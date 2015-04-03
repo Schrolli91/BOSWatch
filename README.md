@@ -1,5 +1,5 @@
 # BOSWatch
-Python Script to Recive and Decode BOS Information with rtl_fm ans multimon-NG
+Python Script to Recive and Decode German BOS Information with rtl_fm ans multimon-NG
 
 ### Features
 #####Implementeted Features:
@@ -60,3 +60,6 @@ optional arguments:
 
 More Options you can find in the extern config.ini File in this Folder
 ```
+
+Thanks to smith_fms and McBo from [Funkmeldesystem.de - Forum](http://www.funkmeldesystem.de/) for Inspiration and Groundwork!
+Greetz Schrolli
