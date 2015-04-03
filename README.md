@@ -18,8 +18,11 @@ Python Script to Recive and Decode BOS Information with rtl_fm ans multimon-NG
 
 ### Configuration
 ##### boswatch.py
-To use the boswatch.py script, you must edit the "config.ini".
-Now you must set the Userdata to your local MySQL Database.
+You can set the ignore time for double alarms in seconds.
+
+To use the script with MySQL Support, you must edit the "config.ini".
+Now set "useMySQL = 1" and the Userdata to your local MySQL Database.
+
 For the other Functions see "Usage" below.
 
 ##### Web Frontend

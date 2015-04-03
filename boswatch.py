@@ -25,8 +25,9 @@ def curtime(format="%Y-%m-%d %H:%M:%S"):
 def stop_script(err):
 	print "ERR: "+err
 	try:
-		if args.verbose: print "disconnect MySQL" 
-		connection.close()
+		if useMySQL: #only if MySQL is active
+			if args.verbose: print "disconnect MySQL" 
+			connection.close()
 		rtl_fm.terminate()
 		if args.verbose: print "rtl_fm terminated" 
 		multimon_ng.terminate()
@@ -103,27 +104,33 @@ try:
 		config.read("./config.ini")
 		fms_double_ignore_time = int(config.get("FMS", "double_ignore_time"))
 		zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
+		
+		#MySQL config
+		useMySQL = int(config.get("MySQL", "useMySQL")) #use MySQL support?
+		if useMySQL: #only if MySQL is active
+			dbserver = config.get("MySQL", "dbserver")
+			dbuser = config.get("MySQL", "dbuser")
+			dbpassword = config.get("MySQL", "dbpassword")
+			database = config.get("MySQL", "database")
+		
+			#MySQL tables
+			tableFMS = config.get("MySQL", "tableFMS")
+			tableZVEI = config.get("MySQL", "tableZVEI")
+			tablePOC = config.get("MySQL", "tablePOC") 
 	except:
 		stop_script("config reading error")
 		exit(0)
 	
 	
-	dbserver = config.get("MySQL", "dbserver")
-	dbuser = config.get("MySQL", "dbuser")
-	dbpassword = config.get("MySQL", "dbpassword")
-	database = config.get("MySQL", "database")
+	if useMySQL: #only if MySQL is active
+		if args.verbose: print "connect to MySQL database"
+		try:
+			connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
+		except:
+			print "MySQL connect error"
+			exit(0)
 	
-	tableFMS = config.get("MySQL", "tableFMS")
-	tableZVEI = config.get("MySQL", "tableZVEI")
-	tablePOC = config.get("MySQL", "tablePOC") 
-	
-	if args.verbose: print "connect to MySQL database"
-	try:
-		connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
-	except:
-		print "MySQL connect error"
-		exit(0)
-	
+	#variables pre-load
 	if args.verbose: print "pre-load variables"
 	fms_id = 0
 	fms_id_old = 0
@@ -191,11 +198,12 @@ try:
 						print curtime("%H:%M:%S")+" BOS:"+fms_service+" Bundesland:"+fms_country+" Ort:"+fms_location+" Fahrzeug:"+fms_vehicle+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi
 						fms_id_old = fms_id #save last id
 						fms_time_old = timestamp #save last time	
-
-						cursor = connection.cursor()
-						cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
-						cursor.close()
-						connection.commit()
+						
+						if useMySQL: #only if MySQL is active
+							cursor = connection.cursor()
+							cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
+							cursor.close()
+							connection.commit()
 	
 				elif args.verbose: #crc error only in verbose mode
 					print "CRC error"
@@ -217,10 +225,11 @@ try:
 						zvei_id_old = zvei_id #save last id
 						zvei_time_old = timestamp #save last time
 						
-						cursor = connection.cursor()
-						cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
-						cursor.close()
-						connection.commit()
+						if useMySQL: #only if MySQL is active
+							cursor = connection.cursor()
+							cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
+							cursor.close()
+							connection.commit()
 						
 				elif args.verbose: #Invalid error only in verbose mode
 					print "No valid ZVEI: "+decoded
