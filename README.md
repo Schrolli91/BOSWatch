@@ -1,6 +1,8 @@
 # BOSWatch
 Python Script to Recive and Decode German BOS Information with rtl_fm ans multimon-NG
 
+**Please** only use Code from **master-Branch** - thats the only stable!
+
 ### Features
 #####Implementeted Features:
 - FMS and ZVEI decoding and Displaying
@@ -60,6 +62,14 @@ optional arguments:
 
 More Options you can find in the extern config.ini File in this Folder
 ```
+
+### Requirements
+- RTL_SDR (rtl_fm)
+- Multimon-NG
+
+##### optional
+- Webserver with PHP
+- MySQL Database Server
 
 Thanks to smith_fms and McBo from [Funkmeldesystem.de - Forum](http://www.funkmeldesystem.de/) for Inspiration and Groundwork!
 Greetz Schrolli
