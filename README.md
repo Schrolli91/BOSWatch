@@ -28,7 +28,7 @@ usage: boswatch.py [-h] -f FREQ [-d DEVICE] [-e ERROR] -a
                    [{FMS,ZVEI,POC512,POC1200,POC2400} ...] [-s SQUELCH] [-v]
 
 BOSWatch is a Python Script to Recive and Decode BOS Information with rtl_fm
-ans multimon-NG
+and multimon-NG
 
 optional arguments:
   -h, --help            show this help message and exit
