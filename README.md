@@ -1,8 +1,8 @@
 # BOSWatch
 Python Script to Recive and Decode BOS Information with rtl_fm ans multimon-NG
 
-### Fetaures
-#####Actual implementet:
+### Features
+#####Implementeted Features:
 - FMS and ZVEI decoding and Displaying
 - Filtering double alarms with adjustable time
 - ZVEI validation (plausibility test)
@@ -10,11 +10,21 @@ Python Script to Recive and Decode BOS Information with rtl_fm ans multimon-NG
 - All configurations in seperate File "config.ini"
 - simple Web Frontend
 
-#####Fetaures for the Future:
+#####Features for the Future:
 - extensive filtering options
 - POCSAG 512,1200,2400 support
 - automatic Audio recording at alarm
 - Web Frontend with configuration
+
+### Configuration
+##### boswatch.py
+To use the boswatch.py script, you must edit the "config.ini".
+Now you must set the Userdata to your local MySQL Database.
+For the other Functions see "Usage" below.
+
+##### Web Frontend
+Put the Files in Folder /wwww/ into your local Webserver Folder (/var/www/).
+Now you must edit the "config.php" with your Userdata to yout local Database.
 
 ### Usage
 `sudo python boswatch.py -f 85.235M -a FMS ZVEI -s 50`
