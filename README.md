@@ -1,5 +1,5 @@
 # BOSWatch
-Python Script to Recive and Decode German BOS Information with rtl_fm ans multimon-NG
+Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
 
 **Please** only use Code from **master-Branch** - thats the only stable!
 
@@ -66,6 +66,7 @@ More Options you can find in the extern config.ini File in this Folder
 ### Requirements
 - RTL_SDR (rtl_fm)
 - Multimon-NG
+- MySQL Connector for Python
 
 ##### optional
 - Webserver with PHP

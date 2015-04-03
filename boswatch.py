@@ -3,7 +3,7 @@
 
 ##### Info #####
 # BOSWatch
-# Python Script to Recive and Decode BOS Information with rtl_fm and multimon-NG
+# Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
 # For more Information see the README.md
 ##### Info #####
 
@@ -40,7 +40,7 @@ def stop_script(err):
 
 #With -h or --help you get the Args help
 #ArgsParser
-parser = argparse.ArgumentParser(prog="boswatch.py", description="BOSWatch is a Python Script to Recive and Decode German BOS Information with rtl_fm ans multimon-NG", epilog="More Options you can find in the extern config.ini File in this Folder")
+parser = argparse.ArgumentParser(prog="boswatch.py", description="BOSWatch is a Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG", epilog="More Options you can find in the extern config.ini File in this Folder")
 #parser.add_argument("-c", "--channel", help="BOS Channel you want to listen")
 parser.add_argument("-f", "--freq", help="Frequency you want to listen", required=True)
 parser.add_argument("-d", "--device", help="Device you want to use (Check with rtl_test)", type=int, default=0)
