@@ -5,7 +5,7 @@ Python Script to Recive and Decode BOS Information with rtl_fm ans multimon-NG
 #####Implementeted Features:
 - FMS and ZVEI decoding and Displaying
 - Filtering double alarms with adjustable time
-- ZVEI validation (plausibility test)
+- FMS and ZVEI validation (plausibility test)
 - MySQL Database Support for FMS and ZVEI
 - All configurations in seperate File "config.ini"
 - simple Web Frontend
@@ -51,7 +51,8 @@ optional arguments:
                         Device you want to use (Check with rtl_test)
   -e ERROR, --error ERROR
                         Frequency-Error of your Device in PPM
-  -a {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...], --demod {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...]
+  -a {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...],
+  --demod {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...]
                         Demodulation Functions
   -s SQUELCH, --squelch SQUELCH
                         Level of Squelch
