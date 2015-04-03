@@ -21,3 +21,27 @@ Starts boswatch at Frequency 85.235 MHz with the Demodulation Functions FMS and 
 Squelch level is set to 50
 
 Help to all usable Parameters with `sudo python boswatch.py -h`
+
+```
+usage: boswatch.py [-h] -f FREQ [-d DEVICE] [-e ERROR] -a
+                   {FMS,ZVEI,POC512,POC1200,POC2400}
+                   [{FMS,ZVEI,POC512,POC1200,POC2400} ...] [-s SQUELCH] [-v]
+
+BOSWatch is a Python Script to Recive and Decode BOS Information with rtl_fm
+ans multimon-NG
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FREQ, --freq FREQ  Frequency you want to listen
+  -d DEVICE, --device DEVICE
+                        Device you want to use (Check with rtl_test)
+  -e ERROR, --error ERROR
+                        Frequency-Error of your Device in PPM
+  -a {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...], --demod {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...]
+                        Demodulation Functions
+  -s SQUELCH, --squelch SQUELCH
+                        Level of Squelch
+  -v, --verbose         Shows more Information
+
+More Options you can find in the extern config.ini File in this Folder
+```

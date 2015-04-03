@@ -4,6 +4,7 @@
 ##### Info #####
 # BOSWatch
 # Python Script to Recive and Decode BOS Information with rtl_fm ans multimon-NG
+# For more Information see the README.md
 ##### Info #####
 
 import time
@@ -49,11 +50,11 @@ args = parser.parse_args()
 
 
 #Read Data from Args, Put it into working Variables and Display them
-print("###########################")
-print("#                         #")
-print("#       BOSWatch beta     #")
-print("#                         #")
-print("###########################")
+print("#########################")
+print("#                       #")
+print("#     BOSWatch beta     #")
+print("#                       #")
+print("#########################")
 print("")
 
 freq = args.freq
