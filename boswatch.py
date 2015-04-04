@@ -50,13 +50,19 @@ parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, defaul
 parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
 args = parser.parse_args()
 
+ 
+ 
+
+
+ 
 
 #Read Data from Args, Put it into working Variables and Display them
-print("#########################")
-print("#                       #")
-print("#     BOSWatch beta     #")
-print("#                       #")
-print("#########################")
+print("     ____  ____  ______       __      __       __    ")
+print("    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  b")
+print("   / __  / / / /\__ \| | /| / / __ `/ __/ ___/ __ \ e")
+print("  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / t")
+print(" /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  a")
+print("            German BOS Information Script            ")
 print("")
 
 freq = args.freq
