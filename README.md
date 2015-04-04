@@ -1,4 +1,4 @@
-![# BOSWatch](/gfx/logo.png)
+![# BOSWatch](/www/gfx/logo.png)
 
 Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
 

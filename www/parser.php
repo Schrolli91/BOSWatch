@@ -55,9 +55,9 @@
 				
 			case "direction":
 				if(substr($fms,9,1) == 1){
-					return "L-F";
+					return "L->F";
 				}elseif(substr($fms,9,1) == 0){
-					return "F-L";
+					return "F->L";
 				}
 				break;
 
