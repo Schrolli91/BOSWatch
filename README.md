@@ -1,4 +1,5 @@
-# BOSWatch
+![# BOSWatch](/gfx/logo.png)
+
 Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
 
 **Please** only use Code from **master-Branch** - thats the only stable!
@@ -10,26 +11,25 @@ Python Script to Recive and Decode German BOS Information with rtl_fm and multim
 - FMS and ZVEI validation (plausibility test)
 - MySQL Database Support for FMS and ZVEI
 - All configurations in seperate File "config.ini"
-- simple Web Frontend
+- simple Web Frontend with Data Parsing
 
 #####Features for the Future:
 - extensive filtering options
 - POCSAG 512,1200,2400 support (need RAW data from multimon-ng)
 - automatic Audio recording at alarm
-- Web Frontend with configuration
+- Web Frontend with Overview and configuration
 
 ### Configuration
 ##### boswatch.py
-You can set the ignore time for double alarms in seconds.
-
-To use the script with MySQL Support, you must edit the "config.ini".
-Now set "useMySQL = 1" and the Userdata to your local MySQL Database.
+The configuration for the Script you can find in config.ini
+- You can set the ignore time for double alarms in seconds.
+- To use the script with MySQL Support set "useMySQL = 1" and the Userdata to your local MySQL Database.
 
 For the other Functions see "Usage" below.
 
 ##### Web Frontend
 Put the Files in Folder /wwww/ into your local Webserver Folder (/var/www/).
-Now you must edit the "config.php" with your Userdata to yout local Database.
+Now you must edit the "config.php" with your Userdata to your local Database.
 
 ### Usage
 `sudo python boswatch.py -f 85.235M -a FMS ZVEI -s 50`
