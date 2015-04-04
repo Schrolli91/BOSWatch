@@ -23,20 +23,24 @@ import re #Regex
 def curtime(format="%Y-%m-%d %H:%M:%S"):
     return time.strftime(format)	
 
+def log(msg):
+	if args.verbose: print "[LOG "+curtime("%H:%M:%S")+"] "+msg
+
 def stop_script(err):
 	print ""
 	print "ERR: "+err
 	try:
 		if useMySQL: #only if MySQL is active
-			if args.verbose: print "disconnect MySQL" 
+			log("disconnect MySQL") 
 			connection.close()
 		rtl_fm.terminate()
-		if args.verbose: print "rtl_fm terminated" 
+		log("rtl_fm terminated") 
 		multimon_ng.terminate()
-		if args.verbose: print "multimon-ng terminated" 
-		if args.verbose: print "exiting BOSWatch"
+		log("multimon-ng terminated")
+		log("exiting BOSWatch")	
 	except:
-		pass
+		log("Error in cleaning")	
+		exit(0)
 
 
 #With -h or --help you get the Args help
@@ -51,11 +55,6 @@ parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, defaul
 parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
 args = parser.parse_args()
 
- 
- 
-
-
- 
 
 #Read Data from Args, Put it into working Variables and Display them
 print("     ____  ____  ______       __      __       __    ")
@@ -107,7 +106,7 @@ print ""
 	
 try:	
 	#ConfigParser
-	if args.verbose: print "reading config file"
+	log("reading config file")
 	try:
 		config = ConfigParser.ConfigParser()
 		config.read("./config.ini")
@@ -134,19 +133,17 @@ try:
 			
 	except:
 		stop_script("config reading error")
-		exit(0)
 	
 	
 	if useMySQL: #only if MySQL is active
-		if args.verbose: print "connect to MySQL database"
+		log("connect to MySQL database")
 		try:
 			connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 		except:
 			print "MySQL connect error"
-			exit(0)
 	
 	#variables pre-load
-	if args.verbose: print "pre-load variables"
+	log("pre-load variables")
 	fms_id = 0
 	fms_id_old = 0
 	fms_time_old = 0
@@ -156,7 +153,7 @@ try:
 	zvei_time_old = 0
 
 	
-	if args.verbose: print "starting rtl_fm"
+	log("starting rtl_fm")
 	try:
 		rtl_fm = subprocess.Popen("rtl_fm -d "+str(device)+" -f "+str(freq)+" -M fm -s 22050 -p "+str(error)+" -E DC -F 0 -l "+str(squelch)+" -g 100",
 									#stdin=rtl_fm.stdout,
@@ -165,10 +162,9 @@ try:
 									shell=True)
 	except:
 		stop_script("cannot start rtl_fm")
-		exit(0)
 		
 	#multimon_ng = subprocess.Popen("aplay -r 22050 -f S16_LE -t raw",
-	if args.verbose: print "starting multimon-ng"
+	log("starting multimon-ng")
 	try:
 		multimon_ng = subprocess.Popen("multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - ",
 									stdin=rtl_fm.stdout,
@@ -177,10 +173,9 @@ try:
 									shell=True)
 	except:
 		stop_script("cannot start multimon-ng")
-		exit(0)
 				
 				   
-	if args.verbose: print "start decoding"	
+	log("start decoding")	
 	print ""
 	while True:	
 		#RAW Data from Multimon-NG
@@ -196,7 +191,7 @@ try:
 			#FMS Decoder Section	
 			#check FMS: -> check CRC -> validate -> check double alarm -> print -> (MySQL)
 			if "FMS:" in decoded:	
-				if args.verbose: print "recived FMS"
+				log("recived FMS")
 					
 				fms_service = decoded[19]		#Organisation
 				fms_country = decoded[36] 		#Bundesland
@@ -210,7 +205,7 @@ try:
 					fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction #build FMS id
 					if re.search("[0-9a-f]{2}[0-9]{6}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
 						if fms_id == fms_id_old and timestamp < fms_time_old + fms_double_ignore_time: #check for double alarm
-							if args.verbose: print "FMS double alarm: "+fms_id_old
+							log("FMS double alarm: "+fms_id_old)
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 						else:
 							print curtime("%H:%M:%S")+" BOS:"+fms_service+" Bundesland:"+fms_country+" Ort:"+fms_location+" Fahrzeug:"+fms_vehicle+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi
@@ -218,7 +213,7 @@ try:
 							fms_time_old = timestamp #save last time	
 							
 							if useMySQL: #only if MySQL is active
-								if args.verbose: print "FMS to MySQL"
+								log("FMS to MySQL")
 								cursor = connection.cursor()
 								cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
 								cursor.close()
@@ -228,23 +223,24 @@ try:
 								httprequest = httplib.HTTPConnection(url)
 								httprequest.request("HEAD", "/")
 								httpresponse = httprequest.getresponse()
-								if args.verbose: print httpresponse.status, httpresponse.reason
+								#if args.verbose: print httpresponse.status, httpresponse.reason
+								log("FMS to HTTP")
 								
-					elif args.verbose: #Invalid error only in verbose mode
-						print "No valid FMS: "+fms_id		
-				elif args.verbose: #crc error only in verbose mode
-					print "CRC incorrect"
+					else:
+						log("No valid FMS: "+fms_id)	
+				else:
+					log("CRC incorrect")
 				
 				
 			#ZVEI Decoder Section
 			#check ZVEI: -> validate -> check double alarm -> print -> (MySQL)	 
 			if "ZVEI2:" in decoded:
-				if args.verbose: print "recived ZVEI" 
+				log("recived ZVEI")
 					
 				zvei_id = decoded[7:12]	#ZVEI Code	
 				if re.search("[0-9F]{5}", zvei_id): #if ZVEI is valid
 					if zvei_id == zvei_id_old and timestamp < zvei_time_old + zvei_double_ignore_time: #check for double alarm
-						if args.verbose: print "ZVEI double alarm: "+zvei_id_old
+						log("ZVEI double alarm: "+zvei_id_old)
 						zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 					else:
 						print curtime("%H:%M:%S")+" 5-Ton: "+zvei_id
@@ -252,7 +248,7 @@ try:
 						zvei_time_old = timestamp #save last time
 						
 						if useMySQL: #only if MySQL is active
-							if args.verbose: print "ZVEI to MySQL"
+							log("ZVEI to MySQL")
 							cursor = connection.cursor()
 							cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
 							cursor.close()
@@ -262,10 +258,11 @@ try:
 							httprequest = httplib.HTTPConnection(url)
 							httprequest.request("HEAD", "/")
 							httpresponse = httprequest.getresponse()
-							if args.verbose: print httpresponse.status, httpresponse.reason	
+							#if args.verbose: print httpresponse.status, httpresponse.reason
+							log("ZVEI to HTTP")	
 							
-				elif args.verbose: #Invalid error only in verbose mode
-					print "No valid ZVEI: "+zvei_id
+				else:
+					log("No valid ZVEI: "+zvei_id)
 		
 except KeyboardInterrupt:
 	stop_script("Keyboard Interrupt")
