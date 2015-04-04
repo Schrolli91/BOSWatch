@@ -2,18 +2,22 @@
 
 Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
 
-**Please** only use Code from **master-Branch** - thats the only stable!
+**Please** only use Code from **master**-Branch - thats **the only stable!**
+
+unless you are developer you can use the develop-Branch - may be unstable!
 
 ### Features
-#####Implemented Features:
+##### Implemented Features:
 - FMS and ZVEI decoding and Displaying
 - Filtering double alarms with adjustable time
 - FMS and ZVEI validation (plausibility test)
 - MySQL Database Support for FMS and ZVEI
+- simple HTTP request at alarm to URL you want
 - All configurations in seperate File "config.ini"
 - simple Web Frontend with Data Parsing
+- Logfiles for better Troubleshooting
 
-#####Features for the Future:
+##### Features for the Future:
 - extensive filtering options
 - POCSAG 512,1200,2400 support (need RAW data from multimon-ng)
 - automatic Audio recording at alarm
@@ -43,9 +47,6 @@ usage: boswatch.py [-h] -f FREQ [-d DEVICE] [-e ERROR] -a
                    {FMS,ZVEI,POC512,POC1200,POC2400}
                    [{FMS,ZVEI,POC512,POC1200,POC2400} ...] [-s SQUELCH] [-v]
 
-BOSWatch is a Python Script to Recive and Decode BOS Information with rtl_fm
-and multimon-NG
-
 optional arguments:
   -h, --help            show this help message and exit
   -f FREQ, --freq FREQ  Frequency you want to listen
@@ -59,8 +60,6 @@ optional arguments:
   -s SQUELCH, --squelch SQUELCH
                         Level of Squelch
   -v, --verbose         Shows more Information
-
-More Options you can find in the extern config.ini File in this Folder
 ```
 
 ### Installation
@@ -71,6 +70,9 @@ You can easy install BOSWatch with the install.sh Script.
 
 Now the script downloads and compile all needed data.
 At the end you can find the Programm in `/home/pi/bos/BOSWatch`
+
+Caution, script don't install a Webserver with PHP and MySQL.
+So you have to make up manually if you want to use MySQL support.
 
 ### Requirements
 - RTL_SDR (rtl_fm)
@@ -83,4 +85,4 @@ At the end you can find the Programm in `/home/pi/bos/BOSWatch`
 
 Thanks to smith_fms and McBo from [Funkmeldesystem.de - Forum](http://www.funkmeldesystem.de/) for Inspiration and Groundwork!
 
-######Greetz Schrolli
+###### Greetz Schrolli
