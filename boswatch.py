@@ -71,20 +71,20 @@ try:
 		log("cannot parse Args","error")
 
 	#Read Data from Args, Put it into working Variables and Display them
-	print("     ____  ____  ______       __      __       __    ")
-	print("    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  b")
-	print("   / __  / / / /\__ \| | /| / / __ `/ __/ ___/ __ \ e")
-	print("  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / t")
-	print(" /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  a")
-	print("            German BOS Information Script            ")
-	print("                 by Bastian Schroll                  ")
-	print("")
+	print "     ____  ____  ______       __      __       __    " 
+	print "    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  b" 
+	print "   / __  / / / /\__ \| | /| / / __ `/ __/ ___/ __ \ e" 
+	print "  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / t" 
+	print " /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  a" 
+	print "            German BOS Information Script            " 
+	print "                 by Bastian Schroll                  " 
+	print "" 
 
 	freq = args.freq
 	print "Frequency:	"+freq
 		
 	#channel = args.channel
-	#print("Frequency:	",channel)
+	#print "Frequency:	",channel 
 
 	device = args.device
 	print "Device-ID:	"+str(device)
@@ -114,7 +114,7 @@ try:
 	print "Squelch:	"+str(squelch)
 
 	if args.verbose:
-		print("Verbose Mode!")
+		print "Verbose Mode!" 
 
 	print ""	
 		
@@ -188,7 +188,6 @@ try:
 			
 			
 	log("start decoding")	
-	print ""
 	while True:	
 		#RAW Data from Multimon-NG
 		#ZVEI2: 25832
@@ -201,7 +200,7 @@ try:
 			#if args.verbose: print "RAW: "+decoded #for verbose mode, print Raw input data
 				
 			#FMS Decoder Section	
-			#check FMS: -> check CRC -> validate -> check double alarm -> print -> (MySQL)
+			#check FMS: -> check CRC -> validate -> check double alarm -> log -> (MySQL)
 			if "FMS:" in decoded:	
 				log("recived FMS")
 					
@@ -252,7 +251,7 @@ try:
 						
 						
 			#ZVEI Decoder Section
-			#check ZVEI: -> validate -> check double alarm -> print -> (MySQL)	 
+			#check ZVEI: -> validate -> check double alarm -> log -> (MySQL)	 
 			if "ZVEI2:" in decoded:
 				log("recived ZVEI")
 					
