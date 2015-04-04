@@ -4,7 +4,7 @@ Python Script to Recive and Decode German BOS Information with rtl_fm and multim
 **Please** only use Code from **master-Branch** - thats the only stable!
 
 ### Features
-#####Implementeted Features:
+#####Implemented Features:
 - FMS and ZVEI decoding and Displaying
 - Filtering double alarms with adjustable time
 - FMS and ZVEI validation (plausibility test)
@@ -14,7 +14,7 @@ Python Script to Recive and Decode German BOS Information with rtl_fm and multim
 
 #####Features for the Future:
 - extensive filtering options
-- POCSAG 512,1200,2400 support
+- POCSAG 512,1200,2400 support (need RAW data from multimon-ng)
 - automatic Audio recording at alarm
 - Web Frontend with configuration
 
@@ -62,6 +62,14 @@ optional arguments:
 
 More Options you can find in the extern config.ini File in this Folder
 ```
+
+### Installation
+You can easy install BOSWatch with the install.sh Script.
+Download it in any Folder you want.
+Make it executeable `sudo chmod +x install.sh`
+And use the script  `sudo sh install.sh`
+Now the script downloads and compile all needed data.
+At the end you can find the Programm in `/home/pi/bos/BOSWatch`
 
 ### Requirements
 - RTL_SDR (rtl_fm)
