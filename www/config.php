@@ -2,7 +2,7 @@
 
 $dbhost = "localhost";
 $dbuser = "root";
-$dbpassword = "root";
+$dbpassword = "";
 $database = "boswatch";
 
 $tableFMS = "bos_fms";
