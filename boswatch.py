@@ -14,11 +14,11 @@ import subprocess
 #import os
 import mysql
 import mysql.connector
+import httplib
 
 import argparse #for parse the args
 import ConfigParser #for parse the config file
 import re #Regex
-
 
 def curtime(format="%Y-%m-%d %H:%M:%S"):
     return time.strftime(format)	
@@ -126,6 +126,12 @@ try:
 			tableFMS = config.get("MySQL", "tableFMS")
 			tableZVEI = config.get("MySQL", "tableZVEI")
 			tablePOC = config.get("MySQL", "tablePOC") 
+			
+		#HTTPrequest config
+		useHTTPrequest = int(config.get("Module", "useHTTPrequest")) #use HTTPrequest support?
+		if useHTTPrequest: #only if HTTPrequest is active
+			url = config.get("HTTPrequest", "url")
+			
 	except:
 		stop_script("config reading error")
 		exit(0)
@@ -212,10 +218,18 @@ try:
 							fms_time_old = timestamp #save last time	
 							
 							if useMySQL: #only if MySQL is active
+								if args.verbose: print "FMS to MySQL"
 								cursor = connection.cursor()
 								cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
 								cursor.close()
 								connection.commit()
+								
+							if useHTTPrequest: #only if HTTPrequest is active
+								httprequest = httplib.HTTPConnection(url)
+								httprequest.request("HEAD", "/")
+								httpresponse = httprequest.getresponse()
+								if args.verbose: print httpresponse.status, httpresponse.reason
+								
 					elif args.verbose: #Invalid error only in verbose mode
 						print "No valid FMS: "+fms_id		
 				elif args.verbose: #crc error only in verbose mode
@@ -238,14 +252,22 @@ try:
 						zvei_time_old = timestamp #save last time
 						
 						if useMySQL: #only if MySQL is active
+							if args.verbose: print "ZVEI to MySQL"
 							cursor = connection.cursor()
 							cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
 							cursor.close()
 							connection.commit()
-						
+							
+						if useHTTPrequest: #only if HTTPrequest is active
+							httprequest = httplib.HTTPConnection(url)
+							httprequest.request("HEAD", "/")
+							httpresponse = httprequest.getresponse()
+							if args.verbose: print httpresponse.status, httpresponse.reason	
+							
 				elif args.verbose: #Invalid error only in verbose mode
 					print "No valid ZVEI: "+zvei_id
-	
 		
 except KeyboardInterrupt:
 	stop_script("Keyboard Interrupt")
+except:
+	stop_script("other Error")

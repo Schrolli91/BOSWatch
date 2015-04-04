@@ -10,6 +10,7 @@ Python Script to Recive and Decode German BOS Information with rtl_fm and multim
 - Filtering double alarms with adjustable time
 - FMS and ZVEI validation (plausibility test)
 - MySQL Database Support for FMS and ZVEI
+- simple HTTP request at alarm to URL you want
 - All configurations in seperate File "config.ini"
 - simple Web Frontend with Data Parsing
 
