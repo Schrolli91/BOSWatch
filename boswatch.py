@@ -3,7 +3,8 @@
 
 ##### Info #####
 # BOSWatch
-# Python Script to Recive and Decode BOS Information with rtl_fm and multimon-NG
+# Autor: Bastian Schroll
+# Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
 # For more Information see the README.md
 ##### Info #####
 
@@ -40,7 +41,7 @@ def stop_script(err):
 
 #With -h or --help you get the Args help
 #ArgsParser
-parser = argparse.ArgumentParser(prog="boswatch.py", description="BOSWatch is a Python Script to Recive and Decode German BOS Information with rtl_fm ans multimon-NG", epilog="More Options you can find in the extern config.ini File in this Folder")
+parser = argparse.ArgumentParser(prog="boswatch.py", description="BOSWatch is a Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG", epilog="More Options you can find in the extern config.ini File in this Folder")
 #parser.add_argument("-c", "--channel", help="BOS Channel you want to listen")
 parser.add_argument("-f", "--freq", help="Frequency you want to listen", required=True)
 parser.add_argument("-d", "--device", help="Device you want to use (Check with rtl_test)", type=int, default=0)
@@ -50,13 +51,20 @@ parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, defaul
 parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
 args = parser.parse_args()
 
+ 
+ 
+
+
+ 
 
 #Read Data from Args, Put it into working Variables and Display them
-print("#########################")
-print("#                       #")
-print("#     BOSWatch beta     #")
-print("#                       #")
-print("#########################")
+print("     ____  ____  ______       __      __       __    ")
+print("    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  b")
+print("   / __  / / / /\__ \| | /| / / __ `/ __/ ___/ __ \ e")
+print("  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / t")
+print(" /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  a")
+print("            German BOS Information Script            ")
+print("                 by Bastian Schroll                  ")
 print("")
 
 freq = args.freq
@@ -107,7 +115,7 @@ try:
 		zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
 		
 		#MySQL config
-		useMySQL = int(config.get("MySQL", "useMySQL")) #use MySQL support?
+		useMySQL = int(config.get("Module", "useMySQL")) #use MySQL support?
 		if useMySQL: #only if MySQL is active
 			dbserver = config.get("MySQL", "dbserver")
 			dbuser = config.get("MySQL", "dbuser")
@@ -194,7 +202,7 @@ try:
 				
 				if "CRC correct" in decoded: #check CRC is correct	
 					fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction #build FMS id
-					if re.search("[0-9]{8}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
+					if re.search("[0-9a-f]{2}[0-9]{6}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
 						if fms_id == fms_id_old and timestamp < fms_time_old + fms_double_ignore_time: #check for double alarm
 							if args.verbose: print "FMS double alarm: "+fms_id_old
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
