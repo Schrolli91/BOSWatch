@@ -20,6 +20,8 @@ import argparse #for parse the args
 import ConfigParser #for parse the config file
 import re #Regex
 
+
+# Functions
 def curtime(format="%Y-%m-%d %H:%M:%S"):
     return time.strftime(format)	
 
@@ -28,71 +30,94 @@ def curtime(format="%Y-%m-%d %H:%M:%S"):
 #[INFO] normal display
 #[ERROR] errors
 def log(msg, level="log"):
-	if args.verbose: print curtime("%H:%M:%S")+" ["+level.upper()+"]	"+msg
+	log_entry = curtime("%H:%M:%S")+" ["+level.upper()+"]	"+msg
 
-
-#With -h or --help you get the Args help
-#ArgsParser
-parser = argparse.ArgumentParser(prog="boswatch.py", description="BOSWatch is a Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG", epilog="More Options you can find in the extern config.ini File in this Folder")
-#parser.add_argument("-c", "--channel", help="BOS Channel you want to listen")
-parser.add_argument("-f", "--freq", help="Frequency you want to listen", required=True)
-parser.add_argument("-d", "--device", help="Device you want to use (Check with rtl_test)", type=int, default=0)
-parser.add_argument("-e", "--error", help="Frequency-Error of your Device in PPM", type=int, default=0)
-parser.add_argument("-a", "--demod", help="Demodulation Functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
-parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, default=0)
-parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
-args = parser.parse_args()
-
-
-#Read Data from Args, Put it into working Variables and Display them
-print("     ____  ____  ______       __      __       __    ")
-print("    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  b")
-print("   / __  / / / /\__ \| | /| / / __ `/ __/ ___/ __ \ e")
-print("  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / t")
-print(" /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  a")
-print("            German BOS Information Script            ")
-print("                 by Bastian Schroll                  ")
-print("")
-
-freq = args.freq
-print "Frequency:	"+freq
+	if not level == "log" or args.verbose:
+		print log_entry
+		
+	bos_log = open("log_bos.txt", "a")
+	bos_log.write(log_entry+"\n")
+	bos_log.close()
 	
-#channel = args.channel
-#print("Frequency:	",channel)
 
-device = args.device
-print "Device-ID:	"+str(device)
+try:
 
-error = args.error
-print "Error in PPM:	"+str(error)
+	try:
+		bos_log = open("log_bos.txt", "w")
+		rtl_log = open("log_rtl.txt", "w")
+		mon_log = open("log_mon.txt", "w")
+		bos_log.write("##### "+curtime()+" #####\n\n")
+		rtl_log.write("##### "+curtime()+" #####\n\n")
+		mon_log.write("##### "+curtime()+" #####\n\n")
+		bos_log.close()
+		rtl_log.close()
+		mon_log.close()
+	except:
+		log("cannot clear logfiles","error")
 
-demodulation = ""
-print "Active Demods:	"+str(len(args.demod))
-if "FMS" in args.demod:
-	demodulation += "-a FMSFSK "
-	print "- FMS"
-if "ZVEI" in args.demod:
-	demodulation += "-a ZVEI2 "
-	print "- ZVEI" 
-if "POC512" in args.demod:
-	demodulation += "-a POCSAG512 "
-	print "- POC512"
-if "POC1200" in args.demod:
-	demodulation += "-a POCSAG1200 "
-	print "- POC1200"
-if "POC2400" in args.demod:
-	demodulation += "-a POCSAG2400 "
-	print "- POC2400" 
+	try:
+		#With -h or --help you get the Args help
+		#ArgsParser
+		parser = argparse.ArgumentParser(prog="boswatch.py", description="BOSWatch is a Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG", epilog="More Options you can find in the extern config.ini File in this Folder")
+		#parser.add_argument("-c", "--channel", help="BOS Channel you want to listen")
+		parser.add_argument("-f", "--freq", help="Frequency you want to listen", required=True)
+		parser.add_argument("-d", "--device", help="Device you want to use (Check with rtl_test)", type=int, default=0)
+		parser.add_argument("-e", "--error", help="Frequency-Error of your Device in PPM", type=int, default=0)
+		parser.add_argument("-a", "--demod", help="Demodulation Functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
+		parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, default=0)
+		parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
+		args = parser.parse_args()
+	except:
+		log("cannot parse Args","error")
 
-squelch = args.squelch
-print "Squelch:	"+str(squelch)
+	#Read Data from Args, Put it into working Variables and Display them
+	print("     ____  ____  ______       __      __       __    ")
+	print("    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  b")
+	print("   / __  / / / /\__ \| | /| / / __ `/ __/ ___/ __ \ e")
+	print("  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / t")
+	print(" /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  a")
+	print("            German BOS Information Script            ")
+	print("                 by Bastian Schroll                  ")
+	print("")
 
-if args.verbose:
-	print("Verbose Mode!")
+	freq = args.freq
+	print "Frequency:	"+freq
+		
+	#channel = args.channel
+	#print("Frequency:	",channel)
 
-print ""	
-	
-try:	
+	device = args.device
+	print "Device-ID:	"+str(device)
+
+	error = args.error
+	print "Error in PPM:	"+str(error)
+
+	demodulation = ""
+	print "Active Demods:	"+str(len(args.demod))
+	if "FMS" in args.demod:
+		demodulation += "-a FMSFSK "
+		print "- FMS"
+	if "ZVEI" in args.demod:
+		demodulation += "-a ZVEI2 "
+		print "- ZVEI" 
+	if "POC512" in args.demod:
+		demodulation += "-a POCSAG512 "
+		print "- POC512"
+	if "POC1200" in args.demod:
+		demodulation += "-a POCSAG1200 "
+		print "- POC1200"
+	if "POC2400" in args.demod:
+		demodulation += "-a POCSAG2400 "
+		print "- POC2400" 
+
+	squelch = args.squelch
+	print "Squelch:	"+str(squelch)
+
+	if args.verbose:
+		print("Verbose Mode!")
+
+	print ""	
+		
 	#ConfigParser
 	log("reading config file")
 	try:
@@ -122,14 +147,6 @@ try:
 	except:
 		log("config reading error","error")
 			
-			
-	if useMySQL: #only if MySQL is active
-		log("connect to MySQL database")
-		try:
-			connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
-		except:
-			log("MySQL connect error","error")
-				
 	#variables pre-load
 	log("pre-load variables")
 	fms_id = 0
@@ -139,14 +156,21 @@ try:
 	zvei_id = 0
 	zvei_id_old = 0
 	zvei_time_old = 0
-		
-		
+	
+	if useMySQL: #only if MySQL is active
+		log("connect to MySQL database")
+		try:
+			connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
+		except:
+			log("MySQL connect error","error")
+			
+			
 	log("starting rtl_fm")
 	try:
 		rtl_fm = subprocess.Popen("rtl_fm -d "+str(device)+" -f "+str(freq)+" -M fm -s 22050 -p "+str(error)+" -E DC -F 0 -l "+str(squelch)+" -g 100",
 									#stdin=rtl_fm.stdout,
 									stdout=subprocess.PIPE,
-									stderr=open('log.txt','a'),
+									stderr=open('log_rtl.txt','a'),
 									shell=True)
 	except:
 		log("cannot start rtl_fm","error")
@@ -157,7 +181,7 @@ try:
 		multimon_ng = subprocess.Popen("multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - ",
 									stdin=rtl_fm.stdout,
 									stdout=subprocess.PIPE,
-									stderr=open('log.txt','a'),
+									stderr=open('log_mon.txt','a'),
 									shell=True)
 	except:
 		log("cannot start multimon-ng","error")
@@ -196,29 +220,30 @@ try:
 							log("FMS double alarm: "+fms_id_old)
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 						else:
-							log(curtime("%H:%M:%S")+" BOS:"+fms_service+" Bundesland:"+fms_country+" Ort:"+fms_location+" Fahrzeug:"+fms_vehicle+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi,"info")
+							log("BOS:"+fms_service+" Bundesland:"+fms_country+" Ort:"+fms_location+" Fahrzeug:"+fms_vehicle+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi,"info")
 							fms_id_old = fms_id #save last id
 							fms_time_old = timestamp #save last time	
-								
-							log("FMS to MySQL")
-							try:
-								if useMySQL: #only if MySQL is active	
+							
+							if useMySQL: #only if MySQL is active
+								log("FMS to MySQL")
+								try:
 									cursor = connection.cursor()
 									cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
 									cursor.close()
 									connection.commit()
-							except:
-								log("FMS cannot insert","error")
+								except:
+									log("FMS cannot insert","error")
 									
-							log("FMS to HTTP")
-							try:
-								if useHTTPrequest: #only if HTTPrequest is active
+									
+							if useHTTPrequest: #only if HTTPrequest is active		
+								log("FMS to HTTP")
+								try:
 									httprequest = httplib.HTTPConnection(url)
 									httprequest.request("HEAD", "/")
 									httpresponse = httprequest.getresponse()
 									#if args.verbose: print httpresponse.status, httpresponse.reason
-							except:
-								log("FMS cannot request","error")
+								except:
+									log("FMS cannot request","error")
 									
 					else:
 						log("No valid FMS: "+fms_id)	
@@ -237,30 +262,31 @@ try:
 						log("ZVEI double alarm: "+zvei_id_old)
 						zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 					else:
-						log(curtime("%H:%M:%S")+" 5-Ton: "+zvei_id,"info")
+						log("5-Ton: "+zvei_id,"info")
 						zvei_id_old = zvei_id #save last id
 						zvei_time_old = timestamp #save last time
 							
-						log("ZVEI to MySQL")
-						try:
-							if useMySQL: #only if MySQL is active
-								log("ZVEI to MySQL")
+							
+						if useMySQL: #only if MySQL is active
+							log("ZVEI to MySQL")
+							try:
 								cursor = connection.cursor()
 								cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
 								cursor.close()
 								connection.commit()
-						except:
-							log("ZVEI cannot insert","error")
+							except:
+								log("ZVEI cannot insert","error")
+						
 							
-						log("ZVEI to HTTP")	
-						try:
-							if useHTTPrequest: #only if HTTPrequest is active
+						if useHTTPrequest: #only if HTTPrequest is active
+							log("ZVEI to HTTP")	
+							try:
 								httprequest = httplib.HTTPConnection(url)
 								httprequest.request("HEAD", "/")
 								httpresponse = httprequest.getresponse()
 								#if args.verbose: print httpresponse.status, httpresponse.reason
-						except:
-							log("ZVEI cannot request","error")
+							except:
+								log("ZVEI cannot request","error")
 								
 				else:
 					log("No valid ZVEI: "+zvei_id)
@@ -268,7 +294,7 @@ try:
 except KeyboardInterrupt:
 	log("Keyboard Interrupt","error")
 except:
-	log("other Error","error")
+	log("unknown Error","error")
 finally:
 	if useMySQL: #only if MySQL is active
 		log("disconnect MySQL") 
