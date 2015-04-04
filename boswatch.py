@@ -194,7 +194,7 @@ try:
 				
 				if "CRC correct" in decoded: #check CRC is correct	
 					fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction #build FMS id
-					if re.search("[0-9]{8}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
+					if re.search("[0-9a-f]{2}[0-9]{6}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
 						if fms_id == fms_id_old and timestamp < fms_time_old + fms_double_ignore_time: #check for double alarm
 							if args.verbose: print "FMS double alarm: "+fms_id_old
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
