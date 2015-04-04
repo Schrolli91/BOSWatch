@@ -23,24 +23,12 @@ import re #Regex
 def curtime(format="%Y-%m-%d %H:%M:%S"):
     return time.strftime(format)	
 
-def log(msg):
-	if args.verbose: print "[LOG "+curtime("%H:%M:%S")+"] "+msg
-
-def stop_script(err):
-	print ""
-	print "ERR: "+err
-	try:
-		if useMySQL: #only if MySQL is active
-			log("disconnect MySQL") 
-			connection.close()
-		rtl_fm.terminate()
-		log("rtl_fm terminated") 
-		multimon_ng.terminate()
-		log("multimon-ng terminated")
-		log("exiting BOSWatch")	
-	except:
-		log("Error in cleaning")	
-		exit(0)
+#Loglevel 
+#[LOG] for the logfile
+#[INFO] normal display
+#[ERROR] errors
+def log(msg, level="log"):
+	if args.verbose: print curtime("%H:%M:%S")+" ["+level.upper()+"]	"+msg
 
 
 #With -h or --help you get the Args help
@@ -112,7 +100,7 @@ try:
 		config.read("./config.ini")
 		fms_double_ignore_time = int(config.get("FMS", "double_ignore_time"))
 		zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
-		
+			
 		#MySQL config
 		useMySQL = int(config.get("Module", "useMySQL")) #use MySQL support?
 		if useMySQL: #only if MySQL is active
@@ -120,39 +108,39 @@ try:
 			dbuser = config.get("MySQL", "dbuser")
 			dbpassword = config.get("MySQL", "dbpassword")
 			database = config.get("MySQL", "database")
-		
+				
 			#MySQL tables
 			tableFMS = config.get("MySQL", "tableFMS")
 			tableZVEI = config.get("MySQL", "tableZVEI")
 			tablePOC = config.get("MySQL", "tablePOC") 
-			
+				
 		#HTTPrequest config
 		useHTTPrequest = int(config.get("Module", "useHTTPrequest")) #use HTTPrequest support?
 		if useHTTPrequest: #only if HTTPrequest is active
 			url = config.get("HTTPrequest", "url")
 			
 	except:
-		stop_script("config reading error")
-	
-	
+		log("config reading error","error")
+			
+			
 	if useMySQL: #only if MySQL is active
 		log("connect to MySQL database")
 		try:
 			connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 		except:
-			print "MySQL connect error"
-	
+			log("MySQL connect error","error")
+				
 	#variables pre-load
 	log("pre-load variables")
 	fms_id = 0
 	fms_id_old = 0
 	fms_time_old = 0
-	
+		
 	zvei_id = 0
 	zvei_id_old = 0
 	zvei_time_old = 0
-
-	
+		
+		
 	log("starting rtl_fm")
 	try:
 		rtl_fm = subprocess.Popen("rtl_fm -d "+str(device)+" -f "+str(freq)+" -M fm -s 22050 -p "+str(error)+" -E DC -F 0 -l "+str(squelch)+" -g 100",
@@ -161,7 +149,7 @@ try:
 									stderr=open('log.txt','a'),
 									shell=True)
 	except:
-		stop_script("cannot start rtl_fm")
+		log("cannot start rtl_fm","error")
 		
 	#multimon_ng = subprocess.Popen("aplay -r 22050 -f S16_LE -t raw",
 	log("starting multimon-ng")
@@ -172,9 +160,9 @@ try:
 									stderr=open('log.txt','a'),
 									shell=True)
 	except:
-		stop_script("cannot start multimon-ng")
-				
-				   
+		log("cannot start multimon-ng","error")
+			
+			
 	log("start decoding")	
 	print ""
 	while True:	
@@ -182,9 +170,9 @@ try:
 		#ZVEI2: 25832
 		#FMS: 43f314170000 (9=Rotkreuz      3=Bayern 1        Ort 0x25=037FZG 7141Status 3=Einsatz Ab    0=FZG->LST2=III(mit NA,ohneSIGNAL)) CRC correct\n'	
 		decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
-		
+			
 		if True: #if input data avalable
-		
+			
 			timestamp = int(time.time())#Get Timestamp					
 			#if args.verbose: print "RAW: "+decoded #for verbose mode, print Raw input data
 				
@@ -200,7 +188,7 @@ try:
 				fms_status = decoded[84]		#Status
 				fms_direction = decoded[101]	#Richtung
 				fms_tsi = decoded[114:117]		#Taktische Kruzinformation
-				
+					
 				if "CRC correct" in decoded: #check CRC is correct	
 					fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction #build FMS id
 					if re.search("[0-9a-f]{2}[0-9]{6}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
@@ -208,30 +196,36 @@ try:
 							log("FMS double alarm: "+fms_id_old)
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 						else:
-							print curtime("%H:%M:%S")+" BOS:"+fms_service+" Bundesland:"+fms_country+" Ort:"+fms_location+" Fahrzeug:"+fms_vehicle+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi
+							log(curtime("%H:%M:%S")+" BOS:"+fms_service+" Bundesland:"+fms_country+" Ort:"+fms_location+" Fahrzeug:"+fms_vehicle+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi,"info")
 							fms_id_old = fms_id #save last id
 							fms_time_old = timestamp #save last time	
-							
-							if useMySQL: #only if MySQL is active
-								log("FMS to MySQL")
-								cursor = connection.cursor()
-								cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
-								cursor.close()
-								connection.commit()
 								
-							if useHTTPrequest: #only if HTTPrequest is active
-								httprequest = httplib.HTTPConnection(url)
-								httprequest.request("HEAD", "/")
-								httpresponse = httprequest.getresponse()
-								#if args.verbose: print httpresponse.status, httpresponse.reason
-								log("FMS to HTTP")
-								
+							log("FMS to MySQL")
+							try:
+								if useMySQL: #only if MySQL is active	
+									cursor = connection.cursor()
+									cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
+									cursor.close()
+									connection.commit()
+							except:
+								log("FMS cannot insert","error")
+									
+							log("FMS to HTTP")
+							try:
+								if useHTTPrequest: #only if HTTPrequest is active
+									httprequest = httplib.HTTPConnection(url)
+									httprequest.request("HEAD", "/")
+									httpresponse = httprequest.getresponse()
+									#if args.verbose: print httpresponse.status, httpresponse.reason
+							except:
+								log("FMS cannot request","error")
+									
 					else:
 						log("No valid FMS: "+fms_id)	
 				else:
 					log("CRC incorrect")
-				
-				
+						
+						
 			#ZVEI Decoder Section
 			#check ZVEI: -> validate -> check double alarm -> print -> (MySQL)	 
 			if "ZVEI2:" in decoded:
@@ -243,28 +237,45 @@ try:
 						log("ZVEI double alarm: "+zvei_id_old)
 						zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 					else:
-						print curtime("%H:%M:%S")+" 5-Ton: "+zvei_id
+						log(curtime("%H:%M:%S")+" 5-Ton: "+zvei_id,"info")
 						zvei_id_old = zvei_id #save last id
 						zvei_time_old = timestamp #save last time
-						
-						if useMySQL: #only if MySQL is active
-							log("ZVEI to MySQL")
-							cursor = connection.cursor()
-							cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
-							cursor.close()
-							connection.commit()
 							
-						if useHTTPrequest: #only if HTTPrequest is active
-							httprequest = httplib.HTTPConnection(url)
-							httprequest.request("HEAD", "/")
-							httpresponse = httprequest.getresponse()
-							#if args.verbose: print httpresponse.status, httpresponse.reason
-							log("ZVEI to HTTP")	
+						log("ZVEI to MySQL")
+						try:
+							if useMySQL: #only if MySQL is active
+								log("ZVEI to MySQL")
+								cursor = connection.cursor()
+								cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
+								cursor.close()
+								connection.commit()
+						except:
+							log("ZVEI cannot insert","error")
 							
+						log("ZVEI to HTTP")	
+						try:
+							if useHTTPrequest: #only if HTTPrequest is active
+								httprequest = httplib.HTTPConnection(url)
+								httprequest.request("HEAD", "/")
+								httpresponse = httprequest.getresponse()
+								#if args.verbose: print httpresponse.status, httpresponse.reason
+						except:
+							log("ZVEI cannot request","error")
+								
 				else:
 					log("No valid ZVEI: "+zvei_id)
-		
+						
 except KeyboardInterrupt:
-	stop_script("Keyboard Interrupt")
+	log("Keyboard Interrupt","error")
 except:
-	stop_script("other Error")
+	log("other Error","error")
+finally:
+	if useMySQL: #only if MySQL is active
+		log("disconnect MySQL") 
+		connection.close()
+	rtl_fm.terminate()
+	log("rtl_fm terminated") 
+	multimon_ng.terminate()
+	log("multimon-ng terminated")
+	log("exiting BOSWatch")		
+	exit(0)
