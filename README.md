@@ -82,4 +82,5 @@ At the end you can find the Programm in `/home/pi/bos/BOSWatch`
 - MySQL Database Server
 
 Thanks to smith_fms and McBo from [Funkmeldesystem.de - Forum](http://www.funkmeldesystem.de/) for Inspiration and Groundwork!
-Greetz Schrolli
+
+######Greetz Schrolli

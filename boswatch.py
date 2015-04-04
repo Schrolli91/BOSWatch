@@ -3,6 +3,7 @@
 
 ##### Info #####
 # BOSWatch
+# Autor: Bastian Schroll
 # Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
 # For more Information see the README.md
 ##### Info #####
@@ -63,6 +64,7 @@ print("   / __  / / / /\__ \| | /| / / __ `/ __/ ___/ __ \ e")
 print("  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / t")
 print(" /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  a")
 print("            German BOS Information Script            ")
+print("                 by Bastian Schroll                  ")
 print("")
 
 freq = args.freq
@@ -113,7 +115,7 @@ try:
 		zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
 		
 		#MySQL config
-		useMySQL = int(config.get("MySQL", "useMySQL")) #use MySQL support?
+		useMySQL = int(config.get("Module", "useMySQL")) #use MySQL support?
 		if useMySQL: #only if MySQL is active
 			dbserver = config.get("MySQL", "dbserver")
 			dbuser = config.get("MySQL", "dbuser")
