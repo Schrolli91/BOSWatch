@@ -65,9 +65,10 @@ More Options you can find in the extern config.ini File in this Folder
 
 ### Installation
 You can easy install BOSWatch with the install.sh Script.
-Download it in any Folder you want.
-Make it executeable `sudo chmod +x install.sh`
-And use the script  `sudo sh install.sh`
+- Download the install.sh in any Folder you want.
+- Make it executeable `sudo chmod +x install.sh`
+- And use the script  `sudo sh install.sh`
+
 Now the script downloads and compile all needed data.
 At the end you can find the Programm in `/home/pi/bos/BOSWatch`
 
