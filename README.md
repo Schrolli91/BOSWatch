@@ -2,10 +2,12 @@
 
 Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
 
-**Please** only use Code from **master-Branch** - thats the only stable!
+**Please** only use Code from **master**-Branch - thats **the only stable!**
+
+unless you are developer you can use the develop-Branch - may be unstable!
 
 ### Features
-#####Implemented Features:
+##### Implemented Features:
 - FMS and ZVEI decoding and Displaying
 - Filtering double alarms with adjustable time
 - FMS and ZVEI validation (plausibility test)
@@ -14,7 +16,7 @@ Python Script to Recive and Decode German BOS Information with rtl_fm and multim
 - All configurations in seperate File "config.ini"
 - simple Web Frontend with Data Parsing
 
-#####Features for the Future:
+##### Features for the Future:
 - extensive filtering options
 - POCSAG 512,1200,2400 support (need RAW data from multimon-ng)
 - automatic Audio recording at alarm
@@ -84,4 +86,4 @@ At the end you can find the Programm in `/home/pi/bos/BOSWatch`
 
 Thanks to smith_fms and McBo from [Funkmeldesystem.de - Forum](http://www.funkmeldesystem.de/) for Inspiration and Groundwork!
 
-######Greetz Schrolli
+###### Greetz Schrolli
