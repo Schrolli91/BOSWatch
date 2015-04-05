@@ -71,16 +71,7 @@ try:
 	except:
 		log("cannot parse Args","error")
 
-	#Read Data from Args, Put it into working Variables and Display them
-	print "     ____  ____  ______       __      __       __    " 
-	print "    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  b" 
-	print "   / __  / / / /\__ \| | /| / / __ `/ __/ ___/ __ \ e" 
-	print "  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / t" 
-	print " /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  a" 
-	print "            German BOS Information Script            " 
-	print "                 by Bastian Schroll                  " 
-	print "" 
-
+	#Read Data from Args, Put it into working Variables
 	freq = args.freq
 	device = args.device
 	error = args.error
@@ -100,6 +91,15 @@ try:
 	squelch = args.squelch
 
 	if not args.quiet: #only if not quiet mode
+		print "     ____  ____  ______       __      __       __    " 
+		print "    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  b" 
+		print "   / __  / / / /\__ \| | /| / / __ `/ __/ ___/ __ \ e" 
+		print "  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / t" 
+		print " /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  a" 
+		print "            German BOS Information Script            " 
+		print "                 by Bastian Schroll                  " 
+		print "" 
+	
 		print "Frequency:	"+freq
 		print "Device-ID:	"+str(device)
 		print "Error in PPM:	"+str(error)
