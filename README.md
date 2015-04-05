@@ -2,6 +2,11 @@
 
 Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
 
+### Note:
+**This software is for illustrative purposes only and may be used only by authorized persons.**
+
+**The intercept of the German BOS radio is strictly prohibited !!!**
+
 **Please** only use Code from **master**-Branch - thats **the only stable!**
 
 unless you are developer you can use the develop-Branch - may be unstable!
