@@ -32,7 +32,7 @@ def curtime(format="%Y-%m-%d %H:%M:%S"):
 def log(msg, level="log"):
 	log_entry = curtime("%H:%M:%S")+" ["+level.upper()+"]	"+msg
 
-	if not level == "log" or args.verbose:
+	if not level == "log" and not args.quiet or args.verbose:
 		print log_entry
 		
 	bos_log = open("log_bos.txt", "a")
@@ -66,6 +66,7 @@ try:
 		parser.add_argument("-a", "--demod", help="Demodulation Functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
 		parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, default=0)
 		parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
+		parser.add_argument("-q", "--quiet", help="Shows no Information. Only Logfiles", action="store_true")
 		args = parser.parse_args()
 	except:
 		log("cannot parse Args","error")
@@ -81,42 +82,42 @@ try:
 	print "" 
 
 	freq = args.freq
-	print "Frequency:	"+freq
-		
-	#channel = args.channel
-	#print "Frequency:	",channel 
-
 	device = args.device
-	print "Device-ID:	"+str(device)
-
 	error = args.error
-	print "Error in PPM:	"+str(error)
-
+	
 	demodulation = ""
-	print "Active Demods:	"+str(len(args.demod))
 	if "FMS" in args.demod:
 		demodulation += "-a FMSFSK "
-		print "- FMS"
 	if "ZVEI" in args.demod:
 		demodulation += "-a ZVEI2 "
-		print "- ZVEI" 
 	if "POC512" in args.demod:
 		demodulation += "-a POCSAG512 "
-		print "- POC512"
 	if "POC1200" in args.demod:
-		demodulation += "-a POCSAG1200 "
-		print "- POC1200"
+		demodulation += "-a POCSAG1200 "	
 	if "POC2400" in args.demod:
 		demodulation += "-a POCSAG2400 "
-		print "- POC2400" 
-
+		
 	squelch = args.squelch
-	print "Squelch:	"+str(squelch)
 
-	if args.verbose:
-		print "Verbose Mode!" 
-
-	print ""	
+	if not args.quiet: #only if not quiet mode
+		print "Frequency:	"+freq
+		print "Device-ID:	"+str(device)
+		print "Error in PPM:	"+str(error)
+		print "Active Demods:	"+str(len(args.demod))
+		if "FMS" in args.demod:
+			print "- FMS"
+		if "ZVEI" in args.demod:
+			print "- ZVEI" 
+		if "POC512" in args.demod:
+			print "- POC512"
+		if "POC1200" in args.demod:
+			print "- POC1200"
+		if "POC2400" in args.demod:
+			print "- POC2400" 
+		print "Squelch:	"+str(squelch)
+		if args.verbose:
+			print "Verbose Mode!" 
+		print ""	
 		
 	#ConfigParser
 	log("reading config file")
