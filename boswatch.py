@@ -146,7 +146,7 @@ try:
 			url = config.get("HTTPrequest", "url")
 			
 	except:
-		log("config reading error","error")
+		log("cannot read config file","error")
 			
 	#variables pre-load
 	log("pre-load variables")
@@ -163,7 +163,7 @@ try:
 		try:
 			connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 		except:
-			log("MySQL connect error","error")
+			log("cannot connect to MySQL database","error")
 			
 			
 	log("starting rtl_fm")
@@ -225,30 +225,30 @@ try:
 							fms_time_old = timestamp #save last time	
 							
 							if useMySQL: #only if MySQL is active
-								log("FMS to MySQL")
+								log("insert FMS into MySQL")
 								try:
 									cursor = connection.cursor()
 									cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
 									cursor.close()
 									connection.commit()
 								except:
-									log("FMS cannot insert","error")
+									log("FMS cannot insert into MySQL","error")
 									
 									
 							if useHTTPrequest: #only if HTTPrequest is active		
-								log("FMS to HTTP")
+								log("FMS to HTTP request")
 								try:
 									httprequest = httplib.HTTPConnection(url)
 									httprequest.request("HEAD", "/")
 									httpresponse = httprequest.getresponse()
 									#if args.verbose: print httpresponse.status, httpresponse.reason
 								except:
-									log("FMS cannot request","error")
+									log("FMS HTTP request failed","error")
 									
 					else:
 						log("No valid FMS: "+fms_id)	
 				else:
-					log("CRC incorrect")
+					log("FMS CRC incorrect")
 						
 						
 			#ZVEI Decoder Section
@@ -268,25 +268,25 @@ try:
 							
 							
 						if useMySQL: #only if MySQL is active
-							log("ZVEI to MySQL")
+							log("insert ZVEI into MySQL")
 							try:
 								cursor = connection.cursor()
 								cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
 								cursor.close()
 								connection.commit()
 							except:
-								log("ZVEI cannot insert","error")
+								log("ZVEI cannot insert into MySQL","error")
 						
 							
 						if useHTTPrequest: #only if HTTPrequest is active
-							log("ZVEI to HTTP")	
+							log("ZVEI to HTTP request")	
 							try:
 								httprequest = httplib.HTTPConnection(url)
 								httprequest.request("HEAD", "/")
 								httpresponse = httprequest.getresponse()
 								#if args.verbose: print httpresponse.status, httpresponse.reason
 							except:
-								log("ZVEI cannot request","error")
+								log("ZVEI HTTP request failed","error")
 								
 				else:
 					log("No valid ZVEI: "+zvei_id)
