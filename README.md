@@ -74,7 +74,7 @@ You can easy install BOSWatch with the install.sh Script.
 - And use the script  `sudo sh install.sh`
 
 Now the script downloads and compile all needed data.
-At the end you can find the Programm in `/home/pi/bos/BOSWatch`
+At the end you can find the Programm in `~/bos/BOSWatch`
 
 Caution, script don't install a Webserver with PHP and MySQL.
 So you have to make up manually if you want to use MySQL support.
