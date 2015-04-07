@@ -171,11 +171,12 @@ try:
 		log("testing MySQL connection")
 		try:
 			connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
-			connection.close()
 			log("connection test successful")
 		except:
 			log("connection test failed - MySQL support deactivated","error")
 			useMySQL = 0
+		finally:
+			connection.close() #Close connection in every case	
 			
 			
 	log("starting rtl_fm")
@@ -244,9 +245,10 @@ try:
 									cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
 									cursor.close()
 									connection.commit()
-									connection.close()
 								except:
-									log("FMS cannot insert into MySQL","error")				
+									log("FMS cannot insert into MySQL","error")	
+								finally:
+									connection.close() #Close connection in every case	
 									
 							if useHTTPrequest: #only if HTTPrequest is active		
 								log("FMS to HTTP request")
@@ -286,9 +288,10 @@ try:
 								cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
 								cursor.close()
 								connection.commit()
-								connection.close()
 							except:
-								log("ZVEI cannot insert into MySQL","error")						
+								log("ZVEI cannot insert into MySQL","error")	
+							finally:
+								connection.close() #Close connection in every case					
 							
 						if useHTTPrequest: #only if HTTPrequest is active
 							log("ZVEI to HTTP request")	
