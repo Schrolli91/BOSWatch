@@ -11,7 +11,7 @@
 import time
 #import sys
 import subprocess
-#import os
+import os #for absolute path: os.path.dirname(os.path.abspath(__file__))
 import mysql
 import mysql.connector
 import httplib
@@ -19,7 +19,6 @@ import httplib
 import argparse #for parse the args
 import ConfigParser #for parse the config file
 import re #Regex
-
 
 # Functions
 def curtime(format="%Y-%m-%d %H:%M:%S"):
@@ -35,17 +34,19 @@ def log(msg, level="log"):
 	if not level == "log" and not args.quiet or args.verbose:
 		print log_entry
 		
-	bos_log = open("log_bos.txt", "a")
+	bos_log = open(script_path+"/log_bos.txt", "a")
 	bos_log.write(log_entry+"\n")
 	bos_log.close()
 	
 
 try:
 
+	script_path = os.path.dirname(os.path.abspath(__file__))
+
 	try:
-		bos_log = open("log_bos.txt", "w")
-		rtl_log = open("log_rtl.txt", "w")
-		mon_log = open("log_mon.txt", "w")
+		bos_log = open(script_path+"/log_bos.txt", "w")
+		rtl_log = open(script_path+"/log_rtl.txt", "w")
+		mon_log = open(script_path+"/log_mon.txt", "w")
 		bos_log.write("##### "+curtime()+" #####\n\n")
 		rtl_log.write("##### "+curtime()+" #####\n\n")
 		mon_log.write("##### "+curtime()+" #####\n\n")
@@ -123,7 +124,7 @@ try:
 	log("reading config file")
 	try:
 		config = ConfigParser.ConfigParser()
-		config.read("./config.ini")
+		config.read(script_path+"/config.ini")
 		fms_double_ignore_time = int(config.get("FMS", "double_ignore_time"))
 		zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
 			
@@ -171,7 +172,7 @@ try:
 		rtl_fm = subprocess.Popen("rtl_fm -d "+str(device)+" -f "+str(freq)+" -M fm -s 22050 -p "+str(error)+" -E DC -F 0 -l "+str(squelch)+" -g 100",
 									#stdin=rtl_fm.stdout,
 									stdout=subprocess.PIPE,
-									stderr=open('log_rtl.txt','a'),
+									stderr=open(script_path+"/log_rtl.txt","a"),
 									shell=True)
 	except:
 		log("cannot start rtl_fm","error")
@@ -182,7 +183,7 @@ try:
 		multimon_ng = subprocess.Popen("multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - ",
 									stdin=rtl_fm.stdout,
 									stdout=subprocess.PIPE,
-									stderr=open('log_mon.txt','a'),
+									stderr=open(script_path+"/log_mon.txt","a"),
 									shell=True)
 	except:
 		log("cannot start multimon-ng","error")
@@ -232,8 +233,7 @@ try:
 									cursor.close()
 									connection.commit()
 								except:
-									log("FMS cannot insert into MySQL","error")
-									
+									log("FMS cannot insert into MySQL","error")				
 									
 							if useHTTPrequest: #only if HTTPrequest is active		
 								log("FMS to HTTP request")
@@ -243,8 +243,7 @@ try:
 									httpresponse = httprequest.getresponse()
 									#if args.verbose: print httpresponse.status, httpresponse.reason
 								except:
-									log("FMS HTTP request failed","error")
-									
+									log("FMS HTTP request failed","error")									
 					else:
 						log("No valid FMS: "+fms_id)	
 				else:
@@ -265,8 +264,7 @@ try:
 						log("5-Ton: "+zvei_id,"info")
 						zvei_id_old = zvei_id #save last id
 						zvei_time_old = timestamp #save last time
-							
-							
+														
 						if useMySQL: #only if MySQL is active
 							log("insert ZVEI into MySQL")
 							try:
@@ -275,8 +273,7 @@ try:
 								cursor.close()
 								connection.commit()
 							except:
-								log("ZVEI cannot insert into MySQL","error")
-						
+								log("ZVEI cannot insert into MySQL","error")						
 							
 						if useHTTPrequest: #only if HTTPrequest is active
 							log("ZVEI to HTTP request")	
@@ -286,8 +283,7 @@ try:
 								httpresponse = httprequest.getresponse()
 								#if args.verbose: print httpresponse.status, httpresponse.reason
 							except:
-								log("ZVEI HTTP request failed","error")
-								
+								log("ZVEI HTTP request failed","error")								
 				else:
 					log("No valid ZVEI: "+zvei_id)
 						
