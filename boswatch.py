@@ -120,18 +120,16 @@ try:
 			print "Verbose Mode!" 
 		print ""	
 		
-		#variables pre-load
-		log("pre-load variables")
-		fms_id = 0
-		fms_id_old = 0
-		fms_time_old = 0
+	#variables pre-load
+	log("pre-load variables")
+	fms_id = 0
+	fms_id_old = 0
+	fms_time_old = 0
 			
-		zvei_id = 0
-		zvei_id_old = 0
-		zvei_time_old = 0
-		
-		useMySQL = 0
-		useHTTPrequest = 0
+	zvei_id = 0
+	zvei_id_old = 0
+	zvei_time_old = 0
+
 		
 	#ConfigParser
 	log("reading config file")
@@ -161,6 +159,12 @@ try:
 			
 	except:
 		log("cannot read config file","error")
+		
+		log("set to standard configuration")
+		fms_double_ignore_time = 5
+		zvei_double_ignore_time = 5
+		useMySQL = 0
+		useHTTPrequest = 0
 
 	
 	if useMySQL: #only if MySQL is active
