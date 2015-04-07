@@ -14,11 +14,11 @@ import subprocess
 import os #for absolute path: os.path.dirname(os.path.abspath(__file__))
 import mysql
 import mysql.connector
-import httplib
+import httplib #for the HTTP request
 
 import argparse #for parse the args
 import ConfigParser #for parse the config file
-import re #Regex
+import re #Regex for validation
 
 # Functions
 def curtime(format="%Y-%m-%d %H:%M:%S"):
@@ -160,11 +160,14 @@ try:
 	zvei_time_old = 0
 	
 	if useMySQL: #only if MySQL is active
-		log("connect to MySQL database")
+		log("testing MySQL connection")
 		try:
 			connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
+			connection.close()
+			log("connection test successful")
 		except:
-			log("cannot connect to MySQL database","error")
+			log("connection test failed - MySQL support deactivated","error")
+			useMySQL = 0
 			
 			
 	log("starting rtl_fm")
@@ -228,10 +231,12 @@ try:
 							if useMySQL: #only if MySQL is active
 								log("insert FMS into MySQL")
 								try:
+									connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 									cursor = connection.cursor()
 									cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
 									cursor.close()
 									connection.commit()
+									connection.close()
 								except:
 									log("FMS cannot insert into MySQL","error")				
 									
@@ -268,10 +273,12 @@ try:
 						if useMySQL: #only if MySQL is active
 							log("insert ZVEI into MySQL")
 							try:
+								connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 								cursor = connection.cursor()
 								cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
 								cursor.close()
 								connection.commit()
+								connection.close()
 							except:
 								log("ZVEI cannot insert into MySQL","error")						
 							
@@ -292,9 +299,6 @@ except KeyboardInterrupt:
 except:
 	log("unknown Error","error")
 finally:
-	if useMySQL: #only if MySQL is active
-		log("disconnect MySQL") 
-		connection.close()
 	rtl_fm.terminate()
 	log("rtl_fm terminated") 
 	multimon_ng.terminate()
