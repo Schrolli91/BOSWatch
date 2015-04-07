@@ -33,7 +33,8 @@ unless you are developer you can use the develop-Branch - may be unstable!
 ##### boswatch.py
 The configuration for the Script you can find in config.ini
 - You can set the ignore time for double alarms in seconds.
-- To use the script with MySQL Support set "useMySQL = 1" and the Userdata to your local MySQL Database.
+- to use the script with MySQL Support set "useMySQL = 1" and the Userdata to your local MySQL Database.
+- to use the script with HTTP request Support set "useHTTPrequest = 1" and set a URL to your destination.
 
 For the other Functions see "Usage" below.
 
@@ -66,6 +67,7 @@ optional arguments:
   -s SQUELCH, --squelch SQUELCH
                         Level of Squelch
   -v, --verbose         Shows more Information
+  -q, --quiet           Shows no Information. Only Logfiles
 ```
 
 ### Installation
