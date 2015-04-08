@@ -20,6 +20,7 @@ import argparse #for parse the args
 import ConfigParser #for parse the config file
 import re #Regex for validation
 
+
 # Functions
 def curtime(format="%Y-%m-%d %H:%M:%S"):
     return time.strftime(format)	
@@ -238,7 +239,7 @@ try:
 							fms_time_old = timestamp #save last time	
 							
 							if useMySQL: #only if MySQL is active
-								log("insert FMS into MySQL")
+								log("FMS to MySQL")
 								try:
 									connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 									cursor = connection.cursor()
@@ -246,19 +247,22 @@ try:
 									cursor.close()
 									connection.commit()
 								except:
-									log("FMS cannot insert into MySQL","error")	
+									log("FMS to MySQL failed","error")	
 								finally:
 									connection.close() #Close connection in every case	
 									
 							if useHTTPrequest: #only if HTTPrequest is active		
-								log("FMS to HTTP request")
+								log("FMS to HTTP")
 								try:
 									httprequest = httplib.HTTPConnection(url)
 									httprequest.request("HEAD", "/")
 									httpresponse = httprequest.getresponse()
-									#if args.verbose: print httpresponse.status, httpresponse.reason
+									if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
+										log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
+									else:
+										log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
 								except:
-									log("FMS HTTP request failed","error")									
+									log("FMS to HTTP failed","error")									
 					else:
 						log("No valid FMS: "+fms_id)	
 				else:
@@ -281,7 +285,7 @@ try:
 						zvei_time_old = timestamp #save last time
 														
 						if useMySQL: #only if MySQL is active
-							log("insert ZVEI into MySQL")
+							log("ZVEI to MySQL")
 							try:
 								connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 								cursor = connection.cursor()
@@ -289,21 +293,27 @@ try:
 								cursor.close()
 								connection.commit()
 							except:
-								log("ZVEI cannot insert into MySQL","error")	
+								log("ZVEI to MySQL failed","error")	
 							finally:
 								connection.close() #Close connection in every case					
 							
 						if useHTTPrequest: #only if HTTPrequest is active
-							log("ZVEI to HTTP request")	
+							log("ZVEI to HTTP")	
 							try:
 								httprequest = httplib.HTTPConnection(url)
 								httprequest.request("HEAD", "/")
 								httpresponse = httprequest.getresponse()
-								#if args.verbose: print httpresponse.status, httpresponse.reason
+								if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
+									log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
+								else:
+									log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
+								except:
+									log("ZVEI to HTTP failed","error")	
 							except:
-								log("ZVEI HTTP request failed","error")								
+								log("ZVEI to HTTP failed","error")								
 				else:
 					log("No valid ZVEI: "+zvei_id)
+						
 						
 except KeyboardInterrupt:
 	log("Keyboard Interrupt","error")
