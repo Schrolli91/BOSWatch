@@ -72,7 +72,11 @@ $db_link = mysqli_connect ($dbhost, $dbuser, $dbpassword, $database);
 			?>
 		</div>
 		
+		<br><br>
+		(C) BOSWatch - All rights reserved
+		<br><br>	
+		
 	</div>
-
+	
 </body>
 </html>

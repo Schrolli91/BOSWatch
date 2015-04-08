@@ -69,7 +69,8 @@
 		switch ($mode) {
 			#Parse Service
 			case "service":
-				if (array_key_exists($data, $service)) {
+				if (array_key_exists($data, $service))
+				{
 					return $service[substr($data,0,1)];
 				}else
 				{
@@ -79,7 +80,8 @@
 			
 			#Parse Country
 			case "country":
-				if (array_key_exists($data, $country)) {
+				if (array_key_exists($data, $country))
+				{
 					return $country[substr($data,1,1)];
 				}else
 				{
@@ -89,7 +91,8 @@
 				
 			#Parse Location
 			case "location":
-				if (array_key_exists($data, $location)) {
+				if (array_key_exists($data, $location))
+				{
 					return $location[substr($data,2,2)];
 				}else
 				{
@@ -99,7 +102,8 @@
 				
 			#Parse Vehicle
 			case "vehicle":
-				if (array_key_exists($data, $vehicle)) {
+				if (array_key_exists($data, $vehicle))
+				{
 					return $vehicle[substr($data,4,4)];
 				}else
 				{
@@ -109,9 +113,11 @@
 			
 			#Parse direction
 			case "direction":
-				if(substr($fms,9,1) == 1){
+				if(substr($fms,9,1) == 1
+				{
 					return "L->F";
-				}elseif(substr($fms,9,1) == 0){
+				}elseif(substr($fms,9,1) == 0
+				{
 					return "F->L";
 				}else
 					return "ERR!";
@@ -120,7 +126,8 @@
 	
 			#Parse Zvei
 			case "zvei":
-				if (array_key_exists($data, $zvei)) {
+				if (array_key_exists($data, $zvei))
+				{
 					return $data ." - ". $zvei[$data];
 				}else
 				{
