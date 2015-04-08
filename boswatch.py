@@ -4,7 +4,7 @@
 ##### Info #####
 # BOSWatch
 # Autor: Bastian Schroll
-# Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
+# Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG
 # For more Information see the README.md
 ##### Info #####
 

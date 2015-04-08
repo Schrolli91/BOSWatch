@@ -1,6 +1,6 @@
 ![# BOSWatch](/www/gfx/logo.png)
 
-Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
+Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG
 
 #### Note:
 **This software is for illustrative purposes only and may be used only by authorized persons.**
@@ -19,9 +19,10 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - FMS and ZVEI validation (plausibility test)
 - MySQL Database Support for FMS and ZVEI
 - simple HTTP request at alarm to URL you want
-- All configurations in seperate File "config.ini"
+- All configurations in seperate config File
 - simple Web Frontend with Data Parsing
 - Logfiles for better Troubleshooting
+- verbose/quiet Mode for more/none information
 
 ##### Features for the Future:
 - extensive filtering options
@@ -41,11 +42,11 @@ For the other Functions see "Usage" below.
 ##### Web Frontend
 Put the Files in Folder /wwww/ into your local Webserver Folder (/var/www/).
 Now you must edit the "config.php" with your Userdata to your local Database.
+For the Parsing Functions take a look into the parser.php 
 
 ### Usage
-`sudo python boswatch.py -f 85.235M -a FMS ZVEI -s 50`
+`sudo python boswatch.py -f 85.235M -a FMS ZVEI`
 Starts boswatch at Frequency 85.235 MHz with the Demodulation Functions FMS and ZVEI.
-Squelch level is set to 50
 
 Help to all usable Parameters with `sudo python boswatch.py -h`
 
@@ -77,7 +78,7 @@ You can easy install BOSWatch with the install.sh Script.
 - And use the script  `sudo sh install.sh`
 
 Now the script downloads and compile all needed data.
-At the end you can find the Programm in `~/bos/BOSWatch`
+At the end you can find BOSWatch in `~/bos/BOSWatch/`
 
 Caution, script don't install a Webserver with PHP and MySQL.
 So you have to make up manually if you want to use MySQL support.

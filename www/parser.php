@@ -4,7 +4,6 @@
 	function parse($mode, $data)
 	{	
 		//Data for Service Parsing
-		
 		$service = array(
 		"0" => "Unbekannt",
 		"1" => "Polizei",
