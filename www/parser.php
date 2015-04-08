@@ -4,6 +4,7 @@
 	function parse($mode, $data)
 	{	
 		//Data for Service Parsing
+		
 		$service = array(
 		"0" => "Unbekannt",
 		"1" => "Polizei",
@@ -67,7 +68,7 @@
 
 	
 		switch ($mode) {
-			#Parse Service
+			//Parse Service
 			case "service":
 				if (array_key_exists($data, $service))
 				{
@@ -78,7 +79,7 @@
 				}
 				break;
 			
-			#Parse Country
+			//Parse Country
 			case "country":
 				if (array_key_exists($data, $country))
 				{
@@ -89,7 +90,7 @@
 				}
 				break;
 				
-			#Parse Location
+			//Parse Location
 			case "location":
 				if (array_key_exists($data, $location))
 				{
@@ -100,7 +101,7 @@
 				}
 				break;
 				
-			#Parse Vehicle
+			//Parse Vehicle
 			case "vehicle":
 				if (array_key_exists($data, $vehicle))
 				{
@@ -111,7 +112,7 @@
 				}
 				break;
 			
-			#Parse direction
+			//Parse direction
 			case "direction":
 				if(substr($fms,9,1) == 1
 				{
@@ -124,7 +125,7 @@
 				}
 				break;
 	
-			#Parse Zvei
+			//Parse Zvei
 			case "zvei":
 				if (array_key_exists($data, $zvei))
 				{
