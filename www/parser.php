@@ -1,8 +1,7 @@
 <?php
 //Data from TRBOS-FMS http://www.lfs-bw.de/Fachthemen/Digitalfunk-Funk/Documents/Pruefstelle/TRBOS-FMS.pdf
 
-
-	function parse($mode, $fms)
+	function parse($mode, $data)
 	{	
 		//Data for Service Parsing
 		$service = array(
@@ -24,7 +23,7 @@
 		"f" => "Fernwirktelegramm",
 	);
 
-		//Data for Country Parsing
+	//Data for Country Parsing
 	$country = array(
 		"0" => "Sachsen",
 		"1" => "Bund",
@@ -43,21 +42,101 @@
 		"e" => "Meck-Pom/Sachsen-Anhalt",
 		"f" => "Brandenburg/Thüringen",
 	);
+	
+	//Data for Location Parsing
+	$location = array(
+		"11" => "testLoc",
+		"22" => "testLoc",
+		"33" => "testLoc"
+	);
+	
+	//Data for Vehicle Parsing
+	$vehicle = array(
+		"1111" => "testVeh",
+		"2222" => "testVeh",
+		"3333" => "testVeh"
+	);
+	
+	
+	//Data for ZVEI Parsing
+	$zvei = array(
+		"12345" => "testZvei",
+		"23456" => "testZvei",
+		"34567" => "testZvei",
+	);
 
+	
 		switch ($mode) {
+			//Parse Service
 			case "service":
-				return $service[substr($fms,0,1)];
+				$data = substr($data,0,1);
+				if (array_key_exists($data, $service))
+				{
+					return $service[$data];
+				}else
+				{
+					return $data;
+				}
 				break;
-				
+			
+			//Parse Country
 			case "country":
-				return $country[substr($fms,1,1)];
+				$data = substr($data,1,1);
+				if (array_key_exists($data, $country))
+				{
+					return $country[$data];
+				}else
+				{
+					return $data;
+				}
 				break;
 				
+			//Parse Location
+			case "location":
+				$data = substr($data,2,2);
+				if (array_key_exists($data, $location))
+				{
+					return $location[$data];
+				}else
+				{
+					return $data;
+				}
+				break;
+				
+			//Parse Vehicle
+			case "vehicle":
+				$data = substr($data,4,4);
+				if (array_key_exists($data, $vehicle))
+				{
+					return $vehicle[$data];
+				}else
+				{
+					return $data;
+				}
+				break;
+			
+			//Parse direction
 			case "direction":
-				if(substr($fms,9,1) == 1){
+				if (substr($data,9,1) == 1)
+				{
 					return "L->F";
-				}elseif(substr($fms,9,1) == 0){
+				}elseif (substr($data,9,1) == 0)
+				{
 					return "F->L";
+				}else
+				{
+					return "ERR!";
+				}
+				break;
+	
+			//Parse Zvei
+			case "zvei":
+				if (array_key_exists($data, $zvei))
+				{
+					return $data ." - ". $zvei[$data];
+				}else
+				{
+					return $data;
 				}
 				break;
 
