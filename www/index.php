@@ -16,16 +16,26 @@ $db_link = mysqli_connect ($dbhost, $dbuser, $dbpassword, $database);
 	<div style="text-align: center; width: 1250px; margin: 0px auto;">
 
 		<img src="gfx/logo.png" alt="BOSWatch"><br>
-		
 		Last alarms for FMS and ZVEI (max. 50)<br><br>
 		
 		<div style="float: left; width: 800px;">
 			<b>Last FMS alarms</b>
+			<table border="1" style="width: 800px;">
+				<tr style="font-weight: bold;">
+					<td>ID</td>
+					<td>Datum - Zeit</td>
+					<td>BOS</td>
+					<td>Bundesland</td>
+					<td>Ort</td>
+					<td>Fahrzeug</td>
+					<td>Stat.</td>
+					<td>Richt.</td>
+					<td>TKI</td>
+				</tr>
 			<?php 
 			$sql = "SELECT id, time, service, country, location, vehicle, status, direction, tsi FROM ".$tableFMS." ORDER BY id DESC LIMIT 50";
 			$db_erg = mysqli_query( $db_link, $sql );
-			 
-			echo '<table border="1" style="width: 800px;">';
+			
 			while ($data = mysqli_fetch_array( $db_erg, MYSQL_ASSOC))
 			{
 			
@@ -45,17 +55,22 @@ $db_link = mysqli_connect ($dbhost, $dbuser, $dbpassword, $database);
 				  echo "<td>". $data['tsi'] . "</td>";
 			  echo "</tr>";
 			}
-			echo "</table>";
 			?>
+			</table>
 		</div>
 		
 		<div style="float: right; width: 400px;">
 			<b>Last ZVEI alarms</b>
+			<table border="1" style="width: 400px;">
+			<tr style="font-weight: bold;">
+				<td>ID</td>
+				<td>Datum - Zeit</td>
+				<td>Schleife</td>
+			</tr>
 			<?php 
 			$sql = "SELECT id, time, zvei FROM ".$tableZVEI." ORDER BY id DESC LIMIT 50";
 			$db_erg = mysqli_query( $db_link, $sql );
-			  
-			echo '<table border="1" style="width: 400px;">';
+
 			while ($data = mysqli_fetch_array( $db_erg, MYSQL_ASSOC))
 			{
 				
@@ -68,13 +83,9 @@ $db_link = mysqli_connect ($dbhost, $dbuser, $dbpassword, $database);
 				  echo "<td>". parse('zvei',$data['zvei']) . "</td>";
 			  echo "</tr>";
 			}
-			echo "</table>";
 			?>
+			</table>
 		</div>
-		
-		<br><br>
-		(C) BOSWatch - All rights reserved
-		<br><br>	
 		
 	</div>
 	
