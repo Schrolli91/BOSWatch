@@ -11,15 +11,14 @@
 import time
 #import sys
 import subprocess
-#import os
+import os #for absolute path: os.path.dirname(os.path.abspath(__file__))
 import mysql
 import mysql.connector
-import httplib
+import httplib #for the HTTP request
 
 import argparse #for parse the args
 import ConfigParser #for parse the config file
-import re #Regex
-
+import re #Regex for validation
 
 # Functions
 def curtime(format="%Y-%m-%d %H:%M:%S"):
@@ -35,17 +34,19 @@ def log(msg, level="log"):
 	if not level == "log" and not args.quiet or args.verbose:
 		print log_entry
 		
-	bos_log = open("log_bos.txt", "a")
+	bos_log = open(script_path+"/log_bos.txt", "a")
 	bos_log.write(log_entry+"\n")
 	bos_log.close()
 	
 
 try:
 
+	script_path = os.path.dirname(os.path.abspath(__file__))
+
 	try:
-		bos_log = open("log_bos.txt", "w")
-		rtl_log = open("log_rtl.txt", "w")
-		mon_log = open("log_mon.txt", "w")
+		bos_log = open(script_path+"/log_bos.txt", "w")
+		rtl_log = open(script_path+"/log_rtl.txt", "w")
+		mon_log = open(script_path+"/log_mon.txt", "w")
 		bos_log.write("##### "+curtime()+" #####\n\n")
 		rtl_log.write("##### "+curtime()+" #####\n\n")
 		mon_log.write("##### "+curtime()+" #####\n\n")
@@ -119,11 +120,22 @@ try:
 			print "Verbose Mode!" 
 		print ""	
 		
+	#variables pre-load
+	log("pre-load variables")
+	fms_id = 0
+	fms_id_old = 0
+	fms_time_old = 0
+			
+	zvei_id = 0
+	zvei_id_old = 0
+	zvei_time_old = 0
+
+		
 	#ConfigParser
 	log("reading config file")
 	try:
 		config = ConfigParser.ConfigParser()
-		config.read("./config.ini")
+		config.read(script_path+"/config.ini")
 		fms_double_ignore_time = int(config.get("FMS", "double_ignore_time"))
 		zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
 			
@@ -146,24 +158,25 @@ try:
 			url = config.get("HTTPrequest", "url")
 			
 	except:
-		log("config reading error","error")
-			
-	#variables pre-load
-	log("pre-load variables")
-	fms_id = 0
-	fms_id_old = 0
-	fms_time_old = 0
+		log("cannot read config file","error")
 		
-	zvei_id = 0
-	zvei_id_old = 0
-	zvei_time_old = 0
+		log("set to standard configuration")
+		fms_double_ignore_time = 5
+		zvei_double_ignore_time = 5
+		useMySQL = 0
+		useHTTPrequest = 0
+
 	
 	if useMySQL: #only if MySQL is active
-		log("connect to MySQL database")
+		log("testing MySQL connection")
 		try:
 			connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
+			log("connection test successful")
 		except:
-			log("MySQL connect error","error")
+			log("connection test failed - MySQL support deactivated","error")
+			useMySQL = 0
+		finally:
+			connection.close() #Close connection in every case	
 			
 			
 	log("starting rtl_fm")
@@ -171,7 +184,7 @@ try:
 		rtl_fm = subprocess.Popen("rtl_fm -d "+str(device)+" -f "+str(freq)+" -M fm -s 22050 -p "+str(error)+" -E DC -F 0 -l "+str(squelch)+" -g 100",
 									#stdin=rtl_fm.stdout,
 									stdout=subprocess.PIPE,
-									stderr=open('log_rtl.txt','a'),
+									stderr=open(script_path+"/log_rtl.txt","a"),
 									shell=True)
 	except:
 		log("cannot start rtl_fm","error")
@@ -182,7 +195,7 @@ try:
 		multimon_ng = subprocess.Popen("multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - ",
 									stdin=rtl_fm.stdout,
 									stdout=subprocess.PIPE,
-									stderr=open('log_mon.txt','a'),
+									stderr=open(script_path+"/log_mon.txt","a"),
 									shell=True)
 	except:
 		log("cannot start multimon-ng","error")
@@ -225,30 +238,31 @@ try:
 							fms_time_old = timestamp #save last time	
 							
 							if useMySQL: #only if MySQL is active
-								log("FMS to MySQL")
+								log("insert FMS into MySQL")
 								try:
+									connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 									cursor = connection.cursor()
 									cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
 									cursor.close()
 									connection.commit()
 								except:
-									log("FMS cannot insert","error")
-									
+									log("FMS cannot insert into MySQL","error")	
+								finally:
+									connection.close() #Close connection in every case	
 									
 							if useHTTPrequest: #only if HTTPrequest is active		
-								log("FMS to HTTP")
+								log("FMS to HTTP request")
 								try:
 									httprequest = httplib.HTTPConnection(url)
 									httprequest.request("HEAD", "/")
 									httpresponse = httprequest.getresponse()
 									#if args.verbose: print httpresponse.status, httpresponse.reason
 								except:
-									log("FMS cannot request","error")
-									
+									log("FMS HTTP request failed","error")									
 					else:
 						log("No valid FMS: "+fms_id)	
 				else:
-					log("CRC incorrect")
+					log("FMS CRC incorrect")
 						
 						
 			#ZVEI Decoder Section
@@ -265,29 +279,29 @@ try:
 						log("5-Ton: "+zvei_id,"info")
 						zvei_id_old = zvei_id #save last id
 						zvei_time_old = timestamp #save last time
-							
-							
+														
 						if useMySQL: #only if MySQL is active
-							log("ZVEI to MySQL")
+							log("insert ZVEI into MySQL")
 							try:
+								connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 								cursor = connection.cursor()
 								cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
 								cursor.close()
 								connection.commit()
 							except:
-								log("ZVEI cannot insert","error")
-						
+								log("ZVEI cannot insert into MySQL","error")	
+							finally:
+								connection.close() #Close connection in every case					
 							
 						if useHTTPrequest: #only if HTTPrequest is active
-							log("ZVEI to HTTP")	
+							log("ZVEI to HTTP request")	
 							try:
 								httprequest = httplib.HTTPConnection(url)
 								httprequest.request("HEAD", "/")
 								httpresponse = httprequest.getresponse()
 								#if args.verbose: print httpresponse.status, httpresponse.reason
 							except:
-								log("ZVEI cannot request","error")
-								
+								log("ZVEI HTTP request failed","error")								
 				else:
 					log("No valid ZVEI: "+zvei_id)
 						
@@ -296,9 +310,6 @@ except KeyboardInterrupt:
 except:
 	log("unknown Error","error")
 finally:
-	if useMySQL: #only if MySQL is active
-		log("disconnect MySQL") 
-		connection.close()
 	rtl_fm.terminate()
 	log("rtl_fm terminated") 
 	multimon_ng.terminate()

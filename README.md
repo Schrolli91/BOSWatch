@@ -2,10 +2,11 @@
 
 Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG
 
-### Note:
+#### Note:
 **This software is for illustrative purposes only and may be used only by authorized persons.**
 
 **The intercept of the German BOS radio is strictly prohibited !!!**
+
 
 **Please** only use Code from **master**-Branch - thats **the only stable!**
 
@@ -32,7 +33,8 @@ unless you are developer you can use the develop-Branch - may be unstable!
 ##### boswatch.py
 The configuration for the Script you can find in config.ini
 - You can set the ignore time for double alarms in seconds.
-- To use the script with MySQL Support set "useMySQL = 1" and the Userdata to your local MySQL Database.
+- to use the script with MySQL Support set "useMySQL = 1" and the Userdata to your local MySQL Database.
+- to use the script with HTTP request Support set "useHTTPrequest = 1" and set a URL to your destination.
 
 For the other Functions see "Usage" below.
 
@@ -65,6 +67,7 @@ optional arguments:
   -s SQUELCH, --squelch SQUELCH
                         Level of Squelch
   -v, --verbose         Shows more Information
+  -q, --quiet           Shows no Information. Only Logfiles
 ```
 
 ### Installation
@@ -74,7 +77,7 @@ You can easy install BOSWatch with the install.sh Script.
 - And use the script  `sudo sh install.sh`
 
 Now the script downloads and compile all needed data.
-At the end you can find the Programm in `/home/pi/bos/BOSWatch`
+At the end you can find the Programm in `~/bos/BOSWatch`
 
 Caution, script don't install a Webserver with PHP and MySQL.
 So you have to make up manually if you want to use MySQL support.
