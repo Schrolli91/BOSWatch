@@ -59,7 +59,7 @@
 	
 	
 	//Data for ZVEI Parsing
-	$country = array(
+	$zvei = array(
 		"12345" => "testZvei",
 		"23456" => "testZvei",
 		"34567" => "testZvei",
@@ -69,9 +69,10 @@
 		switch ($mode) {
 			//Parse Service
 			case "service":
+				$data = substr($data,0,1);
 				if (array_key_exists($data, $service))
 				{
-					return $service[substr($data,0,1)];
+					return $service[$data];
 				}else
 				{
 					return $data;
@@ -80,9 +81,10 @@
 			
 			//Parse Country
 			case "country":
+				$data = substr($data,1,1);
 				if (array_key_exists($data, $country))
 				{
-					return $country[substr($data,1,1)];
+					return $country[$data];
 				}else
 				{
 					return $data;
@@ -91,9 +93,10 @@
 				
 			//Parse Location
 			case "location":
+				$data = substr($data,2,2);
 				if (array_key_exists($data, $location))
 				{
-					return $location[substr($data,2,2)];
+					return $location[$data];
 				}else
 				{
 					return $data;
@@ -102,9 +105,10 @@
 				
 			//Parse Vehicle
 			case "vehicle":
+				$data = substr($data,4,4);
 				if (array_key_exists($data, $vehicle))
 				{
-					return $vehicle[substr($data,4,4)];
+					return $vehicle[$data];
 				}else
 				{
 					return $data;
@@ -113,13 +117,14 @@
 			
 			//Parse direction
 			case "direction":
-				if(substr($fms,9,1) == 1
+				if (substr($data,9,1) == 1)
 				{
 					return "L->F";
-				}elseif(substr($fms,9,1) == 0
+				}elseif (substr($data,9,1) == 0)
 				{
 					return "F->L";
 				}else
+				{
 					return "ERR!";
 				}
 				break;
