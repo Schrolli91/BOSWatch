@@ -28,6 +28,11 @@ $db = new Database($dbhost, $dbuser, $dbpassword, $database, 1); //Show Error = 
 				include("content.overview.php");
 				include("template.overview.php");
 			}
+			elseif(isset($_GET['parser']))
+			{
+				include("content.parser.php");
+				include("template.parser.php");
+			}
 			else
 			{
 				include("content.overview.php");
