@@ -234,7 +234,7 @@ try:
 							log("FMS double alarm: "+fms_id_old)
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 						else:
-							log("BOS:"+fms_service+" Bundesland:"+fms_country+" Ort:"+fms_location+" Fahrzeug:"+fms_vehicle+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi,"info")
+							log("FMS:"+fms_id[0:8]+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi,"info")
 							fms_id_old = fms_id #save last id
 							fms_time_old = timestamp #save last time	
 							
@@ -243,7 +243,7 @@ try:
 								try:
 									connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 									cursor = connection.cursor()
-									cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
+									cursor.execute("INSERT INTO "+tableFMS+" (time,fms,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_id[0:8],fms_status,fms_direction,fms_tsi))
 									cursor.close()
 									connection.commit()
 								except:

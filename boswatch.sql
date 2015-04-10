@@ -29,10 +29,7 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `bos_fms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL,
-  `service` varchar(1) NOT NULL,
-  `country` varchar(2) NOT NULL,
-  `location` varchar(2) NOT NULL,
-  `vehicle` varchar(4) NOT NULL,
+  `fms` varchar(8) NOT NULL,
   `status` varchar(1) NOT NULL,
   `direction` varchar(1) NOT NULL,
   `tsi` varchar(3) NOT NULL,
