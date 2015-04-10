@@ -6,10 +6,7 @@ Last alarms for FMS and ZVEI (max. 50)<br><br>
 		<tr style="font-weight: bold;">
 			<td>ID</td>
 			<td>Datum - Zeit</td>
-			<td>BOS</td>
-			<td>Bundesland</td>
-			<td>Ort</td>
-			<td>Fahrzeug</td>
+			<td>FMS</td>
 			<td>Stat.</td>
 			<td>Richt.</td>
 			<td>TKI</td>
@@ -21,16 +18,12 @@ Last alarms for FMS and ZVEI (max. 50)<br><br>
 			$time = strtotime($fms['time']);
 			$time = date("d.m.Y H:i:s", $time);
 		
-			$fms_id = $fms['service'].$fms['country'].$fms['location'].$fms['vehicle'].$fms['status'].$fms['direction'];
 			echo "<tr>";
 			echo "<td>". $fms['id'] . "</td>";
 			echo "<td>". $time . "</td>";
-			echo "<td>". parse("service",$fms_id) . "</td>";
-			echo "<td>". parse("country",$fms_id) . "</td>";
-			echo "<td>". parse("location",$fms_id) . "</td>";
-			echo "<td>". parse("vehicle",$fms_id) . "</td>";
+			echo "<td>". $fms['fms'] . "</td>";
 			echo "<td>". $fms['status'] . "</td>";
-			echo "<td>". parse("direction",$fms_id) . "</td>";
+			echo "<td>". $fms['direction'] . "</td>";
 			echo "<td>". $fms['tsi'] . "</td>";
 			echo "</tr>";
 		}
@@ -56,7 +49,7 @@ Last alarms for FMS and ZVEI (max. 50)<br><br>
 			echo "<tr>";
 			echo "<td>". $zvei['id'] . "</td>";
 			echo "<td>". $time . "</td>";
-			echo "<td>". parse('zvei',$zvei['zvei']) . "</td>";
+			echo "<td>". $zvei['zvei'] . "</td>";
 			echo "</tr>";
 		}
 	?>
