@@ -25,18 +25,18 @@ $db = new Database($dbhost, $dbuser, $dbpassword, $database, 1); //Show Error = 
 		
 			if(isset($_GET['overview']))
 			{
-				include("content.overview.php");
-				include("template.overview.php");
+				include("tpl/content.overview.php");
+				include("tpl/template.overview.php");
 			}
 			elseif(isset($_GET['parser']))
 			{
-				include("content.parser.php");
-				include("template.parser.php");
+				include("tpl/content.parser.php");
+				include("tpl/template.parser.php");
 			}
 			else
 			{
-				include("content.overview.php");
-				include("template.overview.php");
+				include("tpl/content.overview.php");
+				include("tpl/template.overview.php");
 			}
 		
 		?>	
