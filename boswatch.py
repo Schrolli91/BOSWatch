@@ -243,7 +243,7 @@ try:
 								try:
 									connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 									cursor = connection.cursor()
-									cursor.execute("INSERT INTO "+tableFMS+" (time,fms,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_id[0:8],fms_status,fms_direction,fms_tsi))
+									cursor.execute("INSERT INTO "+tableFMS+" (time,fms,status,direction,tsi) VALUES (%s,%s,%s,%s,%s)",(curtime(),fms_id[0:8],fms_status,fms_direction,fms_tsi))
 									cursor.close()
 									connection.commit()
 								except:
