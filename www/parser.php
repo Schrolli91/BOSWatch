@@ -1,5 +1,6 @@
 <?php
-//Data from TRBOS-FMS http://www.lfs-bw.de/Fachthemen/Digitalfunk-Funk/Documents/Pruefstelle/TRBOS-FMS.pdf
+// TRBOS-FMS  http://www.lfs-bw.de/Fachthemen/Digitalfunk-Funk/Documents/Pruefstelle/TRBOS-FMS.pdf
+// FMS Bayern https://www.stmi.bayern.de/assets/stmi/sus/feuerwehr/id2_17a_03_02_fms_kenng_fw_anl1_20020523.pdf
 
 	function parse($mode, $data)
 	{	
@@ -42,22 +43,8 @@
 		"e" => "Meck-Pom/Sachsen-Anhalt",
 		"f" => "Brandenburg/Thüringen",
 	);
-	
-	//Data for Location Parsing
-	$location = array(
-		"11" => "testLoc",
-		"22" => "testLoc",
-		"33" => "testLoc"
-	);
-	
-	//Data for Vehicle Parsing
-	$vehicle = array(
-		"1111" => "testVeh",
-		"2222" => "testVeh",
-		"3333" => "testVeh"
-	);
-	
-	
+
+
 	//Data for ZVEI Parsing
 	$zvei = array(
 		"12345" => "testZvei",
@@ -89,31 +76,7 @@
 				{
 					return $data;
 				}
-				break;
-				
-			//Parse Location
-			case "location":
-				$data = substr($data,2,2);
-				if (array_key_exists($data, $location))
-				{
-					return $location[$data];
-				}else
-				{
-					return $data;
-				}
-				break;
-				
-			//Parse Vehicle
-			case "vehicle":
-				$data = substr($data,4,4);
-				if (array_key_exists($data, $vehicle))
-				{
-					return $vehicle[$data];
-				}else
-				{
-					return $data;
-				}
-				break;
+				break;	
 			
 			//Parse direction
 			case "direction":

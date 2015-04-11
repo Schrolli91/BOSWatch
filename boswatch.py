@@ -20,6 +20,7 @@ import argparse #for parse the args
 import ConfigParser #for parse the config file
 import re #Regex for validation
 
+
 # Functions
 def curtime(format="%Y-%m-%d %H:%M:%S"):
     return time.strftime(format)	
@@ -228,37 +229,40 @@ try:
 					
 				if "CRC correct" in decoded: #check CRC is correct	
 					fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction #build FMS id
-					if re.search("[0-9a-f]{2}[0-9]{6}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
+					if re.search("[0-9a-f]{8}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
 						if fms_id == fms_id_old and timestamp < fms_time_old + fms_double_ignore_time: #check for double alarm
 							log("FMS double alarm: "+fms_id_old)
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 						else:
-							log("BOS:"+fms_service+" Bundesland:"+fms_country+" Ort:"+fms_location+" Fahrzeug:"+fms_vehicle+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi,"info")
+							log("FMS:"+fms_id[0:8]+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi,"info")
 							fms_id_old = fms_id #save last id
 							fms_time_old = timestamp #save last time	
 							
 							if useMySQL: #only if MySQL is active
-								log("insert FMS into MySQL")
+								log("FMS to MySQL")
 								try:
 									connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 									cursor = connection.cursor()
-									cursor.execute("INSERT INTO "+tableFMS+" (time,service,country,location,vehicle,status,direction,tsi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(curtime(),fms_service,fms_country,fms_location,fms_vehicle,fms_status,fms_direction,fms_tsi))
+									cursor.execute("INSERT INTO "+tableFMS+" (time,fms,status,direction,tsi) VALUES (%s,%s,%s,%s,%s)",(curtime(),fms_id[0:8],fms_status,fms_direction,fms_tsi))
 									cursor.close()
 									connection.commit()
 								except:
-									log("FMS cannot insert into MySQL","error")	
+									log("FMS to MySQL failed","error")	
 								finally:
 									connection.close() #Close connection in every case	
 									
 							if useHTTPrequest: #only if HTTPrequest is active		
-								log("FMS to HTTP request")
+								log("FMS to HTTP")
 								try:
 									httprequest = httplib.HTTPConnection(url)
 									httprequest.request("HEAD", "/")
 									httpresponse = httprequest.getresponse()
-									#if args.verbose: print httpresponse.status, httpresponse.reason
+									if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
+										log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
+									else:
+										log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
 								except:
-									log("FMS HTTP request failed","error")									
+									log("FMS to HTTP failed","error")									
 					else:
 						log("No valid FMS: "+fms_id)	
 				else:
@@ -281,7 +285,7 @@ try:
 						zvei_time_old = timestamp #save last time
 														
 						if useMySQL: #only if MySQL is active
-							log("insert ZVEI into MySQL")
+							log("ZVEI to MySQL")
 							try:
 								connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
 								cursor = connection.cursor()
@@ -289,21 +293,25 @@ try:
 								cursor.close()
 								connection.commit()
 							except:
-								log("ZVEI cannot insert into MySQL","error")	
+								log("ZVEI to MySQL failed","error")	
 							finally:
 								connection.close() #Close connection in every case					
 							
 						if useHTTPrequest: #only if HTTPrequest is active
-							log("ZVEI to HTTP request")	
+							log("ZVEI to HTTP")	
 							try:
 								httprequest = httplib.HTTPConnection(url)
 								httprequest.request("HEAD", "/")
 								httpresponse = httprequest.getresponse()
-								#if args.verbose: print httpresponse.status, httpresponse.reason
+								if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
+									log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
+								else:
+									log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
 							except:
-								log("ZVEI HTTP request failed","error")								
+								log("ZVEI to HTTP failed","error")								
 				else:
 					log("No valid ZVEI: "+zvei_id)
+						
 						
 except KeyboardInterrupt:
 	log("Keyboard Interrupt","error")

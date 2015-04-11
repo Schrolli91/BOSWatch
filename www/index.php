@@ -2,7 +2,9 @@
 <?php
 require_once ("config.php");
 require_once ("parser.php");
-$db_link = mysqli_connect ($dbhost, $dbuser, $dbpassword, $database);
+
+require_once ("mysql.class.php");
+$db = new Database($dbhost, $dbuser, $dbpassword, $database, 1); //Show Error = 1!
 ?>
 
 
@@ -15,78 +17,29 @@ $db_link = mysqli_connect ($dbhost, $dbuser, $dbpassword, $database);
 
 	<div style="text-align: center; width: 1250px; margin: 0px auto;">
 
-		<img src="gfx/logo.png" alt="BOSWatch"><br>
-		Last alarms for FMS and ZVEI (max. 50)<br><br>
+		<img src="gfx/logo.png" alt="BOSWatch"><br>		
+		<a href="index.php?overview">[Übersicht]</a> - <a href="index.php?parser">[Parser]</a>
 		
-		<div style="float: left; width: 800px;">
-			<b>Last FMS alarms</b>
-			<table border="1" style="width: 800px;">
-				<tr style="font-weight: bold;">
-					<td>ID</td>
-					<td>Datum - Zeit</td>
-					<td>BOS</td>
-					<td>Bundesland</td>
-					<td>Ort</td>
-					<td>Fahrzeug</td>
-					<td>Stat.</td>
-					<td>Richt.</td>
-					<td>TKI</td>
-				</tr>
-			<?php 
-			$sql = "SELECT id, time, service, country, location, vehicle, status, direction, tsi FROM ".$tableFMS." ORDER BY id DESC LIMIT 50";
-			$db_erg = mysqli_query( $db_link, $sql );
-			
-			while ($data = mysqli_fetch_array( $db_erg, MYSQL_ASSOC))
+		<br><br>	
+		<?php
+		
+			if(isset($_GET['overview']))
 			{
-			
-			$time = strtotime($data['time']);
-			$time = date("d.m.Y H:i:s", $time);
-			
-				$fms_id = $data['service'].$data['country'].$data['location'].$data['vehicle'].$data['status'].$data['direction'];
-			  echo "<tr>";
-				  echo "<td>". $data['id'] . "</td>";
-				  echo "<td>". $time . "</td>";
-				  echo "<td>". parse("service",$fms_id) . "</td>";
-				  echo "<td>". parse("country",$fms_id) . "</td>";
-				  echo "<td>". parse("location",$fms_id) . "</td>";
-				  echo "<td>". parse("vehicle",$fms_id) . "</td>";
-				  echo "<td>". $data['status'] . "</td>";
-				  echo "<td>". parse("direction",$fms_id) . "</td>";
-				  echo "<td>". $data['tsi'] . "</td>";
-			  echo "</tr>";
+				include("tpl/content.overview.php");
+				include("tpl/template.overview.php");
 			}
-			?>
-			</table>
-		</div>
-		
-		<div style="float: right; width: 400px;">
-			<b>Last ZVEI alarms</b>
-			<table border="1" style="width: 400px;">
-			<tr style="font-weight: bold;">
-				<td>ID</td>
-				<td>Datum - Zeit</td>
-				<td>Schleife</td>
-			</tr>
-			<?php 
-			$sql = "SELECT id, time, zvei FROM ".$tableZVEI." ORDER BY id DESC LIMIT 50";
-			$db_erg = mysqli_query( $db_link, $sql );
-
-			while ($data = mysqli_fetch_array( $db_erg, MYSQL_ASSOC))
+			elseif(isset($_GET['parser']))
 			{
-				
-			$time = strtotime($data['time']);
-			$time = date("d.m.Y H:i:s", $time);
-			
-			echo "<tr>";
-				  echo "<td>". $data['id'] . "</td>";
-				  echo "<td>". $time . "</td>";
-				  echo "<td>". parse('zvei',$data['zvei']) . "</td>";
-			  echo "</tr>";
+				include("tpl/content.parser.php");
+				include("tpl/template.parser.php");
 			}
-			?>
-			</table>
-		</div>
+			else
+			{
+				include("tpl/content.overview.php");
+				include("tpl/template.overview.php");
+			}
 		
+		?>	
 	</div>
 	
 </body>
