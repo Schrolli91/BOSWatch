@@ -1,6 +1,6 @@
 <?php
 	//read FMS
-	$db->query("SELECT id, time, service, country, location, vehicle, status, direction, tsi FROM ".$tableFMS." ORDER BY id DESC LIMIT 50");
+	$db->query("SELECT id, time, fms, status, direction, tsi FROM ".$tableFMS." ORDER BY id DESC LIMIT 50");
 	$Rows = array();
 	while ($daten = $db->fetchAssoc())
 	{

@@ -307,8 +307,6 @@ try:
 									log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
 								else:
 									log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
-								except:
-									log("ZVEI to HTTP failed","error")	
 							except:
 								log("ZVEI to HTTP failed","error")								
 				else:
