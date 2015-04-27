@@ -20,7 +20,7 @@ tput cup 13 15
 echo "[ 1/10] [#---------]"
 tput cup 15 5
 echo "-> make a apt-get update................"
-apt-get update > ~/bos/install/setup_log.txt 2>&1
+apt-get update -y > ~/bos/install/setup_log.txt 2>&1
 
 tput cup 13 15
 echo "[ 2/10] [##--------]"

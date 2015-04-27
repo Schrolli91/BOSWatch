@@ -38,40 +38,41 @@ def log(msg, level="log"):
 	bos_log = open(script_path+"/log_bos.txt", "a")
 	bos_log.write(log_entry+"\n")
 	bos_log.close()
-	
+
+# Programm
+
+#Clear the Logfiles
+try:
+	script_path = os.path.dirname(os.path.abspath(__file__))
+	bos_log = open(script_path+"/log_bos.txt", "w")
+	rtl_log = open(script_path+"/log_rtl.txt", "w")
+	mon_log = open(script_path+"/log_mon.txt", "w")
+	bos_log.write("##### "+curtime()+" #####\n\n")
+	rtl_log.write("##### "+curtime()+" #####\n\n")
+	mon_log.write("##### "+curtime()+" #####\n\n")
+	bos_log.close()
+	rtl_log.close()
+	mon_log.close()
+except:
+	log("cannot clear logfiles","error")
 
 try:
+	#With -h or --help you get the Args help
+	#ArgsParser
+	parser = argparse.ArgumentParser(prog="boswatch.py", description="BOSWatch is a Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG", epilog="More Options you can find in the extern config.ini File in this Folder")
+	#parser.add_argument("-c", "--channel", help="BOS Channel you want to listen")
+	parser.add_argument("-f", "--freq", help="Frequency you want to listen", required=True)
+	parser.add_argument("-d", "--device", help="Device you want to use (Check with rtl_test)", type=int, default=0)
+	parser.add_argument("-e", "--error", help="Frequency-Error of your Device in PPM", type=int, default=0)
+	parser.add_argument("-a", "--demod", help="Demodulation Functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
+	parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, default=0)
+	parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
+	parser.add_argument("-q", "--quiet", help="Shows no Information. Only Logfiles", action="store_true")
+	args = parser.parse_args()
+except:
+	log("cannot parse Args","error")
 
-	script_path = os.path.dirname(os.path.abspath(__file__))
-
-	try:
-		bos_log = open(script_path+"/log_bos.txt", "w")
-		rtl_log = open(script_path+"/log_rtl.txt", "w")
-		mon_log = open(script_path+"/log_mon.txt", "w")
-		bos_log.write("##### "+curtime()+" #####\n\n")
-		rtl_log.write("##### "+curtime()+" #####\n\n")
-		mon_log.write("##### "+curtime()+" #####\n\n")
-		bos_log.close()
-		rtl_log.close()
-		mon_log.close()
-	except:
-		log("cannot clear logfiles","error")
-
-	try:
-		#With -h or --help you get the Args help
-		#ArgsParser
-		parser = argparse.ArgumentParser(prog="boswatch.py", description="BOSWatch is a Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG", epilog="More Options you can find in the extern config.ini File in this Folder")
-		#parser.add_argument("-c", "--channel", help="BOS Channel you want to listen")
-		parser.add_argument("-f", "--freq", help="Frequency you want to listen", required=True)
-		parser.add_argument("-d", "--device", help="Device you want to use (Check with rtl_test)", type=int, default=0)
-		parser.add_argument("-e", "--error", help="Frequency-Error of your Device in PPM", type=int, default=0)
-		parser.add_argument("-a", "--demod", help="Demodulation Functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
-		parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, default=0)
-		parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
-		parser.add_argument("-q", "--quiet", help="Shows no Information. Only Logfiles", action="store_true")
-		args = parser.parse_args()
-	except:
-		log("cannot parse Args","error")
+try:
 
 	#Read Data from Args, Put it into working Variables
 	freq = args.freq
@@ -130,16 +131,23 @@ try:
 	zvei_id = 0
 	zvei_id_old = 0
 	zvei_time_old = 0
+	
+	poc_id = 0
+	poc_id_old = 0
+	poc_time_old = 0
 
 		
 	#ConfigParser
 	log("reading config file")
 	try:
 		config = ConfigParser.ConfigParser()
-		config.read(script_path+"/config.ini")
+		config.read(script_path+"/config/config.ini")
 		fms_double_ignore_time = int(config.get("FMS", "double_ignore_time"))
 		zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
-			
+		poc_double_ignore_time = int(config.get("POC", "double_ignore_time"))
+		poc_filter_range_start = int(config.get("POC", "filter_range_start"))
+		poc_filter_range_end = int(config.get("POC", "filter_range_end"))
+	
 		#MySQL config
 		useMySQL = int(config.get("Module", "useMySQL")) #use MySQL support?
 		if useMySQL: #only if MySQL is active
@@ -164,8 +172,12 @@ try:
 		log("set to standard configuration")
 		fms_double_ignore_time = 5
 		zvei_double_ignore_time = 5
+		poc_double_ignore_time = 10
+		poc_filter_range_start = 0000000
+		poc_filter_range_end = 9999999
 		useMySQL = 0
 		useHTTPrequest = 0
+
 
 	
 	if useMySQL: #only if MySQL is active
@@ -311,6 +323,115 @@ try:
 								log("ZVEI to HTTP failed","error")								
 				else:
 					log("No valid ZVEI: "+zvei_id)
+			#POCSAG512 Decoder Section
+			#check POCSAG512: -> validate -> check double alarm -> log -> (MySQL)
+			#POCSAG512: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh
+				    
+			if "POCSAG512:" in decoded:
+			    log("recived POCSAG512")
+			    poc_id = decoded[20:27]	#POC Code
+			    poc_sub = decoded[39].replace("3", "4").replace("2", "3").replace("1", "2").replace("0", "1")
+		            if decoded.__contains__("Alpha:"):	
+			        poc_text = decoded.split('Alpha:   ')[1].strip().rstrip('<EOT>').strip()
+			    else:
+                                poc_text = ""
+                            if len(poc_id) == 7: #if POC is valid
+                                if poc_id >= poc_filter_range_start:
+                                    if poc_id >= poc_filter_range_start:                                                                                     
+                                        if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
+                                            log("POC512 double alarm: "+poc_id_old)
+                                            poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
+                                        else:
+                                            log("POCSAG512: "+poc_id+" "+poc_sub+" "+poc_text,"info")
+                                            poc_id_old = poc_id #save last id
+                                            poc_time_old = timestamp #save last time
+                                                                                                                                                
+                                            if useMySQL: #only if MySQL is active
+                                                log("POC to MySQL")
+                                                try:
+                                                    connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
+                                                    cursor = connection.cursor()
+                                                    cursor.execute("INSERT INTO "+tablePOC+" (time,ric,funktion,text) VALUES (%s,%s,%s,%s)",(curtime(),poc_id,poc_sub,poc_text,))
+                                                    cursor.close()
+                                                    connection.commit()
+                                                except:
+                                                    log("POC512 to MySQL failed","error")	
+                                                finally:
+                                                    connection.close() #Close connection in every case					
+                                                            
+                                            if useHTTPrequest: #only if HTTPrequest is active
+                                                log("POC512 to HTTP")	
+                                                try:
+                                                    httprequest = httplib.HTTPConnection(url)
+                                                    httprequest.request("HEAD", "/")
+                                                    httpresponse = httprequest.getresponse()
+                                                    if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
+                                                        log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
+                                                    else:
+                                                        log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
+                                                except:
+                                                    log("POCSAG512 to HTTP failed","error")
+                                    else:
+                                        log("POCSAG512: "+poc_id+" out of filter range! Nothing to do.","info")
+                                else:
+                                    log("POCSAG512: "+poc_id+" out of filter range! Nothing to do.","info")
+                            else:
+                                log("No valid POCSAG512: "+poc_id)
+                                
+			#POCSAG1200 Decoder Section
+			#check POCSAG1200: -> validate -> check double alarm -> log -> (MySQL)
+			#POCSAG1200: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh
+				    
+			if "POCSAG1200:" in decoded:
+			    log("recived POCSAG1200")
+			    poc_id = decoded[21:28]	#POC Code
+			    poc_sub = decoded[40].replace("3", "4").replace("2", "3").replace("1", "2").replace("0", "1")
+		            if decoded.__contains__("Alpha:"):	
+			        poc_text = decoded.split('Alpha:   ')[1].strip().rstrip('<EOT>').strip()
+			    else:
+                                poc_text = ""
+                            if len(poc_id) == 7: #if POC is valid
+                                if poc_id >= poc_filter_range_start:
+                                    if poc_id >= poc_filter_range_start:                                                                                     
+                                        if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
+                                            log("POC1200 double alarm: "+poc_id_old)
+                                            poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
+                                        else:
+                                            log("POCSAG1200: "+poc_id+" "+poc_sub+" "+poc_text,"info")
+                                            poc_id_old = poc_id #save last id
+                                            poc_time_old = timestamp #save last time
+                                                                                                                                                
+                                            if useMySQL: #only if MySQL is active
+                                                log("POC to MySQL")
+                                                try:
+                                                    connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
+                                                    cursor = connection.cursor()
+                                                    cursor.execute("INSERT INTO "+tablePOC+" (time,ric,funktion,text) VALUES (%s,%s,%s,%s)",(curtime(),poc_id,poc_sub,poc_text,))
+                                                    cursor.close()
+                                                    connection.commit()
+                                                except:
+                                                    log("POC1200 to MySQL failed","error")	
+                                                finally:
+                                                    connection.close() #Close connection in every case					
+                                                            
+                                            if useHTTPrequest: #only if HTTPrequest is active
+                                                log("POC1200 to HTTP")	
+                                                try:
+                                                    httprequest = httplib.HTTPConnection(url)
+                                                    httprequest.request("HEAD", "/")
+                                                    httpresponse = httprequest.getresponse()
+                                                    if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
+                                                        log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
+                                                    else:
+                                                        log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
+                                                except:
+                                                    log("POCSAG1200 to HTTP failed","error")
+                                    else:
+                                        log("POCSAG1200: "+poc_id+" out of filter range! Nothing to do.","info")
+                                else:
+                                    log("POCSAG1200: "+poc_id+" out of filter range! Nothing to do.","info")
+                            else:
+                                log("No valid POCSAG1200: "+poc_id)
 						
 						
 except KeyboardInterrupt:
