@@ -22,10 +22,12 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - simple Web Frontend with Data Parsing
 - Logfiles for better Troubleshooting
 - verbose/quiet Mode for more/none information
-
+- POCSAG1200 and POCSAG512 support
+- Filtering of POCSAG512 and POCSAG1200 RIC´s (adjustment at config)
+- 
 ##### Features for the Future:
 - extensive filtering options
-- POCSAG 512,1200,2400 support (need RAW data from multimon-ng)
+- 2400 support (need RAW data from multimon-ng)
 - automatic Audio recording at alarm
 - Web Frontend with Overview and configuration
 
@@ -90,6 +92,9 @@ So you have to make up manually if you want to use MySQL support.
 ##### optional
 - Webserver with PHP
 - MySQL Database Server
+
+##### filtering
+- you can adjust your rangefilter for POCSAG Decode at config file under the section POC
 
 Thanks to smith_fms and McBo from [Funkmeldesystem.de - Forum](http://www.funkmeldesystem.de/) for Inspiration and Groundwork!
 
