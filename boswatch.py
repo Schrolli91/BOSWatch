@@ -141,11 +141,13 @@ try:
 	log("reading config file")
 	try:
 		config = ConfigParser.ConfigParser()
-		config.read(script_path+"/config.ini")
+		config.read(script_path+"/config/config.ini")
 		fms_double_ignore_time = int(config.get("FMS", "double_ignore_time"))
 		zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
 		poc_double_ignore_time = int(config.get("POC", "double_ignore_time"))
-			
+		poc_filter_range_start = int(config.get("POC", "filter_range_start"))
+		poc_filter_range_end = int(config.get("POC", "filter_range_end"))
+	
 		#MySQL config
 		useMySQL = int(config.get("Module", "useMySQL")) #use MySQL support?
 		if useMySQL: #only if MySQL is active
@@ -171,8 +173,11 @@ try:
 		fms_double_ignore_time = 5
 		zvei_double_ignore_time = 5
 		poc_double_ignore_time = 10
+		poc_filter_range_start = 0000000
+		poc_filter_range_end = 9999999
 		useMySQL = 0
 		useHTTPrequest = 0
+
 
 	
 	if useMySQL: #only if MySQL is active
@@ -323,7 +328,7 @@ try:
 			#POCSAG512: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh
 				    
 			if "POCSAG512:" in decoded:
-			    log("recived POCSAG1200")
+			    log("recived POCSAG512")
 			    poc_id = decoded[20:27]	#POC Code
 			    poc_sub = decoded[39].replace("3", "4").replace("2", "3").replace("1", "2").replace("0", "1")
 		            if decoded.__contains__("Alpha:"):	
@@ -331,39 +336,45 @@ try:
 			    else:
                                 poc_text = ""
                             if len(poc_id) == 7: #if POC is valid
-                                if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
-                                    log("POC512 double alarm: "+poc_id_old)
-                                    poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
+                                if poc_id >= poc_filter_range_start:
+                                    if poc_id >= poc_filter_range_start:                                                                                     
+                                        if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
+                                            log("POC512 double alarm: "+poc_id_old)
+                                            poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
+                                        else:
+                                            log("POCSAG512: "+poc_id+" "+poc_sub+" "+poc_text,"info")
+                                            poc_id_old = poc_id #save last id
+                                            poc_time_old = timestamp #save last time
+                                                                                                                                                
+                                            if useMySQL: #only if MySQL is active
+                                                log("POC to MySQL")
+                                                try:
+                                                    connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
+                                                    cursor = connection.cursor()
+                                                    cursor.execute("INSERT INTO "+tablePOC+" (time,ric,funktion,text) VALUES (%s,%s,%s,%s)",(curtime(),poc_id,poc_sub,poc_text,))
+                                                    cursor.close()
+                                                    connection.commit()
+                                                except:
+                                                    log("POC512 to MySQL failed","error")	
+                                                finally:
+                                                    connection.close() #Close connection in every case					
+                                                            
+                                            if useHTTPrequest: #only if HTTPrequest is active
+                                                log("POC512 to HTTP")	
+                                                try:
+                                                    httprequest = httplib.HTTPConnection(url)
+                                                    httprequest.request("HEAD", "/")
+                                                    httpresponse = httprequest.getresponse()
+                                                    if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
+                                                        log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
+                                                    else:
+                                                        log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
+                                                except:
+                                                    log("POCSAG512 to HTTP failed","error")
+                                    else:
+                                        log("POCSAG512: "+poc_id+" out of filter range! Nothing to do.","info")
                                 else:
-                                    log("POCSAG512: "+poc_id+""+poc_sub+""+poc_text,"info")
-                                    poc_id_old = poc_id #save last id
-                                    poc_time_old = timestamp #save last time
-                                                                                                            
-                                    if useMySQL: #only if MySQL is active
-                                        log("POC to MySQL")
-                                        try:
-                                            connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
-                                            cursor = connection.cursor()
-                                            cursor.execute("INSERT INTO "+tablePOC+" (time,ric,funktion,text) VALUES (%s,%s,%s,%s)",(curtime(),poc_id,poc_sub,poc_text,))
-                                            cursor.close()
-                                            connection.commit()
-                                        except:
-                                            log("POC512 to MySQL failed","error")	
-                                        finally:
-                                            connection.close() #Close connection in every case					
-                                                    
-                                    if useHTTPrequest: #only if HTTPrequest is active
-                                        log("POC512 to HTTP")	
-                                        try:
-                                            httprequest = httplib.HTTPConnection(url)
-                                            httprequest.request("HEAD", "/")
-                                            httpresponse = httprequest.getresponse()
-                                            if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
-                                                log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
-                                            else:
-                                                log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
-                                        except:
-                                            log("POCSAG512 to HTTP failed","error")						    
+                                    log("POCSAG512: "+poc_id+" out of filter range! Nothing to do.","info")
                             else:
                                 log("No valid POCSAG512: "+poc_id)
                                 
@@ -380,39 +391,45 @@ try:
 			    else:
                                 poc_text = ""
                             if len(poc_id) == 7: #if POC is valid
-                                if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
-                                    log("POC1200 double alarm: "+poc_id_old)
-                                    poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
+                                if poc_id >= poc_filter_range_start:
+                                    if poc_id >= poc_filter_range_start:                                                                                     
+                                        if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
+                                            log("POC1200 double alarm: "+poc_id_old)
+                                            poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
+                                        else:
+                                            log("POCSAG1200: "+poc_id+" "+poc_sub+" "+poc_text,"info")
+                                            poc_id_old = poc_id #save last id
+                                            poc_time_old = timestamp #save last time
+                                                                                                                                                
+                                            if useMySQL: #only if MySQL is active
+                                                log("POC to MySQL")
+                                                try:
+                                                    connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
+                                                    cursor = connection.cursor()
+                                                    cursor.execute("INSERT INTO "+tablePOC+" (time,ric,funktion,text) VALUES (%s,%s,%s,%s)",(curtime(),poc_id,poc_sub,poc_text,))
+                                                    cursor.close()
+                                                    connection.commit()
+                                                except:
+                                                    log("POC1200 to MySQL failed","error")	
+                                                finally:
+                                                    connection.close() #Close connection in every case					
+                                                            
+                                            if useHTTPrequest: #only if HTTPrequest is active
+                                                log("POC1200 to HTTP")	
+                                                try:
+                                                    httprequest = httplib.HTTPConnection(url)
+                                                    httprequest.request("HEAD", "/")
+                                                    httpresponse = httprequest.getresponse()
+                                                    if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
+                                                        log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
+                                                    else:
+                                                        log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
+                                                except:
+                                                    log("POCSAG1200 to HTTP failed","error")
+                                    else:
+                                        log("POCSAG1200: "+poc_id+" out of filter range! Nothing to do.","info")
                                 else:
-                                    log("POCSAG1200: "+poc_id+""+poc_sub+""+poc_text,"info")
-                                    poc_id_old = poc_id #save last id
-                                    poc_time_old = timestamp #save last time
-                                                                                                            
-                                    if useMySQL: #only if MySQL is active
-                                        log("POC to MySQL")
-                                        try:
-                                            connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
-                                            cursor = connection.cursor()
-                                            cursor.execute("INSERT INTO "+tablePOC+" (time,ric,funktion,text) VALUES (%s,%s,%s,%s)",(curtime(),poc_id,poc_sub,poc_text,))
-                                            cursor.close()
-                                            connection.commit()
-                                        except:
-                                            log("POC1200 to MySQL failed","error")	
-                                        finally:
-                                            connection.close() #Close connection in every case					
-                                                    
-                                    if useHTTPrequest: #only if HTTPrequest is active
-                                        log("POC1200 to HTTP")	
-                                        try:
-                                            httprequest = httplib.HTTPConnection(url)
-                                            httprequest.request("HEAD", "/")
-                                            httpresponse = httprequest.getresponse()
-                                            if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
-                                                log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
-                                            else:
-                                                log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
-                                        except:
-                                            log("POCSAG1200 to HTTP failed","error")						    
+                                    log("POCSAG1200: "+poc_id+" out of filter range! Nothing to do.","info")
                             else:
                                 log("No valid POCSAG1200: "+poc_id)
 						
