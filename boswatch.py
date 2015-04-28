@@ -342,7 +342,7 @@ try:
 			    else:
 					poc_text = ""
 				
-				if len(poc_id) == 7: #if POC is valid
+				if re.search("[0-9]{7}", poc_id): #if POC is valid
 					if poc_id >= poc_filter_range_start:
 						if poc_id >= poc_filter_range_start:                                                                                     
 							if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
@@ -400,7 +400,7 @@ try:
 			    else:
 					poc_text = ""
 					
-				if len(poc_id) == 7: #if POC is valid
+				if re.search("[0-9]{7}", poc_id): #if POC is valid
 					if poc_id >= poc_filter_range_start:
 						if poc_id >= poc_filter_range_start:                                                                                     
 							if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
