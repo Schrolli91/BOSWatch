@@ -169,12 +169,15 @@ try:
 	except:
 		log("cannot read config file","error")
 		
+		#in case of reading error, set standard values
 		log("set to standard configuration")
 		fms_double_ignore_time = 5
 		zvei_double_ignore_time = 5
 		poc_double_ignore_time = 10
 		poc_filter_range_start = 0000000
 		poc_filter_range_end = 9999999
+		
+		#no config - no modules ;-)
 		useMySQL = 0
 		useHTTPrequest = 0
 
@@ -336,7 +339,7 @@ try:
 		            if decoded.__contains__("Alpha:"):	
 			        poc_text = decoded.split('Alpha:   ')[1].strip().rstrip('<EOT>').strip()
 			    else:
-                                poc_text = ""
+                            poc_text = ""
                             if len(poc_id) == 7: #if POC is valid
                                 if poc_id >= poc_filter_range_start:
                                     if poc_id >= poc_filter_range_start:                                                                                     
@@ -392,7 +395,7 @@ try:
 		            if decoded.__contains__("Alpha:"):	
 			        poc_text = decoded.split('Alpha:   ')[1].strip().rstrip('<EOT>').strip()
 			    else:
-                                poc_text = ""
+                            poc_text = ""
                             if len(poc_id) == 7: #if POC is valid
                                 if poc_id >= poc_filter_range_start:
                                     if poc_id >= poc_filter_range_start:                                                                                     
