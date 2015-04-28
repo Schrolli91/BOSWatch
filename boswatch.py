@@ -141,7 +141,7 @@ try:
 	log("reading config file")
 	try:
 		config = ConfigParser.ConfigParser()
-		config.read(script_path+"/config/config.ini")
+		config.read(script_path+"/config.ini")
 		fms_double_ignore_time = int(config.get("FMS", "double_ignore_time"))
 		zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
 		poc_double_ignore_time = int(config.get("POC", "double_ignore_time"))
@@ -323,10 +323,12 @@ try:
 								log("ZVEI to HTTP failed","error")								
 				else:
 					log("No valid ZVEI: "+zvei_id)
+				
+
+				
 			#POCSAG512 Decoder Section
 			#check POCSAG512: -> validate -> check double alarm -> log -> (MySQL)
-			#POCSAG512: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh
-				    
+			#POCSAG512: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh	    
 			if "POCSAG512:" in decoded:
 			    log("recived POCSAG512")
 			    poc_id = decoded[20:27]	#POC Code
@@ -372,16 +374,17 @@ try:
                                                 except:
                                                     log("POCSAG512 to HTTP failed","error")
                                     else:
-                                        log("POCSAG512: "+poc_id+" out of filter range! Nothing to do.","info")
+                                        log("POCSAG512: "+poc_id+" out of filter range!")
                                 else:
-                                    log("POCSAG512: "+poc_id+" out of filter range! Nothing to do.","info")
+                                    log("POCSAG512: "+poc_id+" out of filter range!")
                             else:
                                 log("No valid POCSAG512: "+poc_id)
-                                
+              
+
+			  
 			#POCSAG1200 Decoder Section
 			#check POCSAG1200: -> validate -> check double alarm -> log -> (MySQL)
-			#POCSAG1200: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh
-				    
+			#POCSAG1200: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh	    
 			if "POCSAG1200:" in decoded:
 			    log("recived POCSAG1200")
 			    poc_id = decoded[21:28]	#POC Code
@@ -427,9 +430,9 @@ try:
                                                 except:
                                                     log("POCSAG1200 to HTTP failed","error")
                                     else:
-                                        log("POCSAG1200: "+poc_id+" out of filter range! Nothing to do.","info")
+                                        log("POCSAG1200: "+poc_id+" out of filter range")
                                 else:
-                                    log("POCSAG1200: "+poc_id+" out of filter range! Nothing to do.","info")
+                                    log("POCSAG1200: "+poc_id+" out of filter range")
                             else:
                                 log("No valid POCSAG1200: "+poc_id)
 						
