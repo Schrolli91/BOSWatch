@@ -141,7 +141,7 @@ try:
 	log("reading config file")
 	try:
 		config = ConfigParser.ConfigParser()
-		config.read(script_path+"/config/config.ini")
+		config.read(script_path+"/config.ini")
 		fms_double_ignore_time = int(config.get("FMS", "double_ignore_time"))
 		zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
 		poc_double_ignore_time = int(config.get("POC", "double_ignore_time"))
