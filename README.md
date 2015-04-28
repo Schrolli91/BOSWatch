@@ -24,7 +24,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - verbose/quiet Mode for more/none information
 - POCSAG1200 and POCSAG512 support
 - Filtering of POCSAG512 and POCSAG1200 RIC´s (adjustment at config)
-- 
+
 ##### Features for the Future:
 - extensive filtering options
 - 2400 support (need RAW data from multimon-ng)
@@ -35,6 +35,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 ##### boswatch.py
 The configuration for the Script you can find in config.ini
 - You can set the ignore time for double alarms in seconds.
+- you can adjust your rangefilter for POCSAG Decode.
 - to use the script with MySQL Support set "useMySQL = 1" and the Userdata to your local MySQL Database.
 - to use the script with HTTP request Support set "useHTTPrequest = 1" and set a URL to your destination.
 
@@ -92,9 +93,6 @@ So you have to make up manually if you want to use MySQL support.
 ##### optional
 - Webserver with PHP
 - MySQL Database Server
-
-##### filtering
-- you can adjust your rangefilter for POCSAG Decode at config file under the section POC
 
 Thanks to smith_fms and McBo from [Funkmeldesystem.de - Forum](http://www.funkmeldesystem.de/) for Inspiration and Groundwork!
 
