@@ -40,39 +40,38 @@ def log(msg, level="log"):
 	bos_log.close()
 
 # Programm
-
-#Clear the Logfiles
 try:
-	script_path = os.path.dirname(os.path.abspath(__file__))
-	bos_log = open(script_path+"/log_bos.txt", "w")
-	rtl_log = open(script_path+"/log_rtl.txt", "w")
-	mon_log = open(script_path+"/log_mon.txt", "w")
-	bos_log.write("##### "+curtime()+" #####\n\n")
-	rtl_log.write("##### "+curtime()+" #####\n\n")
-	mon_log.write("##### "+curtime()+" #####\n\n")
-	bos_log.close()
-	rtl_log.close()
-	mon_log.close()
-except:
-	log("cannot clear logfiles","error")
 
-try:
-	#With -h or --help you get the Args help
-	#ArgsParser
-	parser = argparse.ArgumentParser(prog="boswatch.py", description="BOSWatch is a Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG", epilog="More Options you can find in the extern config.ini File in this Folder")
-	#parser.add_argument("-c", "--channel", help="BOS Channel you want to listen")
-	parser.add_argument("-f", "--freq", help="Frequency you want to listen", required=True)
-	parser.add_argument("-d", "--device", help="Device you want to use (Check with rtl_test)", type=int, default=0)
-	parser.add_argument("-e", "--error", help="Frequency-Error of your Device in PPM", type=int, default=0)
-	parser.add_argument("-a", "--demod", help="Demodulation Functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
-	parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, default=0)
-	parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
-	parser.add_argument("-q", "--quiet", help="Shows no Information. Only Logfiles", action="store_true")
-	args = parser.parse_args()
-except:
-	log("cannot parse Args","error")
+	#Clear the Logfiles
+	try:
+		script_path = os.path.dirname(os.path.abspath(__file__))
+		bos_log = open(script_path+"/log_bos.txt", "w")
+		rtl_log = open(script_path+"/log_rtl.txt", "w")
+		mon_log = open(script_path+"/log_mon.txt", "w")
+		bos_log.write("##### "+curtime()+" #####\n\n")
+		rtl_log.write("##### "+curtime()+" #####\n\n")
+		mon_log.write("##### "+curtime()+" #####\n\n")
+		bos_log.close()
+		rtl_log.close()
+		mon_log.close()
+	except:
+		log("cannot clear logfiles","error")
 
-try:
+	try:
+		#With -h or --help you get the Args help
+		#ArgsParser
+		parser = argparse.ArgumentParser(prog="boswatch.py", description="BOSWatch is a Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG", epilog="More Options you can find in the extern config.ini File in this Folder")
+		#parser.add_argument("-c", "--channel", help="BOS Channel you want to listen")
+		parser.add_argument("-f", "--freq", help="Frequency you want to listen", required=True)
+		parser.add_argument("-d", "--device", help="Device you want to use (Check with rtl_test)", type=int, default=0)
+		parser.add_argument("-e", "--error", help="Frequency-Error of your Device in PPM", type=int, default=0)
+		parser.add_argument("-a", "--demod", help="Demodulation Functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
+		parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, default=0)
+		parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
+		parser.add_argument("-q", "--quiet", help="Shows no Information. Only Logfiles", action="store_true")
+		args = parser.parse_args()
+	except:
+		log("cannot parse Args","error")
 
 	#Read Data from Args, Put it into working Variables
 	freq = args.freq
@@ -449,9 +448,13 @@ except KeyboardInterrupt:
 except:
 	log("unknown Error","error")
 finally:
-	rtl_fm.terminate()
-	log("rtl_fm terminated") 
-	multimon_ng.terminate()
-	log("multimon-ng terminated")
-	log("exiting BOSWatch")		
-	exit(0)
+	try:
+		rtl_fm.terminate()
+		log("rtl_fm terminated") 
+		multimon_ng.terminate()
+		log("multimon-ng terminated")
+		log("exiting BOSWatch")		
+	except:
+		log("failed in clean-up routine","error")	
+	finally:
+		exit(0)
