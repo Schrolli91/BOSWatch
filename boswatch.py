@@ -339,7 +339,7 @@ try:
 		        if "Alpha:" in decoded:	#check if there is a text message
 			        poc_text = decoded.split('Alpha:   ')[1].strip().rstrip('<EOT>').strip()
 			    else:
-					poc_text = ""
+				poc_text = ""
 				
 				if re.search("[0-9]{7}", poc_id): #if POC is valid
 					if poc_id >= poc_filter_range_start:
@@ -397,7 +397,7 @@ try:
 		        if "Alpha:" in decoded:	#check if there is a text message	
 			        poc_text = decoded.split('Alpha:   ')[1].strip().rstrip('<EOT>').strip()
 			    else:
-					poc_text = ""
+				poc_text = ""
 					
 				if re.search("[0-9]{7}", poc_id): #if POC is valid
 					if poc_id >= poc_filter_range_start:
