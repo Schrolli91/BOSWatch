@@ -445,13 +445,13 @@ except KeyboardInterrupt:
 except:
     log("unknown Error","error")
 finally:
-	try:
-		rtl_fm.terminate()
-		log("rtl_fm terminated") 
-		multimon_ng.terminate()
-		log("multimon-ng terminated")
-		log("exiting BOSWatch")		
-	except:
-		log("failed in clean-up routine","error")	
-	finally:
-		exit(0)
+    try:
+        rtl_fm.terminate()
+        log("rtl_fm terminated") 
+        multimon_ng.terminate()
+        log("multimon-ng terminated")
+        log("exiting BOSWatch")		
+    except:
+        log("failed in clean-up routine","error")	
+    finally:
+        exit(0)
