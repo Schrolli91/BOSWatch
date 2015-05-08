@@ -326,8 +326,7 @@ try:
                 else:
                     log("No valid ZVEI: "+zvei_id)
                 
-
-                
+     
             #POCSAG512 Decoder Section
             #check POCSAG512: -> validate -> check double alarm -> log -> (MySQL)
             #POCSAG512: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh       
@@ -384,8 +383,7 @@ try:
                 else:
                     log("No valid POCSAG512: "+poc_id)
               
-
-              
+           
             #POCSAG1200 Decoder Section
             #check POCSAG1200: -> validate -> check double alarm -> log -> (MySQL)
             #POCSAG1200: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh      
@@ -442,13 +440,12 @@ try:
                 else:
                     log("No valid POCSAG1200: "+poc_id)
                         
-                        
 except KeyboardInterrupt:
     log("Keyboard Interrupt","error")
 except:
     log("unknown Error","error")
 finally:
-    try:
+	try:
 		rtl_fm.terminate()
 		log("rtl_fm terminated") 
 		multimon_ng.terminate()
