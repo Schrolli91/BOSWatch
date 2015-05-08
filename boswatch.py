@@ -35,7 +35,7 @@ def log(msg, level="log"):
     if not level == "log" and not args.quiet or args.verbose:
         print log_entry
         
-    bos_log = open(script_path+"/log_bos.txt", "a")
+    bos_log = open(script_path+"/log/log_bos.txt", "a")
     bos_log.write(log_entry+"\n")
     bos_log.close()
 
@@ -45,9 +45,9 @@ try:
     #Clear the Logfiles
     try:
         script_path = os.path.dirname(os.path.abspath(__file__))
-        bos_log = open(script_path+"/log_bos.txt", "w")
-        rtl_log = open(script_path+"/log_rtl.txt", "w")
-        mon_log = open(script_path+"/log_mon.txt", "w")
+        bos_log = open(script_path+"/log/log_bos.txt", "w")
+        rtl_log = open(script_path+"/log/log_rtl.txt", "w")
+        mon_log = open(script_path+"/log/log_mon.txt", "w")
         bos_log.write("##### "+curtime()+" #####\n\n")
         rtl_log.write("##### "+curtime()+" #####\n\n")
         mon_log.write("##### "+curtime()+" #####\n\n")
@@ -140,7 +140,7 @@ try:
     log("reading config file")
     try:
         config = ConfigParser.ConfigParser()
-        config.read(script_path+"/config.ini")
+        config.read(script_path+"/config/config.ini")
         fms_double_ignore_time = int(config.get("FMS", "double_ignore_time"))
         zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
         poc_double_ignore_time = int(config.get("POC", "double_ignore_time"))
