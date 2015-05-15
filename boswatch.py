@@ -203,7 +203,7 @@ try:
 		rtl_fm = subprocess.Popen("rtl_fm -d "+str(device)+" -f "+str(freq)+" -M fm -s 22050 -p "+str(error)+" -E DC -F 0 -l "+str(squelch)+" -g 100",
 									#stdin=rtl_fm.stdout,
 									stdout=subprocess.PIPE,
-									stderr=open(script_path+"/log_rtl.txt","a"),
+									stderr=open(script_path+"/log/log_rtl.txt","a"),
 									shell=True)
 	except:
 		log("cannot start rtl_fm","error")
@@ -214,7 +214,7 @@ try:
 		multimon_ng = subprocess.Popen("multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - ",
 									stdin=rtl_fm.stdout,
 									stdout=subprocess.PIPE,
-									stderr=open(script_path+"/log_mon.txt","a"),
+									stderr=open(script_path+"/log/log_mon.txt","a"),
 									shell=True)
 	except:
 		log("cannot start multimon-ng","error")
