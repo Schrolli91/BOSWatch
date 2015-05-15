@@ -44,6 +44,9 @@ try:
 
 	#Clear the Logfiles
 	try:
+		if not os.path.isdir(script_path+"/log"):
+			os.mkdir(script_path+"/log")
+			
 		script_path = os.path.dirname(os.path.abspath(__file__))
 		bos_log = open(script_path+"/log/log_bos.txt", "w")
 		rtl_log = open(script_path+"/log/log_rtl.txt", "w")
