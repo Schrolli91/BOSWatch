@@ -167,7 +167,9 @@ try:
 		#HTTPrequest config
 		useHTTPrequest = int(config.get("Module", "useHTTPrequest")) #use HTTPrequest support?
 		if useHTTPrequest: #only if HTTPrequest is active
-			url = config.get("HTTPrequest", "url")
+			url_fms = config.get("HTTPrequest", "url_fms")
+			url_zvei = config.get("HTTPrequest", "url_zvei")
+			url_poc = config.get("HTTPrequest", "url_poc")
 			
 	except:
 		log("cannot read config file","error")
@@ -272,7 +274,7 @@ try:
 							if useHTTPrequest: #only if HTTPrequest is active       
 								log("FMS to HTTP")
 								try:
-									httprequest = httplib.HTTPConnection(url)
+									httprequest = httplib.HTTPConnection(url_fms)
 									httprequest.request("HEAD", "/")
 									httpresponse = httprequest.getresponse()
 									if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
@@ -318,7 +320,7 @@ try:
 						if useHTTPrequest: #only if HTTPrequest is active
 							log("ZVEI to HTTP") 
 							try:
-								httprequest = httplib.HTTPConnection(url)
+								httprequest = httplib.HTTPConnection(url_zvei)
 								httprequest.request("HEAD", "/")
 								httpresponse = httprequest.getresponse()
 								if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
@@ -330,7 +332,7 @@ try:
 				else:
 					log("No valid ZVEI: "+zvei_id)
 				
-	 
+				
 			#POCSAG512 Decoder Section
 			#check POCSAG512: -> validate -> check double alarm -> log -> (MySQL)
 			#POCSAG512: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh       
@@ -371,7 +373,7 @@ try:
 								if useHTTPrequest: #only if HTTPrequest is active
 									log("POC512 to HTTP")   
 									try:
-										httprequest = httplib.HTTPConnection(url)
+										httprequest = httplib.HTTPConnection(url_poc)
 										httprequest.request("HEAD", "/")
 										httpresponse = httprequest.getresponse()
 										if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
@@ -386,8 +388,8 @@ try:
 						log("POCSAG512: "+poc_id+" out of filter range")
 				else:
 					log("No valid POCSAG512: "+poc_id)
-			  
-		   
+				
+			
 			#POCSAG1200 Decoder Section
 			#check POCSAG1200: -> validate -> check double alarm -> log -> (MySQL)
 			#POCSAG1200: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh      
@@ -428,7 +430,7 @@ try:
 								if useHTTPrequest: #only if HTTPrequest is active
 									log("POC1200 to HTTP")  
 									try:
-										httprequest = httplib.HTTPConnection(url)
+										httprequest = httplib.HTTPConnection(url_poc)
 										httprequest.request("HEAD", "/")
 										httpresponse = httprequest.getresponse()
 										if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
