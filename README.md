@@ -13,21 +13,21 @@ unless you are developer you can use the develop-Branch - may be unstable!
 
 ### Features
 ##### Implemented Features:
-- FMS and ZVEI decoding and Displaying
+- FMS, ZVEI and POCSAG decoding and Displaying
 - Filtering double alarms with adjustable time
-- FMS and ZVEI validation (plausibility test)
-- MySQL Database Support for FMS and ZVEI
+- Data validation (plausibility test)
+- MySQL Database Support
 - simple HTTP request at alarm to URL you want
 - All configurations in seperate config File
 - simple Web Frontend with Data Parsing
 - Logfiles for better Troubleshooting
 - verbose/quiet Mode for more/none information
 - POCSAG1200 and POCSAG512 support
-- Filtering of POCSAG512 and POCSAG1200 RIC´s (adjustment at config)
+- Filtering of POCSAG RIC´s (adjustment at config)
 
 ##### Features for the Future:
 - extensive filtering options
-- 2400 support (need RAW data from multimon-ng)
+- POCSAG 2400 support (need RAW data from multimon-ng)
 - automatic Audio recording at alarm
 - E-Mail Notification
 - Web Frontend with Overview and configuration
