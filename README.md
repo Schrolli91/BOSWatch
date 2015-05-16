@@ -29,6 +29,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - extensive filtering options
 - 2400 support (need RAW data from multimon-ng)
 - automatic Audio recording at alarm
+- E-Mail Notification
 - Web Frontend with Overview and configuration
 
 ### Configuration
@@ -80,7 +81,8 @@ You can easy install BOSWatch with the install.sh Script.
 - And use the script  `sudo sh install.sh`
 
 Now the script downloads and compile all needed data.
-At the end you can find BOSWatch in `~/bos/BOSWatch/`
+At the end you can find BOSWatch in `~/boswatch/`
+In case of an Error during the Installation, check the Logfile in `~/boswatch/install/setup_log.txt`
 
 Caution, script don't install a Webserver with PHP and MySQL.
 So you have to make up manually if you want to use MySQL support.
@@ -88,6 +90,7 @@ So you have to make up manually if you want to use MySQL support.
 ### Requirements
 - RTL_SDR (rtl_fm)
 - Multimon-NG
+- Python Support
 - MySQL Connector for Python
 
 ##### optional
