@@ -5,7 +5,7 @@ import time
 import pluginloader
 
 import logging
-logging.basicConfig(filename='boswatch.log',level=logging.DEBUG, format='%(asctime)s - %(levelname)s: %(message)s', datefmt='%d.%m.%Y %I:%M:%S')
+logging.basicConfig(filename='boswatch.log', filemode='w', level=logging.DEBUG, format='%(asctime)s - %(levelname)s: %(message)s', datefmt='%d.%m.%Y %I:%M:%S')
 
 #https://docs.python.org/2/howto/logging.html#logging-basic-tutorial
 #log levels
