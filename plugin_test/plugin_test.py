@@ -32,16 +32,15 @@ logger.addHandler(ch)
 #warning
 #error - normal error - program goes further
 #exception - error handler in try:exc: into the message
-#critical - big error, program exit
+#critical - critical error, program exit
 
 
-
+daten = ["12345"]
 
 while True:
     time.sleep(1)
-    print ("Alarm!")
     logging.info("Alarm!")
     for i in pluginloader.getPlugins():
         logging.debug("Loading plugin " + i["name"])
         plugin = pluginloader.loadPlugin(i)
-        plugin.run("zvei","","12345","","")
+        plugin.run("zvei","00000000",daten)

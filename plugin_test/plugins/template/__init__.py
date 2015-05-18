@@ -1,8 +1,9 @@
 import logging
 
-def run(typ,frequenz,data1,data2,data3):
+def run(typ,frequenz,daten):
     logging.debug("Throw Template Plugin")
     try:
+        logging.info("ZVEI: %s wurde empfangen!", daten[0])
         logging.debug("try 5/0")
         test = 5/0
     except:
