@@ -1,8 +1,12 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
 
+import globals  # Global variables
 import time
 import pluginloader
+
+import os #for absolute path: os.path.dirname(os.path.abspath(__file__))
+import ConfigParser #for parse the config file
 
 #create new logger
 import logging
@@ -34,8 +38,17 @@ logger.addHandler(ch)
 #exception - error handler in try:exc: into the message
 #critical - critical error, program exit
 
+#ConfigParser
+logging.info("reading config file")
+try:
+	script_path = os.path.dirname(os.path.abspath(__file__))
+	globals.config = ConfigParser.ConfigParser()
+	globals.config.read(script_path+"/config/config.ini")
+except:
+	logging.error("cannot read config file","error")
 
-data = {"zvei":"12345"}
+#data = {"zvei":"12345"}
+data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
 
 while True:
     time.sleep(1)
@@ -43,4 +56,4 @@ while True:
     for i in pluginloader.getPlugins():
         logging.debug("Load Plugin: " + i["name"])
         plugin = pluginloader.loadPlugin(i)
-        plugin.run("zvei","80000000",data)
+        plugin.run("POC","80000000",data)

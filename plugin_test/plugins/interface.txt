@@ -15,5 +15,12 @@ FMS:
 
 POCSAG:
 - ric
-- sub_ric
-- text
+- function
+- msg
+
+Es stehen folgende globale Objecte zur Verfügung:
+1.) import logging # Global logger
+logging - Object
+
+2.) import globals # Global variables
+config - Object (typ: ConfigParser, stellt config.ini bereit)
