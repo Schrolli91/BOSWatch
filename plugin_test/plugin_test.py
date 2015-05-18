@@ -25,7 +25,7 @@ logger.addHandler(fh)
 
 #create a display loger
 ch = logging.StreamHandler()
-ch.setLevel(logging.ERROR) #log level >= Error
+ch.setLevel(logging.INFO) #log level >= info
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
@@ -33,7 +33,7 @@ logger.addHandler(ch)
 #log levels
 #----------
 #debug - debug messages only for log
-#info - inormation for normal display
+#info - information for normal display
 #warning
 #error - normal error - program goes further
 #exception - error with exception message in log
