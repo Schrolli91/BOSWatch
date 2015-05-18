@@ -35,7 +35,7 @@ logger.addHandler(ch)
 #critical - critical error, program exit
 
 
-daten = ["12345"]
+data = ["12345"]
 
 while True:
     time.sleep(1)
@@ -43,4 +43,4 @@ while True:
     for i in pluginloader.getPlugins():
         logging.debug("Loading plugin " + i["name"])
         plugin = pluginloader.loadPlugin(i)
-        plugin.run("zvei","00000000",daten)
+        plugin.run("zvei","80000000",data)
