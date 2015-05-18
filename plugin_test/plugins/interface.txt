@@ -2,7 +2,7 @@
 
 typ		=	FMS, ZVEI oder POC
 freq		=	Frequenz in Hz
-daten[] als Python Dict
+data = {"KEY":"VALUE"} 	als Python Dict
 
 ZVEI:
 - zvei
