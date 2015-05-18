@@ -1,0 +1,26 @@
+ZVEI:
+=====
+typ	=	zvei
+time	=	datetime
+frequenz=	empfangsfrequenz
+data1	=	zvei code
+data2	= 
+data3	=
+
+FMS:
+====
+typ	=	fms
+time	=	datetime
+frequenz=	empfangsfrequenz
+data1	=	fms kennung	
+data2	=	status
+data3	=	richtung
+
+POCSAG 1200:
+============
+typ	=	poc1200
+time	=	datetime
+frequenz=	empfangsfrequenz
+data1	=	ric
+data2	=	sub_ric	
+data3	=	text
