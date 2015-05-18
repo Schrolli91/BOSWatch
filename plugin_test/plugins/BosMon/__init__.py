@@ -8,7 +8,7 @@ import httplib #for the HTTP request
 import urllib #for the HTTP request with parameters
 import base64 #for the HTTP request with User/Password
 
-def run(typ,frequenz,daten):
+def run(typ,freq,data):
 	logging.debug("BosMon Plugin called")
 	logging.debug(" - typ: " +typ)
 	try:
@@ -33,12 +33,12 @@ def run(typ,frequenz,daten):
 			logging.debug("Start POC to BosMon")
 			try:
 				#Defined data structure:
-				#   daten["ric"]
-				#   daten["function"]
-				#   daten["msg"]
+				#   data["ric"]
+				#   data["function"]
+				#   data["msg"]
 				#BosMon-Telegramin expected "a-d" as RIC-sub/function
-				daten["function"] = daten["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
-				params = urllib.urlencode({'type':'pocsag', 'address':daten["ric"], 'flags':'0', 'function':daten["function"], 'message':daten["msg"]})
+				data["function"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
+				params = urllib.urlencode({'type':'pocsag', 'address':data["ric"], 'flags':'0', 'function':data["function"], 'message':data["msg"]})
 				logging.debug(" - Params:" +params)
 				headers = {}
 				headers['Content-type'] = "application/x-www-form-urlencoded"

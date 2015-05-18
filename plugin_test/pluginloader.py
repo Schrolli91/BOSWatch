@@ -18,6 +18,7 @@ def getPlugins():
         if not os.path.isdir(location) or not MainModule + ".py" in os.listdir(location):
             continue
         logging.debug("found plugin: "+i)
+
         # is the plugin enabled in the config-file?
         try: 
             usePlugin = int(globals.config.get("Module", i))

@@ -8,8 +8,9 @@ import pluginloader
 import os #for absolute path: os.path.dirname(os.path.abspath(__file__))
 import ConfigParser #for parse the config file
 
-#create new logger
 import logging
+
+#create new logger
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
@@ -32,20 +33,20 @@ logger.addHandler(ch)
 #log levels
 #----------
 #debug - debug messages only for log
-#info - only an information
+#info - inormation for normal display
 #warning
 #error - normal error - program goes further
-#exception - error handler in try:exc: into the message
+#exception - error with exception message in log
 #critical - critical error, program exit
 
 #ConfigParser
-logging.info("reading config file")
 try:
+	logging.debug("reading config file")
 	script_path = os.path.dirname(os.path.abspath(__file__))
 	globals.config = ConfigParser.ConfigParser()
 	globals.config.read(script_path+"/config/config.ini")
 except:
-	logging.error("cannot read config file","error")
+	logging.exception("cannot read config file")
 
 #data = {"zvei":"12345"}
 data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
