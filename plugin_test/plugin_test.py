@@ -35,7 +35,7 @@ logger.addHandler(ch)
 #critical - critical error, program exit
 
 
-data = { "zvei":"12345"}
+data = ["12345"]
 
 while True:
     time.sleep(1)
