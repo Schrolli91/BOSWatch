@@ -9,8 +9,6 @@ import urllib #for the HTTP request with parameters
 import base64 #for the HTTP request with User/Password
 
 def run(typ,freq,data):
-	logging.debug("BosMon Plugin called")
-	logging.debug(" - typ: " +typ)
 	try:
 		#get BosMon-Config
 		bosmon_server = globals.config.get("BosMon", "bosmon_server")
@@ -18,6 +16,7 @@ def run(typ,freq,data):
 		bosmon_user = globals.config.get("BosMon", "bosmon_user")
 		bosmon_password = globals.config.get("BosMon", "bosmon_password")
 		bosmon_channel = globals.config.get("BosMon", "bosmon_channel")
+		logging.debug(" - typ: " +typ)
 		logging.debug(" - Server: " +bosmon_server)
 		logging.debug(" - Port: " +bosmon_port)
 		logging.debug(" - User: " +bosmon_user)

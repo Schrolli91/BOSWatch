@@ -52,9 +52,9 @@ except:
 data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
 
 while True:
-    time.sleep(1)
-    logging.info("Alarm!")
-    for i in pluginloader.getPlugins():
-        logging.debug("Load Plugin: " + i["name"])
-        plugin = pluginloader.loadPlugin(i)
-        plugin.run("POC","80000000",data)
+	time.sleep(1)
+	logging.info("Alarm!")
+		for i in pluginloader.getPlugins():
+		plugin = pluginloader.loadPlugin(i)
+		logging.debug(i["name"] + " Plugin called")
+		plugin.run("POC","80000000",data)
