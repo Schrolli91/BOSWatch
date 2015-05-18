@@ -1,0 +1,19 @@
+Übergabe an Plugin:
+
+typ		=	FMS, ZVEI oder POC
+freq		=	Frequenz in Hz
+data = {"KEY":"VALUE"} 	als Python Dict
+
+ZVEI:
+- zvei
+
+FMS:
+- fms
+- status
+- direction
+- tki
+
+POCSAG:
+- ric
+- sub_ric
+- text
