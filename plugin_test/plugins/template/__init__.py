@@ -1,7 +1,7 @@
 import logging
 
 def run(typ,freq,data):
-    logging.debug("Throw Template Plugin")
+    logging.debug("Strat Plugin: template")
     try:
         logging.info("ZVEI: %s wurde auf %s empfangen!", data["zvei"],freq)
         logging.debug("try 5/0")

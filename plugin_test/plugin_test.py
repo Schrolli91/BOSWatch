@@ -41,6 +41,6 @@ while True:
     time.sleep(1)
     logging.info("Alarm!")
     for i in pluginloader.getPlugins():
-        logging.debug("Loading plugin " + i["name"])
+        logging.debug("Load Plugin: " + i["name"])
         plugin = pluginloader.loadPlugin(i)
         plugin.run("zvei","80000000",data)
