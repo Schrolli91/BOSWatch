@@ -2,18 +2,18 @@
 
 Typ		=	FMS, ZVEI oder POC
 Frequenz	=	Frequenz in Hz
-daten[] als Python List
+daten[] als Python Dictionary
 
 ZVEI:
-- ZVEI code
+- zvei
 
 FMS:
-- FMS Kennung
-- Status
-- Richtung
-- TKI
+- fms
+- status
+- direction
+- tki
 
 POCSAG:
-- RIC
-- Sub RIC
-- Text
+- ric
+- sub_ric
+- text
