@@ -23,4 +23,4 @@ while True:
     for i in pluginloader.getPlugins():
         logging.debug("Loading plugin " + i["name"])
         plugin = pluginloader.loadPlugin(i)
-        plugin.run("zvei","","","12345","","")
+        plugin.run("zvei","","12345","","")
