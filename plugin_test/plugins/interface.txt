@@ -1,19 +1,19 @@
 Übergabe an Plugin:
 
-Typ		=	FMS, ZVEI oder POC
-Frequenz	=	Frequenz in Hz
-daten[] als Python List
+typ		=	FMS, ZVEI oder POC
+freq		=	Frequenz in Hz
+daten[] als Python Dict
 
 ZVEI:
-- ZVEI code
+- zvei
 
 FMS:
-- FMS Kennung
-- Status
-- Richtung
-- TKI
+- fms
+- status
+- direction
+- tki
 
 POCSAG:
-- RIC
-- Sub RIC
-- Text
+- ric
+- sub_ric
+- text
