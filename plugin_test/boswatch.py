@@ -167,11 +167,11 @@ try:
 	try:
 		globals.config = ConfigParser.ConfigParser()
 		globals.config.read(script_path+"/config/config.ini")
-		fms_double_ignore_time = int(globals.config.get("FMS", "double_ignore_time"))
-		zvei_double_ignore_time = int(globals.config.get("ZVEI", "double_ignore_time"))
-		poc_double_ignore_time = int(globals.config.get("POC", "double_ignore_time"))
-		poc_filter_range_start = int(globals.config.get("POC", "filter_range_start"))
-		poc_filter_range_end = int(globals.config.get("POC", "filter_range_end"))		
+		fms_double_ignore_time = globals.config.getint("FMS", "double_ignore_time")
+		zvei_double_ignore_time = globals.config.getint("ZVEI", "double_ignore_time")
+		poc_double_ignore_time = globals.config.getint("POC", "double_ignore_time")
+		poc_filter_range_start = globals.config.getint("POC", "filter_range_start")
+		poc_filter_range_end = globals.config.getint("POC", "filter_range_end")	
 	except:
 		logging.exception("cannot read config file")
 		
