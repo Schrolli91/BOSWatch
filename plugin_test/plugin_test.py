@@ -15,6 +15,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 #set log string format
+formatter = logging.Formatter('%(asctime)s - %(module)s [%(levelname)s] %(message)s', '%d.%m.%Y %I:%M:%S')
 
 #create a file loger
 fh = logging.FileHandler('boswatch.log', 'w')
