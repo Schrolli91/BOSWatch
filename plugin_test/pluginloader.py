@@ -16,6 +16,7 @@ def getPlugins():
 		# plugins have to be a subdir with MainModule, if not skip
 		if not os.path.isdir(location) or not i + ".py" in os.listdir(location):
 			continue
+		logging.debug("found Plugin: %s", i)
 
 		# is the plugin enabled in the config-file?
 		try: 
@@ -31,4 +32,5 @@ def getPlugins():
 	return plugins
 
 def loadPlugin(plugin):
+	logging.debug("load Plugin: %s", plugin["name"])
 	return imp.load_module(plugin["name"], *plugin["info"])
