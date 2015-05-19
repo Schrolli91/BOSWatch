@@ -17,12 +17,12 @@ def run(typ,freq,data):
 		logging.debug(" - Data4: %s", data4)
 	
 		if typ == "FMS":
-			logging.debug("FMS: %s Status: %s Dir: $s", data["fms"], data["status", data["direction")
+			logging.debug("FMS: %s Status: %s Dir: %s", data["fms"], data["status"], data["direction"])
 		elif typ == "ZVEI":
 			logging.debug("ZVEI: %s", data["zvei"])
 		elif typ == "POC":
 			logging.debug("POC: %s/%s - %s", data["ric"], data["function"], data["msg"])
-		else
+		else:
 			logging.warning(typ + " not supportet")
 			
 	except:

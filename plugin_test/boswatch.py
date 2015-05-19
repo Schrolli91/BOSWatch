@@ -216,8 +216,14 @@ try:
 		#RAW Data from Multimon-NG
 		#ZVEI2: 25832
 		#FMS: 43f314170000 (9=Rotkreuz      3=Bayern 1        Ort 0x25=037FZG 7141Status 3=Einsatz Ab    0=FZG->LST2=III(mit NA,ohneSIGNAL)) CRC correct\n' 
-		decoded = ""#str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
-			
+		#decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
+		
+		#only for develop
+		#decoded = "ZVEI2: 25832"
+		decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
+		time.sleep(1)	
+		
+		
 		if True: #if input data avalable
 			
 			timestamp = int(time.time())#Get Timestamp                  
@@ -242,9 +248,9 @@ try:
 							logging.warning("FMS double alarm: %s", fms_id_old)
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 						else:
+							logging.info("FMS:%s Status:%s Richtung:%s TKI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
 							data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "tki":fms_tsi}
 							throwAlarm("FMS",data)
-							logging.info("FMS:%s Status:%s Richtung:%s TKI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
 							
 							fms_id_old = fms_id #save last id
 							fms_time_old = timestamp #save last time	
@@ -265,10 +271,10 @@ try:
 						logging.warning("ZVEI double alarm: %s", zvei_id_old)
 						zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 					else:
+						logging.info("5-Ton: %s", zvei_id)
 						data = {"zvei":zvei_id}
 						throwAlarm("ZVEI",data)
-						logging.info("5-Ton: %s", zvei_id)
-						
+	
 						zvei_id_old = zvei_id #save last id
 						zvei_time_old = timestamp #save last time
 				else:
@@ -295,10 +301,10 @@ try:
 								logging.warning("POC512 double alarm: %s", poc_id_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
+								logging.info("POCSAG512: %s %s %s ", poc_id, poc_sub, poc_text)
 								data = {"ric":poc_id, "function":poc_sub, "msg":poc_text}
 								throwAlarm("POC",data)
-								logging.info("POCSAG512: %s %s %s ", poc_id, poc_sub, poc_text)
-								
+				
 								poc_id_old = poc_id #save last id
 								poc_time_old = timestamp #save last time		
 						else:
@@ -329,10 +335,10 @@ try:
 								logging.warning("POC1200 double alarm: %s", poc_id_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
+								logging.info("POCSAG1200: %s %s %s", poc_id, poc_sub, poc_text)
 								data = {"ric":poc_id, "function":poc_sub, "msg":poc_text}
 								throwAlarm("POC",data)
-								logging.info("POCSAG1200: %s %s %s", poc_id, poc_sub, poc_text)
-								
+
 								poc_id_old = poc_id #save last id
 								poc_time_old = timestamp #save last time						
 						else:
