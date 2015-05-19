@@ -11,16 +11,17 @@ import base64 #for the HTTP request with User/Password
 def run(typ,freq,data):
 	try:
 		#get BosMon-Config
+		logging.debug("read config file")
 		bosmon_server = globals.config.get("BosMon", "bosmon_server")
 		bosmon_port = globals.config.get("BosMon", "bosmon_port")
 		bosmon_user = globals.config.get("BosMon", "bosmon_user")
 		bosmon_password = globals.config.get("BosMon", "bosmon_password")
 		bosmon_channel = globals.config.get("BosMon", "bosmon_channel")
-		logging.debug(" - typ: " +typ)
-		logging.debug(" - Server: " +bosmon_server)
-		logging.debug(" - Port: " +bosmon_port)
-		logging.debug(" - User: " +bosmon_user)
-		logging.debug(" - Channel: " +bosmon_channel)
+		logging.debug(" - typ: %s", typ)
+		logging.debug(" - Server: %s", bosmon_server)
+		logging.debug(" - Port: %s", bosmon_port)
+		logging.debug(" - User: %s", bosmon_user)
+		logging.debug(" - Channel: %s", bosmon_channel)
 
 		if typ == "FMS":
 			logging.warning("FMS not implemented")
@@ -38,7 +39,7 @@ def run(typ,freq,data):
 				#BosMon-Telegramin expected "a-d" as RIC-sub/function
 				data["function"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
 				params = urllib.urlencode({'type':'pocsag', 'address':data["ric"], 'flags':'0', 'function':data["function"], 'message':data["msg"]})
-				logging.debug(" - Params:" +params)
+				logging.debug(" - Params: %s", params)
 				headers = {}
 				headers['Content-type'] = "application/x-www-form-urlencoded"
 				headers['Accept'] = "text/plain"
@@ -48,12 +49,12 @@ def run(typ,freq,data):
 				httprequest.request("POST", "/telegramin/"+bosmon_channel+"/input.xml", params, headers)
 				httpresponse = httprequest.getresponse()
 				if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
-					logging.debug("BosMon response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
+					logging.debug("BosMon response: %s - %s", str(httpresponse.status), str(httpresponse.reason))
 				else:
-					logging.warning("BosMon response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
+					logging.warning("BosMon response: %s - %s", str(httpresponse.status), str(httpresponse.reason))
 			except:
 				logging.error("POC to BosMon failed")
 		else:
-			logging.warning("undefined typ '"+typ+"'")
+			logging.warning("undefined typ '%s'", typ)
 	except:
 		logging.exception("")
