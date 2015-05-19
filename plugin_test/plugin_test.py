@@ -6,7 +6,7 @@ import time
 import pluginloader
 
 import os #for absolute path: os.path.dirname(os.path.abspath(__file__))
-import configparser #for parse the config file
+import ConfigParser #for parse the config file
 
 import logging
 
@@ -43,7 +43,7 @@ logger.addHandler(ch)
 try:
 	logging.debug("reading config file")
 	script_path = os.path.dirname(os.path.abspath(__file__))
-	globals.config = configparser.ConfigParser()
+	globals.config = ConfigParser.ConfigParser()
 	globals.config.read(script_path+"/config/config.ini")
 except:
 	logging.exception("cannot read config file")
