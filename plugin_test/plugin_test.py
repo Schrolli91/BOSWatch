@@ -51,25 +51,13 @@ except:
 #data = {"zvei":"12345"}
 data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
 
-#read Plugins
-pluginlist = []
-for i in pluginloader.getPlugins():
-	plugin = pluginloader.loadPlugin(i)
-	print(plugin)
-	pluginlist.append(plugin)
-
-print()	
-	
-for i in pluginlist:
-	print(i)
-	
-exit()	
 while True:
 	try:
 		time.sleep(1)
 		logging.info("Alarm!")
-		for plugin in pluginList:
-			logging.info(plugin)
+		for i in pluginloader.getPlugins():
+			plugin = pluginloader.loadPlugin(i)
+			logging.debug(i["name"] + " Plugin called")
 			plugin.run("POC","80000000",data)
 	except:
 		logging.exception("Cannot Throw Modules")

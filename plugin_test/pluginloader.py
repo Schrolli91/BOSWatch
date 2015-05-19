@@ -9,6 +9,7 @@ import os
 PluginFolder = "./plugins"
 MainModule = "__init__"
 
+
 def getPlugins():
 	plugins = []
 	possibleplugins = os.listdir(PluginFolder)
