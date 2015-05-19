@@ -16,19 +16,18 @@ def getPlugins():
 		# plugins have to be a subdir with MainModule, if not skip
 		if not os.path.isdir(location) or not i + ".py" in os.listdir(location):
 			continue
-		logging.debug("found plugin: "+i)
 
 		# is the plugin enabled in the config-file?
 		try: 
 			usePlugin = int(globals.config.get("Plugins", i))
 		except: #no entry for plugin found in config-file, skip
-			logging.warning("Plugin not in config: "+i)
+			logging.warning("Plugin not in config: %s", i)
 			
-		logging.debug("use Plugin: "+str(usePlugin))
+
 		if usePlugin:
 			info = imp.find_module(i, [location])
 			plugins.append({"name": i, "info": info})
-			logging.debug("append Plugin: "+i)
+			logging.debug("use Plugin: %s", i)
 	return plugins
 
 def loadPlugin(plugin):
