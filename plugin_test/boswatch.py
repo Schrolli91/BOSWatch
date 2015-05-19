@@ -245,7 +245,7 @@ try:
 					fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction #build FMS id
 					if re.search("[0-9a-f]{8}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
 						if fms_id == fms_id_old and timestamp < fms_time_old + fms_double_ignore_time: #check for double alarm
-							logging.warning("FMS double alarm: %s", fms_id_old)
+							logging.warning("FMS double alarm: %s within %s second(s)", fms_id_old, timestamp-fms_time_old)
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 						else:
 							logging.info("FMS:%s Status:%s Richtung:%s TKI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
@@ -268,7 +268,7 @@ try:
 				zvei_id = decoded[7:12] #ZVEI Code  
 				if re.search("[0-9F]{5}", zvei_id): #if ZVEI is valid
 					if zvei_id == zvei_id_old and timestamp < zvei_time_old + zvei_double_ignore_time: #check for double alarm
-						logging.warning("ZVEI double alarm: %s", zvei_id_old)
+						logging.warning("ZVEI double alarm: %s within %s second(s)", zvei_id_old, timestamp-zvei_time_old)
 						zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 					else:
 						logging.info("5-Ton: %s", zvei_id)
@@ -298,7 +298,7 @@ try:
 					if poc_id >= poc_filter_range_start:
 						if poc_id >= poc_filter_range_start:                                                                                     
 							if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
-								logging.warning("POC512 double alarm: %s", poc_id_old)
+								logging.warning("POC512 double alarm: %s within %s second(s)", poc_id_old, timestamp-poc_time_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
 								logging.info("POCSAG512: %s %s %s ", poc_id, poc_sub, poc_text)
@@ -332,7 +332,7 @@ try:
 					if poc_id >= poc_filter_range_start:
 						if poc_id >= poc_filter_range_start:                                                                                     
 							if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
-								logging.warning("POC1200 double alarm: %s", poc_id_old)
+								logging.warning("POC1200 double alarm: %s within %s second(s)", poc_id_old, timestamp-poc_time_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
 								logging.info("POCSAG1200: %s %s %s", poc_id, poc_sub, poc_text)
