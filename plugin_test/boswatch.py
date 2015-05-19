@@ -268,7 +268,7 @@ try:
 						logging.warning("ZVEI double alarm: %s", zvei_id_old)
 						zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 					else:
-						data = {"zvei":"1234567"}
+						data = {"zvei":zvei_id}
 						throwAlarm("ZVEI",data)
 						logging.info("5-Ton: %s", zvei_id)
 						
@@ -298,7 +298,7 @@ try:
 								logging.warning("POC512 double alarm: %s", poc_id_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
-								data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
+								data = {"ric":poc_id, "function":poc_sub, "msg":poc_text}
 								throwAlarm("POC",data)
 								logging.info("POCSAG512: %s %s %s ", poc_id, poc_sub, poc_text)
 								
@@ -332,7 +332,7 @@ try:
 								logging.warning("POC1200 double alarm: %s", poc_id_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
-								data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
+								data = {"ric":poc_id, "function":poc_sub, "msg":poc_text}
 								throwAlarm("POC",data)
 								logging.info("POCSAG1200: %s %s %s", poc_id, poc_sub, poc_text)
 								
