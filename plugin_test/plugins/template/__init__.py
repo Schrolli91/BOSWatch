@@ -8,5 +8,7 @@ def run(typ,freq,data):
 	try:
 		if typ == "ZVEI":
 			logging.info("ZVEI: %s wurde auf %s empfangen!", data["zvei"],freq)
+		else:
+			logging.warning(typ + " not supportet")
 	except:
 		logging.exception("Error in Template Plugin")

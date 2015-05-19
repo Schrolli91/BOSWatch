@@ -6,7 +6,7 @@ import time
 import pluginloader
 
 import os #for absolute path: os.path.dirname(os.path.abspath(__file__))
-import ConfigParser #for parse the config file
+import configparser #for parse the config file
 
 import logging
 
@@ -15,7 +15,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 #set log string format
-formatter = logging.Formatter('%(asctime)s - %(levelname)s: %(message)s', '%d.%m.%Y %I:%M:%S')
+formatter = logging.Formatter('%(asctime)s - %(module)s - %(levelname)s: %(message)s', '%d.%m.%Y %I:%M:%S')
 
 #create a file loger
 fh = logging.FileHandler('boswatch.log', 'w')
@@ -39,11 +39,11 @@ logger.addHandler(ch)
 #exception - error with exception message in log
 #critical - critical error, program exit
 
-#ConfigParser
+#configparser
 try:
 	logging.debug("reading config file")
 	script_path = os.path.dirname(os.path.abspath(__file__))
-	globals.config = ConfigParser.ConfigParser()
+	globals.config = configparser.ConfigParser()
 	globals.config.read(script_path+"/config/config.ini")
 except:
 	logging.exception("cannot read config file")
@@ -52,9 +52,13 @@ except:
 data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
 
 while True:
-	time.sleep(1)
-	logging.info("Alarm!")
+	try:
+		time.sleep(1)
+		logging.info("Alarm!")
 		for i in pluginloader.getPlugins():
-		plugin = pluginloader.loadPlugin(i)
-		logging.debug(i["name"] + " Plugin called")
-		plugin.run("POC","80000000",data)
+			plugin = pluginloader.loadPlugin(i)
+			logging.debug(i["name"] + " Plugin called")
+			plugin.run("POC","80000000",data)
+	except:
+		logging.exception("Cannot Throw Modules")
+		exit()
