@@ -42,8 +42,6 @@ def throwAlarm(typ,data):
 		logging.debug(i["name"] + " Plugin called")
 		plugin.run(typ,"0",data)
 
-
-
 # Programm
 try:
 
@@ -80,7 +78,6 @@ try:
 		parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, default=0)
 		parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
 		parser.add_argument("-q", "--quiet", help="Shows no Information. Only Logfiles", action="store_true")
-		args = []
 		args = parser.parse_args()
 	except:
 		logging.exception("cannot parse args")
@@ -348,7 +345,7 @@ try:
 except KeyboardInterrupt:
 	logging.warning("Keyboard Interrupt")	
 except:
-	logging.exception("")
+	logging.exception("unknown error")
 finally:
 	try:
 #		rtl_fm.terminate()
