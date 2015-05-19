@@ -23,10 +23,10 @@ def run(typ,freq,data):
 		logging.debug(" - Channel: " +bosmon_channel)
 
 		if typ == "FMS":
-			logging.warning("FMS not implemented in BosMon plugin")
+			logging.warning("FMS not implemented")
 		
 		elif typ == "ZVEI":
-			logging.warning("ZVEI not implemented in BosMon plugin")
+			logging.warning("ZVEI not implemented")
 		
 		elif typ == "POC":
 			logging.debug("Start POC to BosMon")
@@ -52,8 +52,8 @@ def run(typ,freq,data):
 				else:
 					logging.warning("BosMon response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
 			except:
-				logging.warning("POC to BosMon failed")
+				logging.error("POC to BosMon failed")
 		else:
-			logging.warning("typ '"+typ+"' undefined in BosMon plugin")
+			logging.warning("undefined typ '"+typ+"'")
 	except:
-		logging.exception("Error in BosMon Plugin")
+		logging.exception("")
