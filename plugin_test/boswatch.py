@@ -23,7 +23,7 @@ import time #timestamp for doublealarm
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 #set log string format
-formatter = logging.Formatter('%(asctime)s - %(module)s [%(levelname)s] %(message)s', '%d.%m.%Y %I:%M:%S')
+formatter = logging.Formatter('%(asctime)s - %(module)s [%(levelname)s] %(message)s', '%d.%m.%Y %H:%M:%S')
 #create a file logger
 fh = logging.FileHandler('log/boswatch.log', 'w')
 fh.setLevel(logging.DEBUG) #log level >= Debug
