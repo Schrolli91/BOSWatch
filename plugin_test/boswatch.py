@@ -36,6 +36,13 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
+def throwAlarm(typ,data):
+	for i in pluginloader.getPlugins():
+			plugin = pluginloader.loadPlugin(i)
+			logging.debug(i["name"] + " Plugin called")
+
+
+
 # Programm
 try:
 
@@ -234,14 +241,17 @@ try:
 					fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction #build FMS id
 					if re.search("[0-9a-f]{8}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
 						if fms_id == fms_id_old and timestamp < fms_time_old + fms_double_ignore_time: #check for double alarm
-							logging.warning("FMS double alarm: "+fms_id_old)
+							logging.warning("FMS double alarm: %s", fms_id_old)
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 						else:
-							logging.info("FMS:"+fms_id[0:8]+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi,"info")
+							data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "tki":fms_tsi}
+							throwAlarm("FMS",data)
+							logging.info("FMS:%s Status:%s Richtung:%s TKI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
+							
 							fms_id_old = fms_id #save last id
 							fms_time_old = timestamp #save last time	
 					else:
-						logging.warning("No valid FMS: "+fms_id)    
+						logging.warning("No valid FMS: %s", fms_id)    
 				else:
 					logging.warning("FMS CRC incorrect")
 						
@@ -254,14 +264,17 @@ try:
 				zvei_id = decoded[7:12] #ZVEI Code  
 				if re.search("[0-9F]{5}", zvei_id): #if ZVEI is valid
 					if zvei_id == zvei_id_old and timestamp < zvei_time_old + zvei_double_ignore_time: #check for double alarm
-						logging.warning("ZVEI double alarm: "+zvei_id_old)
+						logging.warning("ZVEI double alarm: %s", zvei_id_old)
 						zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 					else:
-						logging.info("5-Ton: "+zvei_id,"info")
+						data = {"zvei":"1234567"}
+						throwAlarm("ZVEI",data)
+						logging.info("5-Ton: %s", zvei_id)
+						
 						zvei_id_old = zvei_id #save last id
 						zvei_time_old = timestamp #save last time
 				else:
-					logging.warning("No valid ZVEI: "+zvei_id)
+					logging.warning("No valid ZVEI: %s", zvei_id)
 				
 				
 			#POCSAG512 Decoder Section
@@ -281,18 +294,21 @@ try:
 					if poc_id >= poc_filter_range_start:
 						if poc_id >= poc_filter_range_start:                                                                                     
 							if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
-								logging.warning("POC512 double alarm: "+poc_id_old)
+								logging.warning("POC512 double alarm: %s", poc_id_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
-								logging.info("POCSAG512: "+poc_id+" "+poc_sub+" "+poc_text,"info")
+								data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
+								throwAlarm("POC",data)
+								logging.info("POCSAG512: %s %s %s ", poc_id, poc_sub, poc_text)
+								
 								poc_id_old = poc_id #save last id
 								poc_time_old = timestamp #save last time		
 						else:
-							logging.warning("POCSAG512: "+poc_id+" out of filter range")
+							logging.warning("POCSAG512: %s out of filter range", poc_id)
 					else:
-						logging.warning("POCSAG512: "+poc_id+" out of filter range")
+						logging.warning("POCSAG512: %s out of filter range", poc_id)
 				else:
-					logging.warning("No valid POCSAG512: "+poc_id)
+					logging.warning("No valid POCSAG512: %s", poc_id)
 				
 			
 			#POCSAG1200 Decoder Section
@@ -312,18 +328,21 @@ try:
 					if poc_id >= poc_filter_range_start:
 						if poc_id >= poc_filter_range_start:                                                                                     
 							if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
-								logging.warning("POC1200 double alarm: "+poc_id_old)
+								logging.warning("POC1200 double alarm: %s", poc_id_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
-								logging.info("POCSAG1200: "+poc_id+" "+poc_sub+" "+poc_text,"info")
+								data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
+								throwAlarm("POC",data)
+								logging.info("POCSAG1200: %s %s %s", poc_id, poc_sub, poc_text)
+								
 								poc_id_old = poc_id #save last id
 								poc_time_old = timestamp #save last time						
 						else:
-							logging.warning("POCSAG1200: "+poc_id+" out of filter range")
+							logging.warning("POCSAG1200: %s out of filter range", poc_id)
 					else:
-						logging.warning("POCSAG1200: "+poc_id+" out of filter range")
+						logging.warning("POCSAG1200: %s out of filter range", poc_id)
 				else:
-					logging.warning("No valid POCSAG1200: "+poc_id)
+					logging.warning("No valid POCSAG1200: %s", poc_id)
 
 except KeyboardInterrupt:
 	logging.warning("Keyboard Interrupt")	
