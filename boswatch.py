@@ -8,60 +8,66 @@
 # For more Information see the README.md
 ##### Info #####
 
-import time
-#import sys
-import subprocess
-import os #for absolute path: os.path.dirname(os.path.abspath(__file__))
-import mysql
-import mysql.connector
-import httplib #for the HTTP request
+import globals  # Global variables
+import pluginloader
+
+import logging
 
 import argparse #for parse the args
 import ConfigParser #for parse the config file
 import re #Regex for validation
+import os #for script path
+import time #timestamp for doublealarm
+
+#create new logger
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+#set log string format
+formatter = logging.Formatter('%(asctime)s - %(module)-12s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
+#create a file logger
+fh = logging.FileHandler('log/boswatch.log', 'w')
+fh.setLevel(logging.DEBUG) #log level >= Debug
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+#create a display logger
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO) #log level >= info
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 
-# Functions
-def curtime(format="%Y-%m-%d %H:%M:%S"):
-	return time.strftime(format)    
-
-#Loglevel 
-#[LOG] for the logfile
-#[INFO] normal display
-#[ERROR] errors
-def log(msg, level="log"):
-	log_entry = curtime("%H:%M:%S")+" ["+level.upper()+"]   "+msg
-
-	if not level == "log" and not args.quiet or args.verbose:
-		print log_entry
-		
-	bos_log = open(script_path+"/log/log_bos.txt", "a")
-	bos_log.write(log_entry+"\n")
-	bos_log.close()
-
+def throwAlarm(typ,data):
+	for i in pluginloader.getPlugins():
+		plugin = pluginloader.loadPlugin(i)
+		logging.debug("call Plugin: %s", i["name"])
+		plugin.run(typ,"0",data)
+	
 # Programm
 try:
 
-	#Clear the Logfiles
+	#first Clear the Logfiles for logging
 	try:
 		script_path = os.path.dirname(os.path.abspath(__file__))
 		
 		if not os.path.exists(script_path+"/log/"):
 			os.mkdir(script_path+"/log/")
 			
-		bos_log = open(script_path+"/log/log_bos.txt", "w")
-		rtl_log = open(script_path+"/log/log_rtl.txt", "w")
-		mon_log = open(script_path+"/log/log_mon.txt", "w")
-		bos_log.write("##### "+curtime()+" #####\n\n")
-		rtl_log.write("##### "+curtime()+" #####\n\n")
-		mon_log.write("##### "+curtime()+" #####\n\n")
+		bos_log = open(script_path+"/log/boswatch.log", "w")
+		rtl_log = open(script_path+"/log/rtl_fm.log", "w")
+		mon_log = open(script_path+"/log/multimon.log", "w")
+#		bos_log.write("##### "+curtime()+" #####\n\n")
+#		rtl_log.write("##### "+curtime()+" #####\n\n")
+#		mon_log.write("##### "+curtime()+" #####\n\n")
 		bos_log.close()
 		rtl_log.close()
 		mon_log.close()
+		logging.debug("BOSWatch has started")
+		logging.debug("Logfiles cleared")
 	except:
-		log("cannot clear logfiles","error")
+		logging.exception("cannot clear Logfiles")
 
 	try:
+		logging.debug("parse args")
 		#With -h or --help you get the Args help
 		#ArgsParser
 		parser = argparse.ArgumentParser(prog="boswatch.py", description="BOSWatch is a Python Script to Recive and Decode German BOS Information with rtl_fm and multimon-NG", epilog="More Options you can find in the extern config.ini File in this Folder")
@@ -75,27 +81,44 @@ try:
 		parser.add_argument("-q", "--quiet", help="Shows no Information. Only Logfiles", action="store_true")
 		args = parser.parse_args()
 	except:
-		log("cannot parse Args","error")
+		logging.exception("cannot parse args")
 
 	#Read Data from Args, Put it into working Variables
 	freq = args.freq
 	device = args.device
 	error = args.error
+	squelch = args.squelch
+	
+	logging.debug(" - Frequency: %s", freq)
+	logging.debug(" - Device: %s", device)
+	logging.debug(" - PPM Error: %s", error)
+	logging.debug(" - Squelch: %s", squelch)
 	
 	demodulation = ""
 	if "FMS" in args.demod:
 		demodulation += "-a FMSFSK "
+		logging.debug(" - Demod: FMS")
 	if "ZVEI" in args.demod:
 		demodulation += "-a ZVEI2 "
+		logging.debug(" - Demod: ZVEI")
 	if "POC512" in args.demod:
 		demodulation += "-a POCSAG512 "
+		logging.debug(" - Demod: POC512")
 	if "POC1200" in args.demod:
-		demodulation += "-a POCSAG1200 "    
+		demodulation += "-a POCSAG1200 "
+		logging.debug(" - Demod: P")		
 	if "POC2400" in args.demod:
 		demodulation += "-a POCSAG2400 "
-		
-	squelch = args.squelch
+		logging.debug(" - Demod: POC2400")
+	
+	logging.debug(" - Verbose Mode: %s", args.verbose)
+	logging.debug(" - Quiet Mode: %s", args.quiet)
 
+	if args.verbose:
+		ch.setLevel(logging.DEBUG)	
+	if args.quiet:
+		ch.setLevel(logging.CRITICAL)
+	
 	if not args.quiet: #only if not quiet mode
 		print "     ____  ____  ______       __      __       __    " 
 		print "    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  b" 
@@ -123,10 +146,10 @@ try:
 		print "Squelch: "+str(squelch)
 		if args.verbose:
 			print "Verbose Mode!" 
-		print ""    
+		print "" 
 		
 	#variables pre-load
-	log("pre-load variables")
+	logging.debug("pre-load variables")
 	fms_id = 0
 	fms_id_old = 0
 	fms_time_old = 0
@@ -139,105 +162,60 @@ try:
 	poc_id_old = 0
 	poc_time_old = 0
 
-		
+
 	#ConfigParser
-	log("reading config file")
+	logging.debug("reading config file")
 	try:
-		config = ConfigParser.ConfigParser()
-		config.read(script_path+"/config/config.ini")
-		fms_double_ignore_time = int(config.get("FMS", "double_ignore_time"))
-		zvei_double_ignore_time = int(config.get("ZVEI", "double_ignore_time"))
-		poc_double_ignore_time = int(config.get("POC", "double_ignore_time"))
-		poc_filter_range_start = int(config.get("POC", "filter_range_start"))
-		poc_filter_range_end = int(config.get("POC", "filter_range_end"))
-	
-		#MySQL config
-		useMySQL = int(config.get("Module", "useMySQL")) #use MySQL support?
-		if useMySQL: #only if MySQL is active
-			dbserver = config.get("MySQL", "dbserver")
-			dbuser = config.get("MySQL", "dbuser")
-			dbpassword = config.get("MySQL", "dbpassword")
-			database = config.get("MySQL", "database")
-				
-			#MySQL tables
-			tableFMS = config.get("MySQL", "tableFMS")
-			tableZVEI = config.get("MySQL", "tableZVEI")
-			tablePOC = config.get("MySQL", "tablePOC") 
-				
-		#HTTPrequest config
-		useHTTPrequest = int(config.get("Module", "useHTTPrequest")) #use HTTPrequest support?
-		if useHTTPrequest: #only if HTTPrequest is active
-			url_fms = config.get("HTTPrequest", "url_fms")
-			url_zvei = config.get("HTTPrequest", "url_zvei")
-			url_poc = config.get("HTTPrequest", "url_poc")
-			
+		globals.config = ConfigParser.ConfigParser()
+		globals.config.read(script_path+"/config/config.ini")
+		for key,val in globals.config.items("BOSWatch"):
+			logging.debug(" - %s = %s", key, val)
 	except:
-		log("cannot read config file","error")
-		
-		#in case of reading error, set standard values
-		log("set to standard configuration")
-		fms_double_ignore_time = 5
-		zvei_double_ignore_time = 5
-		poc_double_ignore_time = 10
-		poc_filter_range_start = 0000000
-		poc_filter_range_end = 9999999
-		
-		#no config - no modules ;-)
-		useMySQL = 0
-		useHTTPrequest = 0
-
-
-	
-	if useMySQL: #only if MySQL is active
-		log("testing MySQL connection")
-		try:
-			connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
-			log("connection test successful")
-		except:
-			log("connection test failed - MySQL support deactivated","error")
-			useMySQL = 0
-		finally:
-			connection.close() #Close connection in every case  
+		logging.exception("cannot read config file")
 			
 			
-	log("starting rtl_fm")
-	try:
-		rtl_fm = subprocess.Popen("rtl_fm -d "+str(device)+" -f "+str(freq)+" -M fm -s 22050 -p "+str(error)+" -E DC -F 0 -l "+str(squelch)+" -g 100",
-									#stdin=rtl_fm.stdout,
-									stdout=subprocess.PIPE,
-									stderr=open(script_path+"/log/log_rtl.txt","a"),
-									shell=True)
-	except:
-		log("cannot start rtl_fm","error")
-		
-	#multimon_ng = subprocess.Popen("aplay -r 22050 -f S16_LE -t raw",
-	log("starting multimon-ng")
-	try:
-		multimon_ng = subprocess.Popen("multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - ",
-									stdin=rtl_fm.stdout,
-									stdout=subprocess.PIPE,
-									stderr=open(script_path+"/log/log_mon.txt","a"),
-									shell=True)
-	except:
-		log("cannot start multimon-ng","error")
+	logging.debug("starting rtl_fm")
+#	try:
+#		rtl_fm = subprocess.Popen("rtl_fm -d "+str(device)+" -f "+str(freq)+" -M fm -s 22050 -p "+str(error)+" -E DC -F 0 -l "+str(squelch)+" -g 100",
+#									#stdin=rtl_fm.stdout,
+#									stdout=subprocess.PIPE,
+#									stderr=open(script_path+"/log/rtl_fm.log","a"),
+#									shell=True)
+#	except:
+#		logging.exception("cannot start rtl_fm")
+#		
+	logging.debug("starting multimon-ng")
+#	try:
+#		multimon_ng = subprocess.Popen("multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - ",
+#									stdin=rtl_fm.stdout,
+#									stdout=subprocess.PIPE,
+#									stderr=open(script_path+"/log/multimon.log","a"),
+#									shell=True)
+#	except:
+#		logging.exception("cannot start multimon-ng")
 			
 			
-	log("start decoding")   
+	logging.debug("start decoding")  
 	while True: 
 		#RAW Data from Multimon-NG
 		#ZVEI2: 25832
 		#FMS: 43f314170000 (9=Rotkreuz      3=Bayern 1        Ort 0x25=037FZG 7141Status 3=Einsatz Ab    0=FZG->LST2=III(mit NA,ohneSIGNAL)) CRC correct\n' 
-		decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
-			
+		#decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
+		
+		#only for develop
+		decoded = "ZVEI2: 25832"
+		#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
+		time.sleep(1)	
+		
+		
 		if True: #if input data avalable
 			
 			timestamp = int(time.time())#Get Timestamp                  
-			#if args.verbose: print "RAW: "+decoded #for verbose mode, print Raw input data
 				
 			#FMS Decoder Section    
-			#check FMS: -> check CRC -> validate -> check double alarm -> log -> (MySQL)
+			#check FMS: -> check CRC -> validate -> check double alarm -> log
 			if "FMS:" in decoded:   
-				log("recived FMS")
+				logging.debug("recieved FMS")
 					
 				fms_service = decoded[19]       #Organisation
 				fms_country = decoded[36]       #Bundesland
@@ -250,94 +228,48 @@ try:
 				if "CRC correct" in decoded: #check CRC is correct  
 					fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction #build FMS id
 					if re.search("[0-9a-f]{8}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
-						if fms_id == fms_id_old and timestamp < fms_time_old + fms_double_ignore_time: #check for double alarm
-							log("FMS double alarm: "+fms_id_old)
+						if fms_id == fms_id_old and timestamp < fms_time_old + globals.config.getint("BOSWatch", "fms_double_ignore_time"): #check for double alarm
+							logging.warning("FMS double alarm: %s within %s second(s)", fms_id_old, timestamp-fms_time_old)
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 						else:
-							log("FMS:"+fms_id[0:8]+" Status:"+fms_status+" Richtung:"+fms_direction+" TKI:"+fms_tsi,"info")
-							fms_id_old = fms_id #save last id
-							fms_time_old = timestamp #save last time    
+							logging.info("FMS:%s Status:%s Richtung:%s TKI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
+							data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "tki":fms_tsi}
+							throwAlarm("FMS",data)
 							
-							if useMySQL: #only if MySQL is active
-								log("FMS to MySQL")
-								try:
-									connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
-									cursor = connection.cursor()
-									cursor.execute("INSERT INTO "+tableFMS+" (time,fms,status,direction,tsi) VALUES (%s,%s,%s,%s,%s)",(curtime(),fms_id[0:8],fms_status,fms_direction,fms_tsi))
-									cursor.close()
-									connection.commit()
-								except:
-									log("FMS to MySQL failed","error")  
-								finally:
-									connection.close() #Close connection in every case  
-									
-							if useHTTPrequest: #only if HTTPrequest is active       
-								log("FMS to HTTP")
-								try:
-									httprequest = httplib.HTTPConnection(url_fms)
-									httprequest.request("HEAD", "/")
-									httpresponse = httprequest.getresponse()
-									if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
-										log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
-									else:
-										log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
-								except:
-									log("FMS to HTTP failed","error")                                   
+							fms_id_old = fms_id #save last id
+							fms_time_old = timestamp #save last time	
 					else:
-						log("No valid FMS: "+fms_id)    
+						logging.warning("No valid FMS: %s", fms_id)    
 				else:
-					log("FMS CRC incorrect")
+					logging.warning("FMS CRC incorrect")
 						
-						
+		
 			#ZVEI Decoder Section
-			#check ZVEI: -> validate -> check double alarm -> log -> (MySQL)     
+			#check ZVEI: -> validate -> check double alarm -> log     
 			if "ZVEI2:" in decoded:
-				log("recived ZVEI")
-					
+				logging.debug("recieved ZVEI")			
+				
 				zvei_id = decoded[7:12] #ZVEI Code  
 				if re.search("[0-9F]{5}", zvei_id): #if ZVEI is valid
-					if zvei_id == zvei_id_old and timestamp < zvei_time_old + zvei_double_ignore_time: #check for double alarm
-						log("ZVEI double alarm: "+zvei_id_old)
+					if zvei_id == zvei_id_old and timestamp < zvei_time_old + globals.config.getint("BOSWatch", "zvei_double_ignore_time"): #check for double alarm
+						logging.warning("ZVEI double alarm: %s within %s second(s)", zvei_id_old, timestamp-zvei_time_old)
 						zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 					else:
-						log("5-Ton: "+zvei_id,"info")
+						logging.info("5-Ton: %s", zvei_id)
+						data = {"zvei":zvei_id}
+						throwAlarm("ZVEI",data)
+	
 						zvei_id_old = zvei_id #save last id
 						zvei_time_old = timestamp #save last time
-														
-						if useMySQL: #only if MySQL is active
-							log("ZVEI to MySQL")
-							try:
-								connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
-								cursor = connection.cursor()
-								cursor.execute("INSERT INTO "+tableZVEI+" (time,zvei) VALUES (%s,%s)",(curtime(),zvei_id))
-								cursor.close()
-								connection.commit()
-							except:
-								log("ZVEI to MySQL failed","error") 
-							finally:
-								connection.close() #Close connection in every case                  
-							
-						if useHTTPrequest: #only if HTTPrequest is active
-							log("ZVEI to HTTP") 
-							try:
-								httprequest = httplib.HTTPConnection(url_zvei)
-								httprequest.request("HEAD", "/")
-								httpresponse = httprequest.getresponse()
-								if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
-									log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
-								else:
-									log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
-							except:
-								log("ZVEI to HTTP failed","error")                              
 				else:
-					log("No valid ZVEI: "+zvei_id)
+					logging.warning("No valid ZVEI: %s", zvei_id)
 				
 				
 			#POCSAG512 Decoder Section
-			#check POCSAG512: -> validate -> check double alarm -> log -> (MySQL)
+			#check POCSAG512: -> validate -> check double alarm -> log
 			#POCSAG512: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh       
 			if "POCSAG512:" in decoded:
-				log("recived POCSAG512")
+				logging.debug("recieved POCSAG512")
 				
 				poc_id = decoded[20:27] #POC Code
 				poc_sub = decoded[39].replace("3", "4").replace("2", "3").replace("1", "2").replace("0", "1")
@@ -347,54 +279,31 @@ try:
 					poc_text = ""
 				
 				if re.search("[0-9]{7}", poc_id): #if POC is valid
-					if poc_id >= poc_filter_range_start:
-						if poc_id >= poc_filter_range_start:                                                                                     
-							if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
-								log("POC512 double alarm: "+poc_id_old)
+					if poc_id >= globals.config.getint("BOSWatch", "poc_filter_range_start"):
+						if poc_id <= globals.config.getint("BOSWatch", "poc_filter_range_end"):                                                                                     
+							if poc_id == poc_id_old and timestamp < poc_time_old + globals.config.getint("BOSWatch", "poc_double_ignore_time"): #check for double alarm
+								logging.warning("POC512 double alarm: %s within %s second(s)", poc_id_old, timestamp-poc_time_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
-								log("POCSAG512: "+poc_id+" "+poc_sub+" "+poc_text,"info")
+								logging.info("POCSAG512: %s %s %s ", poc_id, poc_sub, poc_text)
+								data = {"ric":poc_id, "function":poc_sub, "msg":poc_text}
+								throwAlarm("POC",data)
+				
 								poc_id_old = poc_id #save last id
-								poc_time_old = timestamp #save last time
-																																	
-								if useMySQL: #only if MySQL is active
-									log("POC to MySQL")
-									try:
-										connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
-										cursor = connection.cursor()
-										cursor.execute("INSERT INTO "+tablePOC+" (time,ric,funktion,text) VALUES (%s,%s,%s,%s)",(curtime(),poc_id,poc_sub,poc_text,))
-										cursor.close()
-										connection.commit()
-									except:
-										log("POC512 to MySQL failed","error")   
-									finally:
-										connection.close() #Close connection in every case                  
-												
-								if useHTTPrequest: #only if HTTPrequest is active
-									log("POC512 to HTTP")   
-									try:
-										httprequest = httplib.HTTPConnection(url_poc)
-										httprequest.request("HEAD", "/")
-										httpresponse = httprequest.getresponse()
-										if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
-											log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
-										else:
-											log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
-									except:
-										log("POCSAG512 to HTTP failed","error")
+								poc_time_old = timestamp #save last time		
 						else:
-							log("POCSAG512: "+poc_id+" out of filter range")
+							logging.warning("POCSAG512: %s out of filter range", poc_id)
 					else:
-						log("POCSAG512: "+poc_id+" out of filter range")
+						logging.warning("POCSAG512: %s out of filter range", poc_id)
 				else:
-					log("No valid POCSAG512: "+poc_id)
+					logging.warning("No valid POCSAG512: %s", poc_id)
 				
 			
 			#POCSAG1200 Decoder Section
-			#check POCSAG1200: -> validate -> check double alarm -> log -> (MySQL)
+			#check POCSAG1200: -> validate -> check double alarm -> log
 			#POCSAG1200: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh      
 			if "POCSAG1200:" in decoded:
-				log("recived POCSAG1200")
+				logging.debug("recieved POCSAG1200")
 				
 				poc_id = decoded[21:28] #POC Code
 				poc_sub = decoded[40].replace("3", "4").replace("2", "3").replace("1", "2").replace("0", "1")
@@ -404,60 +313,37 @@ try:
 					poc_text = ""
 					
 				if re.search("[0-9]{7}", poc_id): #if POC is valid
-					if poc_id >= poc_filter_range_start:
-						if poc_id >= poc_filter_range_start:                                                                                     
-							if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
-								log("POC1200 double alarm: "+poc_id_old)
+					if poc_id >= globals.config.getint("BOSWatch", "poc_filter_range_start"):
+						if poc_id <= globals.config.getint("BOSWatch", "poc_filter_range_end"):                                                                                     
+							if poc_id == poc_id_old and timestamp < poc_time_old + globals.config.getint("BOSWatch", "poc_double_ignore_time"): #check for double alarm
+								logging.warning("POC1200 double alarm: %s within %s second(s)", poc_id_old, timestamp-poc_time_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
-								log("POCSAG1200: "+poc_id+" "+poc_sub+" "+poc_text,"info")
+								logging.info("POCSAG1200: %s %s %s", poc_id, poc_sub, poc_text)
+								data = {"ric":poc_id, "function":poc_sub, "msg":poc_text}
+								throwAlarm("POC",data)
+
 								poc_id_old = poc_id #save last id
-								poc_time_old = timestamp #save last time
-																																	
-								if useMySQL: #only if MySQL is active
-									log("POC to MySQL")
-									try:
-										connection = mysql.connector.connect(host = str(dbserver), user = str(dbuser), passwd = str(dbpassword), db = str(database))
-										cursor = connection.cursor()
-										cursor.execute("INSERT INTO "+tablePOC+" (time,ric,funktion,text) VALUES (%s,%s,%s,%s)",(curtime(),poc_id,poc_sub,poc_text,))
-										cursor.close()
-										connection.commit()
-									except:
-										log("POC1200 to MySQL failed","error")  
-									finally:
-										connection.close() #Close connection in every case                  
-												
-								if useHTTPrequest: #only if HTTPrequest is active
-									log("POC1200 to HTTP")  
-									try:
-										httprequest = httplib.HTTPConnection(url_poc)
-										httprequest.request("HEAD", "/")
-										httpresponse = httprequest.getresponse()
-										if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
-											log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason))
-										else:
-											log("HTTP response: "+str(httpresponse.status)+" - "+str(httpresponse.reason),"error")
-									except:
-										log("POCSAG1200 to HTTP failed","error")
+								poc_time_old = timestamp #save last time						
 						else:
-							log("POCSAG1200: "+poc_id+" out of filter range")
+							logging.warning("POCSAG1200: %s out of filter range", poc_id)
 					else:
-						log("POCSAG1200: "+poc_id+" out of filter range")
+						logging.warning("POCSAG1200: %s out of filter range", poc_id)
 				else:
-					log("No valid POCSAG1200: "+poc_id)
-						
+					logging.warning("No valid POCSAG1200: %s", poc_id)
+
 except KeyboardInterrupt:
-	log("Keyboard Interrupt","error")
+	logging.warning("Keyboard Interrupt")	
 except:
-	log("unknown Error","error")
+	logging.exception("unknown error")
 finally:
 	try:
-		rtl_fm.terminate()
-		log("rtl_fm terminated") 
-		multimon_ng.terminate()
-		log("multimon-ng terminated")
-		log("exiting BOSWatch")		
+#		rtl_fm.terminate()
+		logging.debug("rtl_fm terminated") 
+#		multimon_ng.terminate()
+		logging.debug("multimon-ng terminated")
+		logging.debug("exiting BOSWatch")		
 	except:
-		log("failed in clean-up routine","error")	
+		logging.exception("failed in clean-up routine")	
 	finally:
 		exit(0)

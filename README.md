@@ -13,32 +13,37 @@ unless you are developer you can use the develop-Branch - may be unstable!
 
 ### Features
 ##### Implemented Features:
-- FMS, ZVEI and POCSAG decoding and Displaying
+- FMS, ZVEI and POCSAG512/1200 decoding and Displaying
+- Plugin support for easy Functions extension
 - Filtering double alarms with adjustable time
-- Data validation (plausibility test)
-- MySQL Database Support
-- simple HTTP request at alarm to URL you want
+- Filtering of POCSAG RIC´s
 - All configurations in seperate config File
-- simple Web Frontend with Data Parsing
+- Data validation (plausibility test)
 - Logfiles for better Troubleshooting
 - verbose/quiet Mode for more/none information
-- POCSAG1200 and POCSAG512 support
-- Filtering of POCSAG RIC´s (adjustment at config)
 
 ##### Features for the Future:
 - extensive filtering options
 - POCSAG 2400 support (need RAW data from multimon-ng)
-- automatic Audio recording at alarm
-- E-Mail Notification
-- Web Frontend with Overview and configuration
+
+
+###Plugins
+##### Implemented Plugins:
+- MySQL
+- BosMon
+
+##### Plugins for the Future:
+- HTTP-Push
+- E-mail Notification
+- Other Ideas per Issues
+
 
 ### Configuration
 ##### boswatch.py
-The configuration for the Script you can find in config.ini
-- You can set the ignore time for double alarms in seconds.
-- you can adjust your rangefilter for POCSAG Decode.
-- to use the script with MySQL Support set "useMySQL = 1" and the Userdata to your local MySQL Database.
-- to use the script with HTTP request Support set "useHTTPrequest = 1" and set a URL to your destination.
+Take a look into the /config/config.ini
+In the Section `[BOSWatch]` you can set double_alarm_time etc.
+In the Section `[Plugins]` you can activate or deactivate the Plugins
+For each Plugin that requires configurations a own Section with his Name is available
 
 For the other Functions see "Usage" below.
 
@@ -47,9 +52,11 @@ Put the Files in Folder /wwww/ into your local Webserver Folder (/var/www/).
 Now you must edit the "config.php" with your Userdata to your local Database.
 For the Parsing Functions take a look into the parser.php 
 
+
 ### Usage
 `sudo python boswatch.py -f 85.235M -a FMS ZVEI`
 Starts boswatch at Frequency 85.235 MHz with the Demodulation Functions FMS and ZVEI.
+Parameter -f/--freq and -a/--demod are required!
 
 Help to all usable Parameters with `sudo python boswatch.py -h`
 
@@ -59,20 +66,18 @@ usage: boswatch.py [-h] -f FREQ [-d DEVICE] [-e ERROR] -a
                    [{FMS,ZVEI,POC512,POC1200,POC2400} ...] [-s SQUELCH] [-v]
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -f FREQ, --freq FREQ  Frequency you want to listen
-  -d DEVICE, --device DEVICE
-                        Device you want to use (Check with rtl_test)
-  -e ERROR, --error ERROR
-                        Frequency-Error of your Device in PPM
+  -h, --help            				show this help message and exit
+  -f FREQ, --freq FREQ  				Frequency you want to listen
+  -d DEVICE, --device DEVICE		Device you want to use (Check with rtl_test)
+  -e ERROR, --error ERROR				Frequency-Error of your Device in PPM
   -a {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...],
   --demod {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...]
-                        Demodulation Functions
-  -s SQUELCH, --squelch SQUELCH
-                        Level of Squelch
-  -v, --verbose         Shows more Information
-  -q, --quiet           Shows no Information. Only Logfiles
+																Demodulation Functions
+  -s SQUELCH, --squelch SQUELCH	Level of Squelch
+  -v, --verbose         				Shows more Information
+  -q, --quiet           				Shows no Information. Only Logfiles
 ```
+
 
 ### Installation
 You can easy install BOSWatch with the install.sh Script.
@@ -87,16 +92,9 @@ In case of an Error during the Installation, check the Logfile in `~/boswatch/in
 Caution, script don't install a Webserver with PHP and MySQL.
 So you have to make up manually if you want to use MySQL support.
 
+
 ### Requirements
 - RTL_SDR (rtl_fm)
 - Multimon-NG
 - Python Support
 - MySQL Connector for Python
-
-##### optional
-- Webserver with PHP
-- MySQL Database Server
-
-Thanks to smith_fms and McBo from [Funkmeldesystem.de - Forum](http://www.funkmeldesystem.de/) for Inspiration and Groundwork!
-
-###### Greetz Schrolli
