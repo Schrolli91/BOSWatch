@@ -33,7 +33,7 @@ def run(typ,freq,data):
 					
 				elif typ == "ZVEI":
 					#data = {"zvei":zvei_id}
-					cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time,zvei) VALUES (NOW(),"+data["zvei"]+")")
+					cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time,zvei) VALUES (NOW(),%s)",(data["zvei"]))
 					
 				elif typ == "POC":
 					#data = {"ric":poc_id, "function":poc_sub, "msg":poc_text}
@@ -45,6 +45,7 @@ def run(typ,freq,data):
 				logging.exception("cannot Insert %s", typ)
 					 
 		finally:
+			logging.debug("close MySQL")
 			cursor.close()
 			connection.close() #Close connection in every case  
 	except:
