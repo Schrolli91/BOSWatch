@@ -207,7 +207,7 @@ try:
 		#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
 		#decoded  = "POCSAG512: Address: 1234567  Function: 0  Alpha:   Hello World"
 		#decoded  = "POCSAG512: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh"
-		time.sleep(1)	
+		#time.sleep(1)	
 		
 		
 		if True: #if input data avalable
