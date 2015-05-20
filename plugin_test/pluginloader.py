@@ -20,7 +20,7 @@ def getPlugins():
 
 		# is the plugin enabled in the config-file?
 		try: 
-			usePlugin = int(globals.config.get("Plugins", i))
+			usePlugin = globals.config.getint("Plugins", i)
 		except: #no entry for plugin found in config-file, skip
 			logging.warning("Plugin not in config: %s", i)
 			
