@@ -7,23 +7,21 @@ import globals # Global variables
 def run(typ,freq,data):
 	try:
 		#ConfigParser
-		#config Data in config["OPTION"]
 		logging.debug("reading config file")
 		try:
-			config = dict(globals.config.items("template"))
-			for key,val in config.items():
+			for key,val in globals.config.items("BOSWatch"):
 				logging.debug(" - %s = %s", key, val)
 		except:
 			logging.exception("cannot read config file")
 	
 		if typ == "FMS":
-			logging.debug("FMS: %s Status: %s Dir: %s TKI: %s", data["fms"], data["status"], data["direction"], data["tki"])
+			logging.debug(typ + " not supported")
 		elif typ == "ZVEI":
-			logging.debug("ZVEI: %s", data["zvei"])
+			logging.debug(typ + " not supported")
 		elif typ == "POC":
-			logging.debug("POC: %s-%s - %s", data["ric"], data["function"], data["msg"])
+			logging.debug(typ + " not supported")
 		else:
-			logging.warning(typ + " not supportet")
+			logging.warning(typ + " not supported")
 			
 	except:
 		logging.exception("unknown error")

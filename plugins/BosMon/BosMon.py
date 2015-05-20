@@ -13,8 +13,7 @@ def run(typ,freq,data):
 		#ConfigParser
 		logging.debug("reading config file")
 		try:
-			config = dict(globals.config.items("BosMon"))
-			for key,val in config.items():
+			for key,val in globals.config.items("BOSWatch"):
 				logging.debug(" - %s = %s", key, val)
 		except:
 			logging.exception("cannot read config file")
@@ -41,8 +40,8 @@ def run(typ,freq,data):
 				headers['Content-type'] = "application/x-www-form-urlencoded"
 				headers['Accept'] = "text/plain"
 				if bosmon_user:
-					headers['Authorization'] = "Basic {0}".format(base64.b64encode("{0}:{1}".format(config["bosmon_user"], config["bosmon_password"])))
-				httprequest = httplib.HTTPConnection(config["bosmon_server"], config["bosmon_port"])
+					headers['Authorization'] = "Basic {0}".format(base64.b64encode("{0}:{1}".format(globals.config.get("BosMon", "bosmon_user"), globals.config.get("BosMon", "bosmon_password"))))
+				httprequest = httplib.HTTPConnection(globals.config.get("BosMon", "bosmon_server"), globals.config.get("BosMon", "bosmon_port"))
 				httprequest.request("POST", "/telegramin/"+bosmon_channel+"/input.xml", params, headers)
 				httpresponse = httprequest.getresponse()
 				if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
