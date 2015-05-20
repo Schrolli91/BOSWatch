@@ -14,7 +14,7 @@ FMS:
 - fms
 - status
 - direction
-- tki
+- tsi
 
 POCSAG:
 - ric

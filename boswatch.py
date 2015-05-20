@@ -203,8 +203,10 @@ try:
 		#decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
 		
 		#only for develop
-		decoded = "ZVEI2: 25832"
+		#decoded = "ZVEI2: 25832"
 		#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
+		#decoded  = "POCSAG512: Address: 1234567  Function: 0  Alpha:   Hello World"
+		#decoded  = "POCSAG512: Address: 1234567  Function: 1  Alpha:   XXMSG MEfeweffsjh"
 		time.sleep(1)	
 		
 		
@@ -233,7 +235,7 @@ try:
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 						else:
 							logging.info("FMS:%s Status:%s Richtung:%s TKI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
-							data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "tki":fms_tsi}
+							data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "tsi":fms_tsi}
 							throwAlarm("FMS",data)
 							
 							fms_id_old = fms_id #save last id
@@ -280,7 +282,7 @@ try:
 				
 				if re.search("[0-9]{7}", poc_id): #if POC is valid
 					if poc_id >= globals.config.getint("BOSWatch", "poc_filter_range_start"):
-						if poc_id <= globals.config.getint("BOSWatch", "poc_filter_range_end"):                                                                                     
+						if poc_id <= globals.config.getint("BOSWatch", "poc_filter_range_end"):
 							if poc_id == poc_id_old and timestamp < poc_time_old + globals.config.getint("BOSWatch", "poc_double_ignore_time"): #check for double alarm
 								logging.warning("POC512 double alarm: %s within %s second(s)", poc_id_old, timestamp-poc_time_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
@@ -292,9 +294,9 @@ try:
 								poc_id_old = poc_id #save last id
 								poc_time_old = timestamp #save last time		
 						else:
-							logging.warning("POCSAG512: %s out of filter range", poc_id)
+							logging.warning("POCSAG512: %s out of filter range (high)", poc_id)
 					else:
-						logging.warning("POCSAG512: %s out of filter range", poc_id)
+						logging.warning("POCSAG512: %s out of filter range (low)", poc_id)
 				else:
 					logging.warning("No valid POCSAG512: %s", poc_id)
 				
