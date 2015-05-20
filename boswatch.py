@@ -18,6 +18,7 @@ import ConfigParser #for parse the config file
 import re #Regex for validation
 import os #for script path
 import time #timestamp for doublealarm
+import subprocess
 
 
 
@@ -177,24 +178,24 @@ try:
 			
 			
 	logging.debug("starting rtl_fm")
-#	try:
-#		rtl_fm = subprocess.Popen("rtl_fm -d "+str(device)+" -f "+str(freq)+" -M fm -s 22050 -p "+str(error)+" -E DC -F 0 -l "+str(squelch)+" -g 100",
-#									#stdin=rtl_fm.stdout,
-#									stdout=subprocess.PIPE,
-#									stderr=open(script_path+"/log/rtl_fm.log","a"),
-#									shell=True)
-#	except:
-#		logging.exception("cannot start rtl_fm")
-#		
+	try:
+		rtl_fm = subprocess.Popen("rtl_fm -d "+str(device)+" -f "+str(freq)+" -M fm -s 22050 -p "+str(error)+" -E DC -F 0 -l "+str(squelch)+" -g 100",
+									#stdin=rtl_fm.stdout,
+									stdout=subprocess.PIPE,
+									stderr=open(globals.script_path+"/log/rtl_fm.log","a"),
+									shell=True)
+	except:
+		logging.exception("cannot start rtl_fm")
+		
 	logging.debug("starting multimon-ng")
-#	try:
-#		multimon_ng = subprocess.Popen("multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - ",
-#									stdin=rtl_fm.stdout,
-#									stdout=subprocess.PIPE,
-#									stderr=open(script_path+"/log/multimon.log","a"),
-#									shell=True)
-#	except:
-#		logging.exception("cannot start multimon-ng")
+	try:
+		multimon_ng = subprocess.Popen("multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - ",
+									stdin=rtl_fm.stdout,
+									stdout=subprocess.PIPE,
+									stderr=open(globals.script_path+"/log/multimon.log","a"),
+									shell=True)
+	except:
+		logging.exception("cannot start multimon-ng")
 			
 			
 	logging.debug("start decoding")  
@@ -202,12 +203,12 @@ try:
 		#RAW Data from Multimon-NG
 		#ZVEI2: 25832
 		#FMS: 43f314170000 (9=Rotkreuz      3=Bayern 1        Ort 0x25=037FZG 7141Status 3=Einsatz Ab    0=FZG->LST2=III(mit NA,ohneSIGNAL)) CRC correct\n' 
-		#decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
+		decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
 		
 		#only for develop
-		decoded = "ZVEI2: 25832"
+		#decoded = "ZVEI2: 25832"
 		#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
-		time.sleep(1)	
+		#time.sleep(1)	
 		
 		
 		if True: #if input data avalable
@@ -340,9 +341,9 @@ except:
 	logging.exception("unknown error")
 finally:
 	try:
-#		rtl_fm.terminate()
+		rtl_fm.terminate()
 		logging.debug("rtl_fm terminated") 
-#		multimon_ng.terminate()
+		multimon_ng.terminate()
 		logging.debug("multimon-ng terminated")
 		logging.debug("exiting BOSWatch")		
 	except:
