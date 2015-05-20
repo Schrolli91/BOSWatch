@@ -204,8 +204,8 @@ try:
 		#decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
 		
 		#only for develop
-		#decoded = "ZVEI2: 25832"
-		decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
+		decoded = "ZVEI2: 25832"
+		#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
 		time.sleep(1)	
 		
 		
@@ -244,12 +244,12 @@ try:
 				else:
 					logging.warning("FMS CRC incorrect")
 						
-						
+		
 			#ZVEI Decoder Section
 			#check ZVEI: -> validate -> check double alarm -> log     
 			if "ZVEI2:" in decoded:
-				logging.debug("recieved ZVEI")
-					
+				logging.debug("recieved ZVEI")			
+				
 				zvei_id = decoded[7:12] #ZVEI Code  
 				if re.search("[0-9F]{5}", zvei_id): #if ZVEI is valid
 					if zvei_id == zvei_id_old and timestamp < zvei_time_old + int(config["zvei_double_ignore_time"]): #check for double alarm
