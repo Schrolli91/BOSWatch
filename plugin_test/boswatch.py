@@ -39,9 +39,9 @@ logger.addHandler(ch)
 def throwAlarm(typ,data):
 	for i in pluginloader.getPlugins():
 		plugin = pluginloader.loadPlugin(i)
-		logging.debug(i["name"] + " Plugin called")
+		logging.debug("call Plugin: %s", i["name"])
 		plugin.run(typ,"0",data)
-
+	
 # Programm
 try:
 
