@@ -28,7 +28,7 @@ def run(typ,freq,data):
 		#ConfigParser
 		logging.debug("reading config file")
 		try:
-			for key,val in globals.config.items("template"):
+			for key,val in globals.config.items("httpRequest"):
 				logging.debug(" - %s = %s", key, val)
 		except:
 			logging.exception("cannot read config file")
