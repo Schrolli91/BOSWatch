@@ -19,21 +19,7 @@ import re #Regex for validation
 import os #for script path
 import time #timestamp for doublealarm
 
-#create new logger
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-#set log string format
-formatter = logging.Formatter('%(asctime)s - %(module)-12s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
-#create a file logger
-fh = logging.FileHandler('log/boswatch.log', 'w')
-fh.setLevel(logging.DEBUG) #log level >= Debug
-fh.setFormatter(formatter)
-logger.addHandler(fh)
-#create a display logger
-ch = logging.StreamHandler()
-ch.setLevel(logging.INFO) #log level >= info
-ch.setFormatter(formatter)
-logger.addHandler(ch)
+
 
 
 def throwAlarm(typ,data):
@@ -46,15 +32,31 @@ def throwAlarm(typ,data):
 try:
 
 	#first Clear the Logfiles for logging
-	try:
-		script_path = os.path.dirname(os.path.abspath(__file__))
+	try:	
+		globals.script_path = os.path.dirname(os.path.abspath(__file__))
 		
-		if not os.path.exists(script_path+"/log/"):
-			os.mkdir(script_path+"/log/")
+		if not os.path.exists(globals.script_path+"/log/"):
+			os.mkdir(globals.script_path+"/log/")
 			
-		bos_log = open(script_path+"/log/boswatch.log", "w")
-		rtl_log = open(script_path+"/log/rtl_fm.log", "w")
-		mon_log = open(script_path+"/log/multimon.log", "w")
+		#create new logger
+		logger = logging.getLogger()
+		logger.setLevel(logging.DEBUG)
+		#set log string format
+		formatter = logging.Formatter('%(asctime)s - %(module)-12s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
+		#create a file logger
+		fh = logging.FileHandler(globals.script_path+"/log/boswatch.log", "w")
+		fh.setLevel(logging.DEBUG) #log level >= Debug
+		fh.setFormatter(formatter)
+		logger.addHandler(fh)
+		#create a display logger
+		ch = logging.StreamHandler()
+		ch.setLevel(logging.INFO) #log level >= info
+		ch.setFormatter(formatter)
+		logger.addHandler(ch)
+			
+		bos_log = open(globals.script_path+"/log/boswatch.log", "w")
+		rtl_log = open(globals.script_path+"/log/rtl_fm.log", "w")
+		mon_log = open(globals.script_path+"/log/multimon.log", "w")
 #		bos_log.write("##### "+curtime()+" #####\n\n")
 #		rtl_log.write("##### "+curtime()+" #####\n\n")
 #		mon_log.write("##### "+curtime()+" #####\n\n")
@@ -167,7 +169,7 @@ try:
 	logging.debug("reading config file")
 	try:
 		globals.config = ConfigParser.ConfigParser()
-		globals.config.read(script_path+"/config/config.ini")
+		globals.config.read(globals.script_path+"/config/config.ini")
 		for key,val in globals.config.items("BOSWatch"):
 			logging.debug(" - %s = %s", key, val)
 	except:

@@ -6,9 +6,9 @@ import globals # Global variables
 import imp
 import os
 
-PluginFolder = "./plugins"
 
 def getPlugins():
+	PluginFolder = globals.script_path+"/plugins"
 	plugins = []
 	for i in os.listdir(PluginFolder):
 		location = os.path.join(PluginFolder, i)
