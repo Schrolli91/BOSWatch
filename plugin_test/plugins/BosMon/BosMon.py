@@ -10,19 +10,16 @@ import base64 #for the HTTP request with User/Password
 
 def run(typ,freq,data):
 	try:
-		#get BosMon-Config
-		logging.debug("read config file")
-		bosmon_server = globals.config.get("BosMon", "bosmon_server")
-		bosmon_port = globals.config.get("BosMon", "bosmon_port")
-		bosmon_user = globals.config.get("BosMon", "bosmon_user")
-		bosmon_password = globals.config.get("BosMon", "bosmon_password")
-		bosmon_channel = globals.config.get("BosMon", "bosmon_channel")
-		logging.debug(" - typ: %s", typ)
-		logging.debug(" - Server: %s", bosmon_server)
-		logging.debug(" - Port: %s", bosmon_port)
-		logging.debug(" - User: %s", bosmon_user)
-		logging.debug(" - Channel: %s", bosmon_channel)
+		#ConfigParser
+		logging.debug("reading config file")
+		try:
+			config = dict(globals.config.items("BosMon"))
+			for key,val in config.items():
+				logging.debug(" - %s = %s", key, val)
+		except:
+			logging.exception("cannot read config file")
 
+			
 		if typ == "FMS":
 			logging.warning("FMS not implemented")
 		
@@ -44,8 +41,8 @@ def run(typ,freq,data):
 				headers['Content-type'] = "application/x-www-form-urlencoded"
 				headers['Accept'] = "text/plain"
 				if bosmon_user:
-					headers['Authorization'] = "Basic {0}".format(base64.b64encode("{0}:{1}".format(bosmon_user, bosmon_password)))
-				httprequest = httplib.HTTPConnection(bosmon_server, bosmon_port)
+					headers['Authorization'] = "Basic {0}".format(base64.b64encode("{0}:{1}".format(config["bosmon_user"], config["bosmon_password"])))
+				httprequest = httplib.HTTPConnection(config["bosmon_server"], config["bosmon_port"])
 				httprequest.request("POST", "/telegramin/"+bosmon_channel+"/input.xml", params, headers)
 				httpresponse = httprequest.getresponse()
 				if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
