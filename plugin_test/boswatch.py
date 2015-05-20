@@ -167,28 +167,12 @@ try:
 	try:
 		globals.config = ConfigParser.ConfigParser()
 		globals.config.read(script_path+"/config/config.ini")
-		fms_double_ignore_time = globals.config.getint("FMS", "double_ignore_time")
-		zvei_double_ignore_time = globals.config.getint("ZVEI", "double_ignore_time")
-		poc_double_ignore_time = globals.config.getint("POC", "double_ignore_time")
-		poc_filter_range_start = globals.config.getint("POC", "filter_range_start")
-		poc_filter_range_end = globals.config.getint("POC", "filter_range_end")	
+		config = dict(globals.config.items("BOSWatch"))
+		for key,val in config.items():
+			logging.debug(" - %s = %s", key, val)
 	except:
 		logging.exception("cannot read config file")
-		
-		#in case of reading error, set standard values
-		logging.debug("set to standard configuration")
-		fms_double_ignore_time = 5
-		zvei_double_ignore_time = 5
-		poc_double_ignore_time = 10
-		poc_filter_range_start = 0000000
-		poc_filter_range_end = 9999999
-	finally:
-		logging.debug(" - fms_double_ignore_time = %s", fms_double_ignore_time)
-		logging.debug(" - zvei_double_ignore_time = %s", zvei_double_ignore_time)
-		logging.debug(" - poc_double_ignore_time = %s", poc_double_ignore_time)
-		logging.debug(" - poc_filter_range_start = %s", poc_filter_range_start)
-		logging.debug(" - poc_filter_range_end = %s", poc_filter_range_end)
-				
+			
 			
 	logging.debug("starting rtl_fm")
 #	try:
@@ -244,7 +228,7 @@ try:
 				if "CRC correct" in decoded: #check CRC is correct  
 					fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction #build FMS id
 					if re.search("[0-9a-f]{8}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
-						if fms_id == fms_id_old and timestamp < fms_time_old + fms_double_ignore_time: #check for double alarm
+						if fms_id == fms_id_old and timestamp < fms_time_old + int(config["fms_double_ignore_time"]): #check for double alarm
 							logging.warning("FMS double alarm: %s within %s second(s)", fms_id_old, timestamp-fms_time_old)
 							fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 						else:
@@ -267,7 +251,7 @@ try:
 					
 				zvei_id = decoded[7:12] #ZVEI Code  
 				if re.search("[0-9F]{5}", zvei_id): #if ZVEI is valid
-					if zvei_id == zvei_id_old and timestamp < zvei_time_old + zvei_double_ignore_time: #check for double alarm
+					if zvei_id == zvei_id_old and timestamp < zvei_time_old + int(config["zvei_double_ignore_time"]): #check for double alarm
 						logging.warning("ZVEI double alarm: %s within %s second(s)", zvei_id_old, timestamp-zvei_time_old)
 						zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 					else:
@@ -295,9 +279,9 @@ try:
 					poc_text = ""
 				
 				if re.search("[0-9]{7}", poc_id): #if POC is valid
-					if poc_id >= poc_filter_range_start:
-						if poc_id >= poc_filter_range_start:                                                                                     
-							if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
+					if poc_id >= int(config["poc_filter_range_start"]):
+						if poc_id <= int(config["poc_filter_range_end"]):                                                                                     
+							if poc_id == poc_id_old and timestamp < poc_time_old + int(config["poc_double_ignore_time"]): #check for double alarm
 								logging.warning("POC512 double alarm: %s within %s second(s)", poc_id_old, timestamp-poc_time_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
@@ -329,9 +313,9 @@ try:
 					poc_text = ""
 					
 				if re.search("[0-9]{7}", poc_id): #if POC is valid
-					if poc_id >= poc_filter_range_start:
-						if poc_id >= poc_filter_range_start:                                                                                     
-							if poc_id == poc_id_old and timestamp < poc_time_old + poc_double_ignore_time: #check for double alarm
+					if poc_id >= int(config["poc_filter_range_start"]):
+						if poc_id <= int(config["poc_filter_range_end"]):                                                                                     
+							if poc_id == poc_id_old and timestamp < poc_time_old + int(config["poc_double_ignore_time"]): #check for double alarm
 								logging.warning("POC1200 double alarm: %s within %s second(s)", poc_id_old, timestamp-poc_time_old)
 								poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 							else:
