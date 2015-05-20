@@ -7,6 +7,7 @@ import globals # Global variables
 def run(typ,freq,data):
 	try:
 		#ConfigParser
+		#config Data in config["OPTION"]
 		logging.debug("reading config file")
 		try:
 			config = dict(globals.config.items("template"))
@@ -16,11 +17,11 @@ def run(typ,freq,data):
 			logging.exception("cannot read config file")
 	
 		if typ == "FMS":
-			logging.debug("FMS: %s Status: %s Dir: %s", data["fms"], data["status"], data["direction"])
+			logging.debug("FMS: %s Status: %s Dir: %s TKI: %s", data["fms"], data["status"], data["direction"], data["tki"])
 		elif typ == "ZVEI":
 			logging.debug("ZVEI: %s", data["zvei"])
 		elif typ == "POC":
-			logging.debug("POC: %s/%s - %s", data["ric"], data["function"], data["msg"])
+			logging.debug("POC: %s-%s - %s", data["ric"], data["function"], data["msg"])
 		else:
 			logging.warning(typ + " not supportet")
 			
