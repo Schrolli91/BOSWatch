@@ -62,6 +62,7 @@ try:
 		rtl_log.close()
 		mon_log.close()
 		logging.debug("BOSWatch has started")
+		logging.debug("Logfiles cleared")
 	except:
 		logging.exception("cannot clear Logfiles")
 
