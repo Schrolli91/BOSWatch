@@ -6,15 +6,14 @@ import globals # Global variables
 
 def run(typ,freq,data):
 	try:
-		logging.debug("read config file")
-		data1 = globals.config.get("template", "data1")
-		data2 = globals.config.get("template", "data2")
-		data3 = globals.config.get("template", "data3")
-		data4 = globals.config.get("template", "data4")
-		logging.debug(" - Data1: %s", data1)
-		logging.debug(" - Data2: %s", data2)
-		logging.debug(" - Data3: %s", data3)
-		logging.debug(" - Data4: %s", data4)
+		#ConfigParser
+		logging.debug("reading config file")
+		try:
+			config = dict(globals.config.items("template"))
+			for key,val in config.items():
+				logging.debug(" - %s = %s", key, val)
+		except:
+			logging.exception("cannot read config file")
 	
 		if typ == "FMS":
 			logging.debug("FMS: %s Status: %s Dir: %s", data["fms"], data["status"], data["direction"])
