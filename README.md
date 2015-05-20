@@ -32,16 +32,17 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - MySQL
 - BosMon
 
-##### Plugins for the Fetaure:
+##### Plugins for the Future:
 - HTTP-Push
 - E-mail Notification
+- Other Ideas per Issues
 
 
 ### Configuration
 ##### boswatch.py
 Take a look into the /config/config.ini
-In the Section [BOSWatch] you can set double_alarm_time etc.
-In the Section [Plugins] you can activate or deactivate the Plugins
+In the Section `[BOSWatch]` you can set double_alarm_time etc.
+In the Section `[Plugins]` you can activate or deactivate the Plugins
 For each Plugin that requires configurations a own Section with his Name is available
 
 For the other Functions see "Usage" below.
@@ -55,6 +56,7 @@ For the Parsing Functions take a look into the parser.php
 ### Usage
 `sudo python boswatch.py -f 85.235M -a FMS ZVEI`
 Starts boswatch at Frequency 85.235 MHz with the Demodulation Functions FMS and ZVEI.
+Parameter -f/--freq and -a/--demod are required!
 
 Help to all usable Parameters with `sudo python boswatch.py -h`
 
