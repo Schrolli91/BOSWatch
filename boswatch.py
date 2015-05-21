@@ -24,9 +24,11 @@ import subprocess
 
 
 def throwAlarm(typ,data):
+	logging.debug("[  ALARM  ]")
 	for name, plugin in pluginList.items():
 		logging.debug("call Plugin: %s", name)
 		plugin.run(typ,"0",data)
+	logging.debug("[END ALARM]")
 
 	
 # Programm
