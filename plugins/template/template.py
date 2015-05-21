@@ -34,11 +34,11 @@ def run(typ,freq,data):
 			logging.exception("cannot read config file")
 	
 		if typ == "FMS":
-			logging.debug(typ + " not supported")
+			logging.warning(typ + " not supported")
 		elif typ == "ZVEI":
-			logging.debug(typ + " not supported")
+			logging.warning(typ + " not supported")
 		elif typ == "POC":
-			logging.debug(typ + " not supported")
+			logging.warning(typ + " not supported")
 		else:
 			logging.warning(typ + " not supported")
 			
