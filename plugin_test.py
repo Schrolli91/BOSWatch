@@ -1,31 +1,26 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
 
-import globals  # Global variables
 import time
 import pluginloader
 
 import os #for absolute path: os.path.dirname(os.path.abspath(__file__))
-import ConfigParser #for parse the config file
 
 import logging
+import globals
+
+import ConfigParser #for parse the config file
 
 #create new logger
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 #set log string format
-formatter = logging.Formatter('%(asctime)s - %(module)s [%(levelname)s] %(message)s', '%d.%m.%Y %H:%M:%S')
-
-#create a file loger
-fh = logging.FileHandler('boswatch.log', 'w')
-fh.setLevel(logging.DEBUG) #log level >= Debug
-fh.setFormatter(formatter)
-logger.addHandler(fh)
+formatter = logging.Formatter('%(asctime)s - %(module)-12s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
 
 #create a display loger
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO) #log level >= info
+ch.setLevel(logging.DEBUG) #log level >= info
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
@@ -39,26 +34,37 @@ logger.addHandler(ch)
 #exception - error with exception message in log
 #critical - critical error, program exit
 
-#configparser
+
+#ConfigParser
+logging.debug("reading config file")
 try:
-	logging.debug("reading config file")
-	script_path = os.path.dirname(os.path.abspath(__file__))
 	globals.config = ConfigParser.ConfigParser()
-	globals.config.read(script_path+"/config/config.ini")
+	globals.config.read(globals.script_path+"./config/config.ini")
 except:
 	logging.exception("cannot read config file")
 
-#data = {"zvei":"12345"}
-data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
 
+data = {"zvei":"12345"}
+#data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
+
+
+logging.debug("Load Plugins...")
+
+pluginList = {}
+for i in pluginloader.getPlugins():
+			plugin = pluginloader.loadPlugin(i)
+			pluginList[i["name"]] = plugin
+	
+logging.debug("All loaded...")	
+	
 while True:
 	try:
 		time.sleep(1)
+		logging.info(" = = = = = = = = = ")
 		logging.info("Alarm!")
-		for i in pluginloader.getPlugins():
-			plugin = pluginloader.loadPlugin(i)
-			logging.debug(i["name"] + " Plugin called")
-			plugin.run("POC","80000000",data)
+		for name, plugin in pluginList.items():
+			logging.debug("call Plugin: %s", name)
+			plugin.run("ZVEI","0",data)
 	except:
 		logging.exception("Cannot Throw Modules")
 		exit()
