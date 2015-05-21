@@ -92,7 +92,7 @@ try:
 			args = parser.parse_args()
 			
 		except:
-			logging.exception("cannot parse args")
+			logging.error("cannot parse args")
 		else:			
 			try:
 			
@@ -369,12 +369,14 @@ except:
 	logging.exception("unknown error")
 finally:
 	try:
+		logging.debug("BOSWatch shuting down")
 		rtl_fm.terminate()
 		logging.debug("rtl_fm terminated") 
 		multimon_ng.terminate()
 		logging.debug("multimon-ng terminated")
 		logging.debug("exiting BOSWatch")		
 	except:
-		logging.exception("failed in clean-up routine")	
+		logging.warning("failed in clean-up routine")	
 	finally:
+		logging.info("BOSWatch exit()")	
 		exit(0)
