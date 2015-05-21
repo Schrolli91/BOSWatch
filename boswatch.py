@@ -87,17 +87,11 @@ try:
 		args = parser.parse_args()
 	except:
 		logging.exception("cannot parse args")
-
-	#Read Data from Args, Put it into working Variables
-	freq = args.freq
-	device = args.device
-	error = args.error
-	squelch = args.squelch
 	
-	logging.debug(" - Frequency: %s", freq)
-	logging.debug(" - Device: %s", device)
-	logging.debug(" - PPM Error: %s", error)
-	logging.debug(" - Squelch: %s", squelch)
+	logging.debug(" - Frequency: %s", args.freq)
+	logging.debug(" - Device: %s", args.device)
+	logging.debug(" - PPM Error: %s", args.error)
+	logging.debug(" - Squelch: %s", args.squelch)
 	
 	demodulation = ""
 	if "FMS" in args.demod:
@@ -134,9 +128,9 @@ try:
 		print "                 by Bastian Schroll                  " 
 		print "" 
 	
-		print "Frequency:   "+freq
-		print "Device-ID:   "+str(device)
-		print "Error in PPM:    "+str(error)
+		print "Frequency:   "+args.freq
+		print "Device-ID:   "+str(args.device)
+		print "Error in PPM:    "+str(args.error)
 		print "Active Demods:   "+str(len(args.demod))
 		if "FMS" in args.demod:
 			print "- FMS"
@@ -148,7 +142,7 @@ try:
 			print "- POC1200"
 		if "POC2400" in args.demod:
 			print "- POC2400" 
-		print "Squelch: "+str(squelch)
+		print "Squelch: "+str(args.squelch)
 		if args.verbose:
 			print "Verbose Mode!" 
 		print "" 
@@ -192,7 +186,7 @@ try:
 			
 	logging.debug("starting rtl_fm")
 	try:
-		rtl_fm = subprocess.Popen("rtl_fm -d "+str(device)+" -f "+str(freq)+" -M fm -s 22050 -p "+str(error)+" -E DC -F 0 -l "+str(squelch)+" -g 100",
+		rtl_fm = subprocess.Popen("rtl_fm -d "+str(args.device)+" -f "+str(args.freq)+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100",
 									#stdin=rtl_fm.stdout,
 									stdout=subprocess.PIPE,
 									stderr=open(globals.script_path+"/log/rtl_fm.log","a"),
