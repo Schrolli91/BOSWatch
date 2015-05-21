@@ -40,7 +40,8 @@ unless you are developer you can use the develop-Branch - may be unstable!
 
 ### Configuration
 ##### boswatch.py
-Take a look into the /config/config.ini
+Take a look into the Folder /config/
+Rename `config.template.ini` to `config.ini`
 In the Section `[BOSWatch]` you can set double_alarm_time etc.
 In the Section `[Plugins]` you can activate or deactivate the Plugins
 For each Plugin that requires configurations a own Section with his Name is available
@@ -87,6 +88,7 @@ You can easy install BOSWatch with the install.sh Script.
 
 Now the script downloads and compile all needed data.
 At the end you can find BOSWatch in `~/boswatch/`
+Rename `config.template.ini` to `config.ini` and configure
 In case of an Error during the Installation, check the Logfile in `~/boswatch/install/setup_log.txt`
 
 Caution, script don't install a Webserver with PHP and MySQL.
