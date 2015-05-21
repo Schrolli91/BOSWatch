@@ -24,10 +24,10 @@ import subprocess
 
 
 def throwAlarm(typ,data):
-	for i in pluginloader.getPlugins():
-		plugin = pluginloader.loadPlugin(i)
-		logging.debug("call Plugin: %s", i["name"])
+	for name, plugin in pluginList.items():
+		logging.debug("call Plugin: %s", name)
 		plugin.run(typ,"0",data)
+
 	
 # Programm
 try:
@@ -175,6 +175,17 @@ try:
 			logging.debug(" - %s = %s", key, val)
 	except:
 		logging.exception("cannot read config file")
+	
+	
+	#Load Plugins
+	try:
+		logging.debug("loading plugins")
+		pluginList = {}
+		for i in pluginloader.getPlugins():
+			plugin = pluginloader.loadPlugin(i)
+			pluginList[i["name"]] = plugin	
+	except:
+		logging.exception("cannot load Plugins")
 			
 			
 	logging.debug("starting rtl_fm")
