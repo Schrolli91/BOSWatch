@@ -20,7 +20,6 @@ def getPlugins():
 
 			# is the plugin enabled in the config-file?
 			try: 
-				logging.debug("Plugin [DISABLED] %s ", i)
 				if globals.config.getint("Plugins", i):
 					info = imp.find_module(i, [location])
 					plugins.append({"name": i, "info": info})
