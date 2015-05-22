@@ -5,14 +5,14 @@
 # Use this as a simple Plugin Loading Tool to test your own Coded Plugins #
 ###########################################################################
 
-import globals  # Global variables
-import pluginloader
-
 import logging
 
 import ConfigParser #for parse the config file
 import os #for log mkdir
 import time #timestamp for doublealarm
+
+from includes import globals  # Global variables
+from includes import pluginloader
 
 #create new logger
 logger = logging.getLogger()
@@ -46,7 +46,7 @@ try:
 	for key,val in globals.config.items("Plugins"):
 		logging.debug(" - %s = %s", key, val)	
 except:
-	logging.debug("cannot read config file")
+	logging.exception("cannot read config file")
 
 
 try:

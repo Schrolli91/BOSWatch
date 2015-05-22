@@ -127,7 +127,7 @@ try:
 				for key,val in globals.config.items("BOSWatch"):
 					logging.debug(" - %s = %s", key, val)					
 			except:
-				logging.debug("cannot read config file")
+				logging.exception("cannot read config file")
 			else:				
 				
 				#load plugins
