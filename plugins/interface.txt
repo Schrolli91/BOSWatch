@@ -21,6 +21,7 @@ POCSAG:
 - ric
 - function
 - msg
+- bitrate
 
 
 Es stehen folgende globale Objecte zur Verfügung:
