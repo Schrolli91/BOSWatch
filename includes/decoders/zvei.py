@@ -7,6 +7,8 @@ import re #Regex for validation
 
 from includes import globals  # Global variables
 
+#ZVEI Decoder Function
+#validate -> check double alarm -> log      
 def decode(freq, decoded):
 	timestamp = int(time.time())#Get Timestamp                  
 
