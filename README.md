@@ -13,10 +13,10 @@ unless you are developer you can use the develop-Branch - may be unstable!
 
 ### Features
 ##### Implemented Features:
-- FMS, ZVEI and POCSAG512/1200 decoding and Displaying
+- FMS, ZVEI and POCSAG512/1200/2400 decoding and Displaying
 - Plugin support for easy Functions extension
 - Filtering double alarms with adjustable time
-- Filtering of POCSAG RIC´s
+- Filtering Range of POCSAG RIC´s
 - All configurations in seperate config File
 - Data validation (plausibility test)
 - Logfiles for better Troubleshooting
@@ -24,7 +24,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 
 ##### Features for the Future:
 - extensive filtering options
-- POCSAG 2400 support (need RAW data from multimon-ng)
+- more Plugins
 
 
 ###Plugins
