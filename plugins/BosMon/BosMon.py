@@ -18,13 +18,11 @@ def run(typ,freq,data):
 		except:
 			logging.exception("cannot read config file")
 
-			
+		########## User Plugin CODE ##########		
 		if typ == "FMS":
-			logging.warning("FMS not implemented")
-		
+			logging.warning("%s not supported", typ)
 		elif typ == "ZVEI":
-			logging.warning("ZVEI not implemented")
-		
+			logging.warning("%s not supported", typ)
 		elif typ == "POC":
 			logging.debug("Start POC to BosMon")
 			try:
@@ -39,7 +37,7 @@ def run(typ,freq,data):
 				headers = {}
 				headers['Content-type'] = "application/x-www-form-urlencoded"
 				headers['Accept'] = "text/plain"
-				if bosmon_user:
+				if globals.config.get("BosMon", "bosmon_user"):
 					headers['Authorization'] = "Basic {0}".format(base64.b64encode("{0}:{1}".format(globals.config.get("BosMon", "bosmon_user"), globals.config.get("BosMon", "bosmon_password"))))
 				httprequest = httplib.HTTPConnection(globals.config.get("BosMon", "bosmon_server"), globals.config.get("BosMon", "bosmon_port"))
 				httprequest.request("POST", "/telegramin/"+bosmon_channel+"/input.xml", params, headers)
@@ -51,6 +49,8 @@ def run(typ,freq,data):
 			except:
 				logging.error("POC to BosMon failed")
 		else:
-			logging.warning("undefined typ '%s'", typ)
+			logging.warning("Invalid Typ: %s", typ)	
+		########## User Plugin CODE ##########	
+			
 	except:
 		logging.exception("")

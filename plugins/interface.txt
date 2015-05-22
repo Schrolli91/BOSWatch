@@ -5,7 +5,8 @@ freq	=	[FREQ(Hz)]
 data = {"KEY1":"VALUE1","KEY2":"VALUE2"} als Python Dict
 
 
-Follgende Daten sind bei der jeweiligen Alarm-Art enthalten:
+Follgende Daten sind bei der jeweiligen Alarm-Art enthalten
+und per data["OPTION"] abrufbar:
 
 ZVEI:
 - zvei
@@ -20,12 +21,16 @@ POCSAG:
 - ric
 - function
 - msg
+- bitrate
 
 
 Es stehen folgende globale Objecte zur Verfügung:
 
 1.) import logging # Global logger
 logging - Object
+Nachricht ins Log per: logging.LOGLEVEL("MESSAGE")
+Mögliche Loglevel: debug|info|warning|error|exception|critical
 
 2.) import globals # Global variables
 config - Object (typ: ConfigParser, stellt config.ini bereit)
+VALUE = globals.config.get("SECTION", "OPTION")

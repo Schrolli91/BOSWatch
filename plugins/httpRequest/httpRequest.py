@@ -23,6 +23,8 @@ import globals # Global variables
 # usable Loglevels debug|info|warning|error|exception|critical
 # if you use .exception in Try:Exception: Construct, it logs the Python EX.message too
 
+import httplib #for the HTTP request
+
 def run(typ,freq,data):
 	try:
 		#ConfigParser
@@ -32,15 +34,38 @@ def run(typ,freq,data):
 				logging.debug(" - %s = %s", key, val)
 		except:
 			logging.exception("cannot read config file")
-	
-		if typ == "FMS":
-			logging.debug(typ + " not supported")
-		elif typ == "ZVEI":
-			logging.debug(typ + " not supported")
-		elif typ == "POC":
-			logging.debug(typ + " not supported")
+			
+########## User Plugin CODE ##########
+		try:
+			logging.debug("send %s HTTP request", typ)
+			
+			if typ == "FMS":
+				httprequest = httplib.HTTPConnection(globals.config.get("httpRequest", "fms_url"))
+				httprequest.request("HEAD", "/")		
+			elif typ == "ZVEI":
+				httprequest = httplib.HTTPConnection(globals.config.get("httpRequest", "zvei_url"))
+				httprequest.request("HEAD", "/")	
+			elif typ == "POC":
+				httprequest = httplib.HTTPConnection(globals.config.get("httpRequest", "poc_url"))
+				httprequest.request("HEAD", "/")	
+			else:
+				logging.warning("Invalid Typ: %s", typ)	
+				
+		except:
+			loggin.exception("cannot send HTTP request")
 		else:
-			logging.warning(typ + " not supported")
+			
+			try:	
+				httpresponse = httprequest.getresponse()	
+				if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
+					logging.debug("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))
+				else:
+					logging.warning("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))
+			except NameError: #if var httprequest does not exist
+				logging.exception("no HTTP request been sended")
+			except: #otherwise
+				logging.exception("cannot get HTTP response")
+########## User Plugin CODE ##########
 			
 	except:
 		logging.exception("unknown error")
