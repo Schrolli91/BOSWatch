@@ -43,7 +43,7 @@ def run(typ,freq,data):
 			logging.debug("connect to BosMon")
 			httprequest = httplib.HTTPConnection(globals.config.get("BosMon", "bosmon_server"), globals.config.get("BosMon", "bosmon_port"))
 			#debug-level to shell (0=no debug|1)
-			httprequest.set_debuglevel(1)
+			httprequest.set_debuglevel(0)
 		except:
 			logging.exception("cannot connect to BosMon")
 
