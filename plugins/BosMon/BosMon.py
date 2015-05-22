@@ -39,7 +39,7 @@ def run(typ,freq,data):
 				headers = {}
 				headers['Content-type'] = "application/x-www-form-urlencoded"
 				headers['Accept'] = "text/plain"
-				if bosmon_user:
+				if globals.config.get("BosMon", "bosmon_user"):
 					headers['Authorization'] = "Basic {0}".format(base64.b64encode("{0}:{1}".format(globals.config.get("BosMon", "bosmon_user"), globals.config.get("BosMon", "bosmon_password"))))
 				httprequest = httplib.HTTPConnection(globals.config.get("BosMon", "bosmon_server"), globals.config.get("BosMon", "bosmon_port"))
 				httprequest.request("POST", "/telegramin/"+bosmon_channel+"/input.xml", params, headers)
