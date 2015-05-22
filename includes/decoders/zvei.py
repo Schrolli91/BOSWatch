@@ -20,7 +20,7 @@ def decode(freq, decoded):
 		else:
 			logging.info("5-Ton: %s", zvei_id)
 			data = {"zvei":zvei_id}
-			from includes import pluginHandler
+			from includes import alarmHandler
 			alarmHandler.processAlarm("POC",freq,data)
 
 			globals.zvei_id_old = zvei_id #save last id

@@ -29,7 +29,7 @@ def decode(freq, decoded):
 			else:
 				logging.info("FMS:%s Status:%s Richtung:%s TKI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
 				data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "tsi":fms_tsi}
-				from includes import pluginHandler
+				from includes import alarmHandler
 				alarmHandler.processAlarm("POC",freq,data)
 				
 				globals.fms_id_old = fms_id #save last id
