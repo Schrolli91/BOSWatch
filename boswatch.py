@@ -20,8 +20,7 @@ from includes import globals  # Global variables
 
 # Programm
 try:
-	try:
-	
+	try:	
 		#create logger
 		globals.script_path = os.path.dirname(os.path.abspath(__file__))
 		
@@ -42,13 +41,12 @@ try:
 		ch = logging.StreamHandler()
 		ch.setLevel(logging.INFO) #log level >= info
 		ch.setFormatter(formatter)
-		logger.addHandler(ch)
-		
+		logger.addHandler(ch)		
 	except:
 		logging.exception("cannot create logger")
 	else:	
-		try:
 		
+		try:		
 			#clear log
 			bos_log = open(globals.script_path+"/log/boswatch.log", "w")
 			rtl_log = open(globals.script_path+"/log/rtl_fm.log", "w")
@@ -60,12 +58,11 @@ try:
 			rtl_log.close()
 			mon_log.close()
 			logging.debug("BOSWatch has started")
-			logging.debug("Logfiles cleared")
-			
+			logging.debug("Logfiles cleared")		
 		except:
 			logging.exception("cannot clear Logfiles")	
-		try:
-		
+			
+		try:		
 			#parse args
 			logging.debug("parse args")
 			#With -h or --help you get the Args help
@@ -79,13 +76,12 @@ try:
 			parser.add_argument("-s", "--squelch", help="Level of Squelch", type=int, default=0)
 			parser.add_argument("-v", "--verbose", help="Shows more Information", action="store_true")
 			parser.add_argument("-q", "--quiet", help="Shows no Information. Only Logfiles", action="store_true")
-			args = parser.parse_args()
-			
+			args = parser.parse_args()		
 		except:
-			logging.error("cannot parse args")
-		else:			
-			try:
+			logging.error("cannot parse args")		
+		else:	
 			
+			try:		
 				#display/log args
 				logging.debug(" - Frequency: %s", args.freq)
 				logging.debug(" - Device: %s", args.device)
@@ -119,20 +115,17 @@ try:
 				
 				if not args.quiet: #only if not quiet mode
 					from includes import shellHeader
-					shellHeader.printHeader(args)
-					
+					shellHeader.printHeader(args)					
 			except:
 				logging.exception("cannot display/log args")		
 
-			try:
-			
+			try:		
 				#read config
 				logging.debug("reading config file")
 				globals.config = ConfigParser.ConfigParser()
 				globals.config.read(globals.script_path+"/config/config.ini")
 				for key,val in globals.config.items("BOSWatch"):
-					logging.debug(" - %s = %s", key, val)
-					
+					logging.debug(" - %s = %s", key, val)					
 			except:
 				logging.debug("cannot read config file")
 			else:				
@@ -140,20 +133,19 @@ try:
 				#load plugins
 				from includes import pluginHandler
 				pluginHandler.loadPlugins()
-
-				try:
 				
+				try:				
 					#start rtl_fm
 					logging.debug("starting rtl_fm")
 					rtl_fm = subprocess.Popen("rtl_fm -d "+str(args.device)+" -f "+str(args.freq)+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100",
 							#stdin=rtl_fm.stdout,
 							stdout=subprocess.PIPE,
 							stderr=open(globals.script_path+"/log/rtl_fm.log","a"),
-							shell=True)
-							
+							shell=True)						
 				except:
 					logging.exception("cannot start rtl_fm")
-				else:				
+				else:	
+					
 					try:
 						#start multimon
 						logging.debug("starting multimon-ng")
@@ -161,8 +153,7 @@ try:
 							stdin=rtl_fm.stdout,
 							stdout=subprocess.PIPE,
 							stderr=open(globals.script_path+"/log/multimon.log","a"),
-							shell=True)
-							
+							shell=True)						
 					except:
 						logging.exception("cannot start multimon-ng")
 					else:				
