@@ -48,23 +48,8 @@ def decode(freq, decoded):
 	#check ZVEI: -> validate -> check double alarm -> log     
 	if "ZVEI2:" in decoded:
 		logging.debug("recieved ZVEI")			
-		
-		zvei_id = decoded[7:12] #ZVEI Code  
-		if re.search("[0-9F]{5}", zvei_id): #if ZVEI is valid
-			if zvei_id == globals.zvei_id_old and timestamp < globals.zvei_time_old + globals.config.getint("BOSWatch", "zvei_double_ignore_time"): #check for double alarm
-				logging.info("ZVEI double alarm: %s within %s second(s)", globals.zvei_id_old, timestamp-globals.zvei_time_old)
-				globals.zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
-			else:
-				logging.info("5-Ton: %s", zvei_id)
-				data = {"zvei":zvei_id}
-				from includes import pluginHandler
-				pluginHandler.throwAlarm("ZVEI",freq,data)
-
-				globals.zvei_id_old = zvei_id #save last id
-				globals.zvei_time_old = timestamp #save last time
-		else:
-			logging.warning("No valid ZVEI: %s", zvei_id)
-		
+		from includes.decoders import zvei
+		zvei.decode(freq, decoded)
 		
 	#POCSAG Decoder Section
 	#check POCSAG -> validate -> check double alarm -> log      
