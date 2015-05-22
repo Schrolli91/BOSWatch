@@ -16,7 +16,7 @@ import logging
 import argparse #for parse the args
 import ConfigParser #for parse the config file
 import re #Regex for validation
-import os #for script path
+import os #for log mkdir
 import time #timestamp for doublealarm
 import subprocess
 
@@ -258,7 +258,7 @@ try:
 									fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction #build FMS id
 									if re.search("[0-9a-f]{8}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
 										if fms_id == fms_id_old and timestamp < fms_time_old + globals.config.getint("BOSWatch", "fms_double_ignore_time"): #check for double alarm
-											logging.warning("FMS double alarm: %s within %s second(s)", fms_id_old, timestamp-fms_time_old)
+											logging.info("FMS double alarm: %s within %s second(s)", fms_id_old, timestamp-fms_time_old)
 											fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 										else:
 											logging.info("FMS:%s Status:%s Richtung:%s TKI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
@@ -281,7 +281,7 @@ try:
 								zvei_id = decoded[7:12] #ZVEI Code  
 								if re.search("[0-9F]{5}", zvei_id): #if ZVEI is valid
 									if zvei_id == zvei_id_old and timestamp < zvei_time_old + globals.config.getint("BOSWatch", "zvei_double_ignore_time"): #check for double alarm
-										logging.warning("ZVEI double alarm: %s within %s second(s)", zvei_id_old, timestamp-zvei_time_old)
+										logging.info("ZVEI double alarm: %s within %s second(s)", zvei_id_old, timestamp-zvei_time_old)
 										zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 									else:
 										logging.info("5-Ton: %s", zvei_id)
@@ -329,7 +329,7 @@ try:
 										if int(poc_id) >= globals.config.getint("BOSWatch", "poc_filter_range_start"):
 											if int(poc_id) <= globals.config.getint("BOSWatch", "poc_filter_range_end"):
 												if poc_id == poc_id_old and timestamp < poc_time_old + globals.config.getint("BOSWatch", "poc_double_ignore_time"): #check for double alarm
-													logging.warning("POCSAG%s double alarm: %s within %s second(s)", bitrate, poc_id_old, timestamp-poc_time_old)
+													logging.info("POCSAG%s double alarm: %s within %s second(s)", bitrate, poc_id_old, timestamp-poc_time_old)
 													poc_time_old = timestamp #in case of double alarm, poc_double_ignore_time set new
 												else:
 													logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
@@ -339,9 +339,9 @@ try:
 													poc_id_old = poc_id #save last id
 													poc_time_old = timestamp #save last time		
 											else:
-												logging.warning("POCSAG%s: %s out of filter range (high)", bitrate, poc_id)
+												logging.info("POCSAG%s: %s out of filter range (high)", bitrate, poc_id)
 										else:
-											logging.warning("POCSAG%s: %s out of filter range (low)", bitrate, poc_id)
+											logging.info("POCSAG%s: %s out of filter range (low)", bitrate, poc_id)
 									else:
 										logging.warning("No valid POCSAG%s RIC: %s", bitrate, poc_id)
 								
