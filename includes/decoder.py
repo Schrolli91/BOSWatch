@@ -9,7 +9,7 @@ from includes import globals  # Global variables
 from includes import pluginloader
 
 
-def decode(decoded):
+def decode(freq, decoded):
 	timestamp = int(time.time())#Get Timestamp                  
 		
 	#FMS Decoder Section    
@@ -35,7 +35,7 @@ def decode(decoded):
 					logging.info("FMS:%s Status:%s Richtung:%s TKI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
 					data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "tsi":fms_tsi}
 					from includes import pluginHandler
-					pluginHandler.throwAlarm("FMS",data)
+					pluginHandler.throwAlarm("FMS",freq,data)
 					
 					globals.fms_id_old = fms_id #save last id
 					globals.fms_time_old = timestamp #save last time	
@@ -59,7 +59,7 @@ def decode(decoded):
 				logging.info("5-Ton: %s", zvei_id)
 				data = {"zvei":zvei_id}
 				from includes import pluginHandler
-				pluginHandler.throwAlarm("ZVEI",data)
+				pluginHandler.throwAlarm("ZVEI",freq,data)
 
 				globals.zvei_id_old = zvei_id #save last id
 				globals.zvei_time_old = timestamp #save last time
@@ -108,7 +108,7 @@ def decode(decoded):
 							logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
 							data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate}
 							from includes import pluginHandler
-							pluginHandler.throwAlarm("POC",data)
+							pluginHandler.throwAlarm("POC",freq,data)
 			
 							globals.poc_id_old = poc_id #save last id
 							globals.poc_time_old = timestamp #save last time		

@@ -182,7 +182,7 @@ try:
 							#time.sleep(1)	
 							
 							from includes import decoder
-							decoder.decode(decoded)
+							decoder.decode(args.freq, decoded)
 								
 except KeyboardInterrupt:
 	logging.warning("Keyboard Interrupt")	
