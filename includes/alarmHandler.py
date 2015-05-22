@@ -4,11 +4,11 @@
 import logging
 
 from includes import globals  # Global variables
-from includes import pluginloader
 
 def processAlarm(typ,freq,data):
 	logging.debug("[  ALARM  ]")
 	for name, plugin in globals.pluginList.items():
 		logging.debug("call Plugin: %s", name)
 		plugin.run(typ,freq,data)
+		logging.debug("return from: %s", name)
 	logging.debug("[END ALARM]")

@@ -12,7 +12,8 @@ import os #for log mkdir
 import time #timestamp for doublealarm
 
 from includes import globals  # Global variables
-from includes import pluginloader
+from includes import pluginLoader
+from includes import alarmHandler
 
 #create new logger
 logger = logging.getLogger()
@@ -49,15 +50,7 @@ except:
 	logging.exception("cannot read config file")
 
 
-try:
-	logging.debug("loading plugins")
-	pluginList = {}
-	for i in pluginloader.getPlugins():
-		plugin = pluginloader.loadPlugin(i)
-		pluginList[i["name"]] = plugin
-	logging.debug("loading ready")	
-except:
-	logging.exception("cannot load Plugins")		
+pluginLoader.loadPlugins()		
 
 
 # ----- Test Data ----- #
@@ -75,11 +68,7 @@ while True:
 		time.sleep(1)
 		
 		print ""
-		logging.debug("[  ALARM  ]")
-		for name, plugin in pluginList.items():
-			logging.debug("call Plugin: %s", name)
-			plugin.run(typ,"0",data)
-		logging.debug("[END ALARM]")
+		alarmHandler.processAlarm(typ,"0",data)
 		
 	except KeyboardInterrupt:
 		logging.warning("Keyboard Interrupt")	
