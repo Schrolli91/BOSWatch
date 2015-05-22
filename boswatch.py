@@ -346,7 +346,7 @@ try:
 											else:
 												logging.warning("POCSAG%s: %s out of filter range (low)",bitrate, poc_id)
 										else:
-											logging.warning("No valid POCSAG: %s", poc_id)
+											logging.warning("No valid POCSAG%s RIC: %s", bitrate, poc_id)
 								
 except KeyboardInterrupt:
 	logging.warning("Keyboard Interrupt")	
