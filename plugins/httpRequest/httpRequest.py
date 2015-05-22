@@ -66,6 +66,10 @@ def run(typ,freq,data):
 				logging.exception("no HTTP request been sended")
 			except: #otherwise
 				logging.exception("cannot get HTTP response")
+				
+		finally:
+			logging.debug("close http-Connection")
+			httprequest.close()
 ########## User Plugin CODE ##########
 			
 	except:
