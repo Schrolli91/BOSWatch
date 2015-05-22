@@ -2,9 +2,10 @@
 # -*- coding: cp1252 -*-
 
 import logging # Global logger
-import globals # Global variables
 import imp
 import os
+
+from includes import globals  # Global variables
 
 
 def getPlugins():

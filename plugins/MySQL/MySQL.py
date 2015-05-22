@@ -2,9 +2,12 @@
 # -*- coding: cp1252 -*-
 
 import logging # Global logger
-import globals # Global variables
+
 import mysql
 import mysql.connector
+
+from includes import globals  # Global variables
+
 
 def run(typ,freq,data):
 	try:

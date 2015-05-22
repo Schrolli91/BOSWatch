@@ -2,11 +2,13 @@
 # -*- coding: cp1252 -*-
 
 import logging # Global logger
-import globals # Global variables
 
 import httplib #for the HTTP request
 import urllib #for the HTTP request with parameters
 import base64 #for the HTTP request with User/Password
+
+from includes import globals  # Global variables
+
 
 def run(typ,freq,data):
 	try:
@@ -38,9 +40,13 @@ def run(typ,freq,data):
 				headers['Content-type'] = "application/x-www-form-urlencoded"
 				headers['Accept'] = "text/plain"
 				if globals.config.get("BosMon", "bosmon_user"):
+					logging.debug(" Gesicherte Verbindung ")
 					headers['Authorization'] = "Basic {0}".format(base64.b64encode("{0}:{1}".format(globals.config.get("BosMon", "bosmon_user"), globals.config.get("BosMon", "bosmon_password"))))
+				logging.debug(" Open HTTPConnection ")
 				httprequest = httplib.HTTPConnection(globals.config.get("BosMon", "bosmon_server"), globals.config.get("BosMon", "bosmon_port"))
-				httprequest.request("POST", "/telegramin/"+bosmon_channel+"/input.xml", params, headers)
+				logging.debug(" Start Request ")
+				httprequest.request("POST", "/telegramin/"+globals.config.get("BosMon", "bosmon_channel")+"/input.xml", params, headers)
+				logging.debug(" Get Response: ")
 				httpresponse = httprequest.getresponse()
 				if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
 					logging.debug("BosMon response: %s - %s", str(httpresponse.status), str(httpresponse.reason))
