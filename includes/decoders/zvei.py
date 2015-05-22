@@ -21,7 +21,7 @@ def decode(freq, decoded):
 			logging.info("5-Ton: %s", zvei_id)
 			data = {"zvei":zvei_id}
 			from includes import alarmHandler
-			alarmHandler.processAlarm("POC",freq,data)
+			alarmHandler.processAlarm("ZVEI",freq,data)
 
 			globals.zvei_id_old = zvei_id #save last id
 			globals.zvei_time_old = timestamp #save last time
