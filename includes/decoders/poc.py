@@ -47,8 +47,8 @@ def decode(freq, decoded):
 					else:
 						logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
 						data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate}
-						from includes import pluginHandler
-						pluginHandler.throwAlarm("POC",freq,data)
+						from includes import alarmHandler
+						alarmHandler.processAlarm("POC",freq,data)
 		
 						globals.poc_id_old = poc_id #save last id
 						globals.poc_time_old = timestamp #save last time		

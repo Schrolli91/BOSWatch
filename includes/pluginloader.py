@@ -7,6 +7,15 @@ import os
 
 from includes import globals  # Global variables
 
+def loadPlugins():
+	try:
+		logging.debug("loading plugins")
+		for i in getPlugins():
+			plugin = loadPlugin(i)
+			globals.pluginList[i["name"]] = plugin			
+	except:
+		logging.exception("cannot load Plugins")
+
 
 def getPlugins():
 	try:
@@ -33,6 +42,7 @@ def getPlugins():
 		logging.exception("Error during Plugin search")
 
 	return plugins
+
 
 def loadPlugin(plugin):
 	try:
