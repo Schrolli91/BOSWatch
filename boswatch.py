@@ -131,8 +131,8 @@ try:
 			else:				
 				
 				#load plugins
-				from includes import pluginHandler
-				pluginHandler.loadPlugins()
+				from includes import pluginloader
+				pluginloader.loadPlugins()
 				
 				try:				
 					#start rtl_fm

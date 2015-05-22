@@ -12,15 +12,3 @@ def throwAlarm(typ,freq,data):
 		logging.debug("call Plugin: %s", name)
 		plugin.run(typ,freq,data)
 	logging.debug("[END ALARM]")
-
-	
-def loadPlugins():
-	try:
-		#load plugins
-		logging.debug("loading plugins")
-		for i in pluginloader.getPlugins():
-			plugin = pluginloader.loadPlugin(i)
-			globals.pluginList[i["name"]] = plugin
-			
-	except:
-		logging.exception("cannot load Plugins")
