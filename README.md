@@ -29,11 +29,11 @@ unless you are developer you can use the develop-Branch - may be unstable!
 
 ###Plugins
 ##### Implemented Plugins:
-- MySQL
-- BosMon
+- MySQL (insert Data into MySQL Database [FMS|ZVEI|POC])
+- BosMon (send Data to BosMon Server [POC])
+- httpRequest (send a request to an URL [FMS|ZVEI|POC])
 
 ##### Plugins for the Future:
-- HTTP-Push
 - E-mail Notification
 - Other Ideas per Issues
 
