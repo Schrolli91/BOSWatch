@@ -32,7 +32,8 @@ def run(typ,freq,data):
 				logging.debug(" - %s = %s", key, val)
 		except:
 			logging.exception("cannot read config file")
-	
+
+########## User Plugin CODE ##########		
 		if typ == "FMS":
 			logging.warning(typ + " not supported")
 		elif typ == "ZVEI":
@@ -40,7 +41,8 @@ def run(typ,freq,data):
 		elif typ == "POC":
 			logging.warning(typ + " not supported")
 		else:
-			logging.warning(typ + " not supported")
-			
+			logging.warning(typ + " not supported")		
+########## User Plugin CODE ##########
+		
 	except:
 		logging.exception("unknown error")
