@@ -68,7 +68,7 @@ def run(typ,freq,data):
 				logging.exception("cannot get HTTP response")
 				
 		finally:
-			logging.debug("close http-Connection")
+			logging.debug("close HTTP-Connection")
 			httprequest.close()
 ########## User Plugin CODE ##########
 			
