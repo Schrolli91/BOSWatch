@@ -36,7 +36,8 @@ def run(typ,freq,data):
 					
 				elif typ == "ZVEI":
 					#data = {"zvei":zvei_id}
-					cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time,zvei) VALUES (NOW(),%s)",(data["zvei"]))
+					#Don't use %s here (bug in mysql-lib with one parameter)
+					cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time,zvei) VALUES (NOW(),"+(data["zvei"])+")")
 					
 				elif typ == "POC":
 					#data = {"ric":poc_id, "function":poc_sub, "msg":poc_text}
