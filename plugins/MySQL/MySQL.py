@@ -40,7 +40,7 @@ def run(typ,freq,data):
 					cursor.execute("INSERT INTO "+globals.config.get("MySQL","tablePOC")+" (time,ric,funktion,text) VALUES (NOW(),%s,%s,%s)",(data["ric"],data["function"],data["msg"]))
 					
 				else:
-					logging.warning(typ + " not supportet")
+					logging.warning("Invalid Typ: %s", typ)	
 			except:
 				logging.exception("cannot Insert %s", typ)
 					 

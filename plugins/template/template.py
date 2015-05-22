@@ -35,13 +35,13 @@ def run(typ,freq,data):
 
 ########## User Plugin CODE ##########		
 		if typ == "FMS":
-			logging.warning(typ + " not supported")
+			logging.warning("%s not supported", typ)
 		elif typ == "ZVEI":
-			logging.warning(typ + " not supported")
+			logging.warning("%s not supported", typ)
 		elif typ == "POC":
-			logging.warning(typ + " not supported")
+			logging.warning("%s not supported", typ)
 		else:
-			logging.warning(typ + " not supported")		
+			logging.warning("Invalid Typ: %s", typ)	
 ########## User Plugin CODE ##########
 		
 	except:

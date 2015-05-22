@@ -18,13 +18,11 @@ def run(typ,freq,data):
 		except:
 			logging.exception("cannot read config file")
 
-			
+		########## User Plugin CODE ##########		
 		if typ == "FMS":
-			logging.warning("FMS not implemented")
-		
+			logging.warning("%s not supported", typ)
 		elif typ == "ZVEI":
-			logging.warning("ZVEI not implemented")
-		
+			logging.warning("%s not supported", typ)
 		elif typ == "POC":
 			logging.debug("Start POC to BosMon")
 			try:
@@ -51,6 +49,8 @@ def run(typ,freq,data):
 			except:
 				logging.error("POC to BosMon failed")
 		else:
-			logging.warning("undefined typ '%s'", typ)
+			logging.warning("Invalid Typ: %s", typ)	
+		########## User Plugin CODE ##########	
+			
 	except:
 		logging.exception("")
