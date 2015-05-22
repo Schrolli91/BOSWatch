@@ -4,7 +4,6 @@
 import logging
 
 from includes import globals  # Global variables
-from includes import pluginloader
 
 def processAlarm(typ,freq,data):
 	logging.debug("[  ALARM  ]")
