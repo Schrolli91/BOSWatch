@@ -25,10 +25,6 @@ try:
 		#create logger
 		globals.script_path = os.path.dirname(os.path.abspath(__file__))
 		
-		#define include-path
-		globals.include_path = os.path.join(globals.script_path, "includes")
-
-		
 		if not os.path.exists(globals.script_path+"/log/"):
 			os.mkdir(globals.script_path+"/log/")
 			
@@ -177,13 +173,13 @@ try:
 							#RAW Data from Multimon-NG
 							#ZVEI2: 25832
 							#FMS: 43f314170000 (9=Rotkreuz      3=Bayern 1        Ort 0x25=037FZG 7141Status 3=Einsatz Ab    0=FZG->LST2=III(mit NA,ohneSIGNAL)) CRC correct\n' 
-							#decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
+							decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
 							
 							#only for develop
 							#decoded = "ZVEI2: 25832"
 							#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
-							decoded = 	"POCSAG1200: Address: 1234567  Function: 1  Alpha:   Hello World"
-							time.sleep(1)	
+							#decoded = 	"POCSAG1200: Address: 1234567  Function: 1  Alpha:   Hello World"
+							#time.sleep(1)	
 							
 							from includes import decoder
 							decoder.decode(decoded)

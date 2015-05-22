@@ -4,7 +4,6 @@
 #Global variables
 config = 0
 script_path = ""
-include_path = ""
 
 #double alarm
 fms_id_old = 0
