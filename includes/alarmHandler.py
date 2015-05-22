@@ -10,4 +10,5 @@ def processAlarm(typ,freq,data):
 	for name, plugin in globals.pluginList.items():
 		logging.debug("call Plugin: %s", name)
 		plugin.run(typ,freq,data)
+		logging.debug("return from: %s", name)
 	logging.debug("[END ALARM]")
