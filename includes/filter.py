@@ -29,10 +29,10 @@ def checkFilters(data,typ,plugin):
 				foundFilter = True
 				logging.debug("found Filter: %s = %s", i["name"], i["regex"])
 				if re.search(i["regex"], data):
-					logging.debug("Filter passed")
+					logging.debug("Filter passed: %s", i["name"])
 					return True
 				else:
-					logging.debug("Filter not passed")
+					logging.debug("Filter not passed: %s", i["name"])
 			
 		if foundFilter:
 			logging.debug("no Filter passed")
