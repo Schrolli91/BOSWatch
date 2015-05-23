@@ -15,5 +15,8 @@ zvei_time_old = 0
 poc_id_old = 0
 poc_time_old = 0
 
-#pluginHandler
+#pluginLoader
 pluginList = {}
+
+#filter
+filterList = []

@@ -125,14 +125,25 @@ try:
 				globals.config = ConfigParser.ConfigParser()
 				globals.config.read(globals.script_path+"/config/config.ini")
 				for key,val in globals.config.items("BOSWatch"):
-					logging.debug(" - %s = %s", key, val)					
+					logging.debug(" - %s = %s", key, val)
 			except:
 				logging.exception("cannot read config file")
-			else:				
+			else:
+				
+				try:
+					#set the loglevel of the file handler
+					logging.debug("set loglevel of fileHandler")
+					fh.setLevel(globals.config.getint("BOSWatch","loglevel"))
+				except:
+					logging.exception("cannot set loglevel of fileHandler")
 				
 				#load plugins
 				from includes import pluginLoader
 				pluginLoader.loadPlugins()
+				
+				#load filters
+				from includes import filter
+				filter.getFilters()
 				
 				try:				
 					#start rtl_fm
