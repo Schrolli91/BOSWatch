@@ -42,4 +42,4 @@ def checkFilters(data,typ,plugin):
 			return True
 			
 	except:
-		logging.exception("")
+		logging.exception("Error in Filter checking")

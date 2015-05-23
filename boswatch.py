@@ -136,10 +136,14 @@ try:
 					fh.setLevel(globals.config.getint("BOSWatch","loglevel"))
 				except:
 					logging.exception("cannot set loglevel of fileHandler")
-					
+				
 				#load plugins
 				from includes import pluginLoader
 				pluginLoader.loadPlugins()
+				
+				#load filters
+				from includes import filter
+				filter.getFilters()
 				
 				try:				
 					#start rtl_fm
