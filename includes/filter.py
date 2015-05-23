@@ -3,6 +3,8 @@
 
 import logging # Global logger
 
+import re #Regex for Filter Check
+
 from includes import globals  # Global variables
 
 
@@ -15,3 +17,29 @@ def getFilters():
 			globals.filterList.append({"name": key, "typ": filter[0], "plugin": filter[1], "regex": filter[2]})
 	except:
 		logging.exception("cannot read config file")
+	
+	
+def checkFilters(data,typ,plugin):
+	try:
+		logging.debug("search Filter for %s to %s", typ, plugin)
+		
+		foundFilter = False
+		for i in globals.filterList:
+			if i["typ"] == typ and i["plugin"] == plugin:
+				foundFilter = True
+				logging.debug("found Filter: %s = %s", i["name"], i["regex"])
+				if re.search(i["regex"], data):
+					logging.debug("Filter passed")
+					return True
+				else:
+					logging.debug("Filter not passed")
+			
+		if foundFilter:
+			logging.debug("no Filter passed")
+			return False
+		else:
+			logging.debug("no Filter found")
+			return True
+			
+	except:
+		logging.exception("")
