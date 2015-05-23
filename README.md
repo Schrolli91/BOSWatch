@@ -17,20 +17,20 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - Plugin support for easy Functions extension
 - Filtering double alarms with adjustable time
 - Filtering Range of POCSAG RIC´s
+- Filtering Data for each Typ/Plugin combination
 - All configurations in seperate config File
 - Data validation (plausibility test)
 - Logfiles for better Troubleshooting
 - verbose/quiet Mode for more/none information
 
 ##### Features for the Future:
-- extensive filtering options
 - more Plugins
 
 
 ###Plugins
 ##### Implemented Plugins:
 - MySQL (insert Data into MySQL Database [FMS|ZVEI|POC])
-- BosMon (send Data to BosMon Server [POC])
+- BosMon (send Data to BosMon Server [ZVEI|POC])
 - httpRequest (send a request to an URL [FMS|ZVEI|POC])
 
 ##### Plugins for the Future:
