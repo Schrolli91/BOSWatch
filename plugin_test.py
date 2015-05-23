@@ -14,6 +14,7 @@ import time #timestamp for doublealarm
 from includes import globals  # Global variables
 from includes import pluginLoader
 from includes import alarmHandler
+from includes import filter
 
 #create new logger
 logger = logging.getLogger()
@@ -51,6 +52,8 @@ except:
 
 
 pluginLoader.loadPlugins()		
+
+filter.getFilters()
 
 
 # ----- Test Data ----- #
