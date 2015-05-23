@@ -53,7 +53,7 @@ def run(typ,freq,data):
 				logging.warning("Invalid Typ: %s", typ)	
 				
 		except:
-			loggin.exception("cannot send HTTP request")
+			logging.exception("cannot send HTTP request")
 		else:
 			
 			try:	
