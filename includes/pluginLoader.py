@@ -2,9 +2,19 @@
 # -*- coding: cp1252 -*-
 
 import logging # Global logger
-import globals # Global variables
 import imp
 import os
+
+from includes import globals  # Global variables
+
+def loadPlugins():
+	try:
+		logging.debug("loading plugins")
+		for i in getPlugins():
+			plugin = loadPlugin(i)
+			globals.pluginList[i["name"]] = plugin			
+	except:
+		logging.exception("cannot load Plugins")
 
 
 def getPlugins():
@@ -32,6 +42,7 @@ def getPlugins():
 		logging.exception("Error during Plugin search")
 
 	return plugins
+
 
 def loadPlugin(plugin):
 	try:

@@ -1,9 +1,6 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
 
-import logging # Global logger
-import globals # Global variables
-
 #########
 # USAGE
 #
@@ -22,6 +19,11 @@ import globals # Global variables
 # send Log Messages with logging.LOGLEVEL("MESSAGE")
 # usable Loglevels debug|info|warning|error|exception|critical
 # if you use .exception in Try:Exception: Construct, it logs the Python EX.message too
+
+import logging # Global logger
+
+from includes import globals  # Global variables
+
 
 def run(typ,freq,data):
 	try:

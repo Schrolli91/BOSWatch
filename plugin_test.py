@@ -1,15 +1,19 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
 
-import time
-import pluginloader
-
-import os #for absolute path: os.path.dirname(os.path.abspath(__file__))
+###########################################################################
+# Use this as a simple Plugin Loading Tool to test your own Coded Plugins #
+###########################################################################
 
 import logging
-import globals
 
 import ConfigParser #for parse the config file
+import os #for log mkdir
+import time #timestamp for doublealarm
+
+from includes import globals  # Global variables
+from includes import pluginLoader
+from includes import alarmHandler
 
 #create new logger
 logger = logging.getLogger()
@@ -34,37 +38,41 @@ logger.addHandler(ch)
 #exception - error with exception message in log
 #critical - critical error, program exit
 
+globals.script_path = os.path.dirname(os.path.abspath(__file__))
 
-#ConfigParser
-logging.debug("reading config file")
 try:
+	logging.debug("reading config file")
 	globals.config = ConfigParser.ConfigParser()
-	globals.config.read(globals.script_path+"./config/config.ini")
+	globals.config.read(globals.script_path+"/config/config.ini")
+	for key,val in globals.config.items("Plugins"):
+		logging.debug(" - %s = %s", key, val)	
 except:
 	logging.exception("cannot read config file")
 
 
+pluginLoader.loadPlugins()		
+
+
+# ----- Test Data ----- #
+#typ = "FMS"
+#data = {"fms":"12345678", "status":"2", "direction":"1", "tsi":"III"}
+
+typ = "ZVEI"
 data = {"zvei":"12345"}
-#data = {"ric":"1234567", "function":"1", "msg":"Hello World!"}
 
-
-logging.debug("Load Plugins...")
-
-pluginList = {}
-for i in pluginloader.getPlugins():
-			plugin = pluginloader.loadPlugin(i)
-			pluginList[i["name"]] = plugin
-	
-logging.debug("All loaded...")	
+#typ = "POC"
+#data = {"ric":"1234567", "function":"1", "msg":"Hello World!, "bitrate":"1200"}
 	
 while True:
 	try:
 		time.sleep(1)
-		logging.info(" = = = = = = = = = ")
-		logging.info("Alarm!")
-		for name, plugin in pluginList.items():
-			logging.debug("call Plugin: %s", name)
-			plugin.run("ZVEI","0",data)
+		
+		print ""
+		alarmHandler.processAlarm(typ,"0",data)
+		
+	except KeyboardInterrupt:
+		logging.warning("Keyboard Interrupt")	
+		exit()
 	except:
-		logging.exception("Cannot Throw Modules")
+		logging.exception("unknown error")
 		exit()
