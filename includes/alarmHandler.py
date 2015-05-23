@@ -7,8 +7,10 @@ from includes import globals  # Global variables
 
 def processAlarm(typ,freq,data):
 	logging.debug("[  ALARM  ]")
-	for name, plugin in globals.pluginList.items():
-		logging.debug("call Plugin: %s", name)
-		plugin.run(typ,freq,data)
-		logging.debug("return from: %s", name)
+	for pluginName, plugin in globals.pluginList.items():
+		from includes import filter
+		if filter.checkFilters(data,typ,pluginName):	
+			logging.debug("call Plugin: %s", pluginName)
+			plugin.run(typ,freq,data)
+			logging.debug("return from: %s", pluginName)
 	logging.debug("[END ALARM]")

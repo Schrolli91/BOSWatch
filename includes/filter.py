@@ -23,6 +23,11 @@ def checkFilters(data,typ,plugin):
 	try:
 		logging.debug("search Filter for %s to %s", typ, plugin)
 		
+		#extract the correct data for filtering
+		if typ == "FMS": data = data["fms"]
+		if typ == "ZVEI": data = data["zvei"]
+		if typ == "POC": data = data["poc"]
+		
 		foundFilter = False
 		for i in globals.filterList:
 			if i["typ"] == typ and i["plugin"] == plugin:
