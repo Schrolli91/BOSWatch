@@ -48,6 +48,14 @@ For each Plugin that requires configurations a own Section with his Name is avai
 
 For the other Functions see "Usage" below.
 
+##### Filtering Functions
+For the Filter Functions see Section `[Filters]`
+Syntax: INDIVIDUAL_NAME = TYP;PLUGIN;REGEX
+TYP = FMS|ZVEI|POC
+PLUGIN = Name of the Plugin
+REGEX = Filtering with RegEx
+my_own_Filter = ZVEI;template;25[0-9F]{3} #all ZVEI alarm to Plugin template where 25###
+
 ##### Web Frontend
 Put the Files in Folder /wwww/ into your local Webserver Folder (/var/www/).
 Now you must edit the "config.php" with your Userdata to your local Database.
