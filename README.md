@@ -16,8 +16,8 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - FMS, ZVEI and POCSAG512/1200/2400 decoding and Displaying
 - Plugin support for easy Functions extension
 - Filtering double alarms with adjustable time
-- Filtering Range of POCSAG RIC´s
-- Filtering Data for each Typ/Plugin combination
+- Filtering Allowed, Denied and Range of POCSAG RIC´s
+- Filtering Data for each Typ/Plugin combination with RegEX
 - All configurations in seperate config File
 - Data validation (plausibility test)
 - Logfiles for better Troubleshooting
@@ -30,7 +30,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 ###Plugins
 ##### Implemented Plugins:
 - MySQL (insert Data into MySQL Database [FMS|ZVEI|POC])
-- BosMon (send Data to BosMon Server [ZVEI|POC])
+- BosMon (send Data to BosMon Server [FMS|ZVEI|POC])
 - httpRequest (send a request to an URL [FMS|ZVEI|POC])
 
 ##### Plugins for the Future:
