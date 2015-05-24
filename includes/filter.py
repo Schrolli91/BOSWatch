@@ -24,16 +24,16 @@ def checkFilters(data,typ,plugin):
 		logging.debug("search Filter for %s to %s", typ, plugin)
 		
 		#extract the correct data for filtering
-		if typ == "FMS": data = data["fms"]
-		if typ == "ZVEI": data = data["zvei"]
-		if typ == "POC": data = data["poc"]
+		#if typ == "FMS": data = data["fms"]
+		#if typ == "ZVEI": data = data["zvei"]
+		#if typ == "POC": data = data["poc"]
 		
 		foundFilter = False
 		for i in globals.filterList:
 			if i["typ"] == typ and i["plugin"] == plugin:
 				foundFilter = True
 				logging.debug("found Filter: %s = %s", i["name"], i["regex"])
-				if re.search(i["regex"], data):
+				if re.search(i["regex"], data[typ.lower()]):
 					logging.debug("Filter passed: %s", i["name"])
 					return True
 				else:
