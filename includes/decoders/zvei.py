@@ -14,7 +14,7 @@ def decode(freq, decoded):
 
 	zvei_id = decoded[7:12] #ZVEI Code  
 	if re.search("[0-9F]{5}", zvei_id): #if ZVEI is valid
-		if zvei_id == globals.zvei_id_old and timestamp < globals.zvei_time_old + globals.config.getint("BOSWatch", "zvei_double_ignore_time"): #check for double alarm
+		if zvei_id == globals.zvei_id_old and timestamp < globals.zvei_time_old + globals.config.getint("ZVEI", "double_ignore_time"): #check for double alarm
 			logging.info("ZVEI double alarm: %s within %s second(s)", globals.zvei_id_old, timestamp-globals.zvei_time_old)
 			globals.zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 		else:

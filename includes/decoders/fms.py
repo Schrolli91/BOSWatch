@@ -23,7 +23,7 @@ def decode(freq, decoded):
 	if "CRC correct" in decoded: #check CRC is correct  
 		fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction #build FMS id
 		if re.search("[0-9a-f]{8}[0-9a-f]{1}[01]{1}", fms_id): #if FMS is valid
-			if fms_id == globals.fms_id_old and timestamp < globals.fms_time_old + globals.config.getint("BOSWatch", "fms_double_ignore_time"): #check for double alarm
+			if fms_id == globals.fms_id_old and timestamp < globals.fms_time_old + globals.config.getint("FMS", "double_ignore_time"): #check for double alarm
 				logging.info("FMS double alarm: %s within %s second(s)", globals.fms_id_old, timestamp-globals.fms_time_old)
 				globals.fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 			else:
