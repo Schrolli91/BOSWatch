@@ -67,7 +67,7 @@ def run(typ,freq,data):
 						info = info + 8      # + b1000
 					elif "II" in data["tsi"]:
 						info = info + 4      # + b0100
-					# "I" is + b0000 => nothing to do...
+					# "I" is nothing to do     + b0000
 					
 					params = urllib.urlencode({'type':'fms', 'address':data["fms"], 'status':data["status"], 'info':info, 'flags':'0'})
 					logging.debug(" - Params: %s", params)
