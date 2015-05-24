@@ -43,22 +43,34 @@ def run(typ,freq,data):
 			logging.debug("connect to BosMon")
 			httprequest = httplib.HTTPConnection(globals.config.get("BosMon", "bosmon_server"), globals.config.get("BosMon", "bosmon_port"))
 			#debug-level to shell (0=no debug|1)
-			httprequest.set_debuglevel(0)
+			httprequest.set_debuglevel(1)
 		except:
 			logging.exception("cannot connect to BosMon")
 
 		else:
 			if typ == "FMS":
-				logging.warning("%s not supported", typ)
-				#logging.debug("Start FMS to BosMon")
-				#try:
+				logging.debug("Start FMS to BosMon")
+				try:
 					#BosMon-Telegramin expected assembly group, direction and tsi in one field
-					#structure:
-					#params = urllib.urlencode({'type':'fms', 'address':data["fms"], 'status':data["status"], 'info':'0', 'flags':'0'})
-					#logging.debug(" - Params: %s", params)
-					#bosMonRequest(httprequest, params, headers)
-				#except:
-					#logging.error("FMS to BosMon failed")
+					#structure: Byte 1: assembly group; Byte 2: Direction; Byte 3+4: tactic short info 
+					info = 0
+					#assembly group:
+					info = info + 1          # + b0001 (Assumption: is in every time 1 (no output from multimon-ng))
+					#direction:
+					if data["direction"] == "1":
+						info = info + 2      # + b0010
+					#tsi:
+					if "IV" in data["tsi"]:
+						info = info + 12     # + b1100
+					elif "III" in data["tsi"]:
+						info = info + 8      # + b1000
+					elif "II" in data["tsi"]:
+						info = info + 4      # + b0100
+					params = urllib.urlencode({'type':'fms', 'address':data["fms"], 'status':data["status"], 'info':info, 'flags':'0'})
+					logging.debug(" - Params: %s", params)
+					bosMonRequest(httprequest, params, headers)
+				except:
+					logging.exception("FMS to BosMon failed")
 
 			elif typ == "ZVEI":
 				logging.debug("Start ZVEI to BosMon")
@@ -67,7 +79,7 @@ def run(typ,freq,data):
 					logging.debug(" - Params: %s", params)
 					bosMonRequest(httprequest, params, headers)
 				except:
-					logging.error("ZVEI to BosMon failed")
+					logging.exception("ZVEI to BosMon failed")
 
 			elif typ == "POC":
 				logging.debug("Start POC to BosMon")
@@ -78,7 +90,7 @@ def run(typ,freq,data):
 					logging.debug(" - Params: %s", params)
 					bosMonRequest(httprequest, params, headers)
 				except:
-					logging.error("POC to BosMon failed")
+					logging.exception("POC to BosMon failed")
 			
 			else:
 				logging.warning("Invalid Typ: %s", typ)	

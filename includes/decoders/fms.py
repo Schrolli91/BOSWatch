@@ -27,7 +27,7 @@ def decode(freq, decoded):
 				logging.info("FMS double alarm: %s within %s second(s)", globals.fms_id_old, timestamp-globals.fms_time_old)
 				globals.fms_time_old = timestamp #in case of double alarm, fms_double_ignore_time set new
 			else:
-				logging.info("FMS:%s Status:%s Richtung:%s TKI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
+				logging.info("FMS:%s Status:%s Richtung:%s TSI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
 				data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "tsi":fms_tsi}
 				from includes import alarmHandler
 				alarmHandler.processAlarm("FMS",freq,data)
