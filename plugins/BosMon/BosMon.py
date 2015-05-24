@@ -43,7 +43,7 @@ def run(typ,freq,data):
 			logging.debug("connect to BosMon")
 			httprequest = httplib.HTTPConnection(globals.config.get("BosMon", "bosmon_server"), globals.config.get("BosMon", "bosmon_port"))
 			#debug-level to shell (0=no debug|1)
-			httprequest.set_debuglevel(1)
+			httprequest.set_debuglevel(0)
 		except:
 			logging.exception("cannot connect to BosMon")
 
@@ -52,7 +52,8 @@ def run(typ,freq,data):
 				logging.debug("Start FMS to BosMon")
 				try:
 					#BosMon-Telegramin expected assembly group, direction and tsi in one field
-					#structure: Byte 1: assembly group; Byte 2: Direction; Byte 3+4: tactic short info 
+					#structure (binary as hex in base10): 
+					#     Byte 1: assembly group; Byte 2: Direction; Byte 3+4: tactic short info 
 					info = 0
 					#assembly group:
 					info = info + 1          # + b0001 (Assumption: is in every time 1 (no output from multimon-ng))
@@ -66,6 +67,8 @@ def run(typ,freq,data):
 						info = info + 8      # + b1000
 					elif "II" in data["tsi"]:
 						info = info + 4      # + b0100
+					# "I" is nothing to do     + b0000
+					
 					params = urllib.urlencode({'type':'fms', 'address':data["fms"], 'status':data["status"], 'info':info, 'flags':'0'})
 					logging.debug(" - Params: %s", params)
 					bosMonRequest(httprequest, params, headers)
