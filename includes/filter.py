@@ -14,7 +14,7 @@ def getFilters():
 		for key,val in globals.config.items("Filters"):
 			logging.debug(" - %s = %s", key, val)
 			filter = val.split(";")
-			globals.filterList.append({"name": key, "typ": filter[0], "plugin": filter[1], "regex": filter[2]})
+			globals.filterList.append({"name": key, "typ": filter[0], "dataField": filter[1], "plugin": filter[2], "regex": filter[3]})
 	except:
 		logging.exception("cannot read config file")
 	
@@ -23,17 +23,12 @@ def checkFilters(data,typ,plugin):
 	try:
 		logging.debug("search Filter for %s to %s", typ, plugin)
 		
-		#extract the correct data for filtering
-		if typ == "FMS": data = data["fms"]
-		if typ == "ZVEI": data = data["zvei"]
-		if typ == "POC": data = data["ric"]
-		
 		foundFilter = False
 		for i in globals.filterList:
 			if i["typ"] == typ and i["plugin"] == plugin:
 				foundFilter = True
 				logging.debug("found Filter: %s = %s", i["name"], i["regex"])
-				if re.search(i["regex"], data):
+				if re.search(i["regex"], data[i["dataField"]]):
 					logging.debug("Filter passed: %s", i["name"])
 					return True
 				else:
