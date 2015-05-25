@@ -1,14 +1,18 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
-
-##### Info #####
+#
 # BOSWatch
 # Autor: Bastian Schroll
-# Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG
-# For more Information see the README.md
-##### Info #####
+# 
+#
+
+"""
+Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG
+For more Information see the README.md
+"""
 
 import logging
+import logging.handlers
 
 import argparse #for parse the args
 import ConfigParser #for parse the config file
@@ -18,43 +22,65 @@ import subprocess
 
 from includes import globals  # Global variables
 
+##
+# This Class extended the TimedRotatingFileHandler with the possibility to change the backupCount after initialization.
+##
+class MyTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
+	"""Extended Version of TimedRotatingFileHandler"""
+	def setBackupCount(self, backupCount):
+		"""Set/Change backupCount"""
+		self.backupCount = backupCount
+
+#
 # Programm
+#
 try:
 	try:	
-		#create logger
+		#
+		# Script-pathes
+		#
 		globals.script_path = os.path.dirname(os.path.abspath(__file__))
 		
+		#
+		# If necessary create Log-Path
+		#
 		if not os.path.exists(globals.script_path+"/log/"):
 			os.mkdir(globals.script_path+"/log/")
-			
-		#create new logger
-		logger = logging.getLogger()
-		logger.setLevel(logging.DEBUG)
+
+		#
+		# Create new myLogger...
+		#
+		myLogger = logging.getLogger()
+		myLogger.setLevel(logging.DEBUG)
 		#set log string format
 		formatter = logging.Formatter('%(asctime)s - %(module)-12s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
 		#create a file logger
-		fh = logging.FileHandler(globals.script_path+"/log/boswatch.log", "w")
-		fh.setLevel(logging.DEBUG) #log level >= Debug
+		fh = MyTimedRotatingFileHandler(globals.script_path+"/log/boswatch.log", "midnight", interval=1, backupCount=999)
+		#Starts with log level >= Debug
+		#will be changed with config.ini-param later
+		fh.setLevel(logging.DEBUG) 
 		fh.setFormatter(formatter)
-		logger.addHandler(fh)
+		myLogger.addHandler(fh)
 		#create a display logger
 		ch = logging.StreamHandler()
-		ch.setLevel(logging.INFO) #log level >= info
+		#log level for display >= info
+		#will be changed later after parsing args
+		ch.setLevel(logging.INFO) 
 		ch.setFormatter(formatter)
-		logger.addHandler(ch)		
+		myLogger.addHandler(ch)		
 	except:
 		logging.exception("cannot create logger")
 	else:	
 		
-		try:		
-			#clear log
-			bos_log = open(globals.script_path+"/log/boswatch.log", "w")
+		try:
+			#
+			# Clear the logfiles
+			#
+			fh.doRollover()
 			rtl_log = open(globals.script_path+"/log/rtl_fm.log", "w")
 			mon_log = open(globals.script_path+"/log/multimon.log", "w")
-			bos_log.write("")
 			rtl_log.write("")
 			mon_log.write("")
-			bos_log.close()
 			rtl_log.close()
 			mon_log.close()
 			logging.debug("BOSWatch has started")
@@ -62,8 +88,10 @@ try:
 		except:
 			logging.exception("cannot clear Logfiles")	
 			
-		try:		
-			#parse args
+		try:
+			#
+			# Parse args
+			#
 			logging.debug("parse args")
 			#With -h or --help you get the Args help
 			#ArgsParser
@@ -81,8 +109,10 @@ try:
 			logging.error("cannot parse args")		
 		else:	
 			
-			try:		
-				#display/log args
+			try:	
+				#
+				# For debug display/log args
+				#
 				logging.debug(" - Frequency: %s", args.freq)
 				logging.debug(" - Device: %s", args.device)
 				logging.debug(" - PPM Error: %s", args.error)
@@ -119,8 +149,10 @@ try:
 			except:
 				logging.exception("cannot display/log args")		
 
-			try:		
-				#read config
+			try:
+				#
+				# Read config.ini
+				#
 				logging.debug("reading config file")
 				globals.config = ConfigParser.ConfigParser()
 				globals.config.read(globals.script_path+"/config/config.ini")
@@ -131,23 +163,33 @@ try:
 			else:
 				
 				try:
-					#set the loglevel of the file handler
-					logging.debug("set loglevel of fileHandler")
+					# 
+					# Set the loglevel and backupCount of the file handler 
+					#
+					logging.debug("set loglevel of fileHandler to: %s",globals.config.getint("BOSWatch","loglevel") )
 					fh.setLevel(globals.config.getint("BOSWatch","loglevel"))
+					logging.debug("set backupCount of fileHandler to: %s", globals.config.getint("BOSWatch","backupCount"))
+					fh.setBackupCount(globals.config.getint("BOSWatch","backupCount"))
 				except:
 					logging.exception("cannot set loglevel of fileHandler")
 				
-				#load plugins
+				#
+				# Load plugins
+				#
 				from includes import pluginLoader
 				pluginLoader.loadPlugins()
 				
-				#load filters
+				#
+				# Load filters
+				#
 				if globals.config.getint("BOSWatch","useRegExFilter"):
 					from includes import filter
 					filter.getFilters()
 				
 				try:				
-					#start rtl_fm
+					#
+					# Start rtl_fm
+					#
 					logging.debug("starting rtl_fm")
 					rtl_fm = subprocess.Popen("rtl_fm -d "+str(args.device)+" -f "+str(args.freq)+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100",
 							#stdin=rtl_fm.stdout,
@@ -159,7 +201,9 @@ try:
 				else:	
 					
 					try:
-						#start multimon
+						#
+						# Start multimon
+						#
 						logging.debug("starting multimon-ng")
 						multimon_ng = subprocess.Popen("multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - ",
 							stdin=rtl_fm.stdout,
@@ -173,20 +217,25 @@ try:
 						logging.debug("start decoding")  
 						
 						while True: 
-							#RAW Data from Multimon-NG
-							#ZVEI2: 25832
-							#FMS: 43f314170000 (9=Rotkreuz      3=Bayern 1        Ort 0x25=037FZG 7141Status 3=Einsatz Ab    0=FZG->LST2=III(mit NA,ohneSIGNAL)) CRC correct\n' 
+							#
+							# Get decoded data from multimon-ng and call BOSWatch-decoder
+							#
+						
+							# RAW Data from Multimon-NG
+							# ZVEI2: 25832
+							# FMS: 43f314170000 (9=Rotkreuz      3=Bayern 1        Ort 0x25=037FZG 7141Status 3=Einsatz Ab    0=FZG->LST2=III(mit NA,ohneSIGNAL)) CRC correct\n' 
+							# POCSAG1200: Address: 1234567  Function: 1  Alpha:   Hello World
 							decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
 							
-							#only for develop
+							# Test-strings only for develop
 							#decoded = "ZVEI2: 25832"
 							#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=I  (ohneNA,ohneSIGNAL)) CRC correct\n'"
 							#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     1=LST->FZG 2=I  (ohneNA,ohneSIGNAL)) CRC correct\n'"
 							#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=II (ohneNA,mit SIGNAL)) CRC correct\n'"
-							decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     1=LST->FZG 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
+							#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     1=LST->FZG 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
 							#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=IV (mit NA,mit SIGNAL)) CRC correct\n'"
 							#decoded = "POCSAG1200: Address: 1234567  Function: 1  Alpha:   Hello World"
-							time.sleep(1)	
+							#time.sleep(1)	
 							
 							from includes import decoder
 							decoder.decode(args.freq, decoded)
@@ -207,4 +256,8 @@ finally:
 		logging.warning("failed in clean-up routine")	
 	finally:
 		logging.info("BOSWatch exit()")	
+		# Close Logging
+		logging.shutdown()
+		fh.close()
+		ch.close()
 		exit(0)
