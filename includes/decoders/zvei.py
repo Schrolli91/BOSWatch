@@ -13,7 +13,7 @@ def decode(freq, decoded):
 	timestamp = int(time.time())#Get Timestamp                  
 
 	zvei_id = decoded[7:12] #ZVEI Code  
-	zvei_id = resolveWDHtone(zvei_id) #resolve F
+	zvei_id = removeF(zvei_id) #resolve F
 	if re.search("[0-9]{5}", zvei_id): #if ZVEI is valid
 		if zvei_id == globals.zvei_id_old and timestamp < globals.zvei_time_old + globals.config.getint("ZVEI", "double_ignore_time"): #check for double alarm
 			logging.info("ZVEI double alarm: %s within %s second(s)", globals.zvei_id_old, timestamp-globals.zvei_time_old)
@@ -30,10 +30,11 @@ def decode(freq, decoded):
 		logging.warning("No valid ZVEI: %s", zvei_id)
 	
 
-def resolveWDHtone(zvei):
-	zvei_old = zvei
-	for i in range(1, 5):
-		if zvei[i] == "F":
-			zvei = zvei.replace("F",zvei[i-1],1)
-	logging.debug("resolve F: %s -> %s", zvei_old, zvei)
+def removeF(zvei):
+	if "F" in zvei:
+		zvei_old = zvei
+		for i in range(1, 5):
+			if zvei[i] == "F":
+				zvei = zvei.replace("F",zvei[i-1],1)
+		logging.debug("resolve F: %s -> %s", zvei_old, zvei)
 	return zvei
