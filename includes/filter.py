@@ -26,7 +26,7 @@ def checkFilters(data,typ,plugin):
 		#extract the correct data for filtering
 		if typ == "FMS": data = data["fms"]
 		if typ == "ZVEI": data = data["zvei"]
-		if typ == "POC": data = data["poc"]
+		if typ == "POC": data = data["ric"]
 		
 		foundFilter = False
 		for i in globals.filterList:
