@@ -24,7 +24,7 @@ def getPlugins():
 		plugins = []
 		for i in os.listdir(PluginFolder):
 			location = os.path.join(PluginFolder, i)
-			# plugins have to be a subdir with MainModule, if not skip
+				
 			if not os.path.isdir(location) or not i + ".py" in os.listdir(location):
 				continue
 
@@ -36,7 +36,7 @@ def getPlugins():
 					logging.debug("Plugin [ENABLED ] %s", i)
 				else:
 					logging.debug("Plugin [DISABLED] %s ", i)
-			except: #no entry for plugin found in config-file, skip
+			except: #no entry for plugin found in config-file
 				logging.warning("Plugin [NO CONF ] %s", i)				
 	except:
 		logging.exception("Error during Plugin search")

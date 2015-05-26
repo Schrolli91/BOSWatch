@@ -9,8 +9,8 @@ from includes import globals  # Global variables
 
 
 def loadFilters():
-	logging.debug("loading filters")
 	try:
+		logging.debug("loading filters")
 		for key,val in globals.config.items("Filters"):
 			logging.debug(" - %s = %s", key, val)
 			filter = val.split(";")
