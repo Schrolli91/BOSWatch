@@ -8,8 +8,8 @@ import re #Regex for Filter Check
 from includes import globals  # Global variables
 
 
-def getFilters():
-	logging.debug("reading config file")
+def loadFilters():
+	logging.debug("loading filters")
 	try:
 		for key,val in globals.config.items("Filters"):
 			logging.debug(" - %s = %s", key, val)

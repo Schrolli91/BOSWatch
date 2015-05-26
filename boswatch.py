@@ -184,7 +184,7 @@ try:
 				#
 				if globals.config.getint("BOSWatch","useRegExFilter"):
 					from includes import filter
-					filter.getFilters()
+					filter.loadFilters()
 				
 				try:				
 					#
@@ -254,10 +254,11 @@ finally:
 		logging.debug("exiting BOSWatch")		
 	except:
 		logging.warning("failed in clean-up routine")	
-	finally:
-		logging.info("BOSWatch exit()")	
+	finally:	
 		# Close Logging
+		logging.debug("close Logging")	
 		logging.shutdown()
 		fh.close()
 		ch.close()
+		logging.info("BOSWatch exit()")
 		exit(0)
