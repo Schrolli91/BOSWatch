@@ -257,8 +257,8 @@ finally:
 	finally:	
 		# Close Logging
 		logging.debug("close Logging")	
+		logging.info("BOSWatch exit()")
 		logging.shutdown()
 		fh.close()
 		ch.close()
-		logging.info("BOSWatch exit()")
 		exit(0)
