@@ -1,6 +1,13 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
 
+"""
+Global variables
+
+@author: Jens Hermann
+@author: Bastian Schroll
+"""
+
 #Global variables
 config = 0
 script_path = ""

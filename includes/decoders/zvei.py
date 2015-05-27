@@ -1,6 +1,14 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
 
+"""
+ZVEI Decoder
+
+@author: Bastian Schroll
+
+@requires: Configuration has to be set in the config.ini
+"""
+
 import logging
 import time #timestamp for doublealarm
 import re #Regex for validation
@@ -10,6 +18,19 @@ from includes import globals  # Global variables
 #ZVEI Decoder Function
 #validate -> check double alarm -> log      
 def decode(freq, decoded):
+	"""
+	Export ZVEI Information from Multimon-NG RAW String and call alarmHandler.processAlarm()
+
+	@type    freq: string
+	@param   freq: frequency of the SDR Stick
+	@type    decoded: string
+	@param   decoded: RAW Information from Multimon-NG
+
+	@requires:  Configuration has to be set in the config.ini
+	
+	@return:    nothing
+	@exception: Exception if ZVEI decode failed
+	"""
 	timestamp = int(time.time())#Get Timestamp                  
 
 	zvei_id = decoded[7:12] #ZVEI Code  
@@ -31,6 +52,15 @@ def decode(freq, decoded):
 	
 
 def removeF(zvei):
+	"""
+	Resolve the F from the repeat Tone
+
+	@type    zvei: string
+	@param   zvei: ZVEI Information
+	
+	@return:    ZVEI without F
+	@exception: none
+	"""
 	if "F" in zvei:
 		zvei_old = zvei
 		for i in range(1, 5):

@@ -1,9 +1,28 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
 
+"""
+Search for decode String and call the right decoder Funtion
+
+@author: Jens Herrmann
+
+@requires: none
+"""
+
 import logging
 
 def decode(freq, decoded):
+	"""
+	Search for decode String and call the right decoder Function
+
+	@type    freq: string
+	@param   freq: frequency of the SDR Stick
+	@type    decoded: string
+	@param   decoded: RAW Information from Multimon-NG
+	
+	@return:    nothing
+	@exception: Exception if decoder File call failed
+	"""
 	try:
 		#FMS Decoder Section    
 		#check FMS: -> check CRC -> validate -> check double alarm -> log

@@ -1,6 +1,14 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
 
+"""
+FMS Decoder
+
+@author: Bastian Schroll
+
+@requires: Configuration has to be set in the config.ini
+"""
+
 import logging
 import time #timestamp for doublealarm
 import re #Regex for validation
@@ -10,6 +18,19 @@ from includes import globals  # Global variables
 #FMS Decoder Function
 #validate -> check double alarm -> log      
 def decode(freq, decoded):
+	"""
+	Export FMS Information from Multimon-NG RAW String and call alarmHandler.processAlarm()
+
+	@type    freq: string
+	@param   freq: frequency of the SDR Stick
+	@type    decoded: string
+	@param   decoded: RAW Information from Multimon-NG
+
+	@requires:  Configuration has to be set in the config.ini
+	
+	@return:    nothing
+	@exception: Exception if FMS decode failed
+	"""
 	timestamp = int(time.time())#Get Timestamp                  
 
 	fms_service = decoded[19]       #Organisation

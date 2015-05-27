@@ -1,6 +1,15 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
 
+"""
+POCSAG Decoder
+
+@author: Bastian Schroll
+@author: Jens Hermann
+
+@requires: Configuration has to be set in the config.ini
+"""
+
 import logging
 import time #timestamp for doublealarm
 import re #Regex for validation
@@ -9,7 +18,17 @@ from includes import globals  # Global variables
 
 # Simple Filter
 def isAllowed(poc_id):
-	"""Simple filter for POCSAG"""
+	"""
+	Simple Filter Functions (Allowed ,Denied and Range)
+
+	@type    poc_id: string
+	@param   poc_id: POCSAG Ric
+
+	@requires:  Configuration has to be set in the config.ini
+	
+	@return:    True if the Ric is allows, other False
+	@exception: none
+	"""
 	# 1.) If allowed RICs is set, only they will path, 
 	#       If RIC is the right one return True, else False
 	if globals.config.get("POC", "allow_ric"):
@@ -36,7 +55,19 @@ def isAllowed(poc_id):
 #POCSAG Decoder Function
 #validate -> check double alarm -> log      
 def decode(freq, decoded):
-	"""Decode for structure of typ POCSAG"""
+	"""
+	Export POCSAG Information from Multimon-NG RAW String and call alarmHandler.processAlarm()
+
+	@type    freq: string
+	@param   freq: frequency of the SDR Stick
+	@type    decoded: string
+	@param   decoded: RAW Information from Multimon-NG
+
+	@requires:  Configuration has to be set in the config.ini
+	
+	@return:    nothing
+	@exception: Exception if POCSAG decode failed
+	"""
 	bitrate = 0
 	timestamp = int(time.time())#Get Timestamp                  
 	
