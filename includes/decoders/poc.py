@@ -19,14 +19,14 @@ from includes import globals  # Global variables
 # Simple Filter
 def isAllowed(poc_id):
 	"""
-	Simple Filter Functions (Allowed ,Denied and Range)
+	Simple Filter Functions (Allowed, Denied and Range)
 
 	@type    poc_id: string
 	@param   poc_id: POCSAG Ric
 
 	@requires:  Configuration has to be set in the config.ini
 	
-	@return:    True if the Ric is allows, other False
+	@return:    True if the Ric is allowed, other False
 	@exception: none
 	"""
 	# 1.) If allowed RICs is set, only they will path, 
