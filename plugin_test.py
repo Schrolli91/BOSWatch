@@ -53,7 +53,7 @@ except:
 
 pluginLoader.loadPlugins()		
 
-filter.getFilters()
+filter.loadFilters()
 
 
 # ----- Test Data ----- #
@@ -61,7 +61,7 @@ filter.getFilters()
 #data = {"fms":"12345678", "status":"2", "direction":"1", "tsi":"III"}
 
 typ = "ZVEI"
-data = {"zvei":"12345"}
+data = {"zvei":"25345"}
 
 #typ = "POC"
 #data = {"ric":"1234567", "function":"1", "msg":"Hello World!, "bitrate":"1200"}
