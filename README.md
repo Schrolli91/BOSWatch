@@ -48,13 +48,23 @@ For each Plugin that requires configurations a own Section with his Name is avai
 
 For the other Functions see "Usage" below.
 
-##### Filtering Functions
-For the Filter Functions see Section `[Filters]`
-Syntax: INDIVIDUAL_NAME = TYP;PLUGIN;REGEX
-TYP = FMS|ZVEI|POC
-PLUGIN = Name of the Plugin
-REGEX = Filtering with RegEx
-my_own_Filter = ZVEI;template;25[0-9F]{3} #all ZVEI alarm to Plugin template where 25###
+##### Filtering Functions (RegEX)
+For the RegEX Filter Functions see Section `[Filters]`
+http://www.regexr.com/ - RegEX Test Tool an Documentation
+No Filter for a Typ/Plugin Combination = all Data pass
+
+Syntax: INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX
+- TYP				= the Data Typ (FMS|ZVEI|POC)
+- DATAFIELD	= the field of the Data Array (See interface.txt)
+- PLUGIN			= the name of the Plugin to call with this Filter (* for all)
+- FREQUENZ		= the Frequenz to use the Filter (for more SDR Sticks (* for all))
+- REGEX			= the RegEX
+
+only ZVEI to all Plugins with 25### at 85.5MHz
+testfilter = ZVEI;zvei;*;85500000;25[0-9]{3}
+
+only POCSAG to MySQL with the text "ALARM:" in the Message
+pocTest = POC;msg;MySQL;*;ALARM:
 
 ##### Web Frontend
 Put the Files in Folder /wwww/ into your local Webserver Folder (/var/www/).
