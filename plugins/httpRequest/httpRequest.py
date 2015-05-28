@@ -57,8 +57,10 @@ def run(typ,freq,data):
 			else:
 				logging.warning("Invalid Typ: %s", typ)	
 			
-			httprequest = httplib.HTTPConnection(url)
-			httprequest.request("HEAD", url)	
+			url_path = urlparse(url)#get the URL path
+			
+			httprequest = httplib.HTTPConnection(url_path[2])
+			httprequest.request("GET", url)	
 			
 		except:
 			logging.exception("cannot send HTTP request")
