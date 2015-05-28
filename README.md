@@ -31,7 +31,8 @@ unless you are developer you can use the develop-Branch - may be unstable!
 ##### Implemented Plugins:
 - MySQL (insert Data into MySQL Database [FMS|ZVEI|POC])
 - BosMon (send Data to BosMon Server [FMS|ZVEI|POC])
-- httpRequest (send a request to an URL [FMS|ZVEI|POC])
+- httpRequest (send a request with parameter to an URL [FMS|ZVEI|POC])
+for more Information to the Plugins see `config.ini`
 
 ##### Plugins for the Future:
 - E-mail Notification
@@ -53,7 +54,7 @@ For the RegEX Filter Functions see Section `[Filters]`
 http://www.regexr.com/ - RegEX Test Tool an Documentation
 No Filter for a Typ/Plugin Combination = all Data pass
 
-Syntax: INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX
+Syntax: INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX (separator ";")
 - TYP				= the Data Typ (FMS|ZVEI|POC)
 - DATAFIELD	= the field of the Data Array (See interface.txt)
 - PLUGIN			= the name of the Plugin to call with this Filter (* for all)

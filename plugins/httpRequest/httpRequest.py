@@ -43,24 +43,27 @@ def run(typ,freq,data):
 				logging.debug(" - %s = %s", key, val)
 		except:
 			logging.exception("cannot read config file")
-			
 		
 		try:
 			logging.debug("send %s HTTP request", typ)
 			
 			if typ == "FMS":
-				url = globals.config.get("httpRequest", "fms_url")
+				url = globals.config.get("httpRequest", "fms_url") #Get URL
+				url = url.replace("%FMS%", data["fms"]).replace("%STATUS%", data["status"]) #replace Wildcards in URL
+				url = url.replace("%DIR%", data["direction"]).replace("%TSI%", data["tsi"]) #replace Wildcards in URL
 			elif typ == "ZVEI":
-				url = globals.config.get("httpRequest", "zvei_url")
+				url = globals.config.get("httpRequest", "zvei_url") #Get URL
+				url = url.replace("%ZVEI%", data["zvei"]) #replace Wildcards in URL
 			elif typ == "POC":
-				url = globals.config.get("httpRequest", "poc_url")	
+				url = globals.config.get("httpRequest", "poc_url") #Get URL
+				url = url.replace("%RIC%", data["ric"]).replace("%FUNC%", data["function"]) #replace Wildcards in URL
+				url = url.replace("%MSG%", data["msg"]).replace("%BITRATE%", data["bitrate"]) #replace Wildcards in URL
 			else:
 				logging.warning("Invalid Typ: %s", typ)	
 			
-			url_path = urlparse(url)#get the URL path
-			
-			httprequest = httplib.HTTPConnection(url_path[2])
-			httprequest.request("GET", url)	
+			url = urlparse(url)#split URL into path and querry
+			httprequest = httplib.HTTPConnection(url[2]) #connect to URL Path
+			httprequest.request("GET", url[5]) #send URL Querry per GET
 			
 		except:
 			logging.exception("cannot send HTTP request")
