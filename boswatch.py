@@ -1,14 +1,16 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
 #
-# BOSWatch
-# Autor: Bastian Schroll
-# 
-#
-
 """
+BOSWatch
 Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG
+Through a simple plugin system, data can easily be transferred to other applications
 For more Information see the README.md
+
+Autor: 		Bastian Schroll
+Autor: 		Jens Hermann
+
+GitHUB:		https://github.com/Schrolli91/BOSWatch
 """
 
 import logging
