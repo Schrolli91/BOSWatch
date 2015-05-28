@@ -130,7 +130,7 @@ try:
 					logging.debug(" - Demod: POC512")
 				if "POC1200" in args.demod:
 					demodulation += "-a POCSAG1200 "
-					logging.debug(" - Demod: P")		
+					logging.debug(" - Demod: POC1200")		
 				if "POC2400" in args.demod:
 					demodulation += "-a POCSAG2400 "
 					logging.debug(" - Demod: POC2400")
