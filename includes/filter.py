@@ -32,7 +32,7 @@ def loadFilters():
 			logging.debug(" - %s = %s", key, val)
 			filter = val.split(";")
 			#insert splitet Data into globals.filterList
-			globals.filterList.append({"name": key, "typ": filter[0], "dataField": filter[1], "plugin": filter[2], "freq": filter[3], "regex": filter[4]})
+			globals.filterList.append({"name": key, "typ": filter[0], "dataField": filter[1], "plugin": filter[2], "freq": freqToHz(filter[3]), "regex": filter[4]})
 	except:
 		logging.exception("cannot read config file")
 	

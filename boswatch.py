@@ -33,6 +33,24 @@ class MyTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
 		"""Set/Change backupCount"""
 		self.backupCount = backupCount
 
+
+def freqToHz(freq)
+	"""
+	gets a Frequenz and resolve it in Hz
+	
+	@type    freq: string
+	@param   freq: frequency of the SDR Stick
+	
+	@return:    Frequenz in Hz
+	@exception: Exception if Error by recalc
+	"""
+	try:
+		freq = freq.replace("k","e3").replace("M","e6")
+		return int(freq)
+	except:
+		logging.exception("Error in freqToHz()")
+
+		
 #
 # Programm
 #
@@ -115,7 +133,7 @@ try:
 				#
 				# For debug display/log args
 				#
-				logging.debug(" - Frequency: %s", args.freq)
+				logging.debug(" - Frequency: %s", freqToHz(args.freq))
 				logging.debug(" - Device: %s", args.device)
 				logging.debug(" - PPM Error: %s", args.error)
 				logging.debug(" - Squelch: %s", args.squelch)
@@ -193,7 +211,7 @@ try:
 					# Start rtl_fm
 					#
 					logging.debug("starting rtl_fm")
-					rtl_fm = subprocess.Popen("rtl_fm -d "+str(args.device)+" -f "+str(args.freq)+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100",
+					rtl_fm = subprocess.Popen("rtl_fm -d "+str(args.device)+" -f "+str(freqToHz(args.freq))+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100",
 							#stdin=rtl_fm.stdout,
 							stdout=subprocess.PIPE,
 							stderr=open(globals.script_path+"/log/rtl_fm.log","a"),
@@ -240,7 +258,7 @@ try:
 							#time.sleep(1)	
 							
 							from includes import decoder
-							decoder.decode(args.freq, decoded)
+							decoder.decode(freqToHz(args.freq), decoded)
 								
 except KeyboardInterrupt:
 	logging.warning("Keyboard Interrupt")	
