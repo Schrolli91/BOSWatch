@@ -16,6 +16,11 @@ from urlparse import urlparse #for split the URL into url and path
 from includes import globals  # Global variables
 
 
+##
+#
+# Main function of HTTP-plugin
+# will be called by the alarmHandler
+#
 def run(typ,freq,data):
 	"""
 	This function is the implementation of the httpRequest-Plugin.
@@ -36,7 +41,9 @@ def run(typ,freq,data):
 	@exception: Exception if http Response failed
 	"""
 	try:
-		#ConfigParser
+		#
+		# ConfigParser
+		#
 		logging.debug("reading config file")
 		try:
 			for key,val in globals.config.items("httpRequest"):
@@ -45,6 +52,9 @@ def run(typ,freq,data):
 			logging.exception("cannot read config file")
 		
 		try:
+			#
+			# Create URL
+			#
 			logging.debug("send %s HTTP request", typ)
 			
 			if typ == "FMS":
@@ -61,15 +71,20 @@ def run(typ,freq,data):
 			else:
 				logging.warning("Invalid Typ: %s", typ)	
 			
-			url = urlparse(url)#split URL into path and querry
+			#
+			# HTTP-Request
+			#
+			url = urlparse(url) #split URL into path and querry
 			httprequest = httplib.HTTPConnection(url[2]) #connect to URL Path
 			httprequest.request("GET", url[5]) #send URL Querry per GET
 			
 		except:
 			logging.exception("cannot send HTTP request")
 		else:
-			
-			try:	
+			try:
+				# 
+				# check HTTP-Response
+				#
 				httpresponse = httprequest.getresponse()
 				if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
 					logging.debug("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))

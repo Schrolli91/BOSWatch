@@ -4,7 +4,7 @@
 """
 Global variables
 
-@author: Jens Hermann
+@author: Jens Herrmann
 @author: Bastian Schroll
 """
 

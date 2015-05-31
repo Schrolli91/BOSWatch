@@ -15,8 +15,11 @@ import re #Regex for validation
 
 from includes import globals  # Global variables
 
-#FMS Decoder Function
-#validate -> check double alarm -> log      
+##
+#
+# FMS Decoder Function
+# validate -> check double alarm -> log      
+#
 def decode(freq, decoded):
 	"""
 	Export FMS Information from Multimon-NG RAW String and call alarmHandler.processAlarm()

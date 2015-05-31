@@ -25,7 +25,7 @@ from includes import globals  # Global variables
 #
 def bosMonRequest(httprequest, params, headers):
 	"""
-	Local function to dispatch the BosMon-Request
+	This local function dispatch the BosMon-Request
 
 	@type  httprequest: HTTPConnection
 	@param httprequest: An HTTPConnection-Object that represents an open connection to a BosMon-Instance
@@ -38,10 +38,16 @@ def bosMonRequest(httprequest, params, headers):
 	@exception: Exception if httprequest.request failed
 	"""
 	try:
+		#
+		# BosMon/HTTP-Request
+		#
 		httprequest.request("POST", "/telegramin/"+globals.config.get("BosMon", "bosmon_channel")+"/input.xml", params, headers)
 	except:
 		logging.exception("request to BosMon failed")
 	else:	
+		# 
+		# check HTTP-Response
+		#
 		httpresponse = httprequest.getresponse()
 		if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
 			logging.debug("BosMon response: %s - %s", str(httpresponse.status), str(httpresponse.reason))

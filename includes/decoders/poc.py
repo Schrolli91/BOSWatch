@@ -5,7 +5,7 @@
 POCSAG Decoder
 
 @author: Bastian Schroll
-@author: Jens Hermann
+@author: Jens Herrmann
 
 @requires: Configuration has to be set in the config.ini
 """
@@ -16,7 +16,10 @@ import re #Regex for validation
 
 from includes import globals  # Global variables
 
+##
+#
 # Simple Filter
+#
 def isAllowed(poc_id):
 	"""
 	Simple Filter Functions (Allowed, Denied and Range)
@@ -51,9 +54,11 @@ def isAllowed(poc_id):
 		return False
 	return True
 
-	
-#POCSAG Decoder Function
-#validate -> check double alarm -> log      
+##
+#	
+# POCSAG Decoder Function
+# validate -> check double alarm -> log
+#
 def decode(freq, decoded):
 	"""
 	Export POCSAG Information from Multimon-NG RAW String and call alarmHandler.processAlarm()

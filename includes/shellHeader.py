@@ -5,7 +5,7 @@
 Shows the Header in Shell if quiet Mode is not active
 
 @author: Bastian Schroll
-@author: Jens Hermann
+@author: Jens Herrmann
 
 @requires: none
 """

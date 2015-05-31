@@ -7,8 +7,8 @@ Python Script to receive and decode German BOS Information with rtl_fm and multi
 Through a simple plugin system, data can easily be transferred to other applications
 For more Information see the README.md
 
-Autor: 		Bastian Schroll
-Autor: 		Jens Hermann
+@author: 		Bastian Schroll
+@author: 		Jens Herrmann
 
 GitHUB:		https://github.com/Schrolli91/BOSWatch
 """
@@ -25,7 +25,9 @@ import subprocess
 from includes import globals  # Global variables
 
 ##
+#
 # This Class extended the TimedRotatingFileHandler with the possibility to change the backupCount after initialization.
+#
 ##
 class MyTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
 	"""Extended Version of TimedRotatingFileHandler"""

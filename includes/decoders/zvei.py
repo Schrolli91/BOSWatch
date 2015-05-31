@@ -15,8 +15,11 @@ import re #Regex for validation
 
 from includes import globals  # Global variables
 
-#ZVEI Decoder Function
-#validate -> check double alarm -> log      
+##
+#
+# ZVEI Decoder Function
+# validate -> check double alarm -> log      
+#
 def decode(freq, decoded):
 	"""
 	Export ZVEI Information from Multimon-NG RAW String and call alarmHandler.processAlarm()
