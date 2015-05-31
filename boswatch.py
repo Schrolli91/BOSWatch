@@ -36,19 +36,25 @@ class MyTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
 		self.backupCount = backupCount
 
 
-def freqToHz(freq)
+##
+#
+# convert frequency to Hz
+#
+def freqToHz(freq):
 	"""
-	gets a Frequenz and resolve it in Hz
+	gets a frequency and resolve it in Hz
 	
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
 	
-	@return:    Frequenz in Hz
+	@return:    frequency in Hz
 	@exception: Exception if Error by recalc
 	"""
 	try:
 		freq = freq.replace("k","e3").replace("M","e6")
-		return int(freq)
+		# freq has to be interpreted as float first...
+		# otherwise you will get the error: an invalid literal for int() with base 10
+		return int(float(freq))
 	except:
 		logging.exception("Error in freqToHz()")
 
