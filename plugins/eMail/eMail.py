@@ -14,8 +14,8 @@ import logging # Global logger
 import time
 import smtplib #for the SMTP client
 from email.mime.text import MIMEText # Import the email modules we'll need
-from email.utils import formatdate # need for conform to RFC2822 standard
-from email.utils import make_msgid # need for conform to RFC2822 standard
+from email.utils import formatdate # need for confirm to RFC2822 standard
+from email.utils import make_msgid # need for confirm to RFC2822 standard
 
 from includes import globals  # Global variables
 
@@ -24,6 +24,10 @@ from includes import globals  # Global variables
 # Private helper function for a printable Timestamp
 #
 def curtime():
+	"""
+	Local function 
+	@return: current time as formatted string
+	"""
     return time.strftime("%Y-%m-%d %H:%M:%S")
 
 ##
@@ -82,7 +86,7 @@ def run(typ,freq,data):
 	@return:    nothing
 	@exception: Exception if ConfigParser failed
 	@exception: Exception if connect to SMTP-Server failed
-	@exception: Exception if 
+	@exception: Exception if sending the eMail failed
 	"""
 	try:
 		#
