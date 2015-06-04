@@ -102,7 +102,7 @@ def run(typ,freq,data):
 			#
 			server = smtplib.SMTP(globals.config.get("eMail", "smtp_server"), globals.config.get("eMail", "smtp_port"))
 			# debug-level to shell (0=no debug|1)
-			server.set_debuglevel(1)
+			server.set_debuglevel(0)
 			
 			# if tls is enabled, starttls
 			if globals.config.get("eMail", "tls"):
