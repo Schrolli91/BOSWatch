@@ -24,12 +24,7 @@ from includes import globals  # Global variables
 # Private helper function for a printable Timestamp
 #
 def curtime():
-	"""
-	Local function 
-	@return timeString: current time as formatted string
-	"""
-	timeString = time.strftime("%Y-%m-%d %H:%M:%S")
-    return timeString
+    return time.strftime("%Y-%m-%d %H:%M:%S")
 
 ##
 #
