@@ -22,8 +22,6 @@ import os #for log mkdir
 import time #timestamp
 import subprocess
 
-import sys
-
 from includes import globals  # Global variables
 
 ##
@@ -62,11 +60,10 @@ def freqToHz(freq):
 
 
 #
-# Manage args parsing
+# ArgParser
 #
 try:	
 	# With -h or --help you get the Args help
-	# ArgsParser
 	parser = argparse.ArgumentParser(prog="boswatch.py", 
 									description="BOSWatch is a Python Script to recive and decode german BOS information with rtl_fm and multimon-NG", 
 									epilog="More options you can find in the extern config.ini file in the folder /config")
@@ -80,16 +77,17 @@ try:
 	parser.add_argument("-q", "--quiet", help="Shows no information. Only logfiles", action="store_true")
 	args = parser.parse_args()	
 except SystemExit:
-	# -h or --help called, exit now
+	# -h or --help called, exit right now
 	exit(0)
 except:
-	print "Unexpected error parsing the arguments"
+	print "cannot parsing the arguments"
 
 	
 #
-# Programm
+# Main Programm
 #
 try:
+	# initialization
 	try:
 		#
 		# Script-pathes
@@ -126,6 +124,7 @@ try:
 	except:
 		logging.exception("cannot create logger")
 	else:	
+	# initialization of the logging was fine, continue...
 		
 		try:
 			#
@@ -195,6 +194,7 @@ try:
 		except:
 			logging.exception("cannot read config file")
 		else:
+		# initialization of was fine, continue with main program...
 			
 			try:
 				# 
@@ -233,6 +233,7 @@ try:
 			except:
 				logging.exception("cannot start rtl_fm")
 			else:	
+			# rtl_fm started, continue...
 				
 				try:
 					#
@@ -247,6 +248,7 @@ try:
 				except:
 					logging.exception("cannot start multimon-ng")
 				else:				
+				# multimon-ng started, continue...
 					
 					logging.debug("start decoding")  
 					
