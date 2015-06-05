@@ -32,11 +32,13 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - MySQL (insert Data into MySQL Database [FMS|ZVEI|POC])
 - BosMon (send Data to BosMon Server [FMS|ZVEI|POC])
 - httpRequest (send a request with parameter to an URL [FMS|ZVEI|POC])
-for more Information to the Plugins see `config.ini`
+- eMail (send Mails [FMS|ZVEI|POC])
+- firEmergency [ZVEI|POC]
+
+- for more Information to the Plugins see `config.ini`
 
 ##### Plugins for the Future:
-- E-mail Notification
-- Other Ideas per Issues
+- Ideas per Issues please
 
 
 ### Configuration
