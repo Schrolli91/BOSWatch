@@ -111,6 +111,8 @@ def decode(freq, decoded):
 				else:
 					logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
 					data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate}
+					# Add function as character a-d to dataset
+					data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
 					from includes import alarmHandler
 					alarmHandler.processAlarm("POC",freq,data)
 	

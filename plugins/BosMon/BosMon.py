@@ -157,8 +157,7 @@ def run(typ,freq,data):
 				logging.debug("Start POC to BosMon")
 				try:
 					# BosMon-Telegramin expected "a-d" as RIC-sub/function
-					data["function"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
-					params = urllib.urlencode({'type':'pocsag', 'address':data["ric"], 'flags':'0', 'function':data["function"], 'message':data["msg"]})
+					params = urllib.urlencode({'type':'pocsag', 'address':data["ric"], 'flags':'0', 'function':data["functionChar"], 'message':data["msg"]})
 					logging.debug(" - Params: %s", params)
 					# dispatch the BosMon-request 
 					bosMonRequest(httprequest, params, headers)

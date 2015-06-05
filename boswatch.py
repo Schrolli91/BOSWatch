@@ -194,7 +194,7 @@ try:
 		except:
 			logging.exception("cannot read config file")
 		else:
-		# initialization of was fine, continue with main program...
+		# initialization was fine, continue with main program...
 			
 			try:
 				# 
@@ -261,7 +261,7 @@ try:
 						# ZVEI2: 25832
 						# FMS: 43f314170000 (9=Rotkreuz      3=Bayern 1        Ort 0x25=037FZG 7141Status 3=Einsatz Ab    0=FZG->LST2=III(mit NA,ohneSIGNAL)) CRC correct\n' 
 						# POCSAG1200: Address: 1234567  Function: 1  Alpha:   Hello World
-						#decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
+						decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
 						
 						# Test-strings only for develop
 						#decoded = "ZVEI2: 25832"

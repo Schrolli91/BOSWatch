@@ -156,16 +156,16 @@ def run(typ,freq,data):
 			elif typ == "POC":
 				logging.debug("Start POC to eMail")
 				try:
-					# replace 1-4 with a-d for use as %FUNCD%
-					data["functionD"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
 					# read subject-structure from config.ini
 					subject = globals.config.get("eMail", "poc_subject")
-					subject = subject.replace("%RIC%", data["ric"]).replace("%FUNC%", data["function"]).replace("%FUNCD%", data["functionD"]) #replace Wildcards
+					subject = subject.replace("%RIC%", data["ric"]) #replace Wildcards
+					subject = subject.replace("%FUNC%", data["function"]).replace("%FUNCCHAR%", data["functionChar"]) #replace Wildcards
 					subject = subject.replace("%MSG%", data["msg"]).replace("%BITRATE%", str(data["bitrate"])) #replace Wildcards
 					subject = subject.replace("%TIME%", curtime()) # replace Wildcards
 					# read mailtext-structure from config.ini
 					mailtext = globals.config.get("eMail", "poc_message")
-					mailtext = mailtext.replace("%RIC%", data["ric"]).replace("%FUNC%", data["function"]).replace("%FUNCD%", data["functionD"]) #replace Wildcards
+					mailtext = mailtext.replace("%RIC%", data["ric"]) #replace Wildcards
+					mailtext = mailtext.replace("%FUNC%", data["function"]).replace("%FUNCCHAR%", data["functionChar"]) #replace Wildcards
 					mailtext = mailtext.replace("%MSG%", data["msg"]).replace("%BITRATE%", str(data["bitrate"])) #replace Wildcards
 					mailtext = mailtext.replace("%TIME%", curtime()) # replace Wildcards
 					# send eMail

@@ -20,6 +20,7 @@ FMS:
 POCSAG:
 - ric
 - function
+- functionChar
 - msg
 - bitrate
 
