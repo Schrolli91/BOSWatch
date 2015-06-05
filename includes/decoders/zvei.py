@@ -44,7 +44,12 @@ def decode(freq, decoded):
 			globals.zvei_time_old = timestamp #in case of double alarm, zvei_double_ignore_time set new
 		else:
 			logging.info("5-Ton: %s", zvei_id)
-			data = {"zvei":zvei_id}
+			data = {"zvei":zvei_id, "description":zvei_id}
+			# If enabled, look up description
+			if globals.config.getint("ZVEI", "idDescribed"):
+				from includes import descriptionList
+				data["description"] = descriptionList.getDescription("ZVEI", zvei_id)
+			# processing the alarm
 			from includes import alarmHandler
 			alarmHandler.processAlarm("ZVEI",freq,data)
 

@@ -106,7 +106,7 @@ try:
 		myLogger = logging.getLogger()
 		myLogger.setLevel(logging.DEBUG)
 		#set log string format
-		formatter = logging.Formatter('%(asctime)s - %(module)-12s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
+		formatter = logging.Formatter('%(asctime)s - %(module)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
 		#create a file logger
 		fh = MyTimedRotatingFileHandler(globals.script_path+"/log/boswatch.log", "midnight", interval=1, backupCount=999)
 		#Starts with log level >= Debug
@@ -219,6 +219,13 @@ try:
 			if globals.config.getint("BOSWatch","useRegExFilter"):
 				from includes import filter
 				filter.loadFilters()
+			
+			#
+			# Load description lists
+			#
+			if globals.config.getint("BOSWatch","useDescription"):
+				from includes import descriptionList
+				descriptionList.loadDescriptionLists()
 			
 			try:				
 				#

@@ -1,0 +1,10 @@
+ric,description
+#
+# BOSWatch CSV file for describing POCSAG-Addresses
+#
+# For each RIC-Address you could set a description-text
+# Use the structure: ric,"Description-Text"
+#
+# !!! DO NOT delete the first line !!!
+#
+1234567,"John Q. Public"

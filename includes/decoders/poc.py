@@ -110,9 +110,14 @@ def decode(freq, decoded):
 					globals.poc_time_old = timestamp 
 				else:
 					logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
-					data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate}
+					data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id}
 					# Add function as character a-d to dataset
 					data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
+					# If enabled, look up description
+					if globals.config.getint("POC", "idDescribed"):
+						from includes import descriptionList
+						data["description"] = descriptionList.getDescription("POC", poc_id)
+					# processing the alarm
 					from includes import alarmHandler
 					alarmHandler.processAlarm("POC",freq,data)
 	

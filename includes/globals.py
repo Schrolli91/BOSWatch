@@ -27,3 +27,9 @@ pluginList = {}
 
 #filter
 filterList = []
+
+#idDescribing
+fmsDescribtionList  = {}
+zveiDescribtionList = {}
+ricDescribtionList  = {}
+

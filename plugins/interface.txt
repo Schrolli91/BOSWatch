@@ -9,6 +9,7 @@ They can be used by their Index Names: data['OPTION']
 
 ZVEI:
 - zvei
+- description
 
 FMS:
 - fms
@@ -16,6 +17,7 @@ FMS:
 - direction
 - directionText
 - tsi
+- description
 
 POCSAG:
 - ric
@@ -23,6 +25,7 @@ POCSAG:
 - functionChar
 - msg
 - bitrate
+- description
 
 
 Global Objects:
