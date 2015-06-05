@@ -26,9 +26,10 @@ from includes import globals  # Global variables
 def curtime():
 	"""
 	Local function 
-	@return: current time as formatted string
+	@return timeString: current time as formatted string
 	"""
-    return time.strftime("%Y-%m-%d %H:%M:%S")
+	timeString = time.strftime("%Y-%m-%d %H:%M:%S")
+    return timeString
 
 ##
 #
