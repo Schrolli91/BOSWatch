@@ -29,6 +29,33 @@ Last alarms for FMS and ZVEI (max. 50)<br><br>
 		}
 	?>
 	</table>
+		<br>
+	<b>Last POCSAG alarms</b>
+	<table border="1" style="width: 800px;">
+	<tr style="font-weight: bold;">
+		<td>ID</td>
+		<td>Datum - Zeit</td>
+		<td>RIC</td>
+		<td>Funktion</td>
+		<td>Text</td>
+	</tr>
+	<?php 
+		foreach ($tpl['poc'] as $poc)
+		{
+			
+			$time = strtotime($poc['time']);
+			$time = date("d.m.Y H:i:s", $time);
+			
+			echo "<tr>";
+			echo "<td>". $poc['id'] . "</td>";
+			echo "<td>". $time . "</td>";
+			echo "<td>". $poc['ric'] . "</td>";
+			echo "<td>". $poc['funktion'] . "</td>";
+			echo "<td>". $poc['text'] . "</td>";
+			echo "</tr>";
+		}
+	?>
+	</table>
 </div>
 		
 <div style="float: right; width: 400px;">

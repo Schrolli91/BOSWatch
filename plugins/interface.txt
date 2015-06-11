@@ -1,36 +1,41 @@
-Übergabe an Plugin:
+Handover to Plugin:
+typ			= [FMS|ZVEI|POC]
+freq		=	[Freq in Hz]
+data		= {"KEY1":"VALUE1","KEY2":"VALUE2"}
 
-typ	= 	[FMS|ZVEI|POC]
-freq	=	[FREQ(Hz)]
-data = {"KEY1":"VALUE1","KEY2":"VALUE2"} als Python Dict
 
-
-Follgende Daten sind bei der jeweiligen Alarm-Art enthalten
-und per data["OPTION"] abrufbar:
+The following informations are included in the var "data".
+They can be used by their Index Names: data['OPTION']
 
 ZVEI:
 - zvei
+- description
 
 FMS:
 - fms
 - status
 - direction
+- directionText
 - tsi
+- description
 
 POCSAG:
 - ric
 - function
+- functionChar
 - msg
 - bitrate
+- description
 
 
-Es stehen folgende globale Objecte zur Verfügung:
+Global Objects:
 
-1.) import logging # Global logger
-logging - Object
-Nachricht ins Log per: logging.LOGLEVEL("MESSAGE")
-Mögliche Loglevel: debug|info|warning|error|exception|critical
+1.)
+import logging # Global logger
+Message into Log: logging.LOGLEVEL("MESSAGE")
+Loglevel: debug|info|warning|error|exception|critical
 
-2.) import globals # Global variables
-config - Object (typ: ConfigParser, stellt config.ini bereit)
+2.)
+import globals # Global variables
+reads Data from the config.ini
 VALUE = globals.config.get("SECTION", "OPTION")

@@ -1,0 +1,10 @@
+fms,description
+#
+# BOSWatch CSV file for describing FMS-Addresses
+#
+# For each FMS-Address you could set a description-text
+# Use the structure: fms,"Description-Text"
+#
+# !!! DO NOT delete the first line !!!
+#
+93377141,"John Q. Publics car"

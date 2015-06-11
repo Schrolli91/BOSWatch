@@ -1,0 +1,10 @@
+zvei,description
+#
+# BOSWatch CSV file for describing ZVEI-Addresses
+#
+# For each ZVEI-Address you could set a description-text
+# Use the structure: zvei,"Description-Text"
+#
+# !!! DO NOT delete the first line !!!
+#
+25832,"John Q. Public"
