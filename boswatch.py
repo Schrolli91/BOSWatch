@@ -189,8 +189,20 @@ try:
 			logging.debug("reading config file")
 			globals.config = ConfigParser.ConfigParser()
 			globals.config.read(globals.script_path+"/config/config.ini")
-			for key,val in globals.config.items("BOSWatch"):
-				logging.debug(" - %s = %s", key, val)
+			# if given loglevel is debug:
+			if globals.config.getint("BOSWatch","loglevel") == 10: 
+				logging.debug(" - BOSWatch:")
+				for key,val in globals.config.items("BOSWatch"):
+					logging.debug(" -- %s = %s", key, val)
+				logging.debug(" - FMS:")
+				for key,val in globals.config.items("FMS"):
+					logging.debug(" -- %s = %s", key, val)
+				logging.debug(" - ZVEI:")
+				for key,val in globals.config.items("ZVEI"):
+					logging.debug(" -- %s = %s", key, val)
+				logging.debug(" - POC:")
+				for key,val in globals.config.items("POC"):
+					logging.debug(" -- %s = %s", key, val)
 		except:
 			logging.exception("cannot read config file")
 		else:
