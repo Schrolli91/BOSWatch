@@ -13,6 +13,7 @@ import logging # Global logger
 import imp
 import os
 
+from ConfigParser import NoOptionError # we need this exception
 from includes import globals  # Global variables
 
 def loadPlugins():
@@ -61,8 +62,10 @@ def getPlugins():
 					logging.debug("Plugin [ENABLED ] %s", i)
 				else:
 					logging.debug("Plugin [DISABLED] %s ", i)
-			except: # no entry for plugin found in config-file
+			# no entry for plugin found in config-file
+			except NoOptionError: 
 				logging.warning("Plugin [NO CONF ] %s", i)				
+				pass
 	except:
 		logging.exception("Error during Plugin search")
 
