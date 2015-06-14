@@ -10,15 +10,15 @@ POCSAG Decoder
 @requires: Configuration has to be set in the config.ini
 """
 
-import logging
-import time #timestamp for doublealarm
-import re #Regex for validation
+import logging # Global logger
+import time    # timestamp for doublealarm
+import re      # Regex for validation
 
 from includes import globals  # Global variables
 
 ##
 #
-# Simple Filter
+# Simple local filter
 #
 def isAllowed(poc_id):
 	"""
@@ -56,7 +56,7 @@ def isAllowed(poc_id):
 
 ##
 #	
-# POCSAG Decoder Function
+# POCSAG decoder function
 # validate -> check double alarm -> log
 #
 def decode(freq, decoded):
@@ -104,10 +104,10 @@ def decode(freq, decoded):
 		
 		if re.search("[0-9]{7}", poc_id): #if POC is valid
 			if isAllowed(poc_id):
-				#check for double alarm
+				# check for double alarm
 				if poc_id == globals.poc_id_old and timestamp < globals.poc_time_old + globals.config.getint("POC", "double_ignore_time"):
 					logging.info("POCSAG%s double alarm: %s within %s second(s)", bitrate, globals.poc_id_old, timestamp-globals.poc_time_old)
-					#in case of double alarm, poc_double_ignore_time set new
+					# in case of double alarm, poc_double_ignore_time set new
 					globals.poc_time_old = timestamp 
 				else:
 					logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)

@@ -3,9 +3,9 @@
 #
 """
 BOSWatch
-Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG
+Python script to receive and decode German BOS information with rtl_fm and multimon-NG
 Through a simple plugin system, data can easily be transferred to other applications
-For more Information see the README.md
+For more information see the README.md
 
 @author: 		Bastian Schroll
 @author: 		Jens Herrmann
@@ -16,11 +16,11 @@ GitHUB:		https://github.com/Schrolli91/BOSWatch
 import logging
 import logging.handlers
 
-import argparse #for parse the args
-import ConfigParser #for parse the config file
-import os #for log mkdir
-import time #timestamp
-import subprocess
+import argparse     # for parse the args
+import ConfigParser # for parse the config file
+import os           # for log mkdir
+import time         # for timestamp
+import subprocess   # for starting rtl_fm and multimon-ng
 
 from includes import globals  # Global variables
 
@@ -61,6 +61,7 @@ def freqToHz(freq):
 
 #
 # ArgParser
+# Have to be before main program
 #
 try:	
 	# With -h or --help you get the Args help
@@ -84,7 +85,7 @@ except:
 
 	
 #
-# Main Programm
+# Main program
 #
 try:
 	# initialization
@@ -95,7 +96,7 @@ try:
 		globals.script_path = os.path.dirname(os.path.abspath(__file__))
 		
 		#
-		# If necessary create Log-Path
+		# If necessary create log-path
 		#
 		if not os.path.exists(globals.script_path+"/log/"):
 			os.mkdir(globals.script_path+"/log/")
@@ -105,19 +106,19 @@ try:
 		#
 		myLogger = logging.getLogger()
 		myLogger.setLevel(logging.DEBUG)
-		#set log string format
+		# set log string format
 		formatter = logging.Formatter('%(asctime)s - %(module)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
-		#create a file logger
+		# create a file logger
 		fh = MyTimedRotatingFileHandler(globals.script_path+"/log/boswatch.log", "midnight", interval=1, backupCount=999)
-		#Starts with log level >= Debug
-		#will be changed with config.ini-param later
+		# Starts with log level >= Debug
+		# will be changed with config.ini-param later
 		fh.setLevel(logging.DEBUG) 
 		fh.setFormatter(formatter)
 		myLogger.addHandler(fh)
-		#create a display logger
+		# create a display logger
 		ch = logging.StreamHandler()
-		#log level for display >= info
-		#will be changed later after parsing args
+		# log level for display >= info
+		# will be changed later after parsing args
 		ch.setLevel(logging.INFO) 
 		ch.setFormatter(formatter)
 		myLogger.addHandler(ch)		

@@ -24,11 +24,11 @@ def loadPlugins():
 	"""
 	try:
 		logging.debug("loading plugins")
-		#go to all Plugins from getPlugins()
+		# go to all Plugins from getPlugins()
 		for i in getPlugins():
-			#call for each Plugin the loadPlugin() Methode
+			# call for each Plugin the loadPlugin() Methode
 			plugin = loadPlugin(i)
-			#Add it to globals.pluginList
+			# Add it to globals.pluginList
 			globals.pluginList[i["name"]] = plugin			
 	except:
 		logging.exception("cannot load Plugins")
@@ -45,11 +45,11 @@ def getPlugins():
 		logging.debug("Search in Plugin Folder")
 		PluginFolder = globals.script_path+"/plugins"
 		plugins = []
-		#Go to all Folders in the Plugin-Dir
+		# Go to all Folders in the Plugin-Dir
 		for i in os.listdir(PluginFolder):
 			location = os.path.join(PluginFolder, i)
 				
-			#Skip if Path.isdir() or no File DIR_NAME.py is found 
+			# Skip if Path.isdir() or no File DIR_NAME.py is found 
 			if not os.path.isdir(location) or not i + ".py" in os.listdir(location):
 				continue
 
@@ -61,7 +61,7 @@ def getPlugins():
 					logging.debug("Plugin [ENABLED ] %s", i)
 				else:
 					logging.debug("Plugin [DISABLED] %s ", i)
-			except: #no entry for plugin found in config-file
+			except: # no entry for plugin found in config-file
 				logging.warning("Plugin [NO CONF ] %s", i)				
 	except:
 		logging.exception("Error during Plugin search")

@@ -11,7 +11,7 @@ Function to expand the dataset with a description.
 
 import logging # Global logger
 
-import csv
+import csv # for loading the description files
 
 from includes import globals  # Global variables
 
@@ -99,4 +99,6 @@ def getDescription(typ, id):
 		# will be thrown when there is no description for the id
 		# -> nothing to do...
 		pass
+	except:
+		logging.debug("Error during look up description lists")
 	return resultStr

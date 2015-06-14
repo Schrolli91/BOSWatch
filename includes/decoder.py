@@ -2,18 +2,18 @@
 # -*- coding: cp1252 -*-
 
 """
-Search for decode String and call the right decoder Funtion
+Search for decode string and call the right decoder function
 
 @author: Jens Herrmann
 
 @requires: none
 """
 
-import logging
+import logging # Global logger
 
 def decode(freq, decoded):
 	"""
-	Search for decode String and call the right decoder Function
+	Search for decode string and call the right decoder function
 
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
@@ -38,7 +38,7 @@ def decode(freq, decoded):
 			from includes.decoders import zvei
 			zvei.decode(freq, decoded)
 			
-		# For POCSAG we have to ignore the first multimon-ng line
+		# For POCSAG we have to ignore the multimon-ng line "Enabled demodulators:"
 		elif "Enabled demodulators:" in decoded:
 			pass
 			
