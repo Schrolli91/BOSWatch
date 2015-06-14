@@ -36,21 +36,21 @@ def isAllowed(poc_id):
 	#       If RIC is the right one return True, else False
 	if globals.config.get("POC", "allow_ric"):
 		if poc_id in globals.config.get("POC", "allow_ric"):
-			logging.debug("RIC %s is allowed", poc_id)
+			logging.info("RIC %s is allowed", poc_id)
 			return True
 		else:
-			logging.debug("RIC %s is not in the allowed list", poc_id)
+			logging.info("RIC %s is not in the allowed list", poc_id)
 			return False
 	# 2.) If denied RIC, return False
 	elif poc_id in globals.config.get("POC", "deny_ric"):
-		logging.debug("RIC %s is denied by config.ini", poc_id)
+		logging.info("RIC %s is denied by config.ini", poc_id)
 		return False
 	# 3.) Check Range, return False if outside def. range
 	elif int(poc_id) < globals.config.getint("POC", "filter_range_start"):
-		logging.debug("RIC %s out of filter range (start)", poc_id)
+		logging.info("RIC %s out of filter range (start)", poc_id)
 		return False
 	elif int(poc_id) > globals.config.getint("POC", "filter_range_end"):
-		logging.debug("RIC %s out of filter range (end)", poc_id)
+		logging.info("RIC %s out of filter range (end)", poc_id)
 		return False
 	return True
 
@@ -93,6 +93,7 @@ def decode(freq, decoded):
 			
 	if bitrate is 0:
 		logging.warning("POCSAG Bitrate not found")
+		logging.debug(" - (%s)", decoded)
 	else:
 		logging.debug("POCSAG Bitrate: %s", bitrate)
 	
@@ -124,6 +125,6 @@ def decode(freq, decoded):
 					globals.poc_id_old = poc_id #save last id
 					globals.poc_time_old = timestamp #save last time		
 			else:
-				logging.info("POCSAG%s: %s is not allowed", bitrate, poc_id)
+				logging.debug("POCSAG%s: %s is not allowed", bitrate, poc_id)
 		else:
 			logging.warning("No valid POCSAG%s RIC: %s", bitrate, poc_id)
