@@ -2,7 +2,7 @@
 # -*- coding: cp1252 -*-
 
 """
-Shows the Header in Shell if quiet Mode is not active
+Shows the header in shell if quiet mode is not active
 
 @author: Bastian Schroll
 @author: Jens Herrmann
@@ -12,13 +12,13 @@ Shows the Header in Shell if quiet Mode is not active
 
 def printHeader(args):
 	"""
-	Prints the Header to the Shell
+	Prints the header to the shell
 
 	@type    args: Array
-	@param   args: All given Arguments from argsparser
+	@param   args: All given arguments from argsparser
 	
 	@return:    nothing
-	@exception: Exception if display of the Shell Header failed
+	@exception: Exception if display of the shell header failed
 	"""
 	try:
 		print "     ____  ____  ______       __      __       __    " 

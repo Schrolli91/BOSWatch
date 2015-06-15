@@ -10,15 +10,15 @@ POCSAG Decoder
 @requires: Configuration has to be set in the config.ini
 """
 
-import logging
-import time #timestamp for doublealarm
-import re #Regex for validation
+import logging # Global logger
+import time    # timestamp for doublealarm
+import re      # Regex for validation
 
 from includes import globals  # Global variables
 
 ##
 #
-# Simple Filter
+# Simple local filter
 #
 def isAllowed(poc_id):
 	"""
@@ -36,27 +36,27 @@ def isAllowed(poc_id):
 	#       If RIC is the right one return True, else False
 	if globals.config.get("POC", "allow_ric"):
 		if poc_id in globals.config.get("POC", "allow_ric"):
-			logging.debug("RIC %s is allowed", poc_id)
+			logging.info("RIC %s is allowed", poc_id)
 			return True
 		else:
-			logging.debug("RIC %s is not in the allowed list", poc_id)
+			logging.info("RIC %s is not in the allowed list", poc_id)
 			return False
 	# 2.) If denied RIC, return False
 	elif poc_id in globals.config.get("POC", "deny_ric"):
-		logging.debug("RIC %s is denied by config.ini", poc_id)
+		logging.info("RIC %s is denied by config.ini", poc_id)
 		return False
 	# 3.) Check Range, return False if outside def. range
 	elif int(poc_id) < globals.config.getint("POC", "filter_range_start"):
-		logging.debug("RIC %s out of filter range (start)", poc_id)
+		logging.info("RIC %s out of filter range (start)", poc_id)
 		return False
 	elif int(poc_id) > globals.config.getint("POC", "filter_range_end"):
-		logging.debug("RIC %s out of filter range (end)", poc_id)
+		logging.info("RIC %s out of filter range (end)", poc_id)
 		return False
 	return True
 
 ##
 #	
-# POCSAG Decoder Function
+# POCSAG decoder function
 # validate -> check double alarm -> log
 #
 def decode(freq, decoded):
@@ -93,6 +93,7 @@ def decode(freq, decoded):
 			
 	if bitrate is 0:
 		logging.warning("POCSAG Bitrate not found")
+		logging.debug(" - (%s)", decoded)
 	else:
 		logging.debug("POCSAG Bitrate: %s", bitrate)
 	
@@ -103,10 +104,10 @@ def decode(freq, decoded):
 		
 		if re.search("[0-9]{7}", poc_id): #if POC is valid
 			if isAllowed(poc_id):
-				#check for double alarm
+				# check for double alarm
 				if poc_id == globals.poc_id_old and timestamp < globals.poc_time_old + globals.config.getint("POC", "double_ignore_time"):
 					logging.info("POCSAG%s double alarm: %s within %s second(s)", bitrate, globals.poc_id_old, timestamp-globals.poc_time_old)
-					#in case of double alarm, poc_double_ignore_time set new
+					# in case of double alarm, poc_double_ignore_time set new
 					globals.poc_time_old = timestamp 
 				else:
 					logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
@@ -124,6 +125,6 @@ def decode(freq, decoded):
 					globals.poc_id_old = poc_id #save last id
 					globals.poc_time_old = timestamp #save last time		
 			else:
-				logging.info("POCSAG%s: %s is not allowed", bitrate, poc_id)
+				logging.debug("POCSAG%s: %s is not allowed", bitrate, poc_id)
 		else:
 			logging.warning("No valid POCSAG%s RIC: %s", bitrate, poc_id)

@@ -8,11 +8,11 @@ Global variables
 @author: Bastian Schroll
 """
 
-#Global variables
+# Global variables
 config = 0
 script_path = ""
 
-#double alarm
+# double alarm
 fms_id_old = 0
 fms_time_old = 0
 		
@@ -22,13 +22,13 @@ zvei_time_old = 0
 poc_id_old = 0
 poc_time_old = 0
 
-#pluginLoader
+# pluginLoader
 pluginList = {}
 
-#filter
+# filter
 filterList = []
 
-#idDescribing
+# idDescribing
 fmsDescribtionList  = {}
 zveiDescribtionList = {}
 ricDescribtionList  = {}
