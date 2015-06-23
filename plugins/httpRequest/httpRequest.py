@@ -36,9 +36,6 @@ def run(typ,freq,data):
 	@requires:  httpRequest-Configuration has to be set in the config.ini
 	
 	@return:    nothing
-	@exception: Exception if ConfigParser failed
-	@exception: Exception if http Request failed
-	@exception: Exception if http Response failed
 	"""
 	try:
 		#
@@ -49,7 +46,10 @@ def run(typ,freq,data):
 			for key,val in globals.config.items("httpRequest"):
 				logging.debug(" - %s = %s", key, val)
 		except:
-			logging.exception("cannot read config file")
+			logging.error("cannot read config file")
+			logging.debug("cannot read config file", exc_info=True)
+			# Without config, plugin couldn't work
+			return
 		
 		try:
 			#
@@ -79,7 +79,10 @@ def run(typ,freq,data):
 			httprequest.request("GET", url[5]) #send URL Querry per GET
 			
 		except:
-			logging.exception("cannot send HTTP request")
+			logging.error("cannot send HTTP request")
+			logging.debug("cannot send HTTP request", exc_info=True)
+			return
+			
 		else:
 			try:
 				# 
@@ -91,11 +94,17 @@ def run(typ,freq,data):
 				else:
 					logging.warning("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))
 			except: #otherwise
-				logging.exception("cannot get HTTP response")
+				logging.error("cannot get HTTP response")
+				logging.debug("cannot get HTTP response", exc_info=True)
+				return
 				
 		finally:
 			logging.debug("close HTTP-Connection")
-			httprequest.close()
+			try: 
+				httprequest.close()
+			except:
+				pass
 	
 	except:
-		logging.exception("unknown error")
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)

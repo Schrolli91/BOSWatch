@@ -62,9 +62,14 @@ def decode(freq, decoded):
 					from includes import descriptionList
 					data["description"] = descriptionList.getDescription("FMS", fms_id[0:8])
 				# processing the alarm
-				from includes import alarmHandler
-				alarmHandler.processAlarm("FMS",freq,data)
-				
+				try:
+					from includes import alarmHandler
+					alarmHandler.processAlarm("POC",freq,data)
+				except:
+					logging.error("processing alarm failed")
+					logging.debug("processing alarm failed", exc_info=True)
+					pass
+				# in every time save old data for double alarm
 				globals.fms_id_old = fms_id #save last id
 				globals.fms_time_old = timestamp #save last time	
 		else:

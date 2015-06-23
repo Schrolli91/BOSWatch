@@ -35,6 +35,7 @@ def bosMonRequest(httprequest, params, headers):
 	@param headers:     The headers argument should be a mapping of extra HTTP headers to send with the request.
 	
 	@return:    nothing
+	@exception: Exception if HTTP-Request failed
 	"""
 	try:
 		#
@@ -44,7 +45,7 @@ def bosMonRequest(httprequest, params, headers):
 	except:
 		logging.error("request to BosMon failed")
 		logging.debug("request to BosMon failed", exc_info=True)
-		raise Exception("request to BosMon failed")
+		raise
 	else:	
 		# 
 		# check HTTP-Response
@@ -94,7 +95,7 @@ def run(typ,freq,data):
 			return
 
 		try:
-		    #
+			#
 			# Initialize header an connect to BosMon-Server
 			#
 			headers = {}
@@ -116,7 +117,7 @@ def run(typ,freq,data):
 			return
 
 		else:
-		    #
+			#
 			# Format given data-structure to compatible BosMon string
 			#
 			if typ == "FMS":
@@ -179,9 +180,12 @@ def run(typ,freq,data):
 
 		finally:
 			logging.debug("close BosMon-Connection")
-			httprequest.close()
-			
-	except:
+			try: 
+				httprequest.close()
+			except:
+				pass
+
+	except:	
 		# something very mysterious
 		logging.error("unknown error")
 		logging.debug("unknown error", exc_info=True)

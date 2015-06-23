@@ -69,6 +69,8 @@ def run(typ,freq,data):
 		except:
 			logging.error("cannot initialize %s-socket", globals.config.get("jsonSocket", "protocol"))
 			logging.debug("cannot initialize %s-socket", globals.config.get("jsonSocket", "protocol"), exc_info=True)
+			# Without connection, plugin couldn't work
+			return
 
 		else:
 			# toDo is equals for all types, so only check if typ is supported
@@ -83,13 +85,17 @@ def run(typ,freq,data):
 				except:
 					logging.error("%s to %s failed", typ, globals.config.get("jsonSocket", "protocol"))
 					logging.debug("%s to %s failed", typ, globals.config.get("jsonSocket", "protocol"), exc_info=True)
+					return
 
 			else:
 				logging.warning("Invalid Typ: %s", typ)	
 
 		finally:
 			logging.debug("close %s-Connection", globals.config.get("jsonSocket", "protocol"))
-			sock.close()
+			try: 
+				sock.close()
+			except:
+				pass
 			
 	except:
 		# something very mysterious

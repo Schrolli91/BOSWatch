@@ -54,7 +54,9 @@ def doSendmail(server, subject, mailtext):
 		msg['Priority'] = globals.config.get("eMail", "priority")
 		server.sendmail(globals.config.get("eMail", "from"), globals.config.get("eMail", "to"), msg.as_string())
 	except:
-		logging.exception("send eMail failed")
+		logging.error("send eMail failed")
+		logging.debug("send eMail failed", exc_info=True)
+		raise
 
 
 ##
@@ -80,9 +82,6 @@ def run(typ,freq,data):
 	@requires:  eMail-Configuration has to be set in the config.ini
 	
 	@return:    nothing
-	@exception: Exception if ConfigParser failed
-	@exception: Exception if connect to SMTP-Server failed
-	@exception: Exception if sending the eMail failed
 	"""
 	try:
 		#
@@ -94,7 +93,10 @@ def run(typ,freq,data):
 				logging.debug(" - %s = %s", key, val)
 				
 		except:
-			logging.exception("cannot read config file")
+			logging.error("cannot read config file")
+			logging.debug("cannot read config file", exc_info=True)
+			# Without config, plugin couldn't work
+			return
 
 		try:
 		    #
@@ -113,7 +115,10 @@ def run(typ,freq,data):
 				server.login(globals.config.get("eMail", "user"), globals.config.get("eMail", "password"))
 			
 		except:
-			logging.exception("cannot connect to eMail")
+			logging.error("cannot connect to eMail")
+			logging.debug("cannot connect to eMail", exc_info=True)
+			# Without connection, plugin couldn't work
+			return
 
 		else:
 
@@ -137,7 +142,9 @@ def run(typ,freq,data):
 					# send eMail
 					doSendmail(server, subject, mailtext)
 				except:
-					logging.exception("FMS to eMail failed")
+					logging.error("%s to eMail failed", typ)
+					logging.debug("%s to eMail failed", typ, exc_info=True)
+					return
 
 			elif typ == "ZVEI":
 				logging.debug("Start ZVEI to eMail")
@@ -155,7 +162,9 @@ def run(typ,freq,data):
 					# send eMail
 					doSendmail(server, subject, mailtext)
 				except:
-					logging.exception("ZVEI to eMail failed")
+					logging.error("%s to eMail failed", typ)
+					logging.debug("%s to eMail failed", typ, exc_info=True)
+					return
 
 			elif typ == "POC":
 				logging.debug("Start POC to eMail")
@@ -177,14 +186,21 @@ def run(typ,freq,data):
 					# send eMail
 					doSendmail(server, subject, mailtext)
 				except:
-					logging.exception("POC to eMail failed")
+					logging.error("%s to eMail failed", typ)
+					logging.debug("%s to eMail failed", typ, exc_info=True)
+					return
 			
 			else:
 				logging.warning("Invalid Typ: %s", typ)	
 
 		finally:
 			logging.debug("close eMail-Connection")
-			server.quit()
+			try: 
+				server.quit()
+			except:
+				pass
 			
 	except:
-		logging.exception("")
+		# something very mysterious
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)

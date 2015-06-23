@@ -36,9 +36,6 @@ def run(typ,freq,data):
 	@requires:  firEmergency-Configuration has to be set in the config.ini
 	
 	@return:    nothing
-	@exception: Exception if ConfigParser failed
-	@exception: Exception ifconnect to firEmergency failed
-	@exception: Exception if sending the data failed
 	"""
 	try:
 		#
@@ -49,7 +46,10 @@ def run(typ,freq,data):
 			for key,val in globals.config.items("firEmergency"):
 				logging.debug(" - %s = %s", key, val)
 		except:
-			logging.exception("cannot read config file")
+			logging.error("cannot read config file")
+			logging.debug("cannot read config file", exc_info=True)
+			# Without config, plugin couldn't work
+			return
 
 		try:
 			#
@@ -58,7 +58,11 @@ def run(typ,freq,data):
 			firSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			firSocket.connect((globals.config.get("firEmergency", "firserver"), globals.config.getint("firEmergency", "firport")))
 		except:
-			logging.exception("cannot connect to firEmergency")
+			logging.error("cannot connect to firEmergency")
+			logging.debug("cannot connect to firEmergency", exc_info=True)
+			# Without connection, plugin couldn't work
+			return
+			
 		else:	
 			#
 			# Format given data-structure to xml-string for firEmergency
@@ -72,22 +76,32 @@ def run(typ,freq,data):
 						firXML = "<event>\n<address>"+data["zvei"]+"</address>\n<message>"+data["zvei"]+" alarmiert.</message>\n</event>\n"
 						firSocket.send(firXML)
 				except:
-						logging.exception("ZVEI to firEmergency failed")  
-
+						logging.error("%s to firEmergency failed", typ)
+						logging.debug("%s to firEmergency failed", typ, exc_info=True)
+						# Without connection, plugin couldn't work
+						return
+						
 			elif typ == "POC":
 				logging.debug("POC to firEmergency")
 				try:
 						firXML = "<event>\n<address>"+data["ric"]+"</address>\n<message>"+data["msg"]+"</message>\n</event>\n"
 						firSocket.send(firXML)
 				except:
-						logging.exception("POC to firEmergency failed")  
+						logging.error("%s to firEmergency failed", typ)
+						logging.debug("%s to firEmergency failed", typ, exc_info=True)
+						# Without connection, plugin couldn't work
+						return
 
 			else:
 				logging.warning("Invalid Typ: %s", typ)	
 
 		finally:
 			logging.debug("close firEmergency-Connection")
-			firSocket.close()
+			try: 
+				firSocket.close()
+			except:
+				pass
 
 	except:
-		logging.exception("unknown error")
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)

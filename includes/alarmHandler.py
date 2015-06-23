@@ -48,7 +48,6 @@ def processAlarm(typ,freq,data):
 						logging.debug("return from: %s", pluginName)
 					except:
 						# call next plugin, if one has thrown an exception
-						logging.debug("return from: %s", pluginName, exc_info=True)
 						pass
 			else: # RegEX filter off - call plugin directly
 				logging.debug("call Plugin: %s", pluginName)
@@ -57,9 +56,7 @@ def processAlarm(typ,freq,data):
 					logging.debug("return from: %s", pluginName)
 				except:
 					# call next plugin, if one has thrown an exception
-					logging.debug("return from: %s", pluginName, exc_info=True)
 					pass
 		logging.debug("[END ALARM]")
 	except:
-		logging.error("Error in Alarm processing")
-		logging.debug("Error in Alarm processing", exc_info=True)
+		logging.exception("Error in alarm processing")

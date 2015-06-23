@@ -43,19 +43,20 @@ def run(typ,freq,data):
 	@requires: Created Database/Tables, see boswatch.sql
 	
 	@return:    nothing
-	@exception: Exception if ConfigParser failed
-	@exception: Exception if connect to MySQL failed
-	@exception: Exception if executing the sql-statement is failed
 	"""
-
 	try:
+		#
 		#ConfigParser
+		#
 		logging.debug("reading config file")
 		try:
 			for key,val in globals.config.items("MySQL"):
 				logging.debug(" - %s = %s", key, val)
 		except:
-			logging.exception("cannot read config file")
+			logging.error("cannot read config file")
+			logging.debug("cannot read config file", exc_info=True)
+			# Without config, plugin couldn't work
+			return
 				
 		try:
 		    #
@@ -65,7 +66,11 @@ def run(typ,freq,data):
 			connection = mysql.connector.connect(host = globals.config.get("MySQL","dbserver"), user = globals.config.get("MySQL","dbuser"), passwd = globals.config.get("MySQL","dbpassword"), db = globals.config.get("MySQL","database"))
 			cursor = connection.cursor()
 		except:
-			logging.exception("cannot connect to MySQL")
+			logging.error("cannot connect to MySQL")
+			logging.debug("cannot connect to MySQL", exc_info=True)
+			# Without connection, plugin couldn't work
+			return
+			
 		else:
 			try:
 				#
@@ -89,11 +94,18 @@ def run(typ,freq,data):
 				else:
 					logging.warning("Invalid Typ: %s", typ)	
 			except:
-				logging.exception("cannot Insert %s", typ)
+				logging.error("cannot Insert %s", typ)
+				logging.debug("cannot Insert %s", typ, exc_info=True)
+				return
 					 
 		finally:
 			logging.debug("close MySQL")
-			cursor.close()
-			connection.close() #Close connection in every case  
+			try: 
+				cursor.close()
+				connection.close() #Close connection in every case  
+			except:
+				pass
+			
 	except:
-		logging.exception("unknown error")
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)

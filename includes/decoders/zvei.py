@@ -74,9 +74,14 @@ def decode(freq, decoded):
 				from includes import descriptionList
 				data["description"] = descriptionList.getDescription("ZVEI", zvei_id)
 			# processing the alarm
-			from includes import alarmHandler
-			alarmHandler.processAlarm("ZVEI",freq,data)
-
+			try:
+				from includes import alarmHandler
+				alarmHandler.processAlarm("POC",freq,data)
+			except:
+				logging.error("processing alarm failed")
+				logging.debug("processing alarm failed", exc_info=True)
+				pass
+			# in every time save old data for double alarm
 			globals.zvei_id_old = zvei_id     # save last id
 			globals.zvei_time_old = timestamp # save last time
 	else:
