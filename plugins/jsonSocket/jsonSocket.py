@@ -38,9 +38,6 @@ def run(typ,freq,data):
 	@requires:  jsonSocket-Configuration has to be set in the config.ini
 	
 	@return:    nothing
-	@exception: Exception if ConfigParser failed
-	@exception: Exception if connect to socket-Server failed
-	@exception: Exception if sending the socket-message failed
 	"""
 	try:
 		#
@@ -52,7 +49,8 @@ def run(typ,freq,data):
 				logging.debug(" - %s = %s", key, val)
 				
 		except:
-			logging.exception("cannot read config file")
+			logging.error("cannot read config file")
+			logging.debug("cannot read config file", exc_info=True)
 
 		try:
 		    #
@@ -67,20 +65,22 @@ def run(typ,freq,data):
 				sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 			
 		except:
-			logging.exception("cannot initialize %s-socket", globals.config.get("jsonSocket", "protocol"))
+			logging.error("cannot initialize %s-socket", globals.config.get("jsonSocket", "protocol"))
+			logging.debug("cannot initialize %s-socket", globals.config.get("jsonSocket", "protocol"), exc_info=True)
 
 		else:
-
+			# toDo is equals for all types, so only check if typ is supported
 			supportedTypes = ["FMS", "ZVEI", "POC"]
 			if typ in supportedTypes:
 				logging.debug("Start %s to %s", typ, globals.config.get("jsonSocket", "protocol"))
 				try:
-					# convert data to json
+					# dump data to json-string
 					sendData = json.dumps(data)
 					# send data
 					sock.sendto(sendData, (globals.config.get("jsonSocket", "server"), globals.config.getint("jsonSocket", "port")))
 				except:
-					logging.exception("%s to %s failed", typ, globals.config.get("jsonSocket", "protocol"))
+					logging.error("%s to %s failed", typ, globals.config.get("jsonSocket", "protocol"))
+					logging.debug("%s to %s failed", typ, globals.config.get("jsonSocket", "protocol"), exc_info=True)
 
 			else:
 				logging.warning("Invalid Typ: %s", typ)	
@@ -90,4 +90,6 @@ def run(typ,freq,data):
 			sock.close()
 			
 	except:
-		logging.exception("")
+		# something very mysterious
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)
