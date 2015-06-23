@@ -24,17 +24,42 @@ import logging # Global logger
 
 from includes import globals  # Global variables
 
-
+##
+#
+# Main function of plugin
+# will be called by the alarmHandler
+#
 def run(typ,freq,data):
+	"""
+	This function is the implementation of the Plugin.
+	
+	If necessary the configuration hast to be set in the config.ini.
+
+	@type    typ:  string (FMS|ZVEI|POC)
+	@param   typ:  Typ of the dataset
+	@type    data: map of data (structure see interface.txt)
+	@param   data: Contains the parameter for dispatch
+	@type    freq: string
+	@keyword freq: frequency of the SDR Stick
+
+	@requires:  If necessary the configuration hast to be set in the config.ini.
+	
+	@return:    nothing
+	"""
 	try:
-		#ConfigParser
+		#
+		# ConfigParser
+		#
 		logging.debug("reading config file")
 		try:
 			for key,val in globals.config.items("template"):
 				logging.debug(" - %s = %s", key, val)
 		except:
-			logging.exception("cannot read config file")
-
+			logging.error("cannot read config file")
+			logging.debug("cannot read config file", exc_info=True)
+			# Without config, plugin couldn't work
+			return
+			
 ########## User Plugin CODE ##########		
 		if typ == "FMS":
 			logging.warning("%s not supported", typ)
@@ -47,4 +72,5 @@ def run(typ,freq,data):
 ########## User Plugin CODE ##########
 		
 	except:
-		logging.exception("unknown error")
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)

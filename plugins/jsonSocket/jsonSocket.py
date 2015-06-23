@@ -51,6 +51,8 @@ def run(typ,freq,data):
 		except:
 			logging.error("cannot read config file")
 			logging.debug("cannot read config file", exc_info=True)
+			# Without config, plugin couldn't work
+			return
 
 		try:
 		    #

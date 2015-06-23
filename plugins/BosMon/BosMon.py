@@ -35,7 +35,6 @@ def bosMonRequest(httprequest, params, headers):
 	@param headers:     The headers argument should be a mapping of extra HTTP headers to send with the request.
 	
 	@return:    nothing
-	@exception: Exception if httprequest.request failed
 	"""
 	try:
 		#
@@ -43,7 +42,9 @@ def bosMonRequest(httprequest, params, headers):
 		#
 		httprequest.request("POST", "/telegramin/"+globals.config.get("BosMon", "bosmon_channel")+"/input.xml", params, headers)
 	except:
-		logging.exception("request to BosMon failed")
+		logging.error("request to BosMon failed")
+		logging.debug("request to BosMon failed", exc_info=True)
+		raise Exception("request to BosMon failed")
 	else:	
 		# 
 		# check HTTP-Response
@@ -77,9 +78,6 @@ def run(typ,freq,data):
 	@requires:  BosMon-Configuration has to be set in the config.ini
 	
 	@return:    nothing
-	@exception: Exception if ConfigParser failed
-	@exception: Exception if initialize header and connect to BosMon-Server failed
-	@exception: Exception if urlencoding the params failed
 	"""
 	try:
 		#
@@ -90,7 +88,10 @@ def run(typ,freq,data):
 			for key,val in globals.config.items("BosMon"):
 				logging.debug(" - %s = %s", key, val)
 		except:
-			logging.exception("cannot read config file")
+			logging.error("cannot read config file")
+			logging.debug("cannot read config file", exc_info=True)
+			# Without config, plugin couldn't work
+			return
 
 		try:
 		    #
@@ -105,11 +106,14 @@ def run(typ,freq,data):
 				headers['Authorization'] = "Basic {0}".format(base64.b64encode("{0}:{1}".format(globals.config.get("BosMon", "bosmon_user"), globals.config.get("BosMon", "bosmon_password"))))
 			logging.debug("connect to BosMon")
 			# open connection to BosMon-Server
-			httprequest = httplib.HTTPConnection(globals.config.get("BosMon", "bosmon_server"), globals.config.get("BosMon", "bosmon_port"))
+			httprequest = httplib.HTTPConnection(globals.config.get("BosMon", "bosmon_server"), globals.config.get("BosMon", "bosmon_port"), timeout=5)
 			# debug-level to shell (0=no debug|1)
 			httprequest.set_debuglevel(0)
 		except:
-			logging.exception("cannot connect to BosMon")
+			logging.error("cannot connect to BosMon")
+			logging.debug("cannot connect to BosMon", exc_info=True)
+			# Without connection, plugin couldn't work
+			return
 
 		else:
 		    #
@@ -141,7 +145,9 @@ def run(typ,freq,data):
 					# dispatch the BosMon-request 
 					bosMonRequest(httprequest, params, headers)
 				except:
-					logging.exception("FMS to BosMon failed")
+					logging.error("FMS to BosMon failed")
+					logging.debug("FMS to BosMon failed", exc_info=True)
+					return
 
 			elif typ == "ZVEI":
 				logging.debug("Start ZVEI to BosMon")
@@ -151,7 +157,9 @@ def run(typ,freq,data):
 					# dispatch the BosMon-request 
 					bosMonRequest(httprequest, params, headers)
 				except:
-					logging.exception("ZVEI to BosMon failed")
+					logging.error("ZVEI to BosMon failed")
+					logging.debug("ZVEI to BosMon failed", exc_info=True)
+					return
 
 			elif typ == "POC":
 				logging.debug("Start POC to BosMon")
@@ -162,7 +170,9 @@ def run(typ,freq,data):
 					# dispatch the BosMon-request 
 					bosMonRequest(httprequest, params, headers)
 				except:
-					logging.exception("POC to BosMon failed")
+					logging.error("POC to BosMon failed")
+					logging.debug("POC to BosMon failed", exc_info=True)
+					return
 			
 			else:
 				logging.warning("Invalid Typ: %s", typ)	
@@ -172,4 +182,6 @@ def run(typ,freq,data):
 			httprequest.close()
 			
 	except:
-		logging.exception("")
+		# something very mysterious
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)

@@ -105,6 +105,8 @@ def decode(freq, decoded):
 		if re.search("[0-9]{7}", poc_id): #if POC is valid
 			if isAllowed(poc_id):
 				# check for double alarm
+				logging.debug(" - old id:   %s ", globals.poc_id_old)
+				logging.debug(" - old time: %s ", globals.poc_time_old)
 				if poc_id == globals.poc_id_old and timestamp < globals.poc_time_old + globals.config.getint("POC", "double_ignore_time"):
 					logging.info("POCSAG%s double alarm: %s within %s second(s)", bitrate, globals.poc_id_old, timestamp-globals.poc_time_old)
 					# in case of double alarm, poc_double_ignore_time set new
