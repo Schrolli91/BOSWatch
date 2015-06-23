@@ -23,7 +23,6 @@ def loadFilters():
 	@requires:  Configuration has to be set in the config.ini
 	
 	@return:    nothing
-	@exception: Exception if filter loading failed
 	"""
 	try:
 		logging.debug("loading filters")
@@ -34,8 +33,10 @@ def loadFilters():
 			# insert splitet data into globals.filterList
 			globals.filterList.append({"name": key, "typ": filter[0], "dataField": filter[1], "plugin": filter[2], "freq": freqToHz(filter[3]), "regex": filter[4]})
 	except:
-		logging.exception("cannot read config file")
-	
+		logging.error("cannot read config file")
+		logging.debug("cannot read config file", exc_info=True)
+		return
+
 	
 def checkFilters(typ,data,plugin,freq):
 	"""
@@ -54,7 +55,6 @@ def checkFilters(typ,data,plugin,freq):
 	@requires:  all filters in the filterList
 	
 	@return:    nothing
-	@exception: Exception if filter check failed
 	"""
 	try:
 		logging.debug("search Filter for %s to %s at %s Hz", typ, plugin, freq)
@@ -81,4 +81,7 @@ def checkFilters(typ,data,plugin,freq):
 			return True
 			
 	except:
-		logging.exception("Error in Filter checking")
+		logging.error("Error in filter checking")
+		logging.debug("Error in filter checking", exc_info=True)
+		# something goes wrong, data will path
+		return True

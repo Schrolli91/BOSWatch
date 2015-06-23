@@ -21,7 +21,7 @@ def decode(freq, decoded):
 	@param   decoded: RAW Information from Multimon-NG
 	
 	@return:    nothing
-	@exception: Exception if decoder File call failed
+	@exception: Exception if decoder file call failed
 	"""
 	try:
 		# FMS Decoder Section    

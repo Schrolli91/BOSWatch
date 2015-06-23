@@ -32,7 +32,7 @@ def processAlarm(typ,freq,data):
 	@requires:  active plugins in pluginList
 	
 	@return:    nothing
-	@exception: Exception if Alarm processing failed
+	@exception: Exception if Alarm processing itself failed
 	"""
 	try:
 		logging.debug("[  ALARM  ]")

@@ -18,7 +18,6 @@ def printHeader(args):
 	@param   args: All given arguments from argsparser
 	
 	@return:    nothing
-	@exception: Exception if display of the shell header failed
 	"""
 	try:
 		print "     ____  ____  ______       __      __       __    " 
@@ -49,4 +48,5 @@ def printHeader(args):
 			print "Verbose Mode!" 
 		print "" 
 	except:
-		logging.exception("cannot display shell header")
+		logging.error("cannot display shell header")
+		logging.debug("cannot display shell header", exc_info=True)
