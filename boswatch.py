@@ -21,6 +21,8 @@ import ConfigParser # for parse the config file
 import os           # for log mkdir
 import time         # for timestamp
 import subprocess   # for starting rtl_fm and multimon-ng
+import signal       # for use as daemon
+import sys          # throw SystemExitException when daemon is terminated
 
 from includes import globals  # Global variables
 
@@ -58,6 +60,20 @@ def freqToHz(freq):
 	except:
 		logging.exception("Error in freqToHz()")
 
+		
+##
+#
+# TERM-Handler for use script as a daemon
+# In order for the Python program to exit gracefully when the TERM signal is received, 
+# it must have a function that exits the program when signal.SIGTERM is received.
+#
+def sigterm_handler(_signo, _stack_frame):
+	import sys
+	global logging
+	logging.warning("TERM signal received")
+	sys.exit(0)
+
+signal.signal(signal.SIGTERM, sigterm_handler)
 
 #
 # ArgParser
@@ -245,11 +261,12 @@ try:
 				# Start rtl_fm
 				#
 				logging.debug("starting rtl_fm")
-				rtl_fm = subprocess.Popen("rtl_fm -d "+str(args.device)+" -f "+str(freqToHz(args.freq))+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100",
+				command = "rtl_fm -d "+str(args.device)+" -f "+str(freqToHz(args.freq))+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100"
+				rtl_fm = subprocess.Popen(command.split(),
 						#stdin=rtl_fm.stdout,
 						stdout=subprocess.PIPE,
 						stderr=open(globals.script_path+"/log/rtl_fm.log","a"),
-						shell=True)						
+						shell=False)
 			except:
 				logging.exception("cannot start rtl_fm")
 			else:	
@@ -260,11 +277,12 @@ try:
 					# Start multimon
 					#
 					logging.debug("starting multimon-ng")
-					multimon_ng = subprocess.Popen("multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - ",
+					command = "multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - "
+					multimon_ng = subprocess.Popen(command.split(),
 						stdin=rtl_fm.stdout,
 						stdout=subprocess.PIPE,
 						stderr=open(globals.script_path+"/log/multimon.log","a"),
-						shell=True)						
+						shell=False)						
 				except:
 					logging.exception("cannot start multimon-ng")
 				else:				
@@ -298,18 +316,28 @@ try:
 								
 except KeyboardInterrupt:
 	logging.warning("Keyboard Interrupt")	
+except SystemExit:
+	# SystemExitException is thrown if daemon was terminated
+	logging.warning("SystemExit received")
+	# only exit to call finally-block
+	exit(0)
 except:
 	logging.exception("unknown error")
 finally:
 	try:
 		logging.debug("BOSWatch shuting down")
-		rtl_fm.terminate()
-		logging.debug("rtl_fm terminated") 
+		logging.debug("terminate multimon-ng (%s)", multimon_ng.pid) 
 		multimon_ng.terminate()
+		multimon_ng.wait()
 		logging.debug("multimon-ng terminated")
+		logging.debug("terminate rtl_fm (%s)", rtl_fm.pid) 
+		rtl_fm.terminate()
+		rtl_fm.wait()
+		logging.debug("rtl_fm terminated") 
 		logging.debug("exiting BOSWatch")		
 	except:
-		logging.warning("failed in clean-up routine")	
+		logging.exception("failed in clean-up routine")	
+		
 	finally:	
 		# Close Logging
 		logging.debug("close Logging")	
@@ -317,4 +345,4 @@ finally:
 		logging.shutdown()
 		fh.close()
 		ch.close()
-		exit(0)
+	exit(0)
