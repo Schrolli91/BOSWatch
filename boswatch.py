@@ -43,6 +43,7 @@ try:
 	parser.add_argument("-e", "--error", help="Frequency-Error of your device in PPM", type=int, default=0)
 	parser.add_argument("-a", "--demod", help="Demodulation functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
 	parser.add_argument("-s", "--squelch", help="Level of squelch", type=int, default=0)
+	parser.add_argument("-u", "--usevarlog", help="Use '/var/log/boswatch' for logfiles instead of subdir 'log' in BOSWatch directory", action="store_true")
 	parser.add_argument("-v", "--verbose", help="Shows more information", action="store_true")
 	parser.add_argument("-q", "--quiet", help="Shows no information. Only logfiles", action="store_true")
 	args = parser.parse_args()	
@@ -63,12 +64,20 @@ try:
 		# Script-pathes
 		#
 		globals.script_path = os.path.dirname(os.path.abspath(__file__))
-		
+
+		#
+		# Set log_path
+		#
+		if args.usevarlog:
+			globals.log_path = "/var/log/BOSWatch/"
+		else:
+			globals.log_path = globals.script_path+"/log/"
+
 		#
 		# If necessary create log-path
 		#
-		if not os.path.exists(globals.script_path+"/log/"):
-			os.mkdir(globals.script_path+"/log/")
+		if not os.path.exists(globals.log_path):
+			os.mkdir(globals.log_path)
 			
 		#
 		# Create new myLogger...
@@ -78,7 +87,7 @@ try:
 		# set log string format
 		formatter = logging.Formatter('%(asctime)s - %(module)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
 		# create a file logger
-		fh = MyTimedRotatingFileHandler.MyTimedRotatingFileHandler(globals.script_path+"/log/boswatch.log", "midnight", interval=1, backupCount=999)
+		fh = MyTimedRotatingFileHandler.MyTimedRotatingFileHandler(globals.log_path+"boswatch.log", "midnight", interval=1, backupCount=999)
 		# Starts with log level >= Debug
 		# will be changed with config.ini-param later
 		fh.setLevel(logging.DEBUG) 
@@ -101,8 +110,8 @@ try:
 			# Clear the logfiles
 			#
 			fh.doRollover()
-			rtl_log = open(globals.script_path+"/log/rtl_fm.log", "w")
-			mon_log = open(globals.script_path+"/log/multimon.log", "w")
+			rtl_log = open(globals.log_path+"rtl_fm.log", "w")
+			mon_log = open(globals.log_path+"multimon.log", "w")
 			rtl_log.write("")
 			mon_log.write("")
 			rtl_log.close()
@@ -138,6 +147,7 @@ try:
 				demodulation += "-a POCSAG2400 "
 				logging.debug(" - Demod: POC2400")
 			
+			logging.debug(" - Use /var/log: %s", args.usevarlog)
 			logging.debug(" - Verbose Mode: %s", args.verbose)
 			logging.debug(" - Quiet Mode: %s", args.quiet)
 
@@ -182,7 +192,7 @@ try:
 				# 
 				# Set the loglevel and backupCount of the file handler 
 				#
-				logging.debug("set loglevel of fileHandler to: %s",globals.config.getint("BOSWatch","loglevel") )
+				logging.debug("set loglevel of fileHandler to: %s",globals.config.getint("BOSWatch","loglevel"))
 				fh.setLevel(globals.config.getint("BOSWatch","loglevel"))
 				logging.debug("set backupCount of fileHandler to: %s", globals.config.getint("BOSWatch","backupCount"))
 				fh.setBackupCount(globals.config.getint("BOSWatch","backupCount"))
@@ -218,7 +228,7 @@ try:
 				rtl_fm = subprocess.Popen(command.split(),
 						#stdin=rtl_fm.stdout,
 						stdout=subprocess.PIPE,
-						stderr=open(globals.script_path+"/log/rtl_fm.log","a"),
+						stderr=open(globals.log_path+"rtl_fm.log","a"),
 						shell=False)
 			except:
 				logging.exception("cannot start rtl_fm")
@@ -234,7 +244,7 @@ try:
 					multimon_ng = subprocess.Popen(command.split(),
 						stdin=rtl_fm.stdout,
 						stdout=subprocess.PIPE,
-						stderr=open(globals.script_path+"/log/multimon.log","a"),
+						stderr=open(globals.log_path+"multimon.log","a"),
 						shell=False)						
 				except:
 					logging.exception("cannot start multimon-ng")
@@ -261,7 +271,7 @@ try:
 						#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=II (ohneNA,mit SIGNAL)) CRC correct\n'"
 						#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     1=LST->FZG 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
 						#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=IV (mit NA,mit SIGNAL)) CRC correct\n'"
-						#decoded = "POCSAG1200: Address: 1664001  Function: 1  Alpha:   Hello World"
+						#decoded = "POCSAG1200: Address: 1234567  Function: 1  Alpha:   Hello World"
 						#time.sleep(1)	
 						
 						from includes import decoder

@@ -11,6 +11,7 @@ Global variables
 # Global variables
 config = 0
 script_path = ""
+log_path = ""
 
 # double alarm
 fms_id_old = 0
