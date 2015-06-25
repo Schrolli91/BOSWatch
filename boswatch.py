@@ -224,7 +224,7 @@ try:
 				# Start rtl_fm
 				#
 				logging.debug("starting rtl_fm")
-				command = "rtl_fm -d "+str(args.device)+" -f "+str(converter.freqToHz(args.freq))+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100"
+				command = "/usr/local/bin/rtl_fm -d "+str(args.device)+" -f "+str(converter.freqToHz(args.freq))+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100"
 				rtl_fm = subprocess.Popen(command.split(),
 						#stdin=rtl_fm.stdout,
 						stdout=subprocess.PIPE,
@@ -240,7 +240,7 @@ try:
 					# Start multimon
 					#
 					logging.debug("starting multimon-ng")
-					command = "multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - "
+					command = "/usr/local/bin/multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - "
 					multimon_ng = subprocess.Popen(command.split(),
 						stdin=rtl_fm.stdout,
 						stdout=subprocess.PIPE,
