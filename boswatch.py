@@ -21,59 +21,12 @@ import ConfigParser # for parse the config file
 import os           # for log mkdir
 import time         # for timestamp
 import subprocess   # for starting rtl_fm and multimon-ng
-import signal       # for use as daemon
-import sys          # throw SystemExitException when daemon is terminated
 
 from includes import globals  # Global variables
-
-##
-#
-# This Class extended the TimedRotatingFileHandler with the possibility to change the backupCount after initialization.
-#
-##
-class MyTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
-	"""Extended Version of TimedRotatingFileHandler"""
-	def setBackupCount(self, backupCount):
-		"""Set/Change backupCount"""
-		self.backupCount = backupCount
-
-
-##
-#
-# convert frequency to Hz
-#
-def freqToHz(freq):
-	"""
-	gets a frequency and resolve it in Hz
-	
-	@type    freq: string
-	@param   freq: frequency of the SDR Stick
-	
-	@return:    frequency in Hz
-	@exception: Exception if Error by recalc
-	"""
-	try:
-		freq = freq.replace("k","e3").replace("M","e6")
-		# freq has to be interpreted as float first...
-		# otherwise you will get the error: an invalid literal for int() with base 10
-		return int(float(freq))
-	except:
-		logging.exception("Error in freqToHz()")
-
+from includes import MyTimedRotatingFileHandler  # extension of TimedRotatingFileHandler 
+from includes import converter  # converter functions
+from includes import signalHandler  # TERM-Handler for use script as a daemon
 		
-##
-#
-# TERM-Handler for use script as a daemon
-# In order for the Python program to exit gracefully when the TERM signal is received, 
-# it must have a function that exits the program when signal.SIGTERM is received.
-#
-def sigterm_handler(_signo, _stack_frame):
-	import sys
-	global logging
-	logging.warning("TERM signal received")
-	sys.exit(0)
-
-signal.signal(signal.SIGTERM, sigterm_handler)
 
 #
 # ArgParser
@@ -125,7 +78,7 @@ try:
 		# set log string format
 		formatter = logging.Formatter('%(asctime)s - %(module)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
 		# create a file logger
-		fh = MyTimedRotatingFileHandler(globals.script_path+"/log/boswatch.log", "midnight", interval=1, backupCount=999)
+		fh = MyTimedRotatingFileHandler.MyTimedRotatingFileHandler(globals.script_path+"/log/boswatch.log", "midnight", interval=1, backupCount=999)
 		# Starts with log level >= Debug
 		# will be changed with config.ini-param later
 		fh.setLevel(logging.DEBUG) 
@@ -163,7 +116,7 @@ try:
 			#
 			# For debug display/log args
 			#
-			logging.debug(" - Frequency: %s", freqToHz(args.freq))
+			logging.debug(" - Frequency: %s", converter.freqToHz(args.freq))
 			logging.debug(" - Device: %s", args.device)
 			logging.debug(" - PPM Error: %s", args.error)
 			logging.debug(" - Squelch: %s", args.squelch)
@@ -261,7 +214,7 @@ try:
 				# Start rtl_fm
 				#
 				logging.debug("starting rtl_fm")
-				command = "rtl_fm -d "+str(args.device)+" -f "+str(freqToHz(args.freq))+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100"
+				command = "rtl_fm -d "+str(args.device)+" -f "+str(converter.freqToHz(args.freq))+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100"
 				rtl_fm = subprocess.Popen(command.split(),
 						#stdin=rtl_fm.stdout,
 						stdout=subprocess.PIPE,
@@ -308,11 +261,11 @@ try:
 						#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=II (ohneNA,mit SIGNAL)) CRC correct\n'"
 						#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     1=LST->FZG 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
 						#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=IV (mit NA,mit SIGNAL)) CRC correct\n'"
-						#decoded = "POCSAG1200: Address: 1234567  Function: 1  Alpha:   Hello World"
+						#decoded = "POCSAG1200: Address: 1664001  Function: 1  Alpha:   Hello World"
 						#time.sleep(1)	
 						
 						from includes import decoder
-						decoder.decode(freqToHz(args.freq), decoded)
+						decoder.decode(converter.freqToHz(args.freq), decoded)
 								
 except KeyboardInterrupt:
 	logging.warning("Keyboard Interrupt")	
@@ -336,7 +289,7 @@ finally:
 		logging.debug("rtl_fm terminated") 
 		logging.debug("exiting BOSWatch")		
 	except:
-		logging.exception("failed in clean-up routine")	
+		logging.warning("failed in clean-up routine")	
 		
 	finally:	
 		# Close Logging
@@ -345,4 +298,4 @@ finally:
 		logging.shutdown()
 		fh.close()
 		ch.close()
-	exit(0)
+		exit(0)
