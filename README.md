@@ -20,8 +20,10 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - Filtering data for each typ/plugin combination with RegEX
 - All configurations in a seperate config file
 - Data validation (plausibility test)
+- Description look-up from csv-files
 - Logfiles for better troubleshooting
 - verbose/quiet mode for more/none information
+- Ready for use BOSWatch as daemon
 
 ##### Features for the future:
 - more plugins
@@ -34,6 +36,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - eMail (send Mails [FMS|ZVEI|POC])
 - BosMon (send data to BosMon server [FMS|ZVEI|POC])
 - firEmergency (send data to firEmergency server [ZVEI|POC])
+- jsonSocket (send data as jsonString to a socket server [FMS|ZVEI|POC])
 
 - for more Information to the plugins see `config.ini`
 
@@ -90,12 +93,13 @@ usage: boswatch.py [-h] -f FREQ [-d DEVICE] [-e ERROR] -a
 optional arguments:
   -h, --help            				show this help message and exit
   -f FREQ, --freq FREQ  				Frequency you want to listen
-  -d DEVICE, --device DEVICE		Device you want to use (Check with rtl_test)
+  -d DEVICE, --device DEVICE			Device you want to use (Check with rtl_test)
   -e ERROR, --error ERROR				Frequency-Error of your device in PPM
   -a {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...],
   --demod {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...]
-																Demodulation functions
-  -s SQUELCH, --squelch SQUELCH	level of squelch
+										Demodulation functions
+  -s SQUELCH, --squelch 				SQUELCH	level of squelch
+  -u, --usevarlog         				Use '/var/log/boswatch' for logfiles instead of subdir 'log' in BOSWatch directory
   -v, --verbose         				Shows more information
   -q, --quiet           				Shows no information. Only logfiles
 ```
@@ -115,6 +119,10 @@ In case of an error during the installation, check the logfile in `~/boswatch/in
 Caution, script don't install a webserver with PHP and MySQL.
 So you have to make up manually if you want to use MySQL support.
 
+If you want to use BOSWatch as a daemon, you have to set your 
+configuration in `service/boswatch.sh` and copy it to `/etc/init.d`.
+Then you can start BOSWatch with `sudo /etc/init.d/boswatch.sh start`.
+For configuration-details see `service/README.md`.
 
 ### Requirements
 - RTL_SDR (rtl_fm)
