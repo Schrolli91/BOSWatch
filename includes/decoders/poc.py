@@ -11,10 +11,10 @@ POCSAG Decoder
 """
 
 import logging # Global logger
-import time    # timestamp for doublealarm
 import re      # Regex for validation
 
 from includes import globals  # Global variables
+from includes import doubleFilter  # double alarm filter
 
 ##
 #
@@ -74,7 +74,6 @@ def decode(freq, decoded):
 	@exception: Exception if POCSAG decode failed
 	"""
 	bitrate = 0
-	timestamp = int(time.time())#Get Timestamp                  
 	
 	if "POCSAG512:" in decoded:
 		bitrate = 512
@@ -105,11 +104,7 @@ def decode(freq, decoded):
 		if re.search("[0-9]{7}", poc_id): #if POC is valid
 			if isAllowed(poc_id):
 				# check for double alarm
-				if poc_id == globals.poc_id_old and timestamp < globals.poc_time_old + globals.config.getint("POC", "double_ignore_time"):
-					logging.info("POCSAG%s double alarm: %s within %s second(s)", bitrate, globals.poc_id_old, timestamp-globals.poc_time_old)
-					# in case of double alarm, poc_double_ignore_time set new
-					globals.poc_time_old = timestamp 
-				else:
+				if doubleFilter.checkID("POC", poc_id):
 					logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
 					data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id}
 					# Add function as character a-d to dataset
@@ -121,14 +116,13 @@ def decode(freq, decoded):
 					# processing the alarm
 					try:
 						from includes import alarmHandler
-						alarmHandler.processAlarm("POC",freq,data)
+						alarmHandler.processAlarm("POC", freq, data)
 					except:
 						logging.error("processing alarm failed")
 						logging.debug("processing alarm failed", exc_info=True)
 						pass
-					# in every time save old data for double alarm
-					globals.poc_id_old = poc_id #save last id
-					globals.poc_time_old = timestamp #save last time		
+				# in every time save old data for double alarm
+				doubleFilter.newEntry(poc_id)
 			else:
 				logging.debug("POCSAG%s: %s is not allowed", bitrate, poc_id)
 		else:

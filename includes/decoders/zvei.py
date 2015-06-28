@@ -10,10 +10,10 @@ ZVEI Decoder
 """
 
 import logging # Global logger
-import time    # timestamp for doublealarm
 import re      # Regex for validation
 
 from includes import globals  # Global variables
+from includes import doubleFilter  # double alarm filter
 
 ##
 #
@@ -56,17 +56,11 @@ def decode(freq, decoded):
 	@return:    nothing
 	@exception: Exception if ZVEI decode failed
 	"""
-	timestamp = int(time.time()) # Get Timestamp                  
-
 	zvei_id = decoded[7:12]    # ZVEI Code  
 	zvei_id = removeF(zvei_id) # resolve F
 	if re.search("[0-9]{5}", zvei_id): # if ZVEI is valid
 		# check for double alarm
-		if zvei_id == globals.zvei_id_old and timestamp < globals.zvei_time_old + globals.config.getint("ZVEI", "double_ignore_time"): 
-			logging.info("ZVEI double alarm: %s within %s second(s)", globals.zvei_id_old, timestamp-globals.zvei_time_old)
-			# in case of double alarm, zvei_double_ignore_time set new
-			globals.zvei_time_old = timestamp 
-		else:
+		if doubleFilter.checkID("ZVEI", zvei_id):
 			logging.info("5-Ton: %s", zvei_id)
 			data = {"zvei":zvei_id, "description":zvei_id}
 			# If enabled, look up description
@@ -76,13 +70,12 @@ def decode(freq, decoded):
 			# processing the alarm
 			try:
 				from includes import alarmHandler
-				alarmHandler.processAlarm("POC",freq,data)
+				alarmHandler.processAlarm("ZVEI", freq, data)
 			except:
 				logging.error("processing alarm failed")
 				logging.debug("processing alarm failed", exc_info=True)
 				pass
-			# in every time save old data for double alarm
-			globals.zvei_id_old = zvei_id     # save last id
-			globals.zvei_time_old = timestamp # save last time
+		# in every time save old data for double alarm
+		doubleFilter.newEntry(zvei_id)
 	else:
 		logging.warning("No valid ZVEI: %s", zvei_id)

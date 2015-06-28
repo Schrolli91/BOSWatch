@@ -14,14 +14,7 @@ script_path = ""
 log_path = ""
 
 # double alarm
-fms_id_old = 0
-fms_time_old = 0
-		
-zvei_id_old = 0
-zvei_time_old = 0
-
-poc_id_old = 0
-poc_time_old = 0
+doubleList = []
 
 # pluginLoader
 pluginList = {}
@@ -33,4 +26,3 @@ filterList = []
 fmsDescribtionList  = {}
 zveiDescribtionList = {}
 ricDescribtionList  = {}
-
