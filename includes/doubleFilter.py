@@ -34,7 +34,7 @@ def checkID(typ, id):
 	for i in range(len(globals.doubleList)):
 		(xID, xTimestamp) = globals.doubleList[i]
 		# given ID found?
-		# return False if the first entry in double_ignore_time is found, we will not check for younger one...
+		# return False if the first entry in double_ignore_time is found, we will not check for younger ones...
 		if id == xID and timestamp < xTimestamp + globals.config.getint("BOSWatch", "double_ignore_time"):
 			logging.info("%s double alarm: %s within %s second(s)", typ, xID, timestamp-xTimestamp)
 			return False
@@ -43,7 +43,7 @@ def checkID(typ, id):
 
 def newEntry(id):
 	"""
-	new entry in double alarm
+	new entry in double alarm list
 	
 	@return:    nothing
 	"""
@@ -51,6 +51,6 @@ def newEntry(id):
 	globals.doubleList.append((id, timestamp))
 	
 	# now check if list has more than n entries:
-	if len(globals.doubleList) > 10:
+	if len(globals.doubleList) > globals.config.getint("BOSWatch", "double_ignore_entries"):
 		# we have to kill the oldest one
 		globals.doubleList.pop(0)	
