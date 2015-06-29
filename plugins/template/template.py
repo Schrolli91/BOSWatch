@@ -26,17 +26,19 @@ from includes import globals  # Global variables
 
 ##
 #
-# onLoad function of plugin
-# will be called by the pluginLoader
+# onLoad (init) function of plugin
+# will be called one time by the pluginLoader on start
 #
 def onLoad():
 	"""
 	While loading the plugins by pluginLoader.loadPlugins()
-	this onLoad() routine are called
+	this onLoad() routine is called one time for initialize the plugin
 
 	@requires:  nothing
 	
 	@return:    nothing
+	@exception: Exception if init has an fatal error so that the plugin couldn't work
+	
 	"""
 	try:
 		########## User onLoad CODE ##########
@@ -45,6 +47,7 @@ def onLoad():
 	except:
 		logging.error("unknown error")
 		logging.debug("unknown error", exc_info=True)
+		raise
 
 ##
 #
@@ -67,6 +70,7 @@ def run(typ,freq,data):
 	@requires:  If necessary the configuration hast to be set in the config.ini.
 	
 	@return:    nothing
+	@exception: nothing, make sure this function will never thrown an exception
 	"""
 	try:
 		#

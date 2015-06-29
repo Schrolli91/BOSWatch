@@ -1,8 +1,8 @@
 Handover to Plugin:
+-------------------
 typ			= [FMS|ZVEI|POC]
 freq		=	[Freq in Hz]
 data		= {"KEY1":"VALUE1","KEY2":"VALUE2"}
-
 
 The following informations are included in the var "data".
 They can be used by their Index Names: data['OPTION']
@@ -29,6 +29,7 @@ POCSAG:
 
 
 Global Objects:
+---------------
 
 1.)
 import logging # Global logger
@@ -39,3 +40,39 @@ Loglevel: debug|info|warning|error|exception|critical
 import globals # Global variables
 reads Data from the config.ini
 VALUE = globals.config.get("SECTION", "OPTION")
+
+
+General for plugins:
+--------------------
+All Plugins have to implement the following functions (see template.py):
+
+def onLoad():
+	"""
+	While loading the plugins by pluginLoader.loadPlugins()
+	this onLoad() routine is called one time for initialize the plugin
+
+	@requires:  nothing
+	
+	@return:    nothing
+	@exception: Exception if init has an fatal error so that the plugin couldn't work
+	
+	"""
+
+def run(typ,freq,data):
+	"""
+	This function is the implementation of the Plugin.
+	
+	If necessary the configuration hast to be set in the config.ini.
+
+	@type    typ:  string (FMS|ZVEI|POC)
+	@param   typ:  Typ of the dataset
+	@type    data: map of data (structure see interface.txt)
+	@param   data: Contains the parameter for dispatch
+	@type    freq: string
+	@keyword freq: frequency of the SDR Stick
+
+	@requires:  If necessary the configuration hast to be set in the config.ini.
+	
+	@return:    nothing
+	@exception: nothing, make sure this function will never thrown an exception
+	"""

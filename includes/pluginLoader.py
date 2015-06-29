@@ -29,20 +29,21 @@ def loadPlugins():
 		for i in getPlugins():
 			# call for each Plugin the loadPlugin() Methode
 			plugin = loadPlugin(i)
-			# Add it to globals.pluginList
-			globals.pluginList[i["name"]] = plugin	
-
-		#call the .onLoad() routine for all active plugins
-		for pluginName, plugin in globals.pluginList.items():
-			logging.debug("call %s.onLoad()", pluginName)
+			# Try to call the .onLoad() routine for all active plugins
 			try:
-				plugin.onLoad(typ,freq,data)
+				logging.debug("call %s.onLoad()", i["name"])
+				plugin.onLoad()
+				# Add it to globals.pluginList
+				globals.pluginList[i["name"]] = plugin	
 			except:
 				# call next plugin, if one has thrown an exception
+				logging.error("error calling %s.onLoad()", i["name"])
+				logging.debug("error calling %s.onLoad()", exc_info=True)
 				pass
-		
 	except:
-		logging.exception("cannot load Plugins")
+		logging.error("cannot load Plugins")
+		logging.debug("cannot load Plugins", exc_info=True)
+		raise
 
 
 def getPlugins():
@@ -77,7 +78,9 @@ def getPlugins():
 				logging.warning("Plugin [NO CONF ] %s", i)				
 				pass
 	except:
-		logging.exception("Error during Plugin search")
+		logging.error("Error during Plugin search")
+		logging.debug("cannot load Plugins", exc_info=True)
+		raise
 
 	return plugins
 
@@ -97,4 +100,6 @@ def loadPlugin(plugin):
 		logging.debug("load Plugin: %s", plugin["name"])
 		return imp.load_module(plugin["name"], *plugin["info"])
 	except:
-		logging.exception("cannot load Plugin: %s", plugin["name"])
+		logging.error("cannot load Plugin: %s", plugin["name"])
+		logging.debug("cannot load Plugin: %s", plugin["name"], exc_info=True)
+		raise

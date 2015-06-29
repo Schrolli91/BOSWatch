@@ -18,24 +18,21 @@ from includes import globals  # Global variables
 
 ##
 #
-# onLoad function of plugin
-# will be called by the pluginLoader
+# onLoad (init) function of plugin
+# will be called one time by the pluginLoader on start
 #
 def onLoad():
 	"""
 	While loading the plugins by pluginLoader.loadPlugins()
-	this onLoad() routine are called
+	this onLoad() routine is called one time for initialize the plugin
 
 	@requires:  nothing
 	
 	@return:    nothing
 	"""
-	try:
-		# we have to do nothing here...
-		pass
-	except:
-		logging.error("unknown error")
-		logging.debug("unknown error", exc_info=True)
+	# nothing to do for this plugin
+	return
+	
 
 ##
 #
