@@ -136,10 +136,10 @@ try:
 		logging.debug("cannot clear Logfiles", exc_info=True)
 		pass
 		
+	#
+	# For debug display/log args
+	#
 	try:	
-		#
-		# For debug display/log args
-		#
 		if args.test:
 			logging.debug(" - We are in Test-Mode!")
 			
@@ -182,10 +182,10 @@ try:
 		logging.debug("cannot display/log args", exc_info=True)
 		exit(1)
 
+	#
+	# Read config.ini
+	#
 	try:
-		#
-		# Read config.ini
-		#
 		logging.debug("reading config file")
 		globals.config = ConfigParser.ConfigParser()
 		globals.config.read(globals.script_path+"/config/config.ini")
@@ -227,27 +227,45 @@ try:
 	#
 	# Load plugins
 	#
-	from includes import pluginLoader
-	pluginLoader.loadPlugins()
+	try: 
+		from includes import pluginLoader
+		pluginLoader.loadPlugins()
+	except:
+		# we couldn't work without filters -> exit
+		logging.critical("cannot load Plugins")
+		logging.debug("cannot load Plugins", exc_info=True)
+		exit(1)
 	
 	#
 	# Load filters
 	#
-	if globals.config.getboolean("BOSWatch","useRegExFilter"):
-		from includes import filter
-		filter.loadFilters()
+	try: 
+		if globals.config.getboolean("BOSWatch","useRegExFilter"):
+			from includes import filter
+			filter.loadFilters()
+	except:
+		# It's an error, but we could work without that stuff...
+		logging.error("cannot load filters")
+		logging.debug("cannot load filters", exc_info=True)
+		pass
 	
 	#
 	# Load description lists
 	#
-	if globals.config.getboolean("BOSWatch","useDescription"):
-		from includes import descriptionList
-		descriptionList.loadDescriptionLists()
+	try: 
+		if globals.config.getboolean("BOSWatch","useDescription"):
+			from includes import descriptionList
+			descriptionList.loadDescriptionLists()
+	except:
+		# It's an error, but we could work without that stuff...
+		logging.error("cannot load description lists")
+		logging.debug("cannot load description lists", exc_info=True)
+		pass
 	
+	#
+	# Start rtl_fm
+	#
 	try:				
-		#
-		# Start rtl_fm
-		#
 		if not args.test:
 			logging.debug("starting rtl_fm")
 			command = ""
@@ -274,11 +292,10 @@ try:
 		logging.debug("cannot start rtl_fm", exc_info=True)
 		exit(1)
 
-	# rtl_fm started, continue...
+	#
+	# Start multimon
+	#
 	try:
-		#
-		# Start multimon
-		#
 		if not args.test:
 			logging.debug("starting multimon-ng")
 			command = ""
@@ -307,11 +324,11 @@ try:
 
 	# multimon-ng started, continue...
 	logging.debug("start decoding")  
+
+	#
+	# Get decoded data from multimon-ng and call BOSWatch-decoder
+	#
 	while True: 
-		#
-		# Get decoded data from multimon-ng and call BOSWatch-decoder
-		#
-	
 		# RAW Data from Multimon-NG
 		# ZVEI2: 25832
 		# FMS: 43f314170000 (9=Rotkreuz      3=Bayern 1        Ort 0x25=037FZG 7141Status 3=Einsatz Ab    0=FZG->LST2=III(mit NA,ohneSIGNAL)) CRC correct\n' 

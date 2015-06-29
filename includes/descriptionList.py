@@ -106,6 +106,7 @@ def getDescription(typ, id):
 		pass
 		
 	except:
+		logging.error("Error during look up description lists")
 		logging.debug("Error during look up description lists", exc_info=True)
 		pass
 		
