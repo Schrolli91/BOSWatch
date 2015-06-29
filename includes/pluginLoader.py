@@ -30,7 +30,17 @@ def loadPlugins():
 			# call for each Plugin the loadPlugin() Methode
 			plugin = loadPlugin(i)
 			# Add it to globals.pluginList
-			globals.pluginList[i["name"]] = plugin			
+			globals.pluginList[i["name"]] = plugin	
+
+		#call the .onLoad() routine for all active plugins
+		for pluginName, plugin in globals.pluginList.items():
+			logging.debug("call %s.onLoad()", pluginName)
+			try:
+				plugin.onLoad(typ,freq,data)
+			except:
+				# call next plugin, if one has thrown an exception
+				pass
+		
 	except:
 		logging.exception("cannot load Plugins")
 
