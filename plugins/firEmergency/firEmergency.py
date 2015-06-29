@@ -71,59 +71,58 @@ def run(typ,freq,data):
 		except:
 			logging.error("cannot read config file")
 			logging.debug("cannot read config file", exc_info=True)
-			# Without config, plugin couldn't work
-			return
+		else: # Without config, plugin couldn't work
 
-		try:
-			#
-			# connect to firEmergency
-			#
-			firSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			firSocket.connect((globals.config.get("firEmergency", "firserver"), globals.config.getint("firEmergency", "firport")))
-		except:
-			logging.error("cannot connect to firEmergency")
-			logging.debug("cannot connect to firEmergency", exc_info=True)
-			# Without connection, plugin couldn't work
-			return
-			
-		else:	
-			#
-			# Format given data-structure to xml-string for firEmergency
-			#
-			if typ == "FMS":
-				logging.debug("FMS not supported by firEmgency")
-				
-			elif typ == "ZVEI":
-				logging.debug("ZVEI to firEmergency")
-				try:
-						firXML = "<event>\n<address>"+data["zvei"]+"</address>\n<message>"+data["zvei"]+" alarmiert.</message>\n</event>\n"
-						firSocket.send(firXML)
-				except:
-						logging.error("%s to firEmergency failed", typ)
-						logging.debug("%s to firEmergency failed", typ, exc_info=True)
-						# Without connection, plugin couldn't work
-						return
-						
-			elif typ == "POC":
-				logging.debug("POC to firEmergency")
-				try:
-						firXML = "<event>\n<address>"+data["ric"]+"</address>\n<message>"+data["msg"]+"</message>\n</event>\n"
-						firSocket.send(firXML)
-				except:
-						logging.error("%s to firEmergency failed", typ)
-						logging.debug("%s to firEmergency failed", typ, exc_info=True)
-						# Without connection, plugin couldn't work
-						return
-
-			else:
-				logging.warning("Invalid Typ: %s", typ)	
-
-		finally:
-			logging.debug("close firEmergency-Connection")
-			try: 
-				firSocket.close()
+			try:
+				#
+				# connect to firEmergency
+				#
+				firSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+				firSocket.connect((globals.config.get("firEmergency", "firserver"), globals.config.getint("firEmergency", "firport")))
 			except:
-				pass
+				logging.error("cannot connect to firEmergency")
+				logging.debug("cannot connect to firEmergency", exc_info=True)
+				# Without connection, plugin couldn't work
+				return
+				
+			else:	
+				#
+				# Format given data-structure to xml-string for firEmergency
+				#
+				if typ == "FMS":
+					logging.debug("FMS not supported by firEmgency")
+					
+				elif typ == "ZVEI":
+					logging.debug("ZVEI to firEmergency")
+					try:
+							firXML = "<event>\n<address>"+data["zvei"]+"</address>\n<message>"+data["zvei"]+" alarmiert.</message>\n</event>\n"
+							firSocket.send(firXML)
+					except:
+							logging.error("%s to firEmergency failed", typ)
+							logging.debug("%s to firEmergency failed", typ, exc_info=True)
+							# Without connection, plugin couldn't work
+							return
+							
+				elif typ == "POC":
+					logging.debug("POC to firEmergency")
+					try:
+							firXML = "<event>\n<address>"+data["ric"]+"</address>\n<message>"+data["msg"]+"</message>\n</event>\n"
+							firSocket.send(firXML)
+					except:
+							logging.error("%s to firEmergency failed", typ)
+							logging.debug("%s to firEmergency failed", typ, exc_info=True)
+							# Without connection, plugin couldn't work
+							return
+
+				else:
+					logging.warning("Invalid Typ: %s", typ)	
+
+			finally:
+				logging.debug("close firEmergency-Connection")
+				try: 
+					firSocket.close()
+				except:
+					pass
 
 	except:
 		logging.error("unknown error")

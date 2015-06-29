@@ -70,62 +70,61 @@ def run(typ,freq,data):
 		except:
 			logging.error("cannot read config file")
 			logging.debug("cannot read config file", exc_info=True)
-			# Without config, plugin couldn't work
-			return
-		
-		try:
-			#
-			# Create URL
-			#
-			logging.debug("send %s HTTP request", typ)
+		else: # Without config, plugin couldn't work
 			
-			if typ == "FMS":
-				url = globals.config.get("httpRequest", "fms_url") #Get URL
-				url = url.replace("%FMS%", data["fms"]).replace("%STATUS%", data["status"]) #replace Wildcards in URL
-				url = url.replace("%DIR%", data["direction"]).replace("%TSI%", data["tsi"]) #replace Wildcards in URL
-			elif typ == "ZVEI":
-				url = globals.config.get("httpRequest", "zvei_url") #Get URL
-				url = url.replace("%ZVEI%", data["zvei"]) #replace Wildcards in URL
-			elif typ == "POC":
-				url = globals.config.get("httpRequest", "poc_url") #Get URL
-				url = url.replace("%RIC%", data["ric"]).replace("%FUNC%", data["function"]) #replace Wildcards in URL
-				url = url.replace("%MSG%", data["msg"]).replace("%BITRATE%", data["bitrate"]) #replace Wildcards in URL
-			else:
-				logging.warning("Invalid Typ: %s", typ)	
-			
-			#
-			# HTTP-Request
-			#
-			url = urlparse(url) #split URL into path and querry
-			httprequest = httplib.HTTPConnection(url[2]) #connect to URL Path
-			httprequest.request("GET", url[5]) #send URL Querry per GET
-			
-		except:
-			logging.error("cannot send HTTP request")
-			logging.debug("cannot send HTTP request", exc_info=True)
-			return
-			
-		else:
 			try:
-				# 
-				# check HTTP-Response
 				#
-				httpresponse = httprequest.getresponse()
-				if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
-					logging.debug("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))
+				# Create URL
+				#
+				logging.debug("send %s HTTP request", typ)
+				
+				if typ == "FMS":
+					url = globals.config.get("httpRequest", "fms_url") #Get URL
+					url = url.replace("%FMS%", data["fms"]).replace("%STATUS%", data["status"]) #replace Wildcards in URL
+					url = url.replace("%DIR%", data["direction"]).replace("%TSI%", data["tsi"]) #replace Wildcards in URL
+				elif typ == "ZVEI":
+					url = globals.config.get("httpRequest", "zvei_url") #Get URL
+					url = url.replace("%ZVEI%", data["zvei"]) #replace Wildcards in URL
+				elif typ == "POC":
+					url = globals.config.get("httpRequest", "poc_url") #Get URL
+					url = url.replace("%RIC%", data["ric"]).replace("%FUNC%", data["function"]) #replace Wildcards in URL
+					url = url.replace("%MSG%", data["msg"]).replace("%BITRATE%", data["bitrate"]) #replace Wildcards in URL
 				else:
-					logging.warning("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))
-			except: #otherwise
-				logging.error("cannot get HTTP response")
-				logging.debug("cannot get HTTP response", exc_info=True)
+					logging.warning("Invalid Typ: %s", typ)	
+				
+				#
+				# HTTP-Request
+				#
+				url = urlparse(url) #split URL into path and querry
+				httprequest = httplib.HTTPConnection(url[2]) #connect to URL Path
+				httprequest.request("GET", url[5]) #send URL Querry per GET
+				
+			except:
+				logging.error("cannot send HTTP request")
+				logging.debug("cannot send HTTP request", exc_info=True)
 				return
 				
-		finally:
-			logging.debug("close HTTP-Connection")
-			try: 
-				httprequest.close()
-			except:
-				pass
+			else:
+				try:
+					# 
+					# check HTTP-Response
+					#
+					httpresponse = httprequest.getresponse()
+					if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
+						logging.debug("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))
+					else:
+						logging.warning("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))
+				except: #otherwise
+					logging.error("cannot get HTTP response")
+					logging.debug("cannot get HTTP response", exc_info=True)
+					return
+					
+			finally:
+				logging.debug("close HTTP-Connection")
+				try: 
+					httprequest.close()
+				except:
+					pass
 	
 	except:
 		logging.error("unknown error")

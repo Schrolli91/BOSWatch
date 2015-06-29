@@ -74,51 +74,50 @@ def run(typ,freq,data):
 		except:
 			logging.error("cannot read config file")
 			logging.debug("cannot read config file", exc_info=True)
-			# Without config, plugin couldn't work
-			return
+		else: # Without config, plugin couldn't work
 
-		try:
-		    #
-			# initialize to socket-Server
-			#
-			# SOCK_DGRAM is the socket type to use for UDP sockets
-			# SOCK_STREAM is the socket type to use for TCP sockets
-			if globals.config.get("jsonSocket", "protocol") == "TCP":
-				sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-				sock.connect((globals.config.get("jsonSocket", "server"), globals.config.getint("jsonSocket", "port")))
-			else:
-				sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-			
-		except:
-			logging.error("cannot initialize %s-socket", globals.config.get("jsonSocket", "protocol"))
-			logging.debug("cannot initialize %s-socket", globals.config.get("jsonSocket", "protocol"), exc_info=True)
-			# Without connection, plugin couldn't work
-			return
-
-		else:
-			# toDo is equals for all types, so only check if typ is supported
-			supportedTypes = ["FMS", "ZVEI", "POC"]
-			if typ in supportedTypes:
-				logging.debug("Start %s to %s", typ, globals.config.get("jsonSocket", "protocol"))
-				try:
-					# dump data to json-string
-					sendData = json.dumps(data)
-					# send data
-					sock.sendto(sendData, (globals.config.get("jsonSocket", "server"), globals.config.getint("jsonSocket", "port")))
-				except:
-					logging.error("%s to %s failed", typ, globals.config.get("jsonSocket", "protocol"))
-					logging.debug("%s to %s failed", typ, globals.config.get("jsonSocket", "protocol"), exc_info=True)
-					return
-
-			else:
-				logging.warning("Invalid Typ: %s", typ)	
-
-		finally:
-			logging.debug("close %s-Connection", globals.config.get("jsonSocket", "protocol"))
-			try: 
-				sock.close()
+			try:
+					#
+				# initialize to socket-Server
+				#
+				# SOCK_DGRAM is the socket type to use for UDP sockets
+				# SOCK_STREAM is the socket type to use for TCP sockets
+				if globals.config.get("jsonSocket", "protocol") == "TCP":
+					sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+					sock.connect((globals.config.get("jsonSocket", "server"), globals.config.getint("jsonSocket", "port")))
+				else:
+					sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+				
 			except:
-				pass
+				logging.error("cannot initialize %s-socket", globals.config.get("jsonSocket", "protocol"))
+				logging.debug("cannot initialize %s-socket", globals.config.get("jsonSocket", "protocol"), exc_info=True)
+				# Without connection, plugin couldn't work
+				return
+
+			else:
+				# toDo is equals for all types, so only check if typ is supported
+				supportedTypes = ["FMS", "ZVEI", "POC"]
+				if typ in supportedTypes:
+					logging.debug("Start %s to %s", typ, globals.config.get("jsonSocket", "protocol"))
+					try:
+						# dump data to json-string
+						sendData = json.dumps(data)
+						# send data
+						sock.sendto(sendData, (globals.config.get("jsonSocket", "server"), globals.config.getint("jsonSocket", "port")))
+					except:
+						logging.error("%s to %s failed", typ, globals.config.get("jsonSocket", "protocol"))
+						logging.debug("%s to %s failed", typ, globals.config.get("jsonSocket", "protocol"), exc_info=True)
+						return
+
+				else:
+					logging.warning("Invalid Typ: %s", typ)	
+
+			finally:
+				logging.debug("close %s-Connection", globals.config.get("jsonSocket", "protocol"))
+				try: 
+					sock.close()
+				except:
+					pass
 			
 	except:
 		# something very mysterious
