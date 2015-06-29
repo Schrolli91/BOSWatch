@@ -30,10 +30,8 @@ def onLoad():
 	@return:    nothing
 	"""
 	try:
-		########## User onLoad CODE ##########
-		
-		########## User onLoad CODE ##########
-		
+		# we have to do nothing here...
+		pass
 	except:
 		logging.error("unknown error")
 		logging.debug("unknown error", exc_info=True)

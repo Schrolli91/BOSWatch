@@ -40,9 +40,8 @@ def onLoad():
 	"""
 	try:
 		########## User onLoad CODE ##########
-		
+		pass
 		########## User onLoad CODE ##########
-		
 	except:
 		logging.error("unknown error")
 		logging.debug("unknown error", exc_info=True)
