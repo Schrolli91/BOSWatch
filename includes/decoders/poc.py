@@ -104,7 +104,7 @@ def decode(freq, decoded):
 		if re.search("[0-9]{7}", poc_id): #if POC is valid
 			if isAllowed(poc_id):
 				# check for double alarm
-				if doubleFilter.checkID("POC", poc_id):
+				if doubleFilter.checkID("POC", poc_id+poc_sub, poc_text):
 					logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
 					data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id}
 					# Add function as character a-d to dataset
@@ -122,7 +122,7 @@ def decode(freq, decoded):
 						logging.debug("processing alarm failed", exc_info=True)
 						pass
 				# in every time save old data for double alarm
-				doubleFilter.newEntry(poc_id)
+				doubleFilter.newEntry(poc_id+poc_sub, poc_text)
 			else:
 				logging.debug("POCSAG%s: %s is not allowed", bitrate, poc_id)
 		else:

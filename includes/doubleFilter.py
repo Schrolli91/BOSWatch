@@ -17,10 +17,10 @@ import time    # timestamp for doublealarm
 from includes import globals  # Global variables
 
 #
-# ListStructure [0..n] = (ID, TimeStamp)
+# ListStructure [0..n] = (ID, TimeStamp, msg)
 #
 
-def checkID(typ, id):
+def checkID(typ, id, msg=""):
 	"""
 	check if id was called in the last x sec and n entries
 	
@@ -32,25 +32,32 @@ def checkID(typ, id):
 	timestamp = int(time.time()) # Get Timestamp 
 
 	for i in range(len(globals.doubleList)):
-		(xID, xTimestamp) = globals.doubleList[i]
+		(xID, xTimestamp, xMsg) = globals.doubleList[i]
 		# given ID found?
 		# return False if the first entry in double_ignore_time is found, we will not check for younger ones...
-		if id == xID and timestamp < xTimestamp + globals.config.getint("BOSWatch", "double_ignore_time"):
-			logging.info("%s double alarm: %s within %s second(s)", typ, xID, timestamp-xTimestamp)
-			return False
+		if id == xID and timestamp < xTimestamp + globals.config.getint("BOSWatch", "doubleFilter_ignore_time"):
+			# if wanted, we have to check the msg additional 
+			if "POC" in typ and globals.config.getint("BOSWatch", "doubleFilter_check_msg"):
+				# if msg is a substring of xMsg we found a double
+				if msg in xMsg:
+					logging.info("%s double alarm (id+msg): %s within %s second(s)", typ, xID, timestamp-xTimestamp)
+					return False
+			else:
+				logging.info("%s double alarm (id): %s within %s second(s)", typ, xID, timestamp-xTimestamp)
+				return False
 	return True
 	
 
-def newEntry(id):
+def newEntry(id, msg = ""):
 	"""
 	new entry in double alarm list
 	
 	@return:    nothing
 	"""
 	timestamp = int(time.time()) # Get Timestamp 
-	globals.doubleList.append((id, timestamp))
+	globals.doubleList.append((id, timestamp, msg))
 	
 	# now check if list has more than n entries:
-	if len(globals.doubleList) > globals.config.getint("BOSWatch", "double_ignore_entries"):
+	if len(globals.doubleList) > globals.config.getint("BOSWatch", "doubleFilter_ignore_entries"):
 		# we have to kill the oldest one
 		globals.doubleList.pop(0)	
