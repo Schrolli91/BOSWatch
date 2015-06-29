@@ -26,6 +26,29 @@ from includes import globals  # Global variables
 
 ##
 #
+# onLoad function of plugin
+# will be called by the pluginLoader
+#
+def onLoad():
+	"""
+	While loading the plugins by pluginLoader.loadPlugins()
+	this onLoad() routine are called
+
+	@requires:  nothing
+	
+	@return:    nothing
+	"""
+	try:
+		########## User onLoad CODE ##########
+		
+		########## User onLoad CODE ##########
+		
+	except:
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)
+
+##
+#
 # Main function of plugin
 # will be called by the alarmHandler
 #
@@ -57,19 +80,18 @@ def run(typ,freq,data):
 		except:
 			logging.error("cannot read config file")
 			logging.debug("cannot read config file", exc_info=True)
-			# Without config, plugin couldn't work
-			return
+		else: # Without config, plugin couldn't work
 			
-########## User Plugin CODE ##########		
-		if typ == "FMS":
-			logging.warning("%s not supported", typ)
-		elif typ == "ZVEI":
-			logging.warning("%s not supported", typ)
-		elif typ == "POC":
-			logging.warning("%s not supported", typ)
-		else:
-			logging.warning("Invalid Typ: %s", typ)	
-########## User Plugin CODE ##########
+			########## User Plugin CODE ##########		
+			if typ == "FMS":
+				logging.warning("%s not supported", typ)
+			elif typ == "ZVEI":
+				logging.warning("%s not supported", typ)
+			elif typ == "POC":
+				logging.warning("%s not supported", typ)
+			else:
+				logging.warning("Invalid Typ: %s", typ)	
+			########## User Plugin CODE ##########
 		
 	except:
 		logging.error("unknown error")

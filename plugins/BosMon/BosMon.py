@@ -21,6 +21,29 @@ from includes import globals  # Global variables
 
 ##
 #
+# onLoad function of plugin
+# will be called by the pluginLoader
+#
+def onLoad():
+	"""
+	While loading the plugins by pluginLoader.loadPlugins()
+	this onLoad() routine are called
+
+	@requires:  nothing
+	
+	@return:    nothing
+	"""
+	try:
+		########## User onLoad CODE ##########
+		
+		########## User onLoad CODE ##########
+		
+	except:
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)
+
+##
+#
 # do BosMon-Request
 #
 def bosMonRequest(httprequest, params, headers):
