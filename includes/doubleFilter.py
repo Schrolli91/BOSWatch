@@ -57,6 +57,8 @@ def newEntry(id, msg = ""):
 	timestamp = int(time.time()) # Get Timestamp 
 	globals.doubleList.append((id, timestamp, msg))
 	
+	logging.debug("Added %s to doubleList", id)
+	
 	# now check if list has more than n entries:
 	if len(globals.doubleList) > globals.config.getint("BOSWatch", "doubleFilter_ignore_entries"):
 		# we have to kill the oldest one
