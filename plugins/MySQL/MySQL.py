@@ -92,17 +92,13 @@ def run(typ,freq,data):
 					logging.debug("Insert %s", typ)
 					
 					if typ == "FMS":
-						#data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "tsi":fms_tsi}
-						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableFMS")+" (time,fms,status,direction,tsi) VALUES (NOW(),%s,%s,%s,%s)",(data["fms"],data["status"],data["direction"],data["tsi"]))
+						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableFMS")+" (time,fms,status,direction,directionText,tsi,description) VALUES (NOW(),%s,%s,%s,%s,%s,%s)",(data["fms"],data["status"],data["direction"],data["directionText"],data["tsi"],data["description"]))
 						
 					elif typ == "ZVEI":
-						#data = {"zvei":zvei_id}
-						#Don't use %s here (bug in mysql-lib with one parameter)
-						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time,zvei) VALUES (NOW(),"+(data["zvei"])+")")
+						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time,zvei,description) VALUES (NOW(),%s,%s)",(data["zvei"],data["description"]))
 						
 					elif typ == "POC":
-						#data = {"ric":poc_id, "function":poc_sub, "msg":poc_text}
-						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tablePOC")+" (time,ric,funktion,text) VALUES (NOW(),%s,%s,%s)",(data["ric"],data["function"],data["msg"]))
+						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tablePOC")+" (time,ric,funktion,funktionChar,msg,bitrate,description) VALUES (NOW(),%s,%s,%s,%s,%s,%s)",(data["ric"],data["function"],data["functionChar"],data["msg"],data["bitrate"],data["description"]))
 						
 					else:
 						logging.warning("Invalid Typ: %s", typ)	

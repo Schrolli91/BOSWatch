@@ -15,7 +15,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 ##### Implemented features:
 - FMS, ZVEI and POCSAG512/1200/2400 decoding and displaying
 - Plugin support for easy functional extension
-- Filtering double alarms with adjustable time
+- Filtering double alarms with adjustable time and check width
 - Filtering allowed, denied and range of POCSAG RIC´s
 - Filtering data for each typ/plugin combination with RegEX
 - All configurations in a seperate config file
@@ -118,6 +118,7 @@ In case of an error during the installation, check the logfile in `~/boswatch/in
 
 Caution, script don't install a webserver with PHP and MySQL.
 So you have to make up manually if you want to use MySQL support.
+Database Structure `boswatch.sql` in the MySQL Plugin Folder
 
 If you want to use BOSWatch as a daemon, you have to set your 
 configuration in `service/boswatch.sh` and copy it to `/etc/init.d`.
