@@ -1,0 +1,16 @@
+#Testdata for the BOSWatch Test Mode function
+#Data in Multimon-NG Raw Format
+#Data is alternately passed to the decoder to simulate an used Radio-Frequency
+
+#POCSAG
+
+#FMS
+
+#ZVEI
+#two different ids to check filter function
+ZVEI2: 12345
+ZVEI2: 56789
+#in case of incomplete id
+ZVEI2: 135
+#in case of a double-tone for siren n-Fs are sended
+ZVEI2: FFF

@@ -332,10 +332,6 @@ try:
 	# Get decoded data from multimon-ng and call BOSWatch-decoder
 	#
 	while True: 
-		# RAW Data from Multimon-NG
-		# ZVEI2: 25832
-		# FMS: 43f314170000 (9=Rotkreuz      3=Bayern 1        Ort 0x25=037FZG 7141Status 3=Einsatz Ab    0=FZG->LST2=III(mit NA,ohneSIGNAL)) CRC correct\n' 
-		# POCSAG1200: Address: 1234567  Function: 1  Alpha:   Hello World
 		if not args.test:
 			decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
 		
