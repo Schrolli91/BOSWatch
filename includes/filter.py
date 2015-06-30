@@ -15,6 +15,8 @@ import re #Regex for Filter Check
 
 from includes import globals  # Global variables
 
+from includes import converter  # converter functions
+
 
 def loadFilters():
 	"""
@@ -30,8 +32,13 @@ def loadFilters():
 		for key,val in globals.config.items("Filters"):
 			logging.debug(" - %s = %s", key, val)
 			filter = val.split(";")
+			
+			# resolve the * for freqToHz()
+			if not filter[3] == "*":
+				filter[3] = converter.freqToHz(filter[3])
+			
 			# insert splitet data into globals.filterList
-			globals.filterList.append({"name": key, "typ": filter[0], "dataField": filter[1], "plugin": filter[2], "freq": freqToHz(filter[3]), "regex": filter[4]})
+			globals.filterList.append({"name": key, "typ": filter[0], "dataField": filter[1], "plugin": filter[2], "freq": filter[3], "regex": filter[4]})
 	except:
 		logging.error("cannot read config file")
 		logging.debug("cannot read config file", exc_info=True)
