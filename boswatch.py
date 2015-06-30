@@ -8,7 +8,9 @@ Through a simple plugin system, data can easily be transferred to other applicat
 For more information see the README.md
 
 @author: 		Bastian Schroll
-@author: 		Jens Herrmann
+@author: 		Jens Herrmann	
+
+Thanks to smith_fms and McBo from Funkmeldesystem.de - Forum for Inspiration and Groundwork!
 
 GitHUB:		https://github.com/Schrolli91/BOSWatch
 """
@@ -90,7 +92,7 @@ try:
 		myLogger = logging.getLogger()
 		myLogger.setLevel(logging.DEBUG)
 		# set log string format
-		formatter = logging.Formatter('%(asctime)s - %(module)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
+		formatter = logging.Formatter('%(asctime)s - %(module)-15s %(funcName)-15s [%(levelname)-8s] %-4ds %(message)s', '%d.%m.%Y %H:%M:%S')
 		# create a file logger
 		fh = MyTimedRotatingFileHandler.MyTimedRotatingFileHandler(globals.log_path+"boswatch.log", "midnight", interval=1, backupCount=999)
 		# Starts with log level >= Debug

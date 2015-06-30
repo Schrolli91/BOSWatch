@@ -129,3 +129,5 @@ For configuration-details see `service/README.md`.
 - Multimon-NG
 - Python Support
 - MySQL Connector for Python (for MySQL-plugin)
+
+Thanks to smith_fms and McBo from Funkmeldesystem.de - Forum for Inspiration and Groundwork!

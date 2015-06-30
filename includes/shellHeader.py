@@ -26,7 +26,7 @@ def printHeader(args):
 		print "  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / t" 
 		print " /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  a" 
 		print "            German BOS Information Script            " 
-		print "                 by Bastian Schroll                  " 
+		print "          by Bastian Schroll, Jens Herrmann          " 
 		print "" 
 
 		print "Frequency:   "+args.freq
