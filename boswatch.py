@@ -142,8 +142,9 @@ try:
 	# For debug display/log args
 	#
 	try:	
+		logging.debug("BOSWatch given arguments")
 		if args.test:
-			logging.debug(" - We are in Test-Mode!")
+			logging.debug(" - Test-Mode!")
 			
 		logging.debug(" - Frequency: %s", converter.freqToHz(args.freq))
 		logging.debug(" - Device: %s", args.device)

@@ -46,6 +46,8 @@ def printHeader(args):
 		print "Squelch: "+str(args.squelch)
 		if args.verbose:
 			print "Verbose Mode!" 
+		if args.test:
+			print "Test Mode!"
 		print "" 
 	except:
 		logging.error("cannot display shell header")
