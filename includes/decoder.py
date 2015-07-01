@@ -30,7 +30,7 @@ def decode(freq, decoded):
 			logging.debug("recieved FMS")
 			from includes.decoders import fms
 			fms.decode(freq, decoded)
-
+			
 		# ZVEI Decoder Section
 		# check ZVEI: -> validate -> check double alarm -> log     
 		elif "ZVEI2:" in decoded:
@@ -38,13 +38,9 @@ def decode(freq, decoded):
 			from includes.decoders import zvei
 			zvei.decode(freq, decoded)
 			
-		# For POCSAG we have to ignore the multimon-ng line "Enabled demodulators:"
-		elif "Enabled demodulators:" in decoded:
-			pass
-			
 		# POCSAG Decoder Section
 		# check POCSAG -> validate -> check double alarm -> log      
-		elif "POCSAG" in decoded:
+		elif "POCSAG512:" in decoded or "POCSAG1024:" in decoded or "POCSAG2400:" in decoded:
 			logging.debug("recieved POCSAG")				
 			from includes.decoders import poc
 			poc.decode(freq, decoded)
