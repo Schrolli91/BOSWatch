@@ -40,7 +40,7 @@ def decode(freq, decoded):
 			
 		# POCSAG Decoder Section
 		# check POCSAG -> validate -> check double alarm -> log      
-		elif "POCSAG512:" in decoded or "POCSAG1024:" in decoded or "POCSAG2400:" in decoded:
+		elif "POCSAG512:" in decoded or "POCSAG1200:" in decoded or "POCSAG2400:" in decoded:
 			logging.debug("recieved POCSAG")				
 			from includes.decoders import poc
 			poc.decode(freq, decoded)
