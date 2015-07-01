@@ -15,6 +15,7 @@ import httplib #for the HTTP request
 from urlparse import urlparse #for split the URL into url and path
 
 from includes import globals  # Global variables
+from includes import helper #Global helper functions
 
 ##
 #
@@ -32,13 +33,6 @@ def onLoad():
 	"""
 	# nothing to do for this plugin
 	return
-
-##
-#
-# Private helper function for a printable Timestamp
-#
-def curtime():
-    return time.strftime("%Y-%m-%d %H:%M:%S")
 	
 
 ##
@@ -86,22 +80,22 @@ def run(typ,freq,data):
 					url = url.replace("%FMS%", data["fms"]).replace("%STATUS%", data["status"]) #replace Wildcards
 					url = url.replace("%DIR%", data["direction"]).replace("%DIRT%", data["directionText"]) #replace Wildcards
 					url = url.replace("%TSI%", data["tsi"]) #replace Wildcards
-					url = url.replace("%DESCR%", data["description"]) # replace Wildcards
-					url = url.replace("%TIME%", curtime()) # replace Wildcards
 				elif typ == "ZVEI":
 					url = globals.config.get("httpRequest", "zvei_url") #Get URL
 					url = url.replace("%ZVEI%", data["zvei"]) #replace Wildcards
-					url = url.replace("%DESCR%", data["description"]) # replace Wildcards
-					url = url.replace("%TIME%", curtime()) # replace Wildcards
 				elif typ == "POC":
 					url = globals.config.get("httpRequest", "poc_url") #Get URL
 					url = url.replace("%RIC%", data["ric"]) #replace Wildcards
 					url = url.replace("%FUNC%", data["function"]).replace("%FUNCCHAR%", data["functionChar"]) #replace Wildcards
 					url = url.replace("%MSG%", data["msg"]).replace("%BITRATE%", str(data["bitrate"])) #replace Wildcards
-					url = url.replace("%DESCR%", data["description"]) # replace Wildcards
-					url = url.replace("%TIME%", curtime()) # replace Wildcards
 				else:
 					logging.warning("Invalid Typ: %s", typ)	
+					raise
+				
+				#same in all types
+				url = url.replace("%DESCR%", data["description"]) # replace Wildcards
+				url = url.replace("%TIME%", helper.curtime("%H:%M:%S")) # replace Wildcards
+				url = url.replace("%DATE%", helper.curtime("%d.%m.%Y")) # replace Wildcards
 				
 				#
 				# HTTP-Request
