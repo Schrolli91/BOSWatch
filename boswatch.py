@@ -234,7 +234,7 @@ try:
 		from includes import pluginLoader
 		pluginLoader.loadPlugins()
 	except:
-		# we couldn't work without filters -> exit
+		# we couldn't work without plugins -> exit
 		logging.critical("cannot load Plugins")
 		logging.debug("cannot load Plugins", exc_info=True)
 		exit(1)
@@ -256,7 +256,7 @@ try:
 	# Load description lists
 	#
 	try: 
-		if globals.config.getboolean("BOSWatch","useDescription"):
+		if globals.config.getboolean("FMS","idDescribed") or globals.config.getboolean("ZVEI","idDescribed") or globals.config.getboolean("POC","idDescribed"):
 			from includes import descriptionList
 			descriptionList.loadDescriptionLists()
 	except:
