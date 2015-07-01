@@ -21,7 +21,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 #set log string format
-formatter = logging.Formatter('%(asctime)s - %(module)-12s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
+formatter = logging.Formatter('%(asctime)s - %(module)-15s %(funcName)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
 
 #create a display loger
 ch = logging.StreamHandler()

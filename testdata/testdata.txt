@@ -11,6 +11,8 @@
 ZVEI2: 12345
 #without csv description
 ZVEI2: 56789
+#duplicate
+ZVEI2: 56789
 #with repeat Tone
 ZVEI2: 1F21F2
 #in case of incomplete id
