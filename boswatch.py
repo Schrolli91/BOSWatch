@@ -28,6 +28,7 @@ from includes import globals  # Global variables
 from includes import MyTimedRotatingFileHandler  # extension of TimedRotatingFileHandler 
 from includes import converter  # converter functions
 from includes import signalHandler  # TERM-Handler for use script as a daemon
+from includes import checkSubprocesses  # check startup of the subprocesses
 		
 
 #
@@ -55,7 +56,9 @@ except SystemExit:
 	# -h or --help called, exit right now
 	exit(0)
 except:
-	print "cannot parsing the arguments"
+	# we couldn't work without arguments -> exit
+	print "ERROR: cannot parsing the arguments"
+	exit(1)
 
 	
 #
@@ -85,14 +88,20 @@ try:
 		#
 		if not os.path.exists(globals.log_path):
 			os.mkdir(globals.log_path)
-			
-		#
-		# Create new myLogger...
-		#
+	except:
+		# we couldn't work without logging -> exit
+		print "ERROR: cannot initialize paths"
+		exit(1)
+
+	#
+	# Create new myLogger...
+	#
+	try:
 		myLogger = logging.getLogger()
 		myLogger.setLevel(logging.DEBUG)
 		# set log string format
-		formatter = logging.Formatter('%(asctime)s - %(module)-15s %(funcName)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
+		#formatter = logging.Formatter('%(asctime)s - %(module)-15s %(funcName)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
+		formatter = logging.Formatter('%(asctime)s - %(module)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
 		# create a file logger
 		fh = MyTimedRotatingFileHandler.MyTimedRotatingFileHandler(globals.log_path+"boswatch.log", "midnight", interval=1, backupCount=999)
 		# Starts with log level >= Debug
@@ -114,8 +123,7 @@ try:
 		
 	except:
 		# we couldn't work without logging -> exit
-		logging.critical("cannot create logger")
-		logging.debug("cannot create logger", exc_info=True)
+		print "ERROR: cannot create logger"
 		exit(1)
 		
 	# initialization of the logging was fine, continue...
@@ -132,6 +140,7 @@ try:
 		mon_log.close()
 		logging.debug("BOSWatch has started")
 		logging.debug("Logfiles cleared")		
+		
 	except:
 		# It's an error, but we could work without that stuff...
 		logging.error("cannot clear Logfiles")	
@@ -283,10 +292,7 @@ try:
 			# rtl_fm doesn't self-destruct, when an error occurs
 			# wait a moment to give the subprocess a chance to write the logfile
 			time.sleep(3)
-			rtlLog = open(globals.log_path+"rtl_fm.log","r").read()
-			if ("Failed" in rtlLog) or ("error" in rtlLog):
-				logging.debug("\n%s", rtlLog)
-				raise OSError("starting rtl_fm returns an error")
+			checkSubprocesses.checkRTL()
 		else:
 			logging.warning("!!! Test-Mode: rtl_fm not started !!!")
 	except:
@@ -313,10 +319,7 @@ try:
 			# multimon-ng  doesn't self-destruct, when an error occurs
 			# wait a moment to give the subprocess a chance to write the logfile
 			time.sleep(3)
-			multimonLog = open(globals.log_path+"multimon.log","r").read()
-			if ("invalid" in multimonLog) or ("error" in multimonLog):
-				logging.debug("\n%s", multimonLog)
-				raise OSError("starting multimon-ng  returns an error")
+			checkSubprocesses.checkMultimon()
 		else:
 			logging.warning("!!! Test-Mode: multimon-ng not started !!!")
 	except:
