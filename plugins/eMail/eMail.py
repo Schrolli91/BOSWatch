@@ -18,6 +18,7 @@ from email.utils import formatdate # need for confirm to RFC2822 standard
 from email.utils import make_msgid # need for confirm to RFC2822 standard
 
 from includes import globals  # Global variables
+from includes import helper #Global helper functions
 
 ##
 #
@@ -35,16 +36,7 @@ def onLoad():
 	"""
 	# nothing to do for this plugin
 	return
-	
-	
-##
-#
-# Private helper function for a printable Timestamp
-#
-def curtime():
-    return time.strftime("%Y-%m-%d %H:%M:%S")
 
-	
 ##
 #
 # do send mail
@@ -149,14 +141,14 @@ def run(typ,freq,data):
 						subject = subject.replace("%DIR%", data["direction"]).replace("%DIRT%", data["directionText"]) #replace Wildcards
 						subject = subject.replace("%TSI%", data["tsi"]) #replace Wildcards
 						subject = subject.replace("%DESCR%", data["description"]) # replace Wildcards
-						subject = subject.replace("%TIME%", curtime()) # replace Wildcards
+						subject = subject.replace("%TIME%", helper.curtime("H:M:S")).replace("%DATE%", helper.curtime("Y-m-d")) # replace Wildcards
 						# read mailtext-structure from config.ini
 						mailtext = globals.config.get("eMail", "fms_message")
 						mailtext = mailtext.replace("%FMS%", data["fms"]).replace("%STATUS%", data["status"]) #replace Wildcards
 						mailtext = mailtext.replace("%DIR%", data["direction"]).replace("%DIRT%", data["directionText"]) #replace Wildcards
 						mailtext = mailtext.replace("%TSI%", data["tsi"]) #replace Wildcards
 						mailtext = mailtext.replace("%DESCR%", data["description"]) # replace Wildcards
-						mailtext = mailtext.replace("%TIME%", curtime()) # replace Wildcards
+						mailtext = mailtext.replace("%TIME%", helper.curtime("H:M:S")).replace("%DATE%", helper.curtime("Y-m-d")) # replace Wildcards
 						# send eMail
 						doSendmail(server, subject, mailtext)
 					except:
@@ -171,12 +163,12 @@ def run(typ,freq,data):
 						subject = globals.config.get("eMail", "zvei_subject")
 						subject = subject.replace("%ZVEI%", data["zvei"]) #replace Wildcards
 						subject = subject.replace("%DESCR%", data["description"]) # replace Wildcards
-						subject = subject.replace("%TIME%", curtime()) # replace Wildcards
+						subject = subject.replace("%TIME%", helper.curtime("H:M:S")).replace("%DATE%", helper.curtime("Y-m-d")) # replace Wildcards
 						# read mailtext-structure from config.ini
 						mailtext = globals.config.get("eMail", "zvei_message")
 						mailtext = mailtext.replace("%ZVEI%", data["zvei"]) #replace Wildcards
 						mailtext = mailtext.replace("%DESCR%", data["description"]) # replace Wildcards
-						mailtext = mailtext.replace("%TIME%", curtime()) # replace Wildcards
+						mailtext = mailtext.replace("%TIME%", helper.curtime("H:M:S")).replace("%DATE%", helper.curtime("Y-m-d")) # replace Wildcards
 						# send eMail
 						doSendmail(server, subject, mailtext)
 					except:
@@ -193,14 +185,14 @@ def run(typ,freq,data):
 						subject = subject.replace("%FUNC%", data["function"]).replace("%FUNCCHAR%", data["functionChar"]) #replace Wildcards
 						subject = subject.replace("%MSG%", data["msg"]).replace("%BITRATE%", str(data["bitrate"])) #replace Wildcards
 						subject = subject.replace("%DESCR%", data["description"]) # replace Wildcards
-						subject = subject.replace("%TIME%", curtime()) # replace Wildcards
+						subject = subject.replace("%TIME%", helper.curtime("H:M:S")).replace("%DATE%", helper.curtime("Y-m-d")) # replace Wildcards
 						# read mailtext-structure from config.ini
 						mailtext = globals.config.get("eMail", "poc_message")
 						mailtext = mailtext.replace("%RIC%", data["ric"]) #replace Wildcards
 						mailtext = mailtext.replace("%FUNC%", data["function"]).replace("%FUNCCHAR%", data["functionChar"]) #replace Wildcards
 						mailtext = mailtext.replace("%MSG%", data["msg"]).replace("%BITRATE%", str(data["bitrate"])) #replace Wildcards
 						mailtext = mailtext.replace("%DESCR%", data["description"]) # replace Wildcards
-						mailtext = mailtext.replace("%TIME%", curtime()) # replace Wildcards
+						mailtext = mailtext.replace("%TIME%", helper.curtime("H:M:S")).replace("%DATE%", helper.curtime("Y-m-d")) # replace Wildcards
 						# send eMail
 						doSendmail(server, subject, mailtext)
 					except:
