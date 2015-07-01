@@ -90,8 +90,8 @@ def run(typ,freq,data):
 					url = url.replace("%MSG%", data["msg"]).replace("%BITRATE%", str(data["bitrate"])) #replace Wildcards
 				else:
 					logging.warning("Invalid Typ: %s", typ)	
-					raise
-				
+					return
+					
 				#same in all types
 				url = url.replace("%DESCR%", data["description"]) # replace Wildcards
 				url = url.replace("%TIME%", helper.curtime("%H:%M:%S")) # replace Wildcards
