@@ -76,3 +76,11 @@ def run(typ,freq,data):
 	@return:    nothing
 	@exception: nothing, make sure this function will never thrown an exception
 	"""
+
+
+Global Functions for plugins:
+-----------------------------
+from includes import helper #Global helper functions
+
+
+helper.curtime("FORMAT")		
