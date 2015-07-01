@@ -4,6 +4,7 @@
 
 """
 little Helper functions
+mainly for direct usw in plugins to save code
 
 @author: 		Bastian Schroll
 """
@@ -12,9 +13,10 @@ import logging
 import time
 
 
-def freqToHz(freq):
+def curtime(format="%d.%m.%Y %H:%M:%S"):
 	"""
-	gets a frequency and resolve it in Hz
+	Returns formated date and/or time
+	see: https://docs.python.org/2/library/time.html#time.strftime
 	
 	@type    format: string
 	@param   format: Python time Format-String
@@ -22,7 +24,6 @@ def freqToHz(freq):
 	@return:    Formated Time and/or Date
 	@exception: Exception if Error in format
 	"""		
-def curtime(format="%d.%m.%Y %H:%M:%S"):
 	try:
 		return time.strftime(format)  
 	except:
