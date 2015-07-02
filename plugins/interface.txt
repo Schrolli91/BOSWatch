@@ -80,13 +80,13 @@ def run(typ,freq,data):
 
 Global Functions for plugins:
 -----------------------------
-from includes import helper #Global helper functions
-
 
 # for format see https://docs.python.org/2/library/time.html#time.strftime
-# without format string the function returns with: %d.%m.%Y %H:%M:%S
 #
-helper.curtime("FORMAT")
+from includes.helper import timeHandler
+timeHandler.curtime("FORMAT") # without format string the function returns with "%d.%m.%Y %H:%M:%S"
+timeHandler.getDate() # Gets the date in "%d.%m.%Y"
+timeHandler.getTime() # Gets the time in %H:%M:%S
 
 
 # replace all the standard wildcards in the given text
@@ -109,4 +109,5 @@ helper.curtime("FORMAT")
 # %BITRATE% = Bitrate of the Pocsag telegram
 # %DESCR% = Description from csv-file
 #
-helper.replaceWildcards("TEXT",data[])
+from includes.helper import wildcardHandler
+wildcardHandler.replaceWildcards("TEXT",data[])
