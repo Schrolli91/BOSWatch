@@ -10,6 +10,8 @@ Shows the header in shell if quiet mode is not active
 @requires: none
 """
 
+from includes import globals
+
 def printHeader(args):
 	"""
 	Prints the header to the shell
@@ -20,14 +22,17 @@ def printHeader(args):
 	@return:    nothing
 	"""
 	try:
-		print "     ____  ____  ______       __      __       __    " 
-		print "    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  b" 
-		print "   / __  / / / /\__ \| | /| / / __ `/ __/ ___/ __ \ e" 
-		print "  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / t" 
-		print " /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  a" 
-		print "            German BOS Information Script            " 
-		print "          by Bastian Schroll, Jens Herrmann          " 
+		print "     ____  ____  ______       __      __       __   " 
+		print "    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  " 
+		print "   / __  / / / /\__ \| | /| / / __ `/ __/ ___/ __ \ " 
+		print "  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / " 
+		print " /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  " 
+		print "            German BOS Information Script           " 
+		print "          by Bastian Schroll, Jens Herrmann         " 
 		print "" 
+		print "SW Version:	"+globals.getVers("vers")
+		print "Build Date:	"+globals.getVers("date")
+		print ""
 
 		print "Frequency:   "+args.freq
 		print "Device-ID:   "+str(args.device)

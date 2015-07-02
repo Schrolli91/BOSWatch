@@ -26,3 +26,11 @@ filterList = []
 fmsDescribtionList  = {}
 zveiDescribtionList = {}
 ricDescribtionList  = {}
+
+# returns the Version number
+# function -> read only in script
+def getVers(mode="vers"):
+	if mode == "vers":
+		return "2.0-RC"
+	elif mode == "date":
+		return " 2015/07/02"
