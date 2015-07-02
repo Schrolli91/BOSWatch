@@ -16,8 +16,8 @@ POCSAG2400: Address: 3456789  Function: 3  Alpha:   Hello World
 POCSAG1200: Address: 1358246  Function: 4
 
 #duplicate with same and other msg
-POCSAG1200: Address: 2345678  Function: 1  Alpha:   Hello World
-POCSAG1200: Address: 2345678  Function: 1  Alpha:   Hello Earth
+POCSAG1200: Address: 2345678  Function: 2  Alpha:   Hello World
+POCSAG1200: Address: 2345678  Function: 2  Alpha:   Bye Earth
 
 #invalid
 POCSAG1200: Address: 123567  Function: 1  Alpha:   Hello World
