@@ -52,16 +52,16 @@ def onLoad():
 	this onLoad() routine is called one time for initialize the plugin
 
 	@requires:  nothing
-	
+
 	@return:    nothing
 	@exception: Exception if init has an fatal error so that the plugin couldn't work
-	
+
 	"""
 
 def run(typ,freq,data):
 	"""
 	This function is the implementation of the Plugin.
-	
+
 	If necessary the configuration hast to be set in the config.ini.
 
 	@type    typ:  string (FMS|ZVEI|POC)
@@ -72,7 +72,7 @@ def run(typ,freq,data):
 	@keyword freq: frequency of the SDR Stick
 
 	@requires:  If necessary the configuration hast to be set in the config.ini.
-	
+
 	@return:    nothing
 	@exception: nothing, make sure this function will never thrown an exception
 	"""
@@ -83,4 +83,4 @@ Global Functions for plugins:
 from includes import helper #Global helper functions
 
 
-helper.curtime("FORMAT")		
+helper.curtime("FORMAT")

@@ -29,12 +29,12 @@ def onLoad():
 	this onLoad() routine is called one time for initialize the plugin
 
 	@requires:  nothing
-	
+
 	@return:    nothing
 	"""
 	# nothing to do for this plugin
 	return
-	
+
 
 ##
 #
@@ -45,7 +45,7 @@ def run(typ,freq,data):
 	"""
 	This function is the implementation of the MySQL-Plugin.
 	It will store the data to an MySQL database
-	
+
 	The configuration for the MySQL-Connection is set in the config.ini.
 	For DB- and tablestructure see boswatch.sql
 
@@ -58,7 +58,7 @@ def run(typ,freq,data):
 
 	@requires: MySQL-Configuration has to be set in the config.ini
 	@requires: Created Database/Tables, see boswatch.sql
-	
+
 	@return:    nothing
 	"""
 	try:
@@ -73,7 +73,7 @@ def run(typ,freq,data):
 			logging.error("cannot read config file")
 			logging.debug("cannot read config file", exc_info=True)
 		else: # Without config, plugin couldn't work
-				
+
 			try:
 					#
 				# Connect to MySQL
@@ -83,38 +83,38 @@ def run(typ,freq,data):
 				cursor = connection.cursor()
 			except:
 				logging.error("cannot connect to MySQL")
-				logging.debug("cannot connect to MySQL", exc_info=True)	
+				logging.debug("cannot connect to MySQL", exc_info=True)
 			else: # Without connection, plugin couldn't work
 				try:
 					#
 					# Create and execute SQL-statement
 					#
 					logging.debug("Insert %s", typ)
-					
+
 					if typ == "FMS":
 						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableFMS")+" (time,fms,status,direction,directionText,tsi,description) VALUES (NOW(),%s,%s,%s,%s,%s,%s)",(data["fms"],data["status"],data["direction"],data["directionText"],data["tsi"],data["description"]))
-						
+
 					elif typ == "ZVEI":
 						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time,zvei,description) VALUES (NOW(),%s,%s)",(data["zvei"],data["description"]))
-						
+
 					elif typ == "POC":
 						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tablePOC")+" (time,ric,funktion,funktionChar,msg,bitrate,description) VALUES (NOW(),%s,%s,%s,%s,%s,%s)",(data["ric"],data["function"],data["functionChar"],data["msg"],data["bitrate"],data["description"]))
-						
+
 					else:
-						logging.warning("Invalid Typ: %s", typ)	
+						logging.warning("Invalid Typ: %s", typ)
 				except:
 					logging.error("cannot Insert %s", typ)
 					logging.debug("cannot Insert %s", typ, exc_info=True)
 					return
-						 
+
 			finally:
 				logging.debug("close MySQL")
-				try: 
+				try:
 					cursor.close()
-					connection.close() #Close connection in every case  
+					connection.close() #Close connection in every case
 				except:
 					pass
-			
+
 	except:
 		logging.error("unknown error")
 		logging.debug("unknown error", exc_info=True)

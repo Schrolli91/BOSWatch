@@ -17,12 +17,12 @@ $db = new Database($dbhost, $dbuser, $dbpassword, $database, 1); //Show Error = 
 
 	<div style="text-align: center; width: 1250px; margin: 0px auto;">
 
-		<img src="gfx/logo.png" alt="BOSWatch"><br>		
-		<a href="index.php?overview">[Übersicht]</a> - <a href="index.php?parser">[Parser]</a>
-		
-		<br><br>	
+		<img src="gfx/logo.png" alt="BOSWatch"><br>
+		<a href="index.php?overview">[ï¿½bersicht]</a> - <a href="index.php?parser">[Parser]</a>
+
+		<br><br>
 		<?php
-		
+
 			if(isset($_GET['overview']))
 			{
 				include("tpl/content.overview.php");
@@ -38,9 +38,9 @@ $db = new Database($dbhost, $dbuser, $dbpassword, $database, 1); //Show Error = 
 				include("tpl/content.overview.php");
 				include("tpl/template.overview.php");
 			}
-		
-		?>	
+
+		?>
 	</div>
-	
+
 </body>
 </html>

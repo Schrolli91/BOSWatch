@@ -28,12 +28,12 @@ def onLoad():
 	this onLoad() routine is called one time for initialize the plugin
 
 	@requires:  nothing
-	
+
 	@return:    nothing
 	"""
 	# nothing to do for this plugin
 	return
-	
+
 
 ##
 #
@@ -53,7 +53,7 @@ def run(typ,freq,data):
 	@keyword freq: frequency of the SDR Stick
 
 	@requires:  httpRequest-Configuration has to be set in the config.ini
-	
+
 	@return:    nothing
 	"""
 	try:
@@ -68,13 +68,13 @@ def run(typ,freq,data):
 			logging.error("cannot read config file")
 			logging.debug("cannot read config file", exc_info=True)
 		else: # Without config, plugin couldn't work
-			
+
 			try:
 				#
 				# Create URL
 				#
 				logging.debug("send %s HTTP request", typ)
-				
+
 				if typ == "FMS":
 					url = globals.config.get("httpRequest", "fms_url") #Get URL
 					url = url.replace("%FMS%", data["fms"]).replace("%STATUS%", data["status"]) #replace Wildcards
@@ -89,29 +89,29 @@ def run(typ,freq,data):
 					url = url.replace("%FUNC%", data["function"]).replace("%FUNCCHAR%", data["functionChar"]) #replace Wildcards
 					url = url.replace("%MSG%", data["msg"]).replace("%BITRATE%", str(data["bitrate"])) #replace Wildcards
 				else:
-					logging.warning("Invalid Typ: %s", typ)	
+					logging.warning("Invalid Typ: %s", typ)
 					return
-					
+
 				#same in all types
 				url = url.replace("%DESCR%", data["description"]) # replace Wildcards
 				url = url.replace("%TIME%", helper.curtime("%H:%M:%S")) # replace Wildcards
 				url = url.replace("%DATE%", helper.curtime("%d.%m.%Y")) # replace Wildcards
-				
+
 				#
 				# HTTP-Request
 				#
 				url = urlparse(url) #split URL into path and querry
 				httprequest = httplib.HTTPConnection(url[2]) #connect to URL Path
 				httprequest.request("GET", url[5]) #send URL Querry per GET
-				
+
 			except:
 				logging.error("cannot send HTTP request")
 				logging.debug("cannot send HTTP request", exc_info=True)
 				return
-				
+
 			else:
 				try:
-					# 
+					#
 					# check HTTP-Response
 					#
 					httpresponse = httprequest.getresponse()
@@ -123,14 +123,14 @@ def run(typ,freq,data):
 					logging.error("cannot get HTTP response")
 					logging.debug("cannot get HTTP response", exc_info=True)
 					return
-					
+
 			finally:
 				logging.debug("close HTTP-Connection")
-				try: 
+				try:
 					httprequest.close()
 				except:
 					pass
-	
+
 	except:
 		logging.error("unknown error")
 		logging.debug("unknown error", exc_info=True)

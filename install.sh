@@ -1,20 +1,20 @@
 #!/bin/sh
 tput clear
 tput civis
-echo "     ____  ____  ______       __      __       __   " 
-echo "    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  " 
-echo "   / __  / / / /\__ \| | /| / / __  / __/ ___/ __ \ " 
-echo "  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / " 
-echo " /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  " 
-echo "            German BOS Information Script           " 
-echo "                 by Bastian Schroll                 " 
+echo "     ____  ____  ______       __      __       __   "
+echo "    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  "
+echo "   / __  / / / /\__ \| | /| / / __  / __/ ___/ __ \ "
+echo "  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / "
+echo " /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  "
+echo "            German BOS Information Script           "
+echo "                 by Bastian Schroll                 "
 echo ""
 echo "This may take a several minutes... Don't panic!"
 echo ""
 echo "Caution, script don't install a Webserver with PHP and MySQL"
 echo "So you have to make up manually if you want to use MySQL support"
 
-mkdir -p ~/boswatch/install 
+mkdir -p ~/boswatch/install
 
 tput cup 13 15
 echo "[ 1/10] [#---------]"
@@ -32,7 +32,7 @@ tput cup 13 15
 echo "[ 3/10] [###-------]"
 tput cup 15 5
 echo "-> download rtl_fm......................"
-cd ~/boswatch/install 
+cd ~/boswatch/install
 git clone git://git.osmocom.org/rtl-sdr.git >> ~/boswatch/install/setup_log.txt 2>&1
 cd rtl-sdr/
 
@@ -50,7 +50,7 @@ tput cup 13 15
 echo "[ 5/10] [#####-----]"
 tput cup 15 5
 echo "-> download multimon-ng................"
-cd ~/boswatch/install 
+cd ~/boswatch/install
 git clone https://github.com/EliasOenal/multimonNG.git >> ~/boswatch/install/setup_log.txt 2>&1
 cd multimonNG/
 
@@ -68,7 +68,7 @@ tput cup 13 15
 echo "[ 7/10] [#######---]"
 tput cup 15 5
 echo "-> download MySQL Connector for Python."
-cd ~/boswatch/install 
+cd ~/boswatch/install
 wget "http://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-1.0.9.tar.gz/from/http://cdn.mysql.com/" -O mysql-connector.tar >> ~/boswatch/install/setup_log.txt 2>&1
 tar xfv mysql-connector.tar >> ~/boswatch/install/setup_log.txt 2>&1
 cd mysql-connector-python*

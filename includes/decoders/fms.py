@@ -18,7 +18,7 @@ from includes import doubleFilter  # double alarm filter
 ##
 #
 # FMS decoder function
-# validate -> check double alarm -> log      
+# validate -> check double alarm -> log
 #
 def decode(freq, decoded):
 	"""
@@ -30,7 +30,7 @@ def decode(freq, decoded):
 	@param   decoded: RAW Information from Multimon-NG
 
 	@requires:  Configuration has to be set in the config.ini
-	
+
 	@return:    nothing
 	@exception: Exception if FMS decode failed
 	"""
@@ -42,11 +42,11 @@ def decode(freq, decoded):
 	fms_direction = decoded[101]         # Richtung
 	fms_directionText = decoded[103:110] # Richtung (Text)
 	fms_tsi = decoded[114:117]           # Taktische Kruzinformation
-		
-	if "CRC correct" in decoded: #check CRC is correct  
+
+	if "CRC correct" in decoded: #check CRC is correct
 		fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction # build FMS id
 		# if FMS is valid
-		if re.search("[0-9a-f]{8}[0-9a-f]{1}[01]{1}", fms_id): 
+		if re.search("[0-9a-f]{8}[0-9a-f]{1}[01]{1}", fms_id):
 			# check for double alarm
 			if doubleFilter.checkID("FMS", fms_id):
 				logging.info("FMS:%s Status:%s Richtung:%s TSI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
@@ -66,6 +66,6 @@ def decode(freq, decoded):
 			# in every time save old data for double alarm
 			doubleFilter.newEntry(fms_id)
 		else:
-			logging.warning("No valid FMS: %s", fms_id)    
+			logging.warning("No valid FMS: %s", fms_id)
 	else:
 		logging.warning("FMS CRC incorrect")

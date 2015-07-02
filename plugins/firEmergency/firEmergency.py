@@ -25,12 +25,12 @@ def onLoad():
 	this onLoad() routine is called one time for initialize the plugin
 
 	@requires:  nothing
-	
+
 	@return:    nothing
 	"""
 	# nothing to do for this plugin
 	return
-	
+
 
 ##
 #
@@ -41,7 +41,7 @@ def run(typ,freq,data):
 	"""
 	This function is the implementation of the firEmergency-Plugin.
 	It will send the data to an firEmergency-Instance.
-	
+
 	The configuration for the firEmergency-Connection is set in the config.ini.
 
 	@type    typ:  string (ZVEI|POC)
@@ -52,7 +52,7 @@ def run(typ,freq,data):
 	@keyword freq: frequency is not used in this plugin
 
 	@requires:  firEmergency-Configuration has to be set in the config.ini
-	
+
 	@return:    nothing
 	"""
 	try:
@@ -79,14 +79,14 @@ def run(typ,freq,data):
 				logging.debug("cannot connect to firEmergency", exc_info=True)
 				# Without connection, plugin couldn't work
 				return
-				
-			else:	
+
+			else:
 				#
 				# Format given data-structure to xml-string for firEmergency
 				#
 				if typ == "FMS":
 					logging.debug("FMS not supported by firEmgency")
-					
+
 				elif typ == "ZVEI":
 					logging.debug("ZVEI to firEmergency")
 					try:
@@ -97,7 +97,7 @@ def run(typ,freq,data):
 							logging.debug("%s to firEmergency failed", typ, exc_info=True)
 							# Without connection, plugin couldn't work
 							return
-							
+
 				elif typ == "POC":
 					logging.debug("POC to firEmergency")
 					try:
@@ -110,11 +110,11 @@ def run(typ,freq,data):
 							return
 
 				else:
-					logging.warning("Invalid Typ: %s", typ)	
+					logging.warning("Invalid Typ: %s", typ)
 
 			finally:
 				logging.debug("close firEmergency-Connection")
-				try: 
+				try:
 					firSocket.close()
 				except:
 					pass

@@ -31,7 +31,7 @@ def onLoad():
 	this onLoad() routine is called one time for initialize the plugin
 
 	@requires:  nothing
-	
+
 	@return:    nothing
 	"""
 	# nothing to do for this plugin
@@ -51,11 +51,11 @@ def doSendmail(server, subject, mailtext):
 	@param subject:  Subject for the eMail
 	@type  mailtext: string
 	@param mailtext: Mailtext for the eMail
-	
+
 	@return:    nothing
 	@exception: Exception if smtp.sendmail failed
 	"""
-	try: 
+	try:
 		msg = MIMEText(mailtext)
 		msg['From'] = globals.config.get("eMail", "from")
 		msg['To']   = globals.config.get("eMail", "to")
@@ -79,7 +79,7 @@ def run(typ,freq,data):
 	"""
 	This function is the implementation of the eMail-Plugin.
 	It will send the data via eMail (SMTP)
-	
+
 	The configuration for the eMail-Connection is set in the config.ini.
 	If an user is set, the HTTP-Request is authenticatet.
 
@@ -91,7 +91,7 @@ def run(typ,freq,data):
 	@keyword freq: frequency of the SDR Stick
 
 	@requires:  eMail-Configuration has to be set in the config.ini
-	
+
 	@return:    nothing
 	"""
 	try:
@@ -102,7 +102,7 @@ def run(typ,freq,data):
 		try:
 			for key,val in globals.config.items("eMail"):
 				logging.debug(" - %s = %s", key, val)
-				
+
 		except:
 			logging.error("cannot read config file")
 			logging.debug("cannot read config file", exc_info=True)
@@ -115,15 +115,15 @@ def run(typ,freq,data):
 				server = smtplib.SMTP(globals.config.get("eMail", "smtp_server"), globals.config.get("eMail", "smtp_port"))
 				# debug-level to shell (0=no debug|1)
 				server.set_debuglevel(0)
-				
+
 				# if tls is enabled, starttls
 				if globals.config.get("eMail", "tls"):
 					server.starttls()
-				
+
 				# if user is given, login
 				if globals.config.get("eMail", "user"):
 					server.login(globals.config.get("eMail", "user"), globals.config.get("eMail", "password"))
-				
+
 			except:
 				logging.error("cannot connect to eMail")
 				logging.debug("cannot connect to eMail", exc_info=True)
@@ -199,17 +199,17 @@ def run(typ,freq,data):
 						logging.error("%s to eMail failed", typ)
 						logging.debug("%s to eMail failed", typ, exc_info=True)
 						return
-				
+
 				else:
-					logging.warning("Invalid Typ: %s", typ)	
+					logging.warning("Invalid Typ: %s", typ)
 
 			finally:
 				logging.debug("close eMail-Connection")
-				try: 
+				try:
 					server.quit()
 				except:
 					pass
-			
+
 	except:
 		# something very mysterious
 		logging.error("unknown error")

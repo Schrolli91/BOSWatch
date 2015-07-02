@@ -16,7 +16,7 @@ Implemented functions:
 - siren will run with the pack
 - press Pibrella button to stop alarm and reset the LEDs
 
-@author: Jens Herrmann	
+@author: Jens Herrmann
 
 BOSWatch: https://github.com/Schrolli91/BOSWatch
 Pibrella: https://github.com/pimoroni/pibrella
@@ -39,7 +39,7 @@ import json # for data
 #
 # Eventhandler for button
 # will stop the alarm and reset the LEDs
-# 
+#
 def button_pressed(pin):
 	global siren_stopped
 	import pibrella
@@ -75,15 +75,15 @@ pibrella.async_start('siren',siren)
 #
 # Main Program
 #
-try: 
+try:
 	# Logging
 	myLogger = logging.getLogger()
 	myLogger.setLevel(logging.DEBUG)
 	formatter = logging.Formatter('%(asctime)s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
 	ch = logging.StreamHandler()
-	ch.setLevel(logging.DEBUG) 
+	ch.setLevel(logging.DEBUG)
 	ch.setFormatter(formatter)
-	myLogger.addHandler(ch)		
+	myLogger.addHandler(ch)
 
 	# Start TCP socket:
 	logging.debug("Start jsonSocketServer")
@@ -91,7 +91,7 @@ try:
 	sock.bind((IP,PORT))
 	sock.listen(2)
 	logging.info("jsonSocketServer runs")
-	pibrella.light.green.on() 
+	pibrella.light.green.on()
 
 	# our Alarm-RICs:
 	ric_alarm = [12345677, 12345676, 12345675]
@@ -116,7 +116,7 @@ try:
 			if parsed_json['ric'] == "1234567":
 				logging.debug("POCSAG is alive")
 				pibrella.light.green.blink(1, 1)
-			
+
 			elif int(parsed_json['ric']) in ric_alarm:
 				logging.debug("We have do to something")
 				if parsed_json['functionChar'] == "a":
@@ -127,21 +127,21 @@ try:
 					pibrella.light.red.blink(1, 1)
 					# change variable to False to start the siren
 					siren_stopped = False
-				
+
 except KeyboardInterrupt:
-	logging.warning("Keyboard Interrupt")	
+	logging.warning("Keyboard Interrupt")
 except:
 	logging.exception("unknown error")
 finally:
 	try:
 		logging.debug("socketServer shuting down")
 		sock.close()
-		logging.debug("socket closed") 
-		logging.debug("exiting socketServer")		
+		logging.debug("socket closed")
+		logging.debug("exiting socketServer")
 	except:
-		logging.warning("failed in clean-up routine")	
-	finally:	
-		logging.debug("close Logging")	
+		logging.warning("failed in clean-up routine")
+	finally:
+		logging.debug("close Logging")
 		logging.info("socketServer exit()")
 		logging.shutdown()
 		ch.close()

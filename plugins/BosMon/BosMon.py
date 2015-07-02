@@ -30,7 +30,7 @@ def onLoad():
 	this onLoad() routine is called one time for initialize the plugin
 
 	@requires:  nothing
-	
+
 	@return:    nothing
 	"""
 	# nothing to do for this plugin
@@ -50,7 +50,7 @@ def bosMonRequest(httprequest, params, headers):
 	@param params:      Contains the parameter for transfer to BosMon.
 	@type  headers:     map
 	@param headers:     The headers argument should be a mapping of extra HTTP headers to send with the request.
-	
+
 	@return:    nothing
 	@exception: Exception if HTTP-Request failed
 	"""
@@ -63,8 +63,8 @@ def bosMonRequest(httprequest, params, headers):
 		logging.error("request to BosMon failed")
 		logging.debug("request to BosMon failed", exc_info=True)
 		raise
-	else:	
-		# 
+	else:
+		#
 		# check HTTP-Response
 		#
 		httpresponse = httprequest.getresponse()
@@ -82,7 +82,7 @@ def run(typ,freq,data):
 	"""
 	This function is the implementation of the BosMon-Plugin.
 	It will send the data to an BosMon-Instance via http
-	
+
 	The configuration for the BosMon-Connection is set in the config.ini.
 	If an user is set, the HTTP-Request is authenticatet.
 
@@ -94,7 +94,7 @@ def run(typ,freq,data):
 	@keyword freq: frequency is not used in this plugin
 
 	@requires:  BosMon-Configuration has to be set in the config.ini
-	
+
 	@return:    nothing
 	"""
 	try:
@@ -140,8 +140,8 @@ def run(typ,freq,data):
 					logging.debug("Start FMS to BosMon")
 					try:
 						# BosMon-Telegramin expected assembly group, direction and tsi in one field
-						# structure (binary as hex in base10): 
-						#     Byte 1: assembly group; Byte 2: Direction; Byte 3+4: tactic short info 
+						# structure (binary as hex in base10):
+						#     Byte 1: assembly group; Byte 2: Direction; Byte 3+4: tactic short info
 						info = 0
 						# assembly group:
 						info = info + 1          # + b0001 (Assumption: is in every time 1 (no output from multimon-ng))
@@ -156,10 +156,10 @@ def run(typ,freq,data):
 						elif "II" in data["tsi"]:
 							info = info + 4      # + b0100
 						# "I" is nothing to do     + b0000
-						
+
 						params = urllib.urlencode({'type':'fms', 'address':data["fms"], 'status':data["status"], 'info':info, 'flags':'0'})
 						logging.debug(" - Params: %s", params)
-						# dispatch the BosMon-request 
+						# dispatch the BosMon-request
 						bosMonRequest(httprequest, params, headers)
 					except:
 						logging.error("FMS to BosMon failed")
@@ -171,7 +171,7 @@ def run(typ,freq,data):
 					try:
 						params = urllib.urlencode({'type':'zvei', 'address':data["zvei"], 'flags':'0'})
 						logging.debug(" - Params: %s", params)
-						# dispatch the BosMon-request 
+						# dispatch the BosMon-request
 						bosMonRequest(httprequest, params, headers)
 					except:
 						logging.error("ZVEI to BosMon failed")
@@ -184,24 +184,24 @@ def run(typ,freq,data):
 						# BosMon-Telegramin expected "a-d" as RIC-sub/function
 						params = urllib.urlencode({'type':'pocsag', 'address':data["ric"], 'flags':'0', 'function':data["functionChar"], 'message':data["msg"]})
 						logging.debug(" - Params: %s", params)
-						# dispatch the BosMon-request 
+						# dispatch the BosMon-request
 						bosMonRequest(httprequest, params, headers)
 					except:
 						logging.error("POC to BosMon failed")
 						logging.debug("POC to BosMon failed", exc_info=True)
 						return
-				
+
 				else:
-					logging.warning("Invalid Typ: %s", typ)	
+					logging.warning("Invalid Typ: %s", typ)
 
 			finally:
 				logging.debug("close BosMon-Connection")
-				try: 
+				try:
 					httprequest.close()
 				except:
 					pass
 
-	except:	
+	except:
 		# something very mysterious
 		logging.error("unknown error")
 		logging.debug("unknown error", exc_info=True)

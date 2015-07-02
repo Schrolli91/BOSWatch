@@ -5,7 +5,7 @@
 Functions for checking the subprocesses rtl_fm and multimon-ng
 Used in boswatch.py at startup and designated for watching-service
 
-@author: 		Jens Herrmann	
+@author: 		Jens Herrmann
 """
 
 import logging
@@ -32,7 +32,7 @@ def checkRTL():
 		logging.critical("cannot check rtl_fm.log")
 		logging.debug("cannot check rtl_fm.log", exc_info=True)
 		raise
-		
+
 def checkMultimon():
 	"""
 	check startup of multimon-ng

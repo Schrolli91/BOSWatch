@@ -13,10 +13,10 @@ import logging
 def freqToHz(freq):
 	"""
 	gets a frequency and resolve it in Hz
-	
+
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
-	
+
 	@return:    frequency in Hz
 	@exception: Exception if Error by recalc
 	"""

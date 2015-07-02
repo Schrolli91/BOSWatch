@@ -36,10 +36,10 @@ def onLoad():
 	this onLoad() routine is called one time for initialize the plugin
 
 	@requires:  nothing
-	
+
 	@return:    nothing
 	@exception: Exception if init has an fatal error so that the plugin couldn't work
-	
+
 	"""
 	try:
 		########## User onLoad CODE ##########
@@ -58,7 +58,7 @@ def onLoad():
 def run(typ,freq,data):
 	"""
 	This function is the implementation of the Plugin.
-	
+
 	If necessary the configuration hast to be set in the config.ini.
 
 	@type    typ:  string (FMS|ZVEI|POC)
@@ -69,7 +69,7 @@ def run(typ,freq,data):
 	@keyword freq: frequency of the SDR Stick
 
 	@requires:  If necessary the configuration hast to be set in the config.ini.
-	
+
 	@return:    nothing
 	@exception: nothing, make sure this function will never thrown an exception
 	"""
@@ -85,8 +85,8 @@ def run(typ,freq,data):
 			logging.error("cannot read config file")
 			logging.debug("cannot read config file", exc_info=True)
 		else: # Without config, plugin couldn't work
-			
-			########## User Plugin CODE ##########		
+
+			########## User Plugin CODE ##########
 			if typ == "FMS":
 				logging.warning("%s not supported", typ)
 			elif typ == "ZVEI":
@@ -94,9 +94,9 @@ def run(typ,freq,data):
 			elif typ == "POC":
 				logging.warning("%s not supported", typ)
 			else:
-				logging.warning("Invalid Typ: %s", typ)	
+				logging.warning("Invalid Typ: %s", typ)
 			########## User Plugin CODE ##########
-		
+
 	except:
 		logging.error("unknown error")
 		logging.debug("unknown error", exc_info=True)

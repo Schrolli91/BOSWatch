@@ -25,7 +25,7 @@ def removeF(zvei):
 
 	@type    zvei: string
 	@param   zvei: ZVEI Information
-	
+
 	@return:    ZVEI without F
 	@exception: none
 	"""
@@ -40,7 +40,7 @@ def removeF(zvei):
 ##
 #
 # ZVEI decoder function
-# validate -> check double alarm -> log      
+# validate -> check double alarm -> log
 #
 def decode(freq, decoded):
 	"""
@@ -52,11 +52,11 @@ def decode(freq, decoded):
 	@param   decoded: RAW Information from Multimon-NG
 
 	@requires:  Configuration has to be set in the config.ini
-	
+
 	@return:    nothing
 	@exception: Exception if ZVEI decode failed
 	"""
-	zvei_id = decoded[7:12]    # ZVEI Code  
+	zvei_id = decoded[7:12]    # ZVEI Code
 	zvei_id = removeF(zvei_id) # resolve F
 	if re.search("[0-9]{5}", zvei_id): # if ZVEI is valid
 		# check for double alarm

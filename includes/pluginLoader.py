@@ -34,7 +34,7 @@ def loadPlugins():
 				logging.debug("call %s.onLoad()", i["name"])
 				plugin.onLoad()
 				# Add it to globals.pluginList
-				globals.pluginList[i["name"]] = plugin	
+				globals.pluginList[i["name"]] = plugin
 			except:
 				# call next plugin, if one has thrown an exception
 				logging.error("error calling %s.onLoad()", i["name"])
@@ -60,13 +60,13 @@ def getPlugins():
 		# Go to all Folders in the Plugin-Dir
 		for i in os.listdir(PluginFolder):
 			location = os.path.join(PluginFolder, i)
-				
-			# Skip if Path.isdir() or no File DIR_NAME.py is found 
+
+			# Skip if Path.isdir() or no File DIR_NAME.py is found
 			if not os.path.isdir(location) or not i + ".py" in os.listdir(location):
 				continue
 
 			# is the plugin enabled in the config-file?
-			try: 
+			try:
 				if globals.config.getint("Plugins", i):
 					info = imp.find_module(i, [location])
 					plugins.append({"name": i, "info": info})
@@ -74,8 +74,8 @@ def getPlugins():
 				else:
 					logging.debug("Plugin [DISABLED] %s ", i)
 			# no entry for plugin found in config-file
-			except NoOptionError: 
-				logging.warning("Plugin [NO CONF ] %s", i)				
+			except NoOptionError:
+				logging.warning("Plugin [NO CONF ] %s", i)
 				pass
 	except:
 		logging.error("Error during Plugin search")
@@ -91,8 +91,8 @@ def loadPlugin(plugin):
 
 	@type    plugin: Plugin Data
 	@param   plugin: Contains the information to import a Plugin
-	
-	
+
+
 	@return:    nothing
 	@exception: Exception if Plugin import failed
 	"""

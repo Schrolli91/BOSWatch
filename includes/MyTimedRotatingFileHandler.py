@@ -3,7 +3,7 @@
 #
 
 """
-This Class extended the TimedRotatingFileHandler with the possibility 
+This Class extended the TimedRotatingFileHandler with the possibility
 to change the backupCount after initialization.
 
 @author: 		Jens Herrmann

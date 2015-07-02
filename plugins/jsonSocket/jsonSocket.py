@@ -27,12 +27,12 @@ def onLoad():
 	this onLoad() routine is called one time for initialize the plugin
 
 	@requires:  nothing
-	
+
 	@return:    nothing
 	"""
 	# nothing to do for this plugin
 	return
-	
+
 
 ##
 #
@@ -43,7 +43,7 @@ def run(typ,freq,data):
 	"""
 	This function is the implementation of the jsonSocket-Plugin.
 	It will send the data via UDP/TCP
-	
+
 	The configuration for the Connection is set in the config.ini.
 
 	@type    typ:  string (FMS|ZVEI|POC)
@@ -54,7 +54,7 @@ def run(typ,freq,data):
 	@keyword freq: frequency of the SDR Stick
 
 	@requires:  jsonSocket-Configuration has to be set in the config.ini
-	
+
 	@return:    nothing
 	"""
 	try:
@@ -65,7 +65,7 @@ def run(typ,freq,data):
 		try:
 			for key,val in globals.config.items("jsonSocket"):
 				logging.debug(" - %s = %s", key, val)
-				
+
 		except:
 			logging.error("cannot read config file")
 			logging.debug("cannot read config file", exc_info=True)
@@ -82,7 +82,7 @@ def run(typ,freq,data):
 					sock.connect((globals.config.get("jsonSocket", "server"), globals.config.getint("jsonSocket", "port")))
 				else:
 					sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-				
+
 			except:
 				logging.error("cannot initialize %s-socket", globals.config.get("jsonSocket", "protocol"))
 				logging.debug("cannot initialize %s-socket", globals.config.get("jsonSocket", "protocol"), exc_info=True)
@@ -105,15 +105,15 @@ def run(typ,freq,data):
 						return
 
 				else:
-					logging.warning("Invalid Typ: %s", typ)	
+					logging.warning("Invalid Typ: %s", typ)
 
 			finally:
 				logging.debug("close %s-Connection", globals.config.get("jsonSocket", "protocol"))
-				try: 
+				try:
 					sock.close()
 				except:
 					pass
-			
+
 	except:
 		# something very mysterious
 		logging.error("unknown error")
