@@ -27,9 +27,12 @@ unless you are developer you can use the develop-Branch - may be unstable!
 
 ##### Features for the future:
 - more plugins
+- other Ideas per Issues please
 
 
 ###Plugins
+If you want to code your own Plugin, see Section `Code your own Plugin` at the end of this readme.MD
+
 ##### Implemented plugins:
 - MySQL (insert data into MySQL database [FMS|ZVEI|POC])
 - httpRequest (send a request with parameter to an URL [FMS|ZVEI|POC])
@@ -57,6 +60,7 @@ For the other functions see "Usage" below.
 ##### Filtering Functions (RegEX)
 For the RegEX filter functions see Section `[Filters]`
 http://www.regexr.com/ - RegEX test tool an documentation
+
 No filter for a combination typ/plugin = all data will pass
 
 Syntax: `INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX` (separator `;`)
@@ -67,15 +71,17 @@ Syntax: `INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX` (separator `;`)
 - `REGEX`			= the RegEX
 
 only ZVEI to all plugins with 25### at 85.5MHz
-testfilter = ZVEI;zvei;*;85500000;25[0-9]{3}
+`testfilter = ZVEI;zvei;*;85500000;25[0-9]{3}`
 
 only POCSAG to MySQL with the text "ALARM:" in the message
-pocTest = POC;msg;MySQL;*;ALARM:
+`pocTest = POC;msg;MySQL;*;ALARM:`
 
-##### Web frontend
-Put the files in folder /wwww/ into your local webserver folder (f.e. /var/www/).
+##### Web frontend (obsolete)
+New version in future - old data in folder `/www/`
+
+~~Put the files in folder /wwww/ into your local webserver folder (f.e. /var/www/).
 Now you must edit the "config.php" with your userdata to your local database.
-Take a look into the parser.php for the parsing functions  
+Take a look into the parser.php for the parsing functions~~
 
 
 ### Usage
@@ -132,3 +138,9 @@ For configuration-details see `service/README.md`.
 - MySQL Connector for Python (for MySQL-plugin)
 
 Thanks to smith_fms and McBo from Funkmeldesystem.de - Forum for Inspiration and Groundwork!
+
+
+### Code your own Plugin
+To code your own Plugin look at the litte example `/plugins/template/template.py`
+
+In the text-file `plugins/interface.txt` are all relevant data, that your plugin can use.

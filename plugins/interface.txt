@@ -82,5 +82,6 @@ Global Functions for plugins:
 -----------------------------
 from includes import helper #Global helper functions
 
-
+#for format see https://docs.python.org/2/library/time.html#time.strftime
+#without format string the function returns with: %d.%m.%Y %H:%M:%S
 helper.curtime("FORMAT")
