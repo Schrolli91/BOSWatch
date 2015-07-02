@@ -59,12 +59,12 @@ For the RegEX filter functions see Section `[Filters]`
 http://www.regexr.com/ - RegEX test tool an documentation
 No filter for a combination typ/plugin = all data will pass
 
-Syntax: INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX (separator ";")
-- TYP				= the data typ (FMS|ZVEI|POC)
-- DATAFIELD	= the field of the data array (See interface.txt)
-- PLUGIN			= the name of the plugin to call with this filter (* for all)
-- FREQUENZ		= the frequenz to use the filter (for more SDR sticks (* for all))
-- REGEX			= the RegEX
+Syntax: `INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX` (separator `;`)
+- `TYP`				= the data typ (FMS|ZVEI|POC)
+- `DATAFIELD`	= the field of the data array (See interface.txt)
+- `PLUGIN`			= the name of the plugin to call with this filter (* for all)
+- `FREQUENZ`		= the frequenz to use the filter (for more SDR sticks (* for all))
+- `REGEX`			= the RegEX
 
 only ZVEI to all plugins with 25### at 85.5MHz
 testfilter = ZVEI;zvei;*;85500000;25[0-9]{3}
@@ -120,7 +120,7 @@ Caution, script don't install a webserver with PHP and MySQL.
 So you have to make up manually if you want to use MySQL support.
 Database Structure `boswatch.sql` in the MySQL Plugin Folder
 
-If you want to use BOSWatch as a daemon, you have to set your 
+If you want to use BOSWatch as a daemon, you have to set your
 configuration in `service/boswatch.sh` and copy it to `/etc/init.d`.
 Then you can start BOSWatch with `sudo /etc/init.d/boswatch.sh start`.
 For configuration-details see `service/README.md`.
