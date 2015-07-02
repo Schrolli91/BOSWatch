@@ -3,6 +3,24 @@
 #Data is alternately passed to the decoder to simulate an used Radio-Frequency
 
 #POCSAG
+#all bitrates, all functions, with and without text, duplicates same and other msg
+
+#witch csv
+POCSAG512: Address: 1234567  Function: 1  Alpha:   Hello World
+
+#without csv
+POCSAG1200: Address: 2345678  Function: 2  Alpha:   Hello World
+POCSAG2400: Address: 3456789  Function: 3  Alpha:   Hello World
+
+#OHNE TEXT????
+POCSAG1200: Address: 1358246  Function: 4
+
+#duplicate with same and other msg
+POCSAG1200: Address: 2345678  Function: 1  Alpha:   Hello World
+POCSAG1200: Address: 2345678  Function: 1  Alpha:   Hello Earth
+
+#invalid
+POCSAG1200: Address: 123567  Function: 1  Alpha:   Hello World
 
 #FMS
 
@@ -14,8 +32,8 @@ ZVEI2: 56789
 #duplicate
 ZVEI2: 56789
 #with repeat Tone
-ZVEI2: 1F21F2
-#in case of incomplete id
+ZVEI2: 1F2F3
+#in case of invalid id
 ZVEI2: 135
 #in case of a double-tone for siren n-'D's are sended
 ZVEI2: DDD

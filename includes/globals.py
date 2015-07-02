@@ -27,7 +27,7 @@ fmsDescribtionList  = {}
 zveiDescribtionList = {}
 ricDescribtionList  = {}
 
-# returns the Version number
+# returns the version or build date
 # function -> read only in script
 def getVers(mode="vers"):
 	if mode == "vers":
