@@ -47,3 +47,11 @@ def getTime():
 	@return: Formated time
 	"""
 	return curtime("%H:%M:%S")
+
+def getTimestamp():
+	"""
+	Returns a integer timestamp
+
+	@return: integer timestamp
+	"""
+	return int(time.time()

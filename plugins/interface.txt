@@ -87,6 +87,7 @@ from includes.helper import timeHandler
 timeHandler.curtime("FORMAT") # without format string the function returns with "%d.%m.%Y %H:%M:%S"
 timeHandler.getDate() # Gets the date in "%d.%m.%Y"
 timeHandler.getTime() # Gets the time in %H:%M:%S
+timeHandler.getTimestamp() # Gets a integer timestamp
 
 
 # replace all the standard wildcards in the given text

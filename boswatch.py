@@ -21,7 +21,7 @@ import logging.handlers
 import argparse     # for parse the args
 import ConfigParser # for parse the config file
 import os           # for log mkdir
-import time         # for timestamp
+import time         # for time.sleep()
 import subprocess   # for starting rtl_fm and multimon-ng
 
 from includes import globals  # Global variables
