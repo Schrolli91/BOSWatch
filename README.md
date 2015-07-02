@@ -1,6 +1,6 @@
 ![# BOSWatch](/www/gfx/logo.png)
 
-Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG
+:satellite: Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG :satellite:
 
 #### Notice:
 The intercept of the German BOS radio is **strictly prohibited** and will be prosecuted. the use is **only authorized** personnel permitted.
@@ -34,12 +34,15 @@ unless you are developer you can use the develop-Branch - may be unstable!
 If you want to code your own Plugin, see Section `Code your own Plugin` at the end of this readme.MD
 
 ##### Implemented plugins:
-- MySQL (insert data into MySQL database [FMS|ZVEI|POC])
-- httpRequest (send a request with parameter to an URL [FMS|ZVEI|POC])
-- eMail (send Mails [FMS|ZVEI|POC])
-- BosMon (send data to BosMon server [FMS|ZVEI|POC])
-- firEmergency (send data to firEmergency server [ZVEI|POC])
-- jsonSocket (send data as jsonString to a socket server [FMS|ZVEI|POC])
+
+|Plugin|Function|FMS|ZVEI|POC|
+|-----|---------|:-:|:--:|:-:|
+|MySQL|insert data into MySQL database|:thumbsup:|:thumbsup:|:thumbsup:|
+|httpRequest|send a request with parameter to an URL|:thumbsup:|:thumbsup:|:thumbsup:|
+|eMail|send Mails with own text|:thumbsup:|:thumbsup:|:thumbsup:|
+|BosMon|send data to BosMon server|:thumbsup:|:thumbsup:|:thumbsup:|
+|firEmergency|send data to firEmergency server|:thumbsup:|:x:|:thumbsup:|
+|jsonSocket|send data as jsonString to a socket server|:thumbsup:|:thumbsup:|:thumbsup:|
 
 - for more Information to the plugins see `config.ini`
 
@@ -64,11 +67,11 @@ http://www.regexr.com/ - RegEX test tool an documentation
 No filter for a combination typ/plugin = all data will pass
 
 Syntax: `INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX` (separator `;`)
-- `TYP`				= the data typ (FMS|ZVEI|POC)
-- `DATAFIELD`	= the field of the data array (See interface.txt)
-- `PLUGIN`			= the name of the plugin to call with this filter (* for all)
-- `FREQUENZ`		= the frequenz to use the filter (for more SDR sticks (* for all))
-- `REGEX`			= the RegEX
+- `TYP` = the data typ (FMS|ZVEI|POC)
+- `DATAFIELD` = the field of the data array (See interface.txt)
+- `PLUGIN` = the name of the plugin to call with this filter (* for all)
+- `FREQUENZ` = the frequenz to use the filter (for more SDR sticks (* for all))
+- `REGEX` = the RegEX
 
 only ZVEI to all plugins with 25### at 85.5MHz
 `testfilter = ZVEI;zvei;*;85500000;25[0-9]{3}`
