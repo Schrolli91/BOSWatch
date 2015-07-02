@@ -37,12 +37,12 @@ If you want to code your own Plugin, see Section `Code your own Plugin` at the e
 
 |Plugin|Function|FMS|ZVEI|POC|
 |-----|---------|:-:|:--:|:-:|
-|MySQL|insert data into MySQL database|:thumbsup:|:thumbsup:|:thumbsup:|
-|httpRequest|send a request with parameter to an URL|:thumbsup:|:thumbsup:|:thumbsup:|
-|eMail|send Mails with own text|:thumbsup:|:thumbsup:|:thumbsup:|
-|BosMon|send data to BosMon server|:thumbsup:|:thumbsup:|:thumbsup:|
-|firEmergency|send data to firEmergency server|:x:|:thumbsup:|:thumbsup:|
-|jsonSocket|send data as jsonString to a socket server|:thumbsup:|:thumbsup:|:thumbsup:|
+|MySQL|insert data into MySQL database|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|httpRequest|send a request with parameter to an URL|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|eMail|send Mails with own text|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|BosMon|send data to BosMon server|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|firEmergency|send data to firEmergency server|:x:|:white_check_mark:|:white_check_mark:|
+|jsonSocket|send data as jsonString to a socket server|:white_check_mark:|:white_check_mark:|:white_check_mark:|
 
 - for more Information to the plugins see `config.ini`
 
