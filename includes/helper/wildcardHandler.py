@@ -3,33 +3,15 @@
 #
 
 """
-little Helper functions
-mainly for direct use in plugins to save code
+little Helper to replace fast and easy the standard wildcards
+for direct use in plugins to save code
 
-@author: 		Bastian Schroll
+@author: Bastian Schroll
 """
 
 import logging
 
-import time
-
-
-def curtime(format="%d.%m.%Y %H:%M:%S"):
-	"""
-	Returns formated date and/or time
-	see: https://docs.python.org/2/library/time.html#time.strftime
-
-	@type    format: string
-	@param   format: Python time Format-String
-
-	@return:    Formated Time and/or Date
-	@exception: Exception if Error in format
-	"""
-	try:
-		return time.strftime(format)
-	except:
-		logging.warning("error in time-format-string")
-		logging.debug("error in time-format-string", exc_info=True)
+from includes.helper import timeHandler
 
 
 def replaceWildcards(text,data):
@@ -46,7 +28,7 @@ def replaceWildcards(text,data):
 	"""
 	try:
 		# replace date and time wildcards
-		text = text.replace("%TIME%", curtime("%H:%M:%S")).replace("%DATE%", curtime("%d.%m.%Y"))
+		text = text.replace("%TIME%", timeHandler.getTime()).replace("%DATE%", timeHandler.getDate())
 
 		# replace FMS data
 		if "fms" in data: text = text.replace("%FMS%", data["fms"])
