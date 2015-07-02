@@ -41,7 +41,7 @@ If you want to code your own Plugin, see Section `Code your own Plugin` at the e
 |httpRequest|send a request with parameter to an URL|:thumbsup:|:thumbsup:|:thumbsup:|
 |eMail|send Mails with own text|:thumbsup:|:thumbsup:|:thumbsup:|
 |BosMon|send data to BosMon server|:thumbsup:|:thumbsup:|:thumbsup:|
-|firEmergency|send data to firEmergency server|:thumbsup:|:x:|:thumbsup:|
+|firEmergency|send data to firEmergency server|:x:|:thumbsup:|:thumbsup:|
 |jsonSocket|send data as jsonString to a socket server|:thumbsup:|:thumbsup:|:thumbsup:|
 
 - for more Information to the plugins see `config.ini`
