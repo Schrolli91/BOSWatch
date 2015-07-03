@@ -101,7 +101,7 @@ def decode(freq, decoded):
 		else:
 			poc_text = ""
 
-		if re.search("[0-9]{7}", poc_id): #if POC is valid
+		if re.search("[0-9]{7}", poc_id) and re.search("[0-3]{1}", poc_sub): #if POC is valid
 			if isAllowed(poc_id):
 				# check for double alarm
 				if doubleFilter.checkID("POC", poc_id+poc_sub, poc_text):
@@ -126,4 +126,4 @@ def decode(freq, decoded):
 			else:
 				logging.debug("POCSAG%s: %s is not allowed", bitrate, poc_id)
 		else:
-			logging.warning("No valid POCSAG%s RIC: %s", bitrate, poc_id)
+			logging.warning("No valid POCSAG%s RIC: %s SUB: %s", bitrate, poc_id, poc_sub)

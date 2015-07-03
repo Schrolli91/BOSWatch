@@ -73,7 +73,7 @@ POCSAG512: Address:  333333  Function: 0  Alpha:   BOSWatch-Test: okay
 POCSAG512: Address: 3333333  Function: 0  Alpha:   BOSWatch-Test: okay
 POCSAG512: Address: 333333F  Function: 0  Alpha:   BOSWatch-Test: invalid
 POCSAG512: Address: 333333F  Function: 1  Alpha:   BOSWatch-Test: invalid
-POCSAG512: Address: 3333333  Function: 4  Alpha:   BOSWatch-Test: invalid (issue #38)
+POCSAG512: Address: 3333333  Function: 4  Alpha:   BOSWatch-Test: invalid
 
 # denied
 POCSAG1200: Address: 7777777  Function: 1  Alpha:   BOSWatch-Test: denied
