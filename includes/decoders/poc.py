@@ -101,7 +101,7 @@ def decode(freq, decoded):
 		else:
 			poc_text = ""
 
-		if re.search("[0-9]{7}", poc_id) and re.search("[0-3]{1}", poc_sub): #if POC is valid
+		if re.search("[0-9]{7}", poc_id) and re.search("[1-4]{1}", poc_sub): #if POC is valid
 			if isAllowed(poc_id):
 				# check for double alarm
 				if doubleFilter.checkID("POC", poc_id+poc_sub, poc_text):
