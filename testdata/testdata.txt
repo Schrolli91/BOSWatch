@@ -39,10 +39,10 @@ POCSAG1200: Address: 2345678  Function: 2  Alpha:   BOSWatch-Test: without csv
 POCSAG2400: Address: 3456789  Function: 3  Alpha:   BOSWatch-Test: without csv
 
 # OHNE TEXT????
+POCSAG1200: Address: 1100000  Function: 0
 POCSAG1200: Address: 1100000  Function: 1
 POCSAG1200: Address: 1100000  Function: 2
 POCSAG1200: Address: 1100000  Function: 3
-POCSAG1200: Address: 1100000  Function: 4
 
 # duplicate with same and other msg
 POCSAG1200: Address: 2000001  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
@@ -73,7 +73,7 @@ POCSAG512: Address:  333333  Function: 0  Alpha:   BOSWatch-Test: okay
 POCSAG512: Address: 3333333  Function: 0  Alpha:   BOSWatch-Test: okay
 POCSAG512: Address: 333333F  Function: 0  Alpha:   BOSWatch-Test: invalid
 POCSAG512: Address: 333333F  Function: 1  Alpha:   BOSWatch-Test: invalid
-POCSAG512: Address: 3333333  Function: 4  Alpha:   BOSWatch-Test: invalid
+POCSAG512: Address: 3333333  Function: 4  Alpha:   BOSWatch-Test: invalid (issue #38)
 
 # denied
 POCSAG1200: Address: 7777777  Function: 1  Alpha:   BOSWatch-Test: denied
