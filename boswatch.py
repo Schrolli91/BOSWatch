@@ -330,29 +330,26 @@ try:
 		logging.debug("cannot start multimon-ng", exc_info=True)
 		exit(1)
 
-	# multimon-ng started, continue...
-	logging.debug("start decoding")
-
 	#
 	# Get decoded data from multimon-ng and call BOSWatch-decoder
 	#
-	while True:
-		if not args.test:
+	if not args.test:
+		logging.debug("start decoding")
+		while True:
 			decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
+			from includes import decoder
+			decoder.decode(converter.freqToHz(args.freq), decoded)
 
-		else:
-			# Test-strings only for develop
-			#decoded = "ZVEI2: 25832"
-			#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=I  (ohneNA,ohneSIGNAL)) CRC correct\n'"
-			#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     1=LST->FZG 2=I  (ohneNA,ohneSIGNAL)) CRC correct\n'"
-			#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=II (ohneNA,mit SIGNAL)) CRC correct\n'"
-			#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     1=LST->FZG 2=III(mit NA,ohneSIGNAL)) CRC correct\n'"
-			#decoded = "FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=IV (mit NA,mit SIGNAL)) CRC correct\n'"
-			decoded = "POCSAG1200: Address: 1234567  Function: 1  Alpha:   Hello World"
-			time.sleep(1)
-
-		from includes import decoder
-		decoder.decode(converter.freqToHz(args.freq), decoded)
+	else:
+		logging.debug("start testing")
+		testFile = open(globals.script_path+"/testdata/testdata.txt","r")
+		for testData in testFile:
+			if (len(testData) > 1) and ("#" not in testData[0]):
+				logging.info("Testdata: %s", testData.rstrip(' \t\n\r'))
+				from includes import decoder
+				decoder.decode(converter.freqToHz(args.freq), testData)
+				time.sleep(1)
+		logging.debug("test finished")
 
 except KeyboardInterrupt:
 	logging.warning("Keyboard Interrupt")
