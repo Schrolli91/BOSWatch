@@ -15,7 +15,7 @@ import httplib #for the HTTP request
 from urlparse import urlparse #for split the URL into url and path
 
 from includes import globals  # Global variables
-from includes import helper #Global helper functions
+from includes.helper import timeHandler
 
 ##
 #
@@ -94,8 +94,8 @@ def run(typ,freq,data):
 
 				#same in all types
 				url = url.replace("%DESCR%", data["description"]) # replace Wildcards
-				url = url.replace("%TIME%", helper.curtime("%H:%M:%S")) # replace Wildcards
-				url = url.replace("%DATE%", helper.curtime("%d.%m.%Y")) # replace Wildcards
+				url = url.replace("%TIME%", timeHandler.getTime()) # replace Wildcards
+				url = url.replace("%DATE%", timeHandler.getDate()) # replace Wildcards
 
 				#
 				# HTTP-Request
