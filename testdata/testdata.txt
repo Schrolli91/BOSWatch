@@ -1,4 +1,4 @@
-# Testdata for the BOSWatch Test Mode function
+﻿# Testdata for the BOSWatch Test Mode function
 # Data in Multimon-NG Raw Format
 # Data is alternately passed to the decoder to simulate an used Radio-Frequency
 
