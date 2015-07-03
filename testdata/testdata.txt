@@ -21,7 +21,7 @@
 #
 
 # bitrate
-POCSAG512: Address: 1000512  Function: 1  Alpha:   BOSWatch-Test: okay
+POCSAG512: Address: 1000512  Function: 1  Alpha:   BOSWatch-Test ÖÄÜß: okay
 POCSAG1200: Address: 1001200  Function: 1  Alpha:   BOSWatch-Test: okay
 POCSAG2400: Address: 1002400  Function: 1  Alpha:   BOSWatch-Test: okay
 
@@ -30,6 +30,10 @@ POCSAG512: Address: 1000000  Function: 0  Alpha:   BOSWatch-Test: okay
 POCSAG512: Address: 1000001  Function: 1  Alpha:   BOSWatch-Test: okay
 POCSAG512: Address: 1000002  Function: 2  Alpha:   BOSWatch-Test: okay
 POCSAG512: Address: 1000003  Function: 3  Alpha:   BOSWatch-Test: okay
+
+# german special sign
+POCSAG512: Address: 1200001  Function: 1  Alpha:   BOSWatch-Test ÖÄÜß: okay
+POCSAG512: Address: 1200001  Function: 1  Alpha:   BOSWatch-Test öäü: okay
 
 # witch csv
 POCSAG512: Address: 1234567  Function: 1  Alpha:   BOSWatch-Test: with csv
