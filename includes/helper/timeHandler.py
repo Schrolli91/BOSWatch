@@ -54,4 +54,4 @@ def getTimestamp():
 
 	@return: integer timestamp
 	"""
-	return int(time.time()
+	return int(time.time())
