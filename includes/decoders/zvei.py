@@ -56,26 +56,30 @@ def decode(freq, decoded):
 	@return:    nothing
 	@exception: Exception if ZVEI decode failed
 	"""
-	zvei_id = decoded[7:12]    # ZVEI Code
-	zvei_id = removeF(zvei_id) # resolve F
-	if re.search("[0-9]{5}", zvei_id): # if ZVEI is valid
-		# check for double alarm
-		if doubleFilter.checkID("ZVEI", zvei_id):
-			logging.info("5-Ton: %s", zvei_id)
-			data = {"zvei":zvei_id, "description":zvei_id}
-			# If enabled, look up description
-			if globals.config.getint("ZVEI", "idDescribed"):
-				from includes import descriptionList
-				data["description"] = descriptionList.getDescription("ZVEI", zvei_id)
-			# processing the alarm
-			try:
-				from includes import alarmHandler
-				alarmHandler.processAlarm("ZVEI", freq, data)
-			except:
-				logging.error("processing alarm failed")
-				logging.debug("processing alarm failed", exc_info=True)
-				pass
-		# in every time save old data for double alarm
-		doubleFilter.newEntry(zvei_id)
-	else:
-		logging.warning("No valid ZVEI: %s", zvei_id)
+	try:
+		zvei_id = decoded[7:12]    # ZVEI Code
+		zvei_id = removeF(zvei_id) # resolve F
+		if re.search("[0-9]{5}", zvei_id): # if ZVEI is valid
+			# check for double alarm
+			if doubleFilter.checkID("ZVEI", zvei_id):
+				logging.info("5-Ton: %s", zvei_id)
+				data = {"zvei":zvei_id, "description":zvei_id}
+				# If enabled, look up description
+				if globals.config.getint("ZVEI", "idDescribed"):
+					from includes import descriptionList
+					data["description"] = descriptionList.getDescription("ZVEI", zvei_id)
+				# processing the alarm
+				try:
+					from includes import alarmHandler
+					alarmHandler.processAlarm("ZVEI", freq, data)
+				except:
+					logging.error("processing alarm failed")
+					logging.debug("processing alarm failed", exc_info=True)
+					pass
+			# in every time save old data for double alarm
+			doubleFilter.newEntry(zvei_id)
+		else:
+			logging.warning("No valid ZVEI: %s", zvei_id)
+	except:
+		logging.error("error while decoding")
+		logging.debug("error while decoding", exc_info=True)
