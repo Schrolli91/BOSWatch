@@ -86,7 +86,7 @@ def getPlugins():
 				pass
 	except:
 		logging.error("Error during plugin search")
-		logging.debug("cannot load plugins", exc_info=True)
+		logging.debug("Error during plugin search", exc_info=True)
 		raise
 
 	return plugins
