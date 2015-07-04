@@ -90,7 +90,7 @@ def run(typ,freq,data):
 				elif typ == "ZVEI":
 					logging.debug("ZVEI to firEmergency")
 					try:
-							firXML = "<event>\n<address>"+data["zvei"]+"</address>\n<message>"+data["zvei"]+" alarmiert.</message>\n</event>\n"
+							firXML = "<event>\n<address>"+data["zvei"]+"</address>\n<description>"+data["description"]+"</description>\n<message>"+data["zvei"]+" alarmiert.</message>\n</event>\n"
 							firSocket.send(firXML)
 					except:
 							logging.error("%s to firEmergency failed", typ)
@@ -101,7 +101,7 @@ def run(typ,freq,data):
 				elif typ == "POC":
 					logging.debug("POC to firEmergency")
 					try:
-							firXML = "<event>\n<address>"+data["ric"]+"</address>\n<message>"+data["msg"]+"</message>\n</event>\n"
+							firXML = "<event>\n<address>"+data["ric"]+"</address>\n<status>"+data["function"]+"XX</status>\n<description>"+data["description"]+"</description>\n<message>"+data["msg"]+"</message>\n</event>\n"
 							firSocket.send(firXML)
 					except:
 							logging.error("%s to firEmergency failed", typ)
