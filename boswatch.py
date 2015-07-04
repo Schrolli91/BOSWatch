@@ -344,7 +344,7 @@ try:
 		logging.debug("start testing")
 		testFile = open(globals.script_path+"/testdata/testdata.txt","r")
 		for testData in testFile:
-			if (len(testData) > 1) and ("#" not in testData[0]):
+			if (len(testData.rstrip(' \t\n\r')) > 1) and ("#" not in testData[0]):
 				logging.info("Testdata: %s", testData.rstrip(' \t\n\r'))
 				from includes import decoder
 				decoder.decode(converter.freqToHz(args.freq), testData)
