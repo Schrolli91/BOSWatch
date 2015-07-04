@@ -78,17 +78,17 @@ def decode(freq, decoded):
 	if "POCSAG512:" in decoded:
 		bitrate = 512
 		poc_id = decoded[20:27].replace(" ", "").zfill(7)
-		poc_sub = decoded[39].replace("3", "4").replace("2", "3").replace("1", "2").replace("0", "1")
+		poc_sub = str(int(decoded[39])+1)
 
 	elif "POCSAG1200:" in decoded:
 		bitrate = 1200
 		poc_id = decoded[21:28].replace(" ", "").zfill(7)
-		poc_sub = decoded[40].replace("3", "4").replace("2", "3").replace("1", "2").replace("0", "1")
+		poc_sub = str(int(decoded[40])+1)
 
 	elif "POCSAG2400:" in decoded:
 		bitrate = 2400
 		poc_id = decoded[21:28].replace(" ", "").zfill(7)
-		poc_sub = decoded[40].replace("3", "4").replace("2", "3").replace("1", "2").replace("0", "1")
+		poc_sub = str(int(decoded[40])+1)
 
 	if bitrate is 0:
 		logging.warning("POCSAG Bitrate not found")
