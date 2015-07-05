@@ -4,6 +4,9 @@
 """
 firEmergency-Plugin to dispatch ZVEI- and POCSAG - messages to firEmergency
 
+firEmergency configuration:
+- set input to "FMS32" at Port 5555
+
 @autor: Smith-fms
 
 @requires: firEmergency-Configuration has to be set in the config.ini
@@ -101,6 +104,7 @@ def run(typ,freq,data):
 				elif typ == "POC":
 					logging.debug("POC to firEmergency")
 					try:
+							# !!! Subric+"XX" because of an Issuse in firEmergency !!!
 							firXML = "<event>\n<address>"+data["ric"]+"</address>\n<status>"+data["function"]+"XX</status>\n<description>"+data["description"]+"</description>\n<message>"+data["msg"]+"</message>\n</event>\n"
 							firSocket.send(firXML)
 					except:
