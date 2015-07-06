@@ -33,4 +33,4 @@ def getVers(mode="vers"):
 	if mode == "vers":
 		return "2.0-RC"
 	elif mode == "date":
-		return " 2015/07/02"
+		return " 2015/07/06"
