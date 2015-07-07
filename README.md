@@ -144,6 +144,8 @@ Thanks to smith_fms and McBo from Funkmeldesystem.de - Forum for Inspiration and
 
 
 ### Code your own Plugin
-To code your own Plugin look at the litte example `/plugins/template/template.py`
+See `plugins/README.md`
 
-In the text-file `plugins/interface.txt` are all relevant data, that your plugin can use.
+~~To code your own Plugin look at the litte example `/plugins/template/template.py`~~
+
+~~In the text-file `plugins/interface.txt` are all relevant data, that your plugin can use.~~

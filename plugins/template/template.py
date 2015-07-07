@@ -1,29 +1,24 @@
 #!/usr/bin/python
 # -*- coding: cp1252 -*-
 
-#########
-# USAGE
-#
-#	Config
-# ======
-# to read a option from config File
-# VALUE = globals.config.get("SECTION", "OPTION")
-#
-# Data from boswatch.py
-# =====================
-# use data["KEY"] for Alarm Data from boswatch.py
-# for usable KEYs in different Functions (FMS|ZVEI|POC) see interface.txt
-#
-# LOG Messages
-# ============
-# send Log Messages with logging.LOGLEVEL("MESSAGE")
-# usable Loglevels debug|info|warning|error|exception|critical
-# if you use .exception in Try:Exception: Construct, it logs the Python EX.message too
+"""
+template plugin to show the function and usage of plugins
 
+@author: Jens Herrmann
+@author: Bastian Schroll
+
+@requires: none
+"""
+
+#
+# Imports
+#
 import logging # Global logger
-
 from includes import globals  # Global variables
-#from includes import helper #Global helper functions
+
+# Helper function, uncomment to use
+#from includes.helper import timeHandler
+#from includes.helper import wildcardHandler
 
 ##
 #
