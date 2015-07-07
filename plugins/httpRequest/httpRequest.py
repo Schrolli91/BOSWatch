@@ -16,6 +16,7 @@ from urlparse import urlparse #for split the URL into url and path
 
 from includes import globals  # Global variables
 from includes.helper import timeHandler
+from includes.helper import wildcardHandler
 
 ##
 #
@@ -73,33 +74,25 @@ def run(typ,freq,data):
 				#
 				# Create URL
 				#
-				logging.debug("send %s HTTP request", typ)
-
 				if typ == "FMS":
 					url = globals.config.get("httpRequest", "fms_url") #Get URL
-					url = url.replace("%FMS%", data["fms"]).replace("%STATUS%", data["status"]) #replace Wildcards
-					url = url.replace("%DIR%", data["direction"]).replace("%DIRT%", data["directionText"]) #replace Wildcards
-					url = url.replace("%TSI%", data["tsi"]) #replace Wildcards
+					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
 				elif typ == "ZVEI":
 					url = globals.config.get("httpRequest", "zvei_url") #Get URL
-					url = url.replace("%ZVEI%", data["zvei"]) #replace Wildcards
+					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
 				elif typ == "POC":
 					url = globals.config.get("httpRequest", "poc_url") #Get URL
-					url = url.replace("%RIC%", data["ric"]) #replace Wildcards
-					url = url.replace("%FUNC%", data["function"]).replace("%FUNCCHAR%", data["functionChar"]) #replace Wildcards
-					url = url.replace("%MSG%", data["msg"]).replace("%BITRATE%", str(data["bitrate"])) #replace Wildcards
+					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
+
 				else:
 					logging.warning("Invalid Typ: %s", typ)
 					return
 
-				#same in all types
-				url = url.replace("%DESCR%", data["description"]) # replace Wildcards
-				url = url.replace("%TIME%", timeHandler.getTime()) # replace Wildcards
-				url = url.replace("%DATE%", timeHandler.getDate()) # replace Wildcards
 
 				#
 				# HTTP-Request
 				#
+				logging.debug("send %s HTTP request", typ)
 				url = urlparse(url) #split URL into path and querry
 				httprequest = httplib.HTTPConnection(url[2]) #connect to URL Path
 				httprequest.request("GET", url[5]) #send URL Querry per GET

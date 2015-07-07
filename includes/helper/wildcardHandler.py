@@ -50,6 +50,8 @@ def replaceWildcards(text,data):
 		# replace description (exists by all)
 		if "description" in data: text = text.replace("%DESCR%", data["description"])
 
+		logging.debug("wildcards been replaced")
+
 		return text
 
 	except:
