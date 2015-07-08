@@ -3,6 +3,9 @@
 
 """
 template plugin to show the function and usage of plugins
+feel free to edit to yout own plugin
+please edit theese desciption, the @author-Tag and the @requires-Tag
+For more information take a look into the other plugins
 
 @author: Jens Herrmann
 @author: Bastian Schroll
@@ -19,6 +22,7 @@ from includes import globals  # Global variables
 # Helper function, uncomment to use
 #from includes.helper import timeHandler
 #from includes.helper import wildcardHandler
+from includes.helper import configHandler
 
 ##
 #
@@ -72,14 +76,7 @@ def run(typ,freq,data):
 		#
 		# ConfigParser
 		#
-		logging.debug("reading config file")
-		try:
-			for key,val in globals.config.items("template"):
-				logging.debug(" - %s = %s", key, val)
-		except:
-			logging.error("cannot read config file")
-			logging.debug("cannot read config file", exc_info=True)
-		else: # Without config, plugin couldn't work
+		if configHandler.checkConfig("template"): #read and debug the config (let empty if no config used)
 
 			########## User Plugin CODE ##########
 			if typ == "FMS":
