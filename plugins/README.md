@@ -4,13 +4,17 @@ More information and a little Tutorial coming soon!
 
 ## 1. Plugin template
 #### 1.1 General
-You can find a little template plugin file in `plugins/template/template.py`
+You can find a little template plugin file in `plugins/template/template.py` But you can also take a look in all other plugins.
+
+A plugin must be in an seperate folder with the same name of the .py file
 
 #### 1.2 Plugin Init `.onLoad()`
 This `.onLoad()` routine is called one time for initialize the plugin
 
 #### 1.3 Plugin call `.run()`
 This `.run()` routine is called every time an alarm comes in
+
+Here are the information from BOSWatch available. See section `5. Process the data from BOSWatch`
 
 
 ## 2. Use Global Logging
@@ -30,7 +34,7 @@ To use the right loglevel see next section `2.2 Choose right Loglevel`
 
 #### 2.2 Choose right Loglevel
 `debug`
-all messages  to find errors and for the internal program flow
+all messages to find errors and for the internal program flow
 
 `info`
 messages that serve only to inform the user
@@ -80,37 +84,51 @@ VALUE = globals.config.getboolean("SECTION", "OPTION") #Value must be an Boolean
 
 
 ## 4. Global helper functions
-#### 4.1 timeHandler.py
+#### 4.1 configHandler.py
+First you must include the helper file
+```python
+from includes.helper import configHandler
+```
+##### 4.1.1 `.checkConfig(section)`
+This function read all options from a config section and prints it to the debug log. The return value is `true`, also the section var is empty. In case of error a `false` is returned and error printed to log.
+```python
+if configHandler.checkConfig("template"): #check config file
+  ########## User Plugin CODE ##########
+  pass
+```
+
+
+#### 4.2 timeHandler.py
 First you must include the helper file
 ```python
 from includes.helper import timeHandler
 ```
-##### 4.1.1 `.curtime(format)`
+##### 4.2.1 `.curtime(format)`
 ```python
 timeHandler.curtime() # returns a formated datetime string
 ```
 you can give the function an format string. See https://docs.python.org/2/library/time.html#time.strftime
 
 default (without format parameter) the function returns a date time with this format `%d.%m.%Y %H:%M:%S`
-##### 4.1.2 `.getDate()`
+##### 4.2.2 `.getDate()`
 ```python
 timeHandler.getDate() # returns the current date in format `%d.%m.%Y`
 ```
-##### 4.1.3 `.getTime()`
+##### 4.2.3 `.getTime()`
 ```python
 timeHandler.getTime() # returns the current time in format `%H:%M:%S`
 ```
-##### 4.1.4 `.getTimestamp()`
+##### 4.2.4 `.getTimestamp()`
 ```python
 timeHandler.getTimestamp() # returns the current linux timestamp
 ```
 
-#### 4.2 wildcardHandler.py
+#### 4.3 wildcardHandler.py
 First you must include the helper file
 ```python
 from includes.helper import wildcardHandler
 ```
-##### 4.2.1 'replaceWildcards(text,data)'
+##### 4.3.1 `.replaceWildcards(text,data)`
 ```python
 wildcardHandler.replaceWildcards(text,data) # replace all standard wildcards
 ```
