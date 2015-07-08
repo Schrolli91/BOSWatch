@@ -55,5 +55,5 @@ def replaceWildcards(text,data):
 		return text
 
 	except:
-		logging.warning("error wildcard replacement")
-		logging.debug("error wildcard replacement", exc_info=True)
+		logging.warning("error in wildcard replacement")
+		logging.debug("error in wildcard replacement", exc_info=True)
