@@ -1,0 +1,6 @@
+[settings]
+t_monitor = 600
+t_lights = 600
+ss_src = uhrzeit.html
+html_dest = index.html
+[alarm]

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="charset=utf-8" />
+<style type="text/css">
+* { font-family:'Helvetica';
+	font-weight:100px;
+	color:#fff;
+	text-align:center;
+	line-height:80%}
+body { background-color:#FFF;}
+#FW {padding-top30px; 	
+	font-size:150px;
+	letter-spacing:8px;
+	font-family:Arial;
+	color:red;}
+#LZ {	font-size:80px;
+letter-spacing:15px;
+color:red;}
+#time { font-size:300px;
+		padding-top:500px;
+		padding-left:30px;
+		text-align:left;}
+
+#date { font-size:60px;
+		padding-top:0px;
+		padding-left:40px;
+		text-align:left;}
+
+			
+</style>
+<script type="text/javascript">
+
+function updateTime() {
+	var date = new Date();
+	var stunden = date.getHours();
+	var minuten = date.getMinutes();
+    var sekunden = date.getSeconds();
+	var tag = date.getDate();
+	var monatDesJahres = date.getMonth();
+	var jahr = date.getFullYear();
+	var tagInWoche = date.getDay();
+	var wochentag = new Array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
+	var monat = new Array("Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember");
+	var minnull = (minuten < 10 ) ? "0" : "" ;
+	var datum = wochentag[tagInWoche] + ", " + tag + ". " + monat[monatDesJahres] + " " + jahr  ;
+    var time = stunden + ":" + minnull + minuten;
+
+	document.getElementById('date').innerHTML = datum;
+    document.getElementById('time').innerHTML = time;
+	setTimeout(updateTime, 60000);
+}
+
+window.addEventListener("load", updateTime);
+
+
+
+
+</script>
+
+
+</head>
+<body style="background-image:url(bg.jpg)">
+
+<div id="FW">Feuerwehr Hamm</div>
+<br>
+<blink><div id="LZ">Löschzug Westtünnen</div></blink>
+<br>
+<div id="time"></div>
+<br>
+<div id="date"></div>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+* { font-family: "Helvetica";
+    font-weight: 300;}
+#Meldung { 	overflow:visible;
+	text-align:center;
+			background-color:red;
+			color:white;
+			font-size:120px;
+			line-height:120%;
+			margin-top:3%;
+
+width:100%;			margin-bottom:3%;
+		}
+#bg		{
+	background-color:red;
+    float: left
+}
+#timer {
+    color:yellow;
+    position: absolute;
+    bottom: 0px;
+    right:0px;
+	font-size:150px;
+    width: 50%;
+    text-align: center;
+}
+#Uhr {	
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    font-size:150px;
+    width: 50%%;
+    text-align: center;}
