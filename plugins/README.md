@@ -28,27 +28,25 @@ Now you can send log messages with:
 ```python
 logging.LOGLEVEL("MESSAGE")
 ```
-You must replace the word `LOGLEVEL` with one if the following `debug`, `info`, `warning`, `error`, `exception` or `critical`
+You must replace the word `LOGLEVEL` with one if the following `debug`, `info`, `warning` or `error`
 
 To use the right loglevel see next section `2.2 Choose right Loglevel`
 
 #### 2.2 Choose right Loglevel
 `debug`
-all messages to find errors and for the internal program flow
+all messages to find errors and for the internal program flow.
 
 `info`
-messages that serve only to inform the user
+messages that serve only to inform the user.
 
 `warning`
-
+Warnings are notes and technical errors. Never leads to terminate BOSWatch.
 
 `error`
-error does not lead to the end of boswatch
-
-`Exception`
+An error that does not necessarily lead to end of BOSWatch, but an administrator intervention required.
 
 `critical`
-errors leading to the end of boswatch immediate - in plugins not allowed
+errors leading to the end of boswatch immediate - **in plugins not allowed** (Plugin cannot crash the entire program)
 
 
 ## 3. Use config file
