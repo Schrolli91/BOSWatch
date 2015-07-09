@@ -15,8 +15,10 @@ import httplib #for the HTTP request
 from urlparse import urlparse #for split the URL into url and path
 
 from includes import globals  # Global variables
+
 from includes.helper import timeHandler
 from includes.helper import wildcardHandler
+from includes.helper import configHandler
 
 ##
 #
@@ -58,17 +60,7 @@ def run(typ,freq,data):
 	@return:    nothing
 	"""
 	try:
-		#
-		# ConfigParser
-		#
-		logging.debug("reading config file")
-		try:
-			for key,val in globals.config.items("httpRequest"):
-				logging.debug(" - %s = %s", key, val)
-		except:
-			logging.error("cannot read config file")
-			logging.debug("cannot read config file", exc_info=True)
-		else: # Without config, plugin couldn't work
+		if configHandler.checkConfig("httpRequest"): #read and debug the config
 
 			try:
 				#

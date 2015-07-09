@@ -73,9 +73,6 @@ def run(typ,freq,data):
 	@exception: nothing, make sure this function will never thrown an exception
 	"""
 	try:
-		#
-		# ConfigParser
-		#
 		if configHandler.checkConfig("template"): #read and debug the config (let empty if no config used)
 
 			########## User Plugin CODE ##########

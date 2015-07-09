@@ -18,7 +18,9 @@ from email.utils import formatdate # need for confirm to RFC2822 standard
 from email.utils import make_msgid # need for confirm to RFC2822 standard
 
 from includes import globals  # Global variables
+
 from includes.helper import timeHandler # helper function
+from includes.helper import configHandler
 
 ##
 #
@@ -95,18 +97,7 @@ def run(typ,freq,data):
 	@return:    nothing
 	"""
 	try:
-		#
-		# ConfigParser
-		#
-		logging.debug("reading config file")
-		try:
-			for key,val in globals.config.items("eMail"):
-				logging.debug(" - %s = %s", key, val)
-
-		except:
-			logging.error("cannot read config file")
-			logging.debug("cannot read config file", exc_info=True)
-		else: # Without config, plugin couldn't work
+		if configHandler.checkConfig("eMail"): #read and debug the config
 
 			try:
 					#

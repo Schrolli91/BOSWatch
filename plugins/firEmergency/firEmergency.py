@@ -17,6 +17,8 @@ import socket
 
 from includes import globals  # Global variables
 
+from includes.helper import configHandler
+
 ###
 #
 # onLoad (init) function of plugin
@@ -59,17 +61,7 @@ def run(typ,freq,data):
 	@return:    nothing
 	"""
 	try:
-		#
-		#ConfigParser
-		#
-		logging.debug("reading config file")
-		try:
-			for key,val in globals.config.items("firEmergency"):
-				logging.debug(" - %s = %s", key, val)
-		except:
-			logging.error("cannot read config file")
-			logging.debug("cannot read config file", exc_info=True)
-		else: # Without config, plugin couldn't work
+		if configHandler.checkConfig("firEmergency"): #read and debug the config
 
 			try:
 				#
