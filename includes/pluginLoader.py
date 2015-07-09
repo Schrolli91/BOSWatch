@@ -35,18 +35,19 @@ def loadPlugins():
 				logging.error("error loading plugin: %s", i["name"])
 				logging.debug("error loading plugin: %s", i["name"], exc_info=True)
 				pass
-				
-			try:
-				# Try to call the .onLoad() routine for all active plugins
-				logging.debug("call %s.onLoad()", i["name"])
-				plugin.onLoad()
-				# Add it to globals.pluginList
-				globals.pluginList[i["name"]] = plugin
-			except:
-				# call next plugin, if one has thrown an exception
-				logging.error("error calling %s.onLoad()", i["name"])
-				logging.debug("error calling %s.onLoad()", exc_info=True)
-				pass
+			else: # only call onLoad() and insert into pluginList[] if import is succesfull
+
+				try:
+					# Try to call the .onLoad() routine for all active plugins
+					logging.debug("call %s.onLoad()", i["name"])
+					plugin.onLoad()
+					# Add it to globals.pluginList
+					globals.pluginList[i["name"]] = plugin
+				except:
+					# call next plugin, if one has thrown an exception
+					logging.error("error calling %s.onLoad()", i["name"])
+					logging.debug("error calling %s.onLoad()", exc_info=True)
+					pass
 	except:
 		logging.error("cannot load plugins")
 		logging.debug("cannot load plugins", exc_info=True)
