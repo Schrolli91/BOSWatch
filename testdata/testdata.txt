@@ -1,4 +1,4 @@
-﻿# Testdata for the BOSWatch Test Mode function
+# Testdata for the BOSWatch Test Mode function
 # Data in Multimon-NG Raw Format
 # Data is alternately passed to the decoder to simulate an used Radio-Frequency
 
@@ -7,7 +7,7 @@
 # ------
 #
 # The following settings in config.ini are expected for POCSAG
-# 
+#
 # [BOSWatch]
 # useDescription = 1
 # doubleFilter_ignore_entries = 10
@@ -54,12 +54,12 @@ POCSAG1200: Address: 2000001  Function: 2  Alpha:   BOSWatch-Test: second is a d
 POCSAG1200: Address: 2000001  Function: 2  Alpha:   BOSWatch-Testing: okay
 
 # duplicate in different order
-POCSAG1200: Address: 2100000  Function: 2  
-POCSAG1200: Address: 2100001  Function: 2  
-POCSAG1200: Address: 2100002  Function: 2  
-POCSAG1200: Address: 2100000  Function: 2  
-POCSAG1200: Address: 2100001  Function: 2  
-POCSAG1200: Address: 2100002  Function: 2  
+POCSAG1200: Address: 2100000  Function: 2
+POCSAG1200: Address: 2100001  Function: 2
+POCSAG1200: Address: 2100002  Function: 2
+POCSAG1200: Address: 2100000  Function: 2
+POCSAG1200: Address: 2100001  Function: 2
+POCSAG1200: Address: 2100002  Function: 2
 POCSAG1200: Address: 2100000  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
 POCSAG1200: Address: 2100001  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
 POCSAG1200: Address: 2100002  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
