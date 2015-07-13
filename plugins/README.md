@@ -167,6 +167,7 @@ Thats the function of the alarm. Possible values are `FMS`, `ZVEI` or `POC`
 The reception frequency of the tuner in Hz
 
 #### 5.3 data[ ]
+You can get an information with `data["INFO"]`
 In the data map are the folowing informations:
 
 **ZVEI:**
