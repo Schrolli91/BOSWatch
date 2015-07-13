@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 MySQL-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages to a MySQL database
