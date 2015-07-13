@@ -32,12 +32,12 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `bos_fms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL,
-  `fms` varchar(8) NOT NULL,
-  `status` varchar(1) NOT NULL,
-  `direction` varchar(1) NOT NULL,
-	`directionText` text(10) NOT NULL,
+  `fms` char(8) NOT NULL,
+  `status` char(1) NOT NULL,
+  `direction` char(1) NOT NULL,
+  `directionText` char(10) NOT NULL,
   `tsi` varchar(3) NOT NULL,
-	`description` text NOT NULL,
+  `description` text,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -50,12 +50,12 @@ CREATE TABLE IF NOT EXISTS `bos_fms` (
 CREATE TABLE IF NOT EXISTS `bos_pocsag` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL,
-  `ric` varchar(7) NOT NULL DEFAULT '0',
-  `funktion` int(1) NOT NULL,
-	`funktionChar` text(1) NOT NULL,
-  `msg` text NOT NULL,
-	`bitrate` int(4) NOT NULL,
-	`description` text NOT NULL,
+  `ric` char(7) NOT NULL,
+  `function` int(1) NOT NULL,
+  `functionChar` char(1),
+  `bitrate` int(4),
+  `msg` text,
+  `description` text,
   KEY `ID` (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -68,8 +68,8 @@ CREATE TABLE IF NOT EXISTS `bos_pocsag` (
 CREATE TABLE IF NOT EXISTS `bos_zvei` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL,
-  `zvei` varchar(5) NOT NULL DEFAULT '0',
-	`description` text NOT NULL,
+  `zvei` char(5) NOT NULL,
+  `description` text,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
