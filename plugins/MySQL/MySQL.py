@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 MySQL-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages to a MySQL database
@@ -84,13 +84,13 @@ def run(typ,freq,data):
 					logging.debug("Insert %s", typ)
 
 					if typ == "FMS":
-						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableFMS")+" (time,fms,status,direction,directionText,tsi,description) VALUES (NOW(),%s,%s,%s,%s,%s,%s)",(data["fms"],data["status"],data["direction"],data["directionText"],data["tsi"],data["description"]))
+						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableFMS")+" (time, fms, status, direction, directionText, tsi, description) VALUES (NOW(),%s,%s,%s,%s,%s,%s)", (data["fms"], data["status"], data["direction"], data["directionText"], data["tsi"], data["description"]))
 
 					elif typ == "ZVEI":
-						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time,zvei,description) VALUES (NOW(),%s,%s)",(data["zvei"],data["description"]))
+						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time, zvei, description) VALUES (NOW(),%s,%s)", (data["zvei"], data["description"]))
 
 					elif typ == "POC":
-						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tablePOC")+" (time,ric,funktion,funktionChar,msg,bitrate,description) VALUES (NOW(),%s,%s,%s,%s,%s,%s)",(data["ric"],data["function"],data["functionChar"],data["msg"],data["bitrate"],data["description"]))
+						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tablePOC")+" (time, ric, function, functionChar, msg, bitrate, description) VALUES (NOW(),%s,%s,%s,%s,%s,%s)", (data["ric"], data["function"], data["functionChar"], data["msg"], data["bitrate"], data["description"]))
 
 					else:
 						logging.warning("Invalid Typ: %s", typ)

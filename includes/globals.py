@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 Global variables
@@ -31,6 +31,6 @@ ricDescribtionList  = {}
 # function -> read only in script
 def getVers(mode="vers"):
 	if mode == "vers":
-		return "2.0-RC"
+		return "2.0"
 	elif mode == "date":
-		return " 2015/07/06"
+		return " 2015/07/13"
