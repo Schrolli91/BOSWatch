@@ -1,6 +1,6 @@
 ![# BOSWatch](/www/gfx/logo.png)
 
-Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG
+:satellite: Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG :satellite:
 
 #### Notice:
 The intercept of the German BOS radio is **strictly prohibited** and will be prosecuted. the use is **only authorized** personnel permitted.
@@ -15,25 +15,34 @@ unless you are developer you can use the develop-Branch - may be unstable!
 ##### Implemented features:
 - FMS, ZVEI and POCSAG512/1200/2400 decoding and displaying
 - Plugin support for easy functional extension
-- Filtering double alarms with adjustable time
+- Filtering double alarms with adjustable time and check width
 - Filtering allowed, denied and range of POCSAG RIC´s
 - Filtering data for each typ/plugin combination with RegEX
 - All configurations in a seperate config file
 - Data validation (plausibility test)
+- Description look-up from csv-files
 - Logfiles for better troubleshooting
 - verbose/quiet mode for more/none information
+- Ready for use BOSWatch as daemon
 
 ##### Features for the future:
 - more plugins
+- other Ideas per Issues please
 
 
 ###Plugins
+If you want to code your own Plugin, see Section `Code your own Plugin` at the end of this readme.MD
+
 ##### Implemented plugins:
-- MySQL (insert data into MySQL database [FMS|ZVEI|POC])
-- httpRequest (send a request with parameter to an URL [FMS|ZVEI|POC])
-- eMail (send Mails [FMS|ZVEI|POC])
-- BosMon (send data to BosMon server [FMS|ZVEI|POC])
-- firEmergency (send data to firEmergency server [ZVEI|POC])
+
+|Plugin|Function|FMS|ZVEI|POC|
+|-----|---------|:-:|:--:|:-:|
+|MySQL|insert data into MySQL database|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|httpRequest|send a request with parameter to an URL|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|eMail|send Mails with own text|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|BosMon|send data to BosMon server|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|firEmergency|send data to firEmergency server|:x:|:white_check_mark:|:white_check_mark:|
+|jsonSocket|send data as jsonString to a socket server|:white_check_mark:|:white_check_mark:|:white_check_mark:|
 
 - for more Information to the plugins see `config.ini`
 
@@ -54,25 +63,28 @@ For the other functions see "Usage" below.
 ##### Filtering Functions (RegEX)
 For the RegEX filter functions see Section `[Filters]`
 http://www.regexr.com/ - RegEX test tool an documentation
+
 No filter for a combination typ/plugin = all data will pass
 
-Syntax: INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX (separator ";")
-- TYP				= the data typ (FMS|ZVEI|POC)
-- DATAFIELD	= the field of the data array (See interface.txt)
-- PLUGIN			= the name of the plugin to call with this filter (* for all)
-- FREQUENZ		= the frequenz to use the filter (for more SDR sticks (* for all))
-- REGEX			= the RegEX
+Syntax: `INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX` (separator `;`)
+- `TYP` = the data typ (FMS|ZVEI|POC)
+- `DATAFIELD` = the field of the data array (See interface.txt)
+- `PLUGIN` = the name of the plugin to call with this filter (* for all)
+- `FREQUENZ` = the frequenz to use the filter (for more SDR sticks (* for all))
+- `REGEX` = the RegEX
 
 only ZVEI to all plugins with 25### at 85.5MHz
-testfilter = ZVEI;zvei;*;85500000;25[0-9]{3}
+`testfilter = ZVEI;zvei;*;85500000;25[0-9]{3}`
 
 only POCSAG to MySQL with the text "ALARM:" in the message
-pocTest = POC;msg;MySQL;*;ALARM:
+`pocTest = POC;msg;MySQL;*;ALARM:`
 
-##### Web frontend
-Put the files in folder /wwww/ into your local webserver folder (f.e. /var/www/).
+##### Web frontend (obsolete)
+New version in future - old data in folder `/www/`
+
+~~Put the files in folder /wwww/ into your local webserver folder (f.e. /var/www/).
 Now you must edit the "config.php" with your userdata to your local database.
-Take a look into the parser.php for the parsing functions  
+Take a look into the parser.php for the parsing functions~~
 
 
 ### Usage
@@ -90,12 +102,13 @@ usage: boswatch.py [-h] -f FREQ [-d DEVICE] [-e ERROR] -a
 optional arguments:
   -h, --help            				show this help message and exit
   -f FREQ, --freq FREQ  				Frequency you want to listen
-  -d DEVICE, --device DEVICE		Device you want to use (Check with rtl_test)
+  -d DEVICE, --device DEVICE			Device you want to use (Check with rtl_test)
   -e ERROR, --error ERROR				Frequency-Error of your device in PPM
   -a {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...],
   --demod {FMS,ZVEI,POC512,POC1200,POC2400} [{FMS,ZVEI,POC512,POC1200,POC2400} ...]
-																Demodulation functions
-  -s SQUELCH, --squelch SQUELCH	level of squelch
+										Demodulation functions
+  -s SQUELCH, --squelch 				SQUELCH	level of squelch
+  -u, --usevarlog         				Use '/var/log/boswatch' for logfiles instead of subdir 'log' in BOSWatch directory
   -v, --verbose         				Shows more information
   -q, --quiet           				Shows no information. Only logfiles
 ```
@@ -114,10 +127,25 @@ In case of an error during the installation, check the logfile in `~/boswatch/in
 
 Caution, script don't install a webserver with PHP and MySQL.
 So you have to make up manually if you want to use MySQL support.
+Database Structure `boswatch.sql` in the MySQL Plugin Folder
 
+If you want to use BOSWatch as a daemon, you have to set your
+configuration in `service/boswatch.sh` and copy it to `/etc/init.d`.
+Then you can start BOSWatch with `sudo /etc/init.d/boswatch.sh start`.
+For configuration-details see `service/README.md`.
 
 ### Requirements
 - RTL_SDR (rtl_fm)
 - Multimon-NG
 - Python Support
 - MySQL Connector for Python (for MySQL-plugin)
+
+Thanks to smith_fms and McBo from Funkmeldesystem.de - Forum for Inspiration and Groundwork!
+
+
+### Code your own Plugin
+See `plugins/README.md`
+
+~~To code your own Plugin look at the litte example `/plugins/template/template.py`~~
+
+~~In the text-file `plugins/interface.txt` are all relevant data, that your plugin can use.~~

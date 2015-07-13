@@ -11,16 +11,10 @@ Global variables
 # Global variables
 config = 0
 script_path = ""
+log_path = ""
 
 # double alarm
-fms_id_old = 0
-fms_time_old = 0
-		
-zvei_id_old = 0
-zvei_time_old = 0
-
-poc_id_old = 0
-poc_time_old = 0
+doubleList = []
 
 # pluginLoader
 pluginList = {}
@@ -33,3 +27,10 @@ fmsDescribtionList  = {}
 zveiDescribtionList = {}
 ricDescribtionList  = {}
 
+# returns the version or build date
+# function -> read only in script
+def getVers(mode="vers"):
+	if mode == "vers":
+		return "2.0"
+	elif mode == "date":
+		return " 2015/07/13"

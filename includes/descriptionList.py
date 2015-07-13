@@ -25,7 +25,6 @@ def loadCSV(typ, idField):
 	Structure: [id] = description
 
 	@return:    Python list of descriptions
-	@exception: Exception if loading failed
 	"""
 	resultList = {}
 	try:
@@ -40,8 +39,11 @@ def loadCSV(typ, idField):
 					resultList[row[idField]] = row['description']
 		logging.debug("-- loading csv finished")
 	except:
-		logging.exception("loading csvList for typ: %s failed", typ)
+		logging.error("loading csvList for typ: %s failed", typ)
+		logging.debug("loading csvList for typ: %s failed", typ, exc_info=True)
+		raise
 	return resultList;
+
 
 ##
 #
@@ -60,7 +62,7 @@ def loadDescriptionLists():
 		if globals.config.getint("FMS", "idDescribed"):
 			logging.debug("- load FMS description list")
 			globals.fmsDescribtionList = loadCSV("fms", "fms")
- 
+
 		if globals.config.getint("ZVEI", "idDescribed"):
 			logging.debug("- load ZVEI description list")
 			globals.zveiDescribtionList = loadCSV("zvei", "zvei")
@@ -68,15 +70,17 @@ def loadDescriptionLists():
 		if globals.config.getint("POC", "idDescribed"):
 			logging.debug("- load pocsag description list")
 			globals.ricDescribtionList = loadCSV("poc", "ric")
-	
-	except:
-		logging.exception("cannot load description lists")
 
-		
+	except:
+		logging.error("cannot load description lists")
+		logging.debug("cannot load description lists", exc_info=True)
+		pass
+
+
 ##
 #
 # public function for getting a description
-#		
+#
 def getDescription(typ, id):
 	"""
 	Get description for id.
@@ -94,11 +98,17 @@ def getDescription(typ, id):
 		elif typ == "POC":
 			resultStr = globals.ricDescribtionList[id]
 		else:
-			logging.warning("Invalid Typ: %s", typ)	
+			logging.warning("Invalid Typ: %s", typ)
+
 	except KeyError:
 		# will be thrown when there is no description for the id
 		# -> nothing to do...
 		pass
+
 	except:
-		logging.debug("Error during look up description lists")
+		logging.error("Error during look up description lists")
+		logging.debug("Error during look up description lists", exc_info=True)
+		pass
+
+	logging.debug(" - result for %s: %s", id, resultStr)
 	return resultStr

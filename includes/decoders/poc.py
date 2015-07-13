@@ -11,10 +11,10 @@ POCSAG Decoder
 """
 
 import logging # Global logger
-import time    # timestamp for doublealarm
 import re      # Regex for validation
 
 from includes import globals  # Global variables
+from includes import doubleFilter  # double alarm filter
 
 ##
 #
@@ -28,11 +28,11 @@ def isAllowed(poc_id):
 	@param   poc_id: POCSAG Ric
 
 	@requires:  Configuration has to be set in the config.ini
-	
+
 	@return:    True if the Ric is allowed, other False
 	@exception: none
 	"""
-	# 1.) If allowed RICs is set, only they will path, 
+	# 1.) If allowed RICs is set, only they will path,
 	#       If RIC is the right one return True, else False
 	if globals.config.get("POC", "allow_ric"):
 		if poc_id in globals.config.get("POC", "allow_ric"):
@@ -55,7 +55,7 @@ def isAllowed(poc_id):
 	return True
 
 ##
-#	
+#
 # POCSAG decoder function
 # validate -> check double alarm -> log
 #
@@ -69,62 +69,65 @@ def decode(freq, decoded):
 	@param   decoded: RAW Information from Multimon-NG
 
 	@requires:  Configuration has to be set in the config.ini
-	
+
 	@return:    nothing
 	@exception: Exception if POCSAG decode failed
 	"""
-	bitrate = 0
-	timestamp = int(time.time())#Get Timestamp                  
-	
-	if "POCSAG512:" in decoded:
-		bitrate = 512
-		poc_id = decoded[20:27].replace(" ", "").zfill(7)
-		poc_sub = decoded[39].replace("3", "4").replace("2", "3").replace("1", "2").replace("0", "1")
-		
-	elif "POCSAG1200:" in decoded:
-		bitrate = 1200
-		poc_id = decoded[21:28].replace(" ", "").zfill(7)
-		poc_sub = decoded[40].replace("3", "4").replace("2", "3").replace("1", "2").replace("0", "1")
-		
-	elif "POCSAG2400:" in decoded:
-		bitrate = 2400
-		poc_id = decoded[21:28].replace(" ", "").zfill(7)
-		poc_sub = decoded[40].replace("3", "4").replace("2", "3").replace("1", "2").replace("0", "1")
-			
-	if bitrate is 0:
-		logging.warning("POCSAG Bitrate not found")
-		logging.debug(" - (%s)", decoded)
-	else:
-		logging.debug("POCSAG Bitrate: %s", bitrate)
-	
-		if "Alpha:" in decoded: #check if there is a text message
-			poc_text = decoded.split('Alpha:   ')[1].strip().rstrip('<EOT>').strip()
+	try:
+		bitrate = 0
+
+		if "POCSAG512:" in decoded:
+			bitrate = 512
+			poc_id = decoded[20:27].replace(" ", "").zfill(7)
+			poc_sub = str(int(decoded[39])+1)
+
+		elif "POCSAG1200:" in decoded:
+			bitrate = 1200
+			poc_id = decoded[21:28].replace(" ", "").zfill(7)
+			poc_sub = str(int(decoded[40])+1)
+
+		elif "POCSAG2400:" in decoded:
+			bitrate = 2400
+			poc_id = decoded[21:28].replace(" ", "").zfill(7)
+			poc_sub = str(int(decoded[40])+1)
+
+		if bitrate is 0:
+			logging.warning("POCSAG Bitrate not found")
+			logging.debug(" - (%s)", decoded)
 		else:
-			poc_text = ""
-		
-		if re.search("[0-9]{7}", poc_id): #if POC is valid
-			if isAllowed(poc_id):
-				# check for double alarm
-				if poc_id == globals.poc_id_old and timestamp < globals.poc_time_old + globals.config.getint("POC", "double_ignore_time"):
-					logging.info("POCSAG%s double alarm: %s within %s second(s)", bitrate, globals.poc_id_old, timestamp-globals.poc_time_old)
-					# in case of double alarm, poc_double_ignore_time set new
-					globals.poc_time_old = timestamp 
-				else:
-					logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
-					data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id}
-					# Add function as character a-d to dataset
-					data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
-					# If enabled, look up description
-					if globals.config.getint("POC", "idDescribed"):
-						from includes import descriptionList
-						data["description"] = descriptionList.getDescription("POC", poc_id)
-					# processing the alarm
-					from includes import alarmHandler
-					alarmHandler.processAlarm("POC",freq,data)
-	
-					globals.poc_id_old = poc_id #save last id
-					globals.poc_time_old = timestamp #save last time		
+			logging.debug("POCSAG Bitrate: %s", bitrate)
+
+			if "Alpha:" in decoded: #check if there is a text message
+				poc_text = decoded.split('Alpha:   ')[1].strip().rstrip('<EOT>').strip()
 			else:
-				logging.debug("POCSAG%s: %s is not allowed", bitrate, poc_id)
-		else:
-			logging.warning("No valid POCSAG%s RIC: %s", bitrate, poc_id)
+				poc_text = ""
+
+			if re.search("[0-9]{7}", poc_id) and re.search("[1-4]{1}", poc_sub): #if POC is valid
+				if isAllowed(poc_id):
+					# check for double alarm
+					if doubleFilter.checkID("POC", poc_id+poc_sub, poc_text):
+						logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
+						data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id}
+						# Add function as character a-d to dataset
+						data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
+						# If enabled, look up description
+						if globals.config.getint("POC", "idDescribed"):
+							from includes import descriptionList
+							data["description"] = descriptionList.getDescription("POC", poc_id)
+						# processing the alarm
+						try:
+							from includes import alarmHandler
+							alarmHandler.processAlarm("POC", freq, data)
+						except:
+							logging.error("processing alarm failed")
+							logging.debug("processing alarm failed", exc_info=True)
+							pass
+					# in every time save old data for double alarm
+					doubleFilter.newEntry(poc_id+poc_sub, poc_text)
+				else:
+					logging.debug("POCSAG%s: %s is not allowed", bitrate, poc_id)
+			else:
+				logging.warning("No valid POCSAG%s RIC: %s SUB: %s", bitrate, poc_id, poc_sub)
+	except:
+		logging.error("error while decoding")
+		logging.debug("error while decoding", exc_info=True)

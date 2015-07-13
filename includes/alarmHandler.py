@@ -30,9 +30,9 @@ def processAlarm(typ,freq,data):
 	@param   data: Contains the parameter
 
 	@requires:  active plugins in pluginList
-	
+
 	@return:    nothing
-	@exception: Exception if Alarm processing failed
+	@exception: Exception if Alarm processing itself failed
 	"""
 	try:
 		logging.debug("[  ALARM  ]")
@@ -41,14 +41,22 @@ def processAlarm(typ,freq,data):
 			# if enabled use RegEx-filter
 			if globals.config.getint("BOSWatch","useRegExFilter"):
 				from includes import filter
-				if filter.checkFilters(typ,data,pluginName,freq):	
+				if filter.checkFilters(typ,data,pluginName,freq):
 					logging.debug("call Plugin: %s", pluginName)
-					plugin.run(typ,freq,data)
-					logging.debug("return from: %s", pluginName)
+					try:
+						plugin.run(typ,freq,data)
+						logging.debug("return from: %s", pluginName)
+					except:
+						# call next plugin, if one has thrown an exception
+						pass
 			else: # RegEX filter off - call plugin directly
 				logging.debug("call Plugin: %s", pluginName)
-				plugin.run(typ,freq,data)
-				logging.debug("return from: %s", pluginName)
+				try:
+					plugin.run(typ,freq,data)
+					logging.debug("return from: %s", pluginName)
+				except:
+					# call next plugin, if one has thrown an exception
+					pass
 		logging.debug("[END ALARM]")
 	except:
-		logging.exception("Error in Alarm processing")
+		logging.exception("Error in alarm processing")

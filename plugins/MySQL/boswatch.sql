@@ -1,3 +1,6 @@
+-- MySQL Database Structure for the BOSWatch MySQL Plugin
+-- @author: Bastian Schroll
+
 -- phpMyAdmin SQL Dump
 -- version 3.4.11.1deb2+deb7u1
 -- http://www.phpmyadmin.net
@@ -32,7 +35,9 @@ CREATE TABLE IF NOT EXISTS `bos_fms` (
   `fms` varchar(8) NOT NULL,
   `status` varchar(1) NOT NULL,
   `direction` varchar(1) NOT NULL,
+	`directionText` text(10) NOT NULL,
   `tsi` varchar(3) NOT NULL,
+	`description` text NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -47,7 +52,10 @@ CREATE TABLE IF NOT EXISTS `bos_pocsag` (
   `time` datetime NOT NULL,
   `ric` varchar(7) NOT NULL DEFAULT '0',
   `funktion` int(1) NOT NULL,
-  `text` text NOT NULL,
+	`funktionChar` text(1) NOT NULL,
+  `msg` text NOT NULL,
+	`bitrate` int(4) NOT NULL,
+	`description` text NOT NULL,
   KEY `ID` (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -61,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `bos_zvei` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL,
   `zvei` varchar(5) NOT NULL DEFAULT '0',
+	`description` text NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
