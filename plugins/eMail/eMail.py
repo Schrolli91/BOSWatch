@@ -58,7 +58,7 @@ def doSendmail(server, subject, mailtext):
 	@exception: Exception if smtp.sendmail failed
 	"""
 	try:
-		msg = MIMEText(mailtext)
+		msg = MIMEText(mailtext, 'plain', 'UTF-8')
 		msg['From'] = globals.config.get("eMail", "from")
 		msg['To']   = globals.config.get("eMail", "to")
 		msg['Subject'] = subject
