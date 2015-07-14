@@ -1,0 +1,37 @@
+        <div style="font-size:30px;
+		  text-align:left;
+		  font-family:Helvetica;
+		  ">Alamierungen Feuerwehr Hamm</div>
+        <table border="1" style="text-align:center;
+				 
+				 margin-left:auto;
+				 margin-right:auto;				 
+border-style:solid;
+				 border-width:0.25px;
+				 border-collapse:collapse;">
+        <tr style="		font-family="Helvetica";
+				font-weight:bold;">
+                <td style="padding:10px;">ID</td>
+                <td>Datum - Zeit</td>
+                <td>RIC</td>
+                <td>Funktion</td>
+                <td>Text</td>
+        </tr>
+        <?php 
+                foreach ($tpl['poc'] as $poc)
+                {
+                        
+                        $time = strtotime($poc['time']);
+                        $time = date("d.m.Y H:i:s", $time);
+                        
+                        echo "<tr>";
+                        echo "<td>". $poc['id'] . "</td>";
+                        echo "<td>". $time . "</td>";
+                        echo "<td>". $poc['ric'] . "</td>";
+                        echo "<td>". $poc['funktion'] . "</td>";
+                        echo "<td>". $poc['text'] . "</td>";
+                        echo "</tr>";
+                }
+        ?>
+        </table>
+

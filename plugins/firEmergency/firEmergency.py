@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 firEmergency-Plugin to dispatch ZVEI- and POCSAG - messages to firEmergency

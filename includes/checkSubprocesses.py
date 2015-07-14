@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 #
 """
 Functions for checking the subprocesses rtl_fm and multimon-ng
