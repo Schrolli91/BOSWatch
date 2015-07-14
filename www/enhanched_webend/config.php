@@ -8,5 +8,6 @@ $database = "boswatch";
 $tableFMS = "bos_fms";
 $tableZVEI = "bos_zvei";
 $tablePOC = "bos_pocsag";
+$tableLOG = "login";
 
 ?>
