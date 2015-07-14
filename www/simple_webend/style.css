@@ -21,14 +21,20 @@ table, th, td { border: 1px solid black; }
 
 /*alternating line color in table*/
 /*without first line (header)*/
-tr:nth-child(2n+2) { background: #FFF; }
-tr:nth-child(2n+3) { background: #CCC; }
+tr:nth-child(2n+2) { background: white; }
+tr:nth-child(2n+3) { background: lightgray; }
 
 /*table head*/
 .tableHead{
   color: white;
   background-color: #BE2F01;
   font-weight: bold;
+}
+
+.highlight {
+  color: #BE2F01;
+  font-weight: bold;
+  border: 2px solid #BE2F01;
 }
 
 

@@ -13,7 +13,12 @@
 			$time = strtotime($zvei['time']);
 			$time = date("d.m.Y H:i:s", $time);
 
-			echo "<tr>";
+			if(!empty($_GET['id']) && $_GET['id'] == $zvei['id']){
+				echo "<tr class='highlight'>";
+			}
+			else{
+				echo "<tr>";
+			}
 			echo "<td>". $zvei['id'] . "</td>";
 			echo "<td>". $time . "</td>";
 			echo "<td>". $zvei['zvei'] . "</td>";

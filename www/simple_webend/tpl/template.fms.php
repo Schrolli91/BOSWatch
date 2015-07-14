@@ -16,7 +16,12 @@
 			$time = strtotime($fms['time']);
 			$time = date("d.m.Y H:i:s", $time);
 
-			echo "<tr>";
+			if(!empty($_GET['id']) && $_GET['id'] == $fms['id']){
+				echo "<tr class='highlight'>";
+			}
+			else{
+				echo "<tr>";
+			}
 			echo "<td>". $fms['id'] . "</td>";
 			echo "<td>". $time . "</td>";
 			echo "<td>". $fms['fms'] . "</td>";

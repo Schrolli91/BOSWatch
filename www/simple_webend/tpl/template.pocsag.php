@@ -16,7 +16,12 @@
 			$time = strtotime($poc['time']);
 			$time = date("d.m.Y H:i:s", $time);
 
-			echo "<tr>";
+			if(!empty($_GET['id']) && $_GET['id'] == $poc['id']){
+				echo "<tr class='highlight'>";
+			}
+			else{
+				echo "<tr>";
+			}
 			echo "<td>". $poc['id'] . "</td>";
 			echo "<td>". $time . "</td>";
 			echo "<td>". $poc['ric'] . "</td>";
