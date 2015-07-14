@@ -132,14 +132,14 @@ def run(typ,freq,data):
 						subject = subject.replace("%DIR%", data["direction"]).replace("%DIRT%", data["directionText"]) #replace Wildcards
 						subject = subject.replace("%TSI%", data["tsi"]) #replace Wildcards
 						subject = subject.replace("%DESCR%", data["description"]) # replace Wildcards
-						subject = subject.replace("%TIME%", timeHandler.curtime("H:M:S")).replace("%DATE%", timeHandler.curtime("Y-m-d")) # replace Wildcards
+						subject = subject.replace("%TIME%", timeHandler.getTime()).replace("%DATE%", timeHandler.curtime("%Y-%m-%d")) # replace Wildcards
 						# read mailtext-structure from config.ini
 						mailtext = globals.config.get("eMail", "fms_message")
 						mailtext = mailtext.replace("%FMS%", data["fms"]).replace("%STATUS%", data["status"]) #replace Wildcards
 						mailtext = mailtext.replace("%DIR%", data["direction"]).replace("%DIRT%", data["directionText"]) #replace Wildcards
 						mailtext = mailtext.replace("%TSI%", data["tsi"]) #replace Wildcards
 						mailtext = mailtext.replace("%DESCR%", data["description"]) # replace Wildcards
-						mailtext = mailtext.replace("%TIME%", timeHandler.curtime("H:M:S")).replace("%DATE%", timeHandler.curtime("Y-m-d")) # replace Wildcards
+						mailtext = mailtext.replace("%TIME%", timeHandler.getTime()).replace("%DATE%", timeHandler.curtime("%Y-%m-%d")) # replace Wildcards
 						# send eMail
 						doSendmail(server, subject, mailtext)
 					except:
@@ -154,12 +154,12 @@ def run(typ,freq,data):
 						subject = globals.config.get("eMail", "zvei_subject")
 						subject = subject.replace("%ZVEI%", data["zvei"]) #replace Wildcards
 						subject = subject.replace("%DESCR%", data["description"]) # replace Wildcards
-						subject = subject.replace("%TIME%", timeHandler.curtime("H:M:S")).replace("%DATE%", timeHandler.curtime("Y-m-d")) # replace Wildcards
+						subject = subject.replace("%TIME%", timeHandler.getTime()).replace("%DATE%", timeHandler.curtime("%Y-%m-%d")) # replace Wildcards
 						# read mailtext-structure from config.ini
 						mailtext = globals.config.get("eMail", "zvei_message")
 						mailtext = mailtext.replace("%ZVEI%", data["zvei"]) #replace Wildcards
 						mailtext = mailtext.replace("%DESCR%", data["description"]) # replace Wildcards
-						mailtext = mailtext.replace("%TIME%", timeHandler.curtime("H:M:S")).replace("%DATE%", timeHandler.curtime("Y-m-d")) # replace Wildcards
+						mailtext = mailtext.replace("%TIME%", timeHandler.getTime()).replace("%DATE%", timeHandler.curtime("%Y-%m-%d")) # replace Wildcards
 						# send eMail
 						doSendmail(server, subject, mailtext)
 					except:
@@ -176,14 +176,14 @@ def run(typ,freq,data):
 						subject = subject.replace("%FUNC%", data["function"]).replace("%FUNCCHAR%", data["functionChar"]) #replace Wildcards
 						subject = subject.replace("%MSG%", data["msg"]).replace("%BITRATE%", str(data["bitrate"])) #replace Wildcards
 						subject = subject.replace("%DESCR%", data["description"]) # replace Wildcards
-						subject = subject.replace("%TIME%", timeHandler.curtime("H:M:S")).replace("%DATE%", timeHandler.curtime("Y-m-d")) # replace Wildcards
+						subject = subject.replace("%TIME%", timeHandler.getTime()).replace("%DATE%", timeHandler.curtime("%Y-%m-%d")) # replace Wildcards
 						# read mailtext-structure from config.ini
 						mailtext = globals.config.get("eMail", "poc_message")
 						mailtext = mailtext.replace("%RIC%", data["ric"]) #replace Wildcards
 						mailtext = mailtext.replace("%FUNC%", data["function"]).replace("%FUNCCHAR%", data["functionChar"]) #replace Wildcards
 						mailtext = mailtext.replace("%MSG%", data["msg"]).replace("%BITRATE%", str(data["bitrate"])) #replace Wildcards
 						mailtext = mailtext.replace("%DESCR%", data["description"]) # replace Wildcards
-						mailtext = mailtext.replace("%TIME%", timeHandler.curtime("H:M:S")).replace("%DATE%", timeHandler.curtime("Y-m-d")) # replace Wildcards
+						mailtext = mailtext.replace("%TIME%", timeHandler.getTime()).replace("%DATE%", timeHandler.curtime("%Y-%m-%d")) # replace Wildcards
 						# send eMail
 						doSendmail(server, subject, mailtext)
 					except:
