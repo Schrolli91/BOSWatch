@@ -65,7 +65,10 @@ $db = new Database($dbhost, $dbuser, $dbpassword, $database, 1); //Show Error = 
 		?>
 	</div>
 
-	<div id="footer">BOSWatch Webend | 04/2015 - <?php echo date("m/Y"); ?> | find us at <a href="https://github.com/Schrolli91/BOSWatch" target="_blank">GitHub</a> </div>
+	<div id="footer">
+		BOSWatch Webend | 04/2015 - <?php echo date("m/Y"); ?> | find us on <a href="https://github.com/Schrolli91/BOSWatch" target="_blank">GitHub</a><br>
+		Author Webend: <a href="https://github.com/Schrolli91" target="_blank">Bastian Schroll</a>
+	</div>
 
 </body>
 </html>

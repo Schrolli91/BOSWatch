@@ -39,4 +39,4 @@ tr:nth-child(2n+3) { background: #CCC; }
   text-align: center;
   color: gray;
 }
-#footer a{ color: gray; }
+#footer a{ color: gray; font-weight: bold;}
