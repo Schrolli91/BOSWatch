@@ -1,4 +1,4 @@
-![# BOSWatch](/www/gfx/logo.png)
+![# BOSWatch](/exampleAddOns/simpleWeb/gfx/logo.png)
 
 :satellite: Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG :satellite:
 
