@@ -14,6 +14,7 @@ import logging # Global logger
 import csv # for loading the description files
 
 from includes import globals  # Global variables
+from includes.helper import uft8Converter  # UTF-8 converter
 
 
 ##
@@ -37,25 +38,11 @@ def loadCSV(typ, idField):
 				logging.debug(row)
 				# only import rows with an integer as id
 				if row[idField].isdigit() == True:
-					# check if string contains non-utf8 characters
-					description = ""
 					try:
-						description = row['description'].decode('UTF-8', 'strict')
-					except UnicodeDecodeError:
-						# line contains non-utf8 character
-						logging.debug("row contains non-utf8 characters: %s", row['description'])
-						# try to find out codec:
-						encodings = ('windows-1250', 'windows-1252', 'iso-8859-1', 'iso-8859-15')
-						for enc in encodings:
-							try:
-								description = f.decode(enc)
-								break
-							except Exception:
-								pass
-						# encode in UTF-8
-						description = description.encode('UTF-8')
+						resultList[row[idField]] = uft8Converter.convertToUTF8(row['description'])
+					except:
+						# skip entry in case of an exception
 						pass
-					resultList[row[idField]] = description
 		logging.debug("-- loading csv finished")
 	except:
 		logging.error("loading csvList for typ: %s failed", typ)
