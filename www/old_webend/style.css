@@ -1,0 +1,42 @@
+/*navigation*/
+#navi{
+  width: 400px;
+  margin: auto;
+  border: 1px solid black;
+  padding: 5px;
+  font-weight: bold;
+}
+
+#navi a:link { color: red; text-decoration: none;}
+#navi a:visited { color: red; }
+#navi a:hover { color: black; }
+#navi a:active { color: black; }
+
+
+/*table center and border in*/
+table { margin: auto; border-collapse: collapse; }
+
+/*Tabellen mit Rahmen*/
+table, th, td { border: 1px solid black; }
+
+/*alternating line color in table*/
+/*without first line (header)*/
+tr:nth-child(2n+2) { background: #FFF; }
+tr:nth-child(2n+3) { background: #CCC; }
+
+/*table head*/
+.tableHead{
+  color: white;
+  background-color: #BE2F01;
+  font-weight: bold;
+}
+
+
+/*footer*/
+#footer{
+  margin-top: 50px;
+  margin-bottom: 25px;
+  text-align: center;
+  color: gray;
+}
+#footer a{ color: gray; }

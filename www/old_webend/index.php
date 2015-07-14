@@ -11,14 +11,22 @@ $db = new Database($dbhost, $dbuser, $dbpassword, $database, 1); //Show Error = 
 <html>
 <head>
 <title>BOSWatch</title>
-<link rel="stylesheet" type="text/css" href="tooltip.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 
 	<div style="text-align: center; width: 1250px; margin: 0px auto;">
 
 		<img src="gfx/logo.png" alt="BOSWatch"><br>
-		<a href="index.php?overview">[�bersicht]</a> - <a href="index.php?parser">[Parser]</a>
+
+		<div id="navi">
+			<a href="index.php?overview">Overview</a> -
+			<a href="index.php?fms">FMS</a> -
+			<a href="index.php?zvei">ZVEI</a> -
+			<a href="index.php?pocsag">POCSAG</a> -
+			<a href="index.php?parser">Parser</a>
+		</div>
 
 		<br><br>
 		<?php
@@ -27,6 +35,21 @@ $db = new Database($dbhost, $dbuser, $dbpassword, $database, 1); //Show Error = 
 			{
 				include("tpl/content.overview.php");
 				include("tpl/template.overview.php");
+			}
+			elseif(isset($_GET['fms']))
+			{
+				include("tpl/content.fms.php");
+				include("tpl/template.fms.php");
+			}
+			elseif(isset($_GET['zvei']))
+			{
+				include("tpl/content.zvei.php");
+				include("tpl/template.zvei.php");
+			}
+			elseif(isset($_GET['pocsag']))
+			{
+				include("tpl/content.pocsag.php");
+				include("tpl/template.pocsag.php");
 			}
 			elseif(isset($_GET['parser']))
 			{
@@ -41,6 +64,8 @@ $db = new Database($dbhost, $dbuser, $dbpassword, $database, 1); //Show Error = 
 
 		?>
 	</div>
+
+	<div id="footer">BOSWatch Webend | 04/2015 - <?php echo date("m/Y"); ?> | find us at <a href="https://github.com/Schrolli91/BOSWatch" target="_blank">GitHub</a> </div>
 
 </body>
 </html>
