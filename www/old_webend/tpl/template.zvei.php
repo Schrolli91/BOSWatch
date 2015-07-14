@@ -1,4 +1,4 @@
-<b>Last ZVEI alarms</b>
+<b>Last ZVEI data</b>
 <table style="width: 600px;">
 	<tr class="tableHead">
 		<td>ID</td>

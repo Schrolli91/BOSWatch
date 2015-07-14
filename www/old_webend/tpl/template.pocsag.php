@@ -1,4 +1,4 @@
-<b>Last POCSAG alarms</b>
+<b>Last POCSAG data</b>
 <table style="width: 1000px;">
 	<tr class="tableHead">
 		<td>ID</td>

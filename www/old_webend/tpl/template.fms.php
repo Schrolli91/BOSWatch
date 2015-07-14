@@ -1,4 +1,4 @@
-<b>Last FMS alarms</b>
+<b>Last FMS data</b>
 <table style="width: 1000px;">
 	<tr class="tableHead">
 		<td>ID</td>

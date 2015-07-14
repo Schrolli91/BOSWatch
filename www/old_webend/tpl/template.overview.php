@@ -1,5 +1,5 @@
 <div>
-	<b>Last 50 alarms</b>
+	<b>Last data (max. 25)</b>
 	<table style="width: 600px;">
 		<tr class="tableHead">
 			<td>ID</td>
