@@ -10,9 +10,9 @@ Simple Database Class (C) by Bastian Schroll
 
     /**
      * Database::__construct()
-     *
+     * 
      * Stellt eine Verbung mit der MySQL Datenbank fest
-     *
+     * 
      * @param mixed $host Hostname des Datenbank Server
      * @param mixed $user Username des Datenbank Nutzers
      * @param mixed $password Passwort des Datenbank Nutzers
@@ -40,10 +40,10 @@ Simple Database Class (C) by Bastian Schroll
 
     /**
      * Database::query()
-     *
-     * Fï¿½hrt einen MySQL Query aus
-     *
-     * @param mixed $query Auszufï¿½hrender Query
+     * 
+     * Führt einen MySQL Query aus
+     * 
+     * @param mixed $query Auszuführender Query
      * @return Result-Handler/FALSE
      */
     function query($query)
@@ -59,11 +59,11 @@ Simple Database Class (C) by Bastian Schroll
 
     /**
      * Database::fetchAssoc()
-     *
-     * Liefert alle gefundnen Datensï¿½tze als Assoc
-     *
+     * 
+     * Liefert alle gefundnen Datensätze als Assoc
+     * 
      * @param mixed $result Externer Result-Handler
-     * @return gefundene Datensï¿½tze als Assoc
+     * @return gefundene Datensätze als Assoc
      */
     function fetchAssoc($result = null)
     {
@@ -78,11 +78,11 @@ Simple Database Class (C) by Bastian Schroll
 
     /**
      * Database::count()
-     *
-     * Zï¿½hlt alle gefundenen Datensï¿½tze
-     *
+     * 
+     * Zählt alle gefundenen Datensätze
+     * 
      * @param mixed $result Externer Result-Handler
-     * @return Anzahl gefundener Datensï¿½tze
+     * @return Anzahl gefundener Datensätze
      */
     function count($result = null)
     {
@@ -97,9 +97,9 @@ Simple Database Class (C) by Bastian Schroll
 
     /**
      * Database::closeConnection()
-     *
-     * Schlieï¿½t die bestehende MySQL Verbindung
-     *
+     * 
+     * Schließt die bestehende MySQL Verbindung
+     * 
      * @return TRUE/FALSE
      */
     function closeConnection()
@@ -114,9 +114,9 @@ Simple Database Class (C) by Bastian Schroll
 
     /**
      * Database::error()
-     *
+     * 
      * Gibt eine Interne Fehlermeldung aus
-     *
+     * 
      * @param mixed $error_msg Text der Fehlermeldung
      * @param mixed $sql_err MySQL Fehlermeldung per mysql_error()
      * @return NULL
