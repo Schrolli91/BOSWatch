@@ -19,6 +19,7 @@ import mysql.connector
 from includes import globals  # Global variables
 
 from includes.helper import configHandler
+from includes.helper import uft8Converter  # UTF-8 converter
 
 ##
 #
@@ -71,7 +72,7 @@ def run(typ,freq,data):
 				# Connect to MySQL
 				#
 				logging.debug("connect to MySQL")
-				connection = mysql.connector.connect(host = globals.config.get("MySQL","dbserver"), user = globals.config.get("MySQL","dbuser"), passwd = globals.config.get("MySQL","dbpassword"), db = globals.config.get("MySQL","database"))
+				connection = mysql.connector.connect(host = globals.config.get("MySQL","dbserver"), user = globals.config.get("MySQL","dbuser"), passwd = globals.config.get("MySQL","dbpassword"), db = globals.config.get("MySQL","database"), charset='utf8')
 				cursor = connection.cursor()
 			except:
 				logging.error("cannot connect to MySQL")
