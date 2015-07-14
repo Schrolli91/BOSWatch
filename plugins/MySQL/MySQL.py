@@ -19,7 +19,6 @@ import mysql.connector
 from includes import globals  # Global variables
 
 from includes.helper import configHandler
-from includes.helper import uft8Converter  # UTF-8 converter
 
 ##
 #
