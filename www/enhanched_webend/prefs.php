@@ -11,7 +11,7 @@ session_start();
 ?> 
 
 <?php 
-if(($_SESSION["username"])!="Kevin") 
+if(($_SESSION["username"])!="Test") 
    { 
    echo "Sie sind nicht berechtigt fuer diesen Bereich"; 
    exit; 
