@@ -14,6 +14,8 @@ Implemented functions:
 - different colours for no alarm, test alarm and alarm
 - auto-turn-off display
 - show POCSAG is alive status (coloured clock)
+- history of up to 5 alarms
+- status informations
 
 @author: Jens Herrmann
 
@@ -45,8 +47,8 @@ try:
 	# create a display logger
 	ch = logging.StreamHandler()
 	# log level for display >= info
-	#ch.setLevel(logging.INFO) 
-	ch.setLevel(logging.DEBUG) 
+	ch.setLevel(logging.INFO) 
+	#ch.setLevel(logging.DEBUG) 
 	ch.setFormatter(formatter)
 	myLogger.addHandler(ch)		
 
@@ -114,6 +116,19 @@ try:
 	logging.debug("-- functionCharAlarm: %s", functionCharAlarm)
 	
 	#
+	# try to read History from MySQL-DB
+	#
+	try:
+		# if db is enabled
+		pass
+	except:
+		# error, but we could work without history
+		pass
+
+	globals.startTime = int(time.time())
+	logging.info("alarmMonitor on standby")
+		
+	#
 	# Main Program
 	# (Threads will set abort to True if an error occurs)
 	#
@@ -137,28 +152,41 @@ try:
 				logging.debug("Alarmmessage arrived")
 				logging.debug("-- ric: %s", parsed_json['ric'])
 				logging.debug("-- functionChar: %s", parsed_json['functionChar'])
+				
+				# current time for this loop:
+				curtime = int(time.time())
+
 				# keep alive calculation with additional RICs
-				if parsed_json['ric'] in keepAliveRICs:
+				if int(parsed_json['ric']) in keepAliveRICs:
 					logging.info("POCSAG is alive")
-					globals.lastAlarm = int(time.time())
+					globals.lastAlarm = curtime
+					globals.countKeepAlive += 1
 
 				# (test) alarm processing
-				elif parsed_json['ric'] in alarmRICs:
+				elif int(parsed_json['ric']) in alarmRICs:
 					logging.debug("We have do to something")
 					if parsed_json['functionChar'] in functionCharTestAlarm:
 						logging.info("-> Probealarm: %s", parsed_json['ric'])
 						globals.screenBackground = pygame.Color(globals.config.get("AlarmMonitor","colourYellow"))
+						globals.countTestAlarm += 1
 					elif parsed_json['functionChar'] in functionCharAlarm:
 						logging.info("-> Alarm: %s", parsed_json['ric'])
 						globals.screenBackground = pygame.Color(globals.config.get("AlarmMonitor","colourRed"))
+						globals.countAlarm += 1
 						
 					# forward data to alarmMonitor
 					globals.data = parsed_json
+					globals.data['timestamp'] = curtime
+					# save 5 alarm history entries
+					globals.alarmHistory.append(globals.data)
+					if len(globals.alarmHistory) > 5:
+						globals.alarmHistory.pop(0)
 					# update lastAlarm for keep alive calculation
-					globals.lastAlarm = int(time.time())
+					globals.lastAlarm = curtime
 					# enable display for n seconds:
-					globals.enableDisplayUntil = int(time.time()) + globals.config.getint("AlarmMonitor","showAlarmTime")
+					globals.enableDisplayUntil = curtime + globals.config.getint("AlarmMonitor","showAlarmTime")
 					# tell alarm-thread to turn on the display
+					globals.navigation = "alarmPage"
 					globals.showDisplay = True;
 					
 			except KeyError:
