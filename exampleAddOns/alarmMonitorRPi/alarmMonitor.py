@@ -45,8 +45,8 @@ try:
 	# create a display logger
 	ch = logging.StreamHandler()
 	# log level for display >= info
-	ch.setLevel(logging.INFO) 
-	#ch.setLevel(logging.DEBUG) 
+	#ch.setLevel(logging.INFO) 
+	ch.setLevel(logging.DEBUG) 
 	ch.setFormatter(formatter)
 	myLogger.addHandler(ch)		
 
@@ -77,7 +77,7 @@ try:
 	# start threads 
 	#
 	try:
-		from displayService import displayPainter, autoTurnOffDisplay, eventHandler
+		from displayServices import displayPainter, autoTurnOffDisplay, eventHandler
 		globals.screenBackground = pygame.Color(globals.config.get("AlarmMonitor","colourGreen"))
 		logging.debug("Start displayPainter-thread")
 		Thread(target=displayPainter).start()
@@ -103,10 +103,15 @@ try:
 	#
 	# Build Lists out of config-entries
 	#
-	keepAliveRICs         = globals.config.get("AlarmMonitor","keepAliveRICs").split()
-	alarmRICs             = globals.config.get("AlarmMonitor","alarmRICs").split()
-	functionCharTestAlarm = globals.config.get("AlarmMonitor","functionCharTestAlarm").split()
-	functionCharAlarm     = globals.config.get("AlarmMonitor","functionCharAlarm").split()
+	logging.debug("create lists")
+	keepAliveRICs         = [int(x.strip()) for x in globals.config.get("AlarmMonitor","keepAliveRICs").replace(";", ",").split(",")]
+	logging.debug("-- keepAliveRICs: %s", keepAliveRICs)
+	alarmRICs             = [int(x.strip()) for x in globals.config.get("AlarmMonitor","alarmRICs").replace(";", ",").split(",")]
+	logging.debug("-- alarmRICs: %s", alarmRICs)
+	functionCharTestAlarm = [x.strip() for x in globals.config.get("AlarmMonitor","functionCharTestAlarm").replace(";", ",").split(",")]
+	logging.debug("-- functionCharTestAlarm: %s", functionCharTestAlarm)
+	functionCharAlarm     = [x.strip() for x in globals.config.get("AlarmMonitor","functionCharAlarm").replace(";", ",").split(",")]
+	logging.debug("-- functionCharAlarm: %s", functionCharAlarm)
 	
 	#
 	# Main Program
@@ -129,6 +134,9 @@ try:
 			pass
 		else:
 			try:
+				logging.debug("Alarmmessage arrived")
+				logging.debug("-- ric: %s", parsed_json['ric'])
+				logging.debug("-- functionChar: %s", parsed_json['functionChar'])
 				# keep alive calculation with additional RICs
 				if parsed_json['ric'] in keepAliveRICs:
 					logging.info("POCSAG is alive")
