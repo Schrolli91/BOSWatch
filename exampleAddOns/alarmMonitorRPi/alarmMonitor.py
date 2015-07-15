@@ -45,8 +45,8 @@ try:
 	# create a display logger
 	ch = logging.StreamHandler()
 	# log level for display >= info
-	ch.setLevel(logging.INFO) 
-	#ch.setLevel(logging.DEBUG) 
+	#ch.setLevel(logging.INFO) 
+	ch.setLevel(logging.DEBUG) 
 	ch.setFormatter(formatter)
 	myLogger.addHandler(ch)		
 
