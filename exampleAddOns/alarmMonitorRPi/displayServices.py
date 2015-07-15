@@ -107,6 +107,9 @@ def eventHandler():
 					(posX, posY) = (pygame.mouse.get_pos() [0], pygame.mouse.get_pos() [1])
 					#logging.debug("position: (%s, %s)", posX, posY)
 
+					# touching the screen will stop alarmSound in every case
+					pygame.mixer.stop()
+					
 					# touching the dark display will turn it on for n sec
 					if globals.showDisplay == False:
 						logging.info("turn ON display")
@@ -128,7 +131,6 @@ def eventHandler():
 								globals.navigation = "historyPage"
 							elif 111 <= posX <= 210:
 								globals.navigation = "statusPage"
-								logging.debug("Navigation: Status")
 							else:
 								globals.screenBackground = pygame.Color(globals.config.get("AlarmMonitor","colourGreen"))
 								globals.navigation = "alarmPage"
@@ -283,26 +285,54 @@ def displayPainter():
 					try:
 						y = 50
 						for data in reversed(globals.alarmHistory):
-							# 1. Line Description
-							textString = time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(data['timestamp'])) + ": " + data['description']
-							textLines = wrapline(textString, fontHistory, (globals.config.getint("Display","displayWidth") - 40))
+							# Layout:
+							# Date Description 
+							# Time Msg
+							
+							# Prepare date/time block
+							dateString = time.strftime("%d.%m.%y", time.localtime(data['timestamp']))
+							timeString = time.strftime("%H:%M:%S", time.localtime(data['timestamp']))
+							if int(fontHistory.size(dateString)[0]) > int(fontHistory.size(timeString)[0]):
+								(shifting, height) = fontHistory.size(dateString)
+							else:
+								(shifting, height) = fontHistory.size(timeString)
+							shifting += 5
+							
+							# get colour
 							if data['functionChar'] in functionCharTestAlarm:
 								colour = globals.config.get("AlarmMonitor","colourYellow")
 							else:
 								colour = globals.config.get("AlarmMonitor","colourRed")
-							for index, item in enumerate(textLines):
-								textZeile = fontHistory.render(item, 1, pygame.Color(colour))
-								screen.blit(textZeile, (20, y))
-								(width, height) = fontHistory.size(item)
-								y += height
-							# 2. Line Msg
-							textLines = wrapline(data['msg'], fontHistory, (globals.config.getint("Display","displayWidth") - 40))
-							for index, item in enumerate(textLines):
-								textZeile = fontHistory.render(item, 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
-								screen.blit(textZeile, (20, y))
-								(width, height) = fontHistory.size(item)
-								y += height
+
+							# Paint Date/Time
+							screen.blit(fontHistory.render(dateString, 1, pygame.Color(colour)), (20, y))
+							screen.blit(fontHistory.render(timeString, 1, pygame.Color(colour)), (20, y + height))
+
+							# Paint Description
+							try:
+								textLines = wrapline(data['description'], fontHistory, (globals.config.getint("Display","displayWidth") - shifting - 40))
+								for index, item in enumerate(textLines):
+									textZeile = fontHistory.render(item, 1, pygame.Color(globals.config.get("AlarmMonitor","colourWhite")))
+									screen.blit(textZeile, (20 + shifting, y))
+									y += height
+							except KeyError:
+								pass
+								
+							# Paint Msg
+							try:
+								textLines = wrapline(data['msg'].replace("*", " * "), fontHistory, (globals.config.getint("Display","displayWidth") - shifting - 40))
+								for index, item in enumerate(textLines):
+									textZeile = fontHistory.render(item, 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
+									screen.blit(textZeile, (20 + shifting, y))
+									y += height
+							except KeyError:
+								pass
+								
+							# line spacing for next dataset
 							y += 2
+							
+						## end for globals.alarmHistory
+						
 					except KeyError:
 						pass
 				## end if globals.navigation == "historyPage"
@@ -353,24 +383,38 @@ def displayPainter():
 						
 				else:
 					y = 50
-					# Alarm - RIC:
+					
+					# Paint Date/Time
 					try:
-						textLines = wrapline(globals.data['description'], fontRIC, (globals.config.getint("Display","displayWidth") - 40))
-						for index, item in enumerate(textLines):
-							textZeile = fontRIC.render(item, 1, pygame.Color(globals.config.get("AlarmMonitor","colourWhite")))
-							screen.blit(textZeile, (20, y))
-							y += 25
+						dateTimeString = time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(globals.data['timestamp']))
+						dateTimeRow = fontStatus.render(dateTimeString, 1, pygame.Color(globals.config.get("AlarmMonitor","colourDimGrey")))
+						(width, height) = fontStatus.size(dateTimeString)
+						x = (int(globals.config.getint("Display","displayWidth")) - width)/2
+						screen.blit(dateTimeRow, (x, y))
+						y += height + 10
 					except KeyError:
 						pass
 					
-					# Alarm - Text
+					# Paint Description
+					try:
+						textLines = wrapline(globals.data['description'], fontRIC, (globals.config.getint("Display","displayWidth") - 40))
+						(width, height) = fontStatus.size(globals.data['description'])
+						for index, item in enumerate(textLines):
+							textRow = fontRIC.render(item, 1, pygame.Color(globals.config.get("AlarmMonitor","colourWhite")))
+							screen.blit(textRow, (20, y))
+							y += height + 5
+					except KeyError:
+						pass
+					
+					# Paint Msg
 					try:
 						y += 10
 						textLines = wrapline(globals.data['msg'].replace("*", " * "), fontMsg, (globals.config.getint("Display","displayWidth") - 40))
+						(width, height) = fontStatus.size(globals.data['msg'])
 						for index, item in enumerate(textLines):
-							textZeile = fontMsg.render(item, 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
-							screen.blit(textZeile, (20, y))
-							y += 20
+							textRow = fontMsg.render(item, 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
+							screen.blit(textRow, (20, y))
+							y += height
 					except KeyError:
 						pass
 				## end if default navigation

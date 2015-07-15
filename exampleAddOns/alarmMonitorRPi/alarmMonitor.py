@@ -9,12 +9,13 @@ This is an alarmMonitor for receive alarm-messages from BOSWatch and show them o
 The jsonSocketServer controlls an Watterott RPi-Display in case of received POCSAG-RIC
 
 Implemented functions:
-- asynchronous threads for display control
 - show ric-description and alarm-message on display
-- different colours for no alarm, test alarm and alarm
-- auto-turn-off display
-- show POCSAG is alive status (coloured clock)
 - history of up to 5 alarms
+- different colours for no alarm, test alarm and alarm
+- playing a soundfile in case of an alarm
+- show POCSAG is alive status (coloured clock)
+- asynchronous threads for display control
+- auto-turn-off display
 - status informations
 
 @author: Jens Herrmann
@@ -32,7 +33,7 @@ import time
 import socket # for socket
 import json # for data
 from threading import Thread
-import pygame # for building colour-tuple
+import pygame
 
 import globals
 
@@ -125,6 +126,22 @@ try:
 		# error, but we could work without history
 		pass
 
+	#
+	# initialise alarm sound
+	#
+	alarmSound = False
+	try:
+		if globals.config.getboolean("AlarmMonitor","playSound") == True:
+			if not globals.config.get("AlarmMonitor","soundFile") == "":
+				pygame.mixer.init()
+				alarmSound = pygame.mixer.Sound(globals.config.get("AlarmMonitor","soundFile"))
+				logging.info("alarm with sound")
+	except:
+		# error, but we could work without sound
+		logging.error("cannot initialise alarm sound")
+		logging.debug("cannot initialise alarm sound", exc_info=True)
+		pass
+				
 	globals.startTime = int(time.time())
 	logging.info("alarmMonitor on standby")
 		
@@ -188,6 +205,13 @@ try:
 					# tell alarm-thread to turn on the display
 					globals.navigation = "alarmPage"
 					globals.showDisplay = True;
+					
+					# play alarmSound...
+					if not alarmSound == False:
+						# ... but only one per time...
+						if pygame.mixer.get_busy() == False:
+							alarmSound.play()
+							logging.debug("sound started")
 					
 			except KeyError:
 				# we will ignore waste in json_string
