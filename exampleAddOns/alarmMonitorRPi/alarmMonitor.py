@@ -17,6 +17,7 @@ Implemented functions:
 - asynchronous threads for display control
 - auto-turn-off display
 - status informations
+- rotating logfile in /var/log/alarmMonitor
 
 @author: Jens Herrmann
 
@@ -41,18 +42,38 @@ try:
 	#
 	# Logging
 	#
-	myLogger = logging.getLogger()
-	myLogger.setLevel(logging.DEBUG)
-	# set log string format
-	formatter = logging.Formatter('%(asctime)s - %(module)-24s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
-	# create a display logger
-	ch = logging.StreamHandler()
-	# log level for display >= info
-	ch.setLevel(logging.INFO) 
-	#ch.setLevel(logging.DEBUG) 
-	ch.setFormatter(formatter)
-	myLogger.addHandler(ch)		
+	try:
+		# set/create log_path
+		log_path = "/var/log/alarmMonitor/"
+		if not os.path.exists(log_path):
+			os.mkdir(log_path)
 
+		# init logger	
+		myLogger = logging.getLogger()
+		myLogger.setLevel(logging.DEBUG)
+		formatter = logging.Formatter('%(asctime)s - %(module)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
+
+		# display logger
+		ch = logging.StreamHandler()
+		ch.setLevel(logging.INFO) 
+		#ch.setLevel(logging.DEBUG) 
+		ch.setFormatter(formatter)
+		myLogger.addHandler(ch)		
+		
+		# fileLogger:
+		fh = logging.handlers.TimedRotatingFileHandler(log_path+"alarmMonitor.log", "midnight", interval=1, backupCount=7)
+		fh.setLevel(logging.DEBUG)
+		fh.setFormatter(formatter)
+		myLogger.addHandler(fh)
+		# start with a new logfile
+		fh.doRollover()
+	except:
+		# we couldn't work without logging -> exit
+		logging.critical("cannot initialise logging")
+		logging.debug("cannot initialise logging", exc_info=True)
+		exit(1)
+
+	
 	#
 	# Read config.ini
 	#
@@ -61,8 +82,12 @@ try:
 		globals.config = ConfigParser.SafeConfigParser()
 		globals.config.read("config.ini")
 		# if given loglevel is debug:
+		logging.debug("- [AlarmMonitor]")
 		for key,val in globals.config.items("AlarmMonitor"):
-			logging.debug(" -- %s = %s", key, val)
+			logging.debug("-- %s = %s", key, val)
+		logging.debug("- [Display]")
+		for key,val in globals.config.items("Display"):
+			logging.debug("-- %s = %s", key, val)
 	except:
 		# we couldn't work without config -> exit
 		logging.critical("cannot read config file")
@@ -84,14 +109,14 @@ try:
 		globals.screenBackground = pygame.Color(globals.config.get("AlarmMonitor","colourGreen"))
 		logging.debug("Start displayPainter-thread")
 		Thread(target=displayPainter).start()
-		logging.debug("Start autoTurnOffDisplay-thread")
+		logging.debug("start autoTurnOffDisplay-thread")
 		Thread(target=autoTurnOffDisplay).start()
-		logging.debug("Start eventHandler-thread")
+		logging.debug("start eventHandler-thread")
 		Thread(target=eventHandler).start()
 	except:
-		# we couldn't work without config -> exit
-		logging.critical("cannot start displayService-Threads")
-		logging.debug("cannot start displayService-Threads", exc_info=True)
+		# we couldn't work without helper threads -> exit
+		logging.critical("cannot start service-Threads")
+		logging.debug("cannot start service-Threads", exc_info=True)
 		exit(1)
 
 	#
@@ -101,7 +126,7 @@ try:
 	sock = socket.socket () # TCP
 	sock.bind(("",globals.config.getint("AlarmMonitor","socketPort")))
 	sock.listen(5)
-	logging.info("socketServer runs")
+	logging.debug("socketServer runs")
 
 	#
 	# Build Lists out of config-entries
@@ -111,20 +136,103 @@ try:
 	logging.debug("-- keepAliveRICs: %s", keepAliveRICs)
 	alarmRICs             = [int(x.strip()) for x in globals.config.get("AlarmMonitor","alarmRICs").replace(";", ",").split(",")]
 	logging.debug("-- alarmRICs: %s", alarmRICs)
-	functionCharTestAlarm = [x.strip() for x in globals.config.get("AlarmMonitor","functionCharTestAlarm").replace(";", ",").split(",")]
+	functionCharTestAlarm = [str(x.strip()) for x in globals.config.get("AlarmMonitor","functionCharTestAlarm").replace(";", ",").split(",")]
 	logging.debug("-- functionCharTestAlarm: %s", functionCharTestAlarm)
-	functionCharAlarm     = [x.strip() for x in globals.config.get("AlarmMonitor","functionCharAlarm").replace(";", ",").split(",")]
+	functionCharAlarm     = [str(x.strip()) for x in globals.config.get("AlarmMonitor","functionCharAlarm").replace(";", ",").split(",")]
 	logging.debug("-- functionCharAlarm: %s", functionCharAlarm)
 	
 	#
 	# try to read History from MySQL-DB
 	#
 	try:
+		if globals.config.getboolean("AlarmMonitor","loadHistory") == True:
+			import mysql.connector
+
+			for key,val in globals.config.items("MySQL"):
+				logging.debug("-- %s = %s", key, val)
+			
+			# Connect to DB
+			logging.debug("connect to MySQL")
+			connection = mysql.connector.connect(host = globals.config.get("MySQL","dbserver"), user = globals.config.get("MySQL","dbuser"), passwd = globals.config.get("MySQL","dbpassword"), db = globals.config.get("MySQL","database"), charset='utf8')
+			cursor = connection.cursor()
+			logging.debug("MySQL connected")
+
+			# read countKeepAlive 
+			# precondition: keepAliveRICs set
+			if (len(keepAliveRICs) > 0):
+				sql = "SELECT COUNT(*) FROM "+globals.config.get("MySQL","tablePOC")+" WHERE ric IN ("+globals.config.get("AlarmMonitor","keepAliveRICs")+")"
+				cursor.execute(sql)
+				result = int(cursor.fetchone()[0])
+				if result > 0:
+					globals.countKeepAlive = result
+				logging.debug("-- countKeepAlive: %s", globals.countKeepAlive)
+
+			# read countAlarm 
+			# precondition: alarmRics and functionChar set
+			if (len(alarmRICs) > 0) and (len(functionCharAlarm) > 0):
+				sql = "SELECT COUNT(*) FROM "+globals.config.get("MySQL","tablePOC")+" WHERE ric IN ("+globals.config.get("AlarmMonitor","alarmRICs")+")"
+				if len(functionCharAlarm) == 1:
+					sql += " AND functionChar IN ('" + functionCharAlarm[0] + "')"
+				elif len(functionCharAlarm) > 1:
+					sql += " AND functionChar IN " + str(tuple(functionCharAlarm))
+				cursor.execute(sql)
+				result = int(cursor.fetchone()[0])
+				if result > 0:
+					globals.countAlarm = result
+				logging.debug("-- countAlarm: %s", globals.countAlarm)
+
+			# read countTestAlarm 
+			# precondition: alarmRics and functionCharTestAlarm set
+			if (len(alarmRICs) > 0) and (len(functionCharTestAlarm) > 0):
+				sql = "SELECT COUNT(*) FROM "+globals.config.get("MySQL","tablePOC")+" WHERE ric IN ("+globals.config.get("AlarmMonitor","alarmRICs")+")"
+				if len(functionCharTestAlarm) == 1:
+					sql += " AND functionChar IN ('" + functionCharTestAlarm[0] + "')"
+				elif len(functionCharTestAlarm) > 1:
+					sql += " AND functionChar IN " + str(tuple(functionCharTestAlarm))
+				cursor.execute(sql)
+				result = int(cursor.fetchone()[0])
+				if result > 0:
+					globals.countTestAlarm = result
+				logging.debug("-- countTestAlarm: %s", globals.countTestAlarm)
+
+			# read the last 5 events in reverse order
+			# precondition: alarmRics and (functionChar or functionCharTestAlarm) set
+			if (len(alarmRICs) > 0) and ((len(functionCharAlarm) > 0) or (len(functionCharTestAlarm) > 0)):
+				sql  = "SELECT UNIX_TIMESTAMP(time), ric, functionChar, msg, description FROM "+globals.config.get("MySQL","tablePOC")
+				sql += " WHERE ric IN ("+globals.config.get("AlarmMonitor","alarmRICs")+")"
+				functionChar = functionCharAlarm + functionCharTestAlarm
+				if len(functionChar) == 1:
+					sql += " AND functionChar IN ('" + functionChar[0] + "')"
+				elif len(functionChar) > 1:
+					sql += " AND functionChar IN " + str(tuple(functionChar))
+				sql += " ORDER BY time DESC LIMIT 0,5"
+				cursor.execute(sql)
+				# reverse sort into history data
+				for (timestamp, ric, functionChar, msg, description) in reversed(cursor.fetchall()):
+					data = {}
+					data['timestamp'] = timestamp
+					data['ric'] = ric
+					data['functionChar'] = functionChar
+					data['msg'] = msg
+					data['description'] = description
+					globals.alarmHistory.append(data)
+				logging.debug("-- history data loaded: %s", len(globals.alarmHistory))
+						
+			logging.info("history loaded from database")
 		# if db is enabled
 		pass
 	except:
 		# error, but we could work without history
+		logging.error("cannot load history from MySQL")
+		logging.debug("cannot load history from MySQL", exc_info=True)
 		pass
+	finally:
+		try:
+			cursor.close()
+			connection.close()
+			logging.debug("MySQL closed")
+		except:
+			pass
 
 	#
 	# initialise alarm sound
@@ -143,7 +251,7 @@ try:
 		pass
 				
 	globals.startTime = int(time.time())
-	logging.info("alarmMonitor on standby")
+	logging.info("alarmMonitor started - on standby")
 		
 	#
 	# Main Program
@@ -181,19 +289,19 @@ try:
 
 				# (test) alarm processing
 				elif int(parsed_json['ric']) in alarmRICs:
-					logging.debug("We have do to something")
 					if parsed_json['functionChar'] in functionCharTestAlarm:
-						logging.info("-> Probealarm: %s", parsed_json['ric'])
+						logging.info("--> Probealarm: %s", parsed_json['ric'])
 						globals.screenBackground = pygame.Color(globals.config.get("AlarmMonitor","colourYellow"))
 						globals.countTestAlarm += 1
 					elif parsed_json['functionChar'] in functionCharAlarm:
-						logging.info("-> Alarm: %s", parsed_json['ric'])
+						logging.info("--> Alarm: %s", parsed_json['ric'])
 						globals.screenBackground = pygame.Color(globals.config.get("AlarmMonitor","colourRed"))
 						globals.countAlarm += 1
 						
 					# forward data to alarmMonitor
 					globals.data = parsed_json
 					globals.data['timestamp'] = curtime
+					logging.debug("-- data: %s", parsed_json)
 					# save 5 alarm history entries
 					globals.alarmHistory.append(globals.data)
 					if len(globals.alarmHistory) > 5:
@@ -220,6 +328,10 @@ try:
 	
 except KeyboardInterrupt:
 	logging.warning("Keyboard Interrupt")	
+	exit(0)	
+except SystemExit:
+	logging.warning("SystemExit received")
+	exit(0)
 except:
 	logging.exception("unknown error")
 finally:
@@ -227,8 +339,14 @@ finally:
 		logging.info("socketServer shuting down")
 		globals.running = False
 		sock.close()
-		time.sleep(0.5)
 		logging.debug("socket closed") 
+		if not alarmSound == False:
+			pygame.mixer.quit()
+			logging.debug("mixer closed") 
+		if connection:
+			connection.close()
+			logging.debug("MySQL closed") 
+		time.sleep(0.5)
 		logging.debug("exiting socketServer")		
 	except:
 		logging.warning("failed in clean-up routine")	

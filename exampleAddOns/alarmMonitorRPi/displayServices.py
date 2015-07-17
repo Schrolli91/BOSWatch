@@ -83,7 +83,7 @@ def eventHandler():
 	import pygame
 	import globals
 
-	logging.debug("eventHandler-thread called")
+	logging.debug("eventHandler-thread started")
 	
 	try:
 		clock = pygame.time.Clock()
