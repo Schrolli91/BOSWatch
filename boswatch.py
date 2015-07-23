@@ -68,6 +68,7 @@ try:
 	# initialization:
 	rtl_fm = None
 	multimon_ng = None
+	nmaHandler = None
 
 	try:
 		#
@@ -223,11 +224,11 @@ try:
 		logging.debug("cannot read config file", exc_info=True)
 		exit(1)
 
-	# initialization was fine, continue with main program...
+		
+	#
+	# Set the loglevel and backupCount of the file handler
+	#
 	try:
-		#
-		# Set the loglevel and backupCount of the file handler
-		#
 		logging.debug("set loglevel of fileHandler to: %s",globals.config.getint("BOSWatch","loglevel"))
 		fh.setLevel(globals.config.getint("BOSWatch","loglevel"))
 		logging.debug("set backupCount of fileHandler to: %s", globals.config.getint("BOSWatch","backupCount"))
@@ -238,6 +239,32 @@ try:
 		logging.debug("cannot set loglevel of fileHandler", exc_info=True)
 		pass
 
+		
+	#
+	# Add NMA logging handler
+	#
+	try:
+		if globals.config.has_section("NMAHandler"):
+			if globals.config.getint("BOSWatch","loglevel") == 10:
+				logging.debug(" - NMAHandler:")
+				for key,val in globals.config.items("NMAHandler"):
+					logging.debug(" -- %s = %s", key, val)
+			if globals.config.getboolean("NMAHandler", "enableHandler") == True:
+				logging.debug("add NMA logging handler")
+				from includes import NMAHandler
+				logging.handlers.NMAHandler = NMAHandler.NMAHandler
+				nmaHandler = logging.handlers.NMAHandler(globals.config.get("NMAHandler","APIKey"))
+				nmaHandler.setLevel(globals.config.getint("NMAHandler","loglevel"))
+				myLogger.addHandler(nmaHandler)
+	except:
+		# It's an error, but we could work without that stuff...
+		logging.error("cannot add NMA logging handler")
+		logging.debug("cannot add NMA logging handler", exc_info=True)
+		pass
+		
+		
+	# initialization was fine, continue with main program...
+		
 	#
 	# Load plugins
 	#
@@ -383,5 +410,7 @@ finally:
 		logging.debug("close Logging")
 		logging.info("BOSWatch exit()")
 		logging.shutdown()
+		if nmaHandler:
+			nmaHandler.close()
 		fh.close()
 		ch.close()
