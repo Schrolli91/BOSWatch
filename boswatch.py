@@ -249,13 +249,18 @@ try:
 				logging.debug(" - NMAHandler:")
 				for key,val in globals.config.items("NMAHandler"):
 					logging.debug(" -- %s = %s", key, val)
+			# is NMAHandler enabled?
 			if globals.config.getboolean("NMAHandler", "enableHandler") == True:
-				logging.debug("add NMA logging handler")
-				from includes import NMAHandler
-				logging.handlers.NMAHandler = NMAHandler.NMAHandler
-				nmaHandler = logging.handlers.NMAHandler(globals.config.get("NMAHandler","APIKey"))
-				nmaHandler.setLevel(globals.config.getint("NMAHandler","loglevel"))
-				myLogger.addHandler(nmaHandler)
+				# we only could do something, if an APIKey is given:
+				if len(globals.config.get("NMAHandler","APIKey")) > 0:
+					logging.debug("add NMA logging handler")
+					from includes import NMAHandler
+					if globals.config.get("NMAHandler","appName") == "":
+						nmaHandler = NMAHandler.NMAHandler(globals.config.get("NMAHandler","APIKey"))
+					else:
+						nmaHandler = NMAHandler.NMAHandler(globals.config.get("NMAHandler","APIKey"), globals.config.get("NMAHandler","appName"))
+					nmaHandler.setLevel(globals.config.getint("NMAHandler","loglevel"))
+					myLogger.addHandler(nmaHandler)
 	except:
 		# It's an error, but we could work without that stuff...
 		logging.error("cannot add NMA logging handler")

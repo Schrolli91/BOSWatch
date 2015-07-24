@@ -37,6 +37,21 @@ class NMAHandler(logging.Handler): # Inherit from logging.Handler
 		Send logging record via NMA
 		"""
 		# record.message is the log message
+		message = record.message
+		
+		# if exist, add details as NMA event:
+		# record.module is the module- or filename
+		if (len(record.module) > 0):
+			event = "Module: " + record.module
+			# record.functionName is the name of the function
+			# will be "<module>" if the message is not in a function
+			if len(record.funcName) > 0:
+				if not record.funcName == "<module>":
+					event += " - " + record.funcName + "()"
+		else:
+			# we have to set an event-text, use self.event now
+			event = self.event
+			
 		# record.levelno is the log level
 		# loglevel: 10 = debug    => priority: -2
 		# loglevel: 20 = info     => priority: -1
@@ -53,4 +68,6 @@ class NMAHandler(logging.Handler): # Inherit from logging.Handler
 			priority = -1
 		else:
 			priority = -2
-		self.nma.push(self.application, self.event, record.message, priority=priority)
+			
+		# pynma.push(self, application="", event="", description="", url="", contenttype=None, priority=0, batch_mode=False, html=False)
+		self.nma.push(application=self.application, event=event, description=message, priority=priority)
