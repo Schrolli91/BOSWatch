@@ -28,6 +28,8 @@ def checkConfig(section=""):
 			logging.debug("read [%s] from config file", section)
 
 			for key,val in globals.config.items(section):
+				if ("password" in key) or ("apikey" in key):
+					val = "***"
 				logging.debug(" - %s = %s", key, val)
 
 		return True

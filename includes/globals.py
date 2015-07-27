@@ -31,6 +31,6 @@ ricDescribtionList  = {}
 # function -> read only in script
 def getVers(mode="vers"):
 	if mode == "vers":
-		return "2.0"
+		return "2.1-dev"
 	elif mode == "date":
-		return " 2015/07/13"
+		return "2015/07/27"

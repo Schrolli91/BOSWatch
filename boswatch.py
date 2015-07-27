@@ -29,6 +29,7 @@ from includes import MyTimedRotatingFileHandler  # extension of TimedRotatingFil
 from includes import converter  # converter functions
 from includes import signalHandler  # TERM-Handler for use script as a daemon
 from includes import checkSubprocesses  # check startup of the subprocesses
+from includes.helper import configHandler
 
 
 #
@@ -206,18 +207,10 @@ try:
 		globals.config.read(globals.script_path+"/config/config.ini")
 		# if given loglevel is debug:
 		if globals.config.getint("BOSWatch","loglevel") == 10:
-			logging.debug(" - BOSWatch:")
-			for key,val in globals.config.items("BOSWatch"):
-				logging.debug(" -- %s = %s", key, val)
-			logging.debug(" - FMS:")
-			for key,val in globals.config.items("FMS"):
-				logging.debug(" -- %s = %s", key, val)
-			logging.debug(" - ZVEI:")
-			for key,val in globals.config.items("ZVEI"):
-				logging.debug(" -- %s = %s", key, val)
-			logging.debug(" - POC:")
-			for key,val in globals.config.items("POC"):
-				logging.debug(" -- %s = %s", key, val)
+			configHandler.checkConfig("BOSWatch")
+			configHandler.checkConfig("FMS")
+			configHandler.checkConfig("ZVEI")
+			configHandler.checkConfig("POC")
 	except:
 		# we couldn't work without config -> exit
 		logging.critical("cannot read config file")
@@ -244,11 +237,7 @@ try:
 	# Add NMA logging handler
 	#
 	try:
-		if globals.config.has_section("NMAHandler"):
-			if globals.config.getint("BOSWatch","loglevel") == 10:
-				logging.debug(" - NMAHandler:")
-				for key,val in globals.config.items("NMAHandler"):
-					logging.debug(" -- %s = %s", key, val)
+		if configHandler.checkConfig("NMAHandler"):
 			# is NMAHandler enabled?
 			if globals.config.getboolean("NMAHandler", "enableHandler") == True:
 				# we only could do something, if an APIKey is given:
