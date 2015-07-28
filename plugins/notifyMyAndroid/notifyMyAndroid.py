@@ -21,6 +21,10 @@ from includes.helper import timeHandler
 from includes.helper import uft8Converter  # UTF-8 converter
 from includes.pynma import pynma
 
+# local variables
+application = "BOSWatch"
+APIKey = None
+
 ##
 #
 # onLoad (init) function of plugin
@@ -35,7 +39,15 @@ def onLoad():
 
 	@return:    nothing
 	"""
-	# nothing to do for this plugin
+	# local variables
+	global application
+	global APIKey
+	
+	# load config:
+	configHandler.checkConfig("notifyMyAndroid")
+	APIKey = globals.config.get("notifyMyAndroid","APIKey")
+	application = globals.config.get("notifyMyAndroid","appName")
+
 	return
 
 
@@ -61,57 +73,60 @@ def run(typ,freq,data):
 
 	@return:    nothing
 	"""
+	# local variables
+	global application
+	global APIKey
+	
 	try:
-		if configHandler.checkConfig("notifyMyAndroid"): #read and debug the config
+		try:
+			#
+			# initialize to pyNMA
+			#
+			nma = pynma.PyNMA(APIKey)
 
-			try:
-				#
-				# initialize to pyNMA
-				#
-				APIKey = globals.config.get("notifyMyAndroid","APIKey")
-				nma = pynma.PyNMA(APIKey)
+		except:
+			logging.error("cannot initialize pyNMA")
+			logging.debug("cannot initialize %s-socket", exc_info=True)
+			# Without class, plugin couldn't work
+			return
 
-			except:
-				logging.error("cannot initialize pyNMA")
-				logging.debug("cannot initialize %s-socket", exc_info=True)
-				# Without class, plugin couldn't work
-				return
-
-			else:
-				# toDo is equals for all types, so only check if typ is supported
-				supportedTypes = ["FMS", "ZVEI", "POC"]
-				if typ in supportedTypes:
-					logging.debug("Start %s to NMA", typ)
-					try:
-						# send data
-						event = data['description']
-						msg   = timeHandler.curtime() 
-						if len(data['msg']) > 0:
-							msg += "\n" + data['msg']
-						response = nma.push("BOSWatch", uft8Converter.convertToUTF8(event), uft8Converter.convertToUTF8(msg), priority=globals.config.getint("notifyMyAndroid","priority"))
-					except:
-						logging.error("%s to NMA failed", typ)
-						logging.debug("%s to NMA failed", typ, exc_info=True)
-						return
-					else:
-						try:
-							#
-							# check HTTP-Response
-							#
-							if str(response[APIKey]['code']) == "200": #Check HTTP Response an print a Log or Error
-								logging.debug("NMA response: %s" , str(response[APIKey]['code']))
-								if int(response[APIKey]['remaining']) < 11:
-									logging.warning("NMA remaining msgs: %s" , str(response[APIKey]['remaining']))
-								else:
-									logging.debug("NMA remaining msgs: %s" , str(response[APIKey]['remaining']))
-							else:
-								logging.warning("NMA response: %s - %s" , str(response[APIKey]['code']), str(response[APIKey]['message']))
-						except: #otherwise
-							logging.error("cannot read pynma response")
-							logging.debug("cannot read pynma response", exc_info=True)
-							return						
+		else:
+			# toDo is equals for all types, so only check if typ is supported
+			supportedTypes = ["FMS", "ZVEI", "POC"]
+			if typ in supportedTypes:
+				logging.debug("Start %s to NMA", typ)
+				try:
+					# send data
+					event = data['description']
+					msg   = timeHandler.curtime() 
+					if len(data['msg']) > 0:
+						msg += "\n" + data['msg']
+					response = nma.push(application, uft8Converter.convertToUTF8(event), uft8Converter.convertToUTF8(msg), priority=globals.config.getint("notifyMyAndroid","priority"))
+				except:
+					logging.error("%s to NMA failed", typ)
+					logging.debug("%s to NMA failed", typ, exc_info=True)
+					return
 				else:
-					logging.warning("Invalid Typ: %s", typ)
+					try:
+						#
+						# check HTTP-Response
+						#
+						if str(response[APIKey]['code']) == "200": #Check HTTP Response an print a Log or Error
+							logging.debug("NMA response: %s" , str(response[APIKey]['code']))
+							if int(response[APIKey]['remaining']) == 0:
+								logging.error("NMA remaining msgs: %s" , str(response[APIKey]['remaining']))
+							if int(response[APIKey]['remaining']) < 20:
+								logging.warning("NMA remaining msgs: %s" , str(response[APIKey]['remaining']))
+							else:
+								logging.debug("NMA remaining msgs: %s" , str(response[APIKey]['remaining']))
+						else:
+							logging.warning("NMA response: %s - %s" , str(response[APIKey]['code']), str(response[APIKey]['message']))
+					except: #otherwise
+						logging.error("cannot read pynma response")
+						logging.debug("cannot read pynma response", exc_info=True)
+						return						
+			else:
+				logging.warning("Invalid Typ: %s", typ)
 
 	except:
 		# something very mysterious
