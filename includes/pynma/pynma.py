@@ -68,6 +68,14 @@ takes 2 optional arguments:
         if type(developerkey) == str and len(developerkey) == 48:
             self._developerkey = developerkey
 
+    def pushWithAPIKey(self, apikey=[], application="", event="", description="", url="", contenttype=None, priority=0, batch_mode=False, html=False):
+        """Special Funktion"""
+        if apikey:
+            if type(apikey) == str:
+                apikey = [apikey]
+        self._apikey          = uniq(apikey)
+        return self.push(application, event, description, url, contenttype, priority, batch_mode, html)
+			
     def push(self, application="", event="", description="", url="", contenttype=None, priority=0, batch_mode=False, html=False):
         """Pushes a message on the registered API keys.
 takes 5 arguments:

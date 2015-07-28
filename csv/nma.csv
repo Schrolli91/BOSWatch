@@ -1,0 +1,29 @@
+typ,id,APIKey,priority,comment
+#
+# BOSWatch CSV file for notifyMyAndroid-Plugin
+#
+# For each id (FMS, ZVEI, POC) you could set multiple APIKeys with different prioties
+# Use the structure: typ, id, APIKey, priority, "comment"
+#
+# For more than one recipient you could you an id several times
+#
+# Typ: FMS|ZVEI|POC
+#
+# id:
+# ---
+# FMS:    FMS Code
+# ZVEI:   ZVEI 5-tone Code
+# POCSAG: POCSAG RIC + functionChar 
+#		  1234567a = entry only for functionChar a
+#         1234567* = entry for all functionChars
+#
+# Priority: goes from -2 (lowest) to 2 (highest). the default priority is 0 (normal)
+#
+# !!! DO NOT delete the first line !!!
+#
+POC,1000512*,123456789012345678901234567890123456789012345678,0,"Test for *"
+POC,1000000a,123456789012345678901234567890123456789012345678,-2,"Priority-Test"
+POC,1000000a,234567890123456789012345678901234567890123456789,-1,"Priority-Test"
+POC,1000001b,123456789012345678901234567890123456789012345678,0,"Priority-Test"
+POC,1000002c,123456789012345678901234567890123456789012345678,1,"Priority-Test"
+POC,1000003d,123456789012345678901234567890123456789012345678,2,"Priority-Test"

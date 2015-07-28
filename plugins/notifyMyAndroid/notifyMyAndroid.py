@@ -13,6 +13,8 @@ import logging # Global logger
 
 import socket  # for connection
 import json    # for data-transfer
+import csv     # for loading the APIKeys
+
 
 from includes import globals  # Global variables
 
@@ -21,9 +23,51 @@ from includes.helper import timeHandler
 from includes.helper import uft8Converter  # UTF-8 converter
 from includes.pynma import pynma
 
+
 # local variables
 application = "BOSWatch"
 APIKey = None
+remainingMsgs = None
+usecsv = False
+# data structures: xAPIKeyList[id][i] = (APIKey, priority)
+fmsAPIKeyList = {}
+zveiAPIKeyList = {}
+pocAPIKeyList = {}
+
+
+def checkResponse(response, APIKey):
+	"""
+	Helper function to check the response of NMA
+
+	@type    response: dict
+	@param   response: Response of the pyNMA.push() method
+	@type    data: string / array
+	@param   data: a string containing 1 key or an array of keys
+
+	@return:    nothing
+	"""
+	# local variables
+	global remainingMsgs
+	try:
+		#
+		# check HTTP-Response
+		#
+		if str(response[APIKey]['code']) == "200": #Check HTTP Response an print a Log or Error
+			logging.debug("NMA response: %s" , str(response[APIKey]['code']))
+			remainingMsgs = response[APIKey]['remaining']
+			if int(remainingMsgs) == 0:
+				logging.error("NMA remaining msgs: %s" , str(remainingMsgs))
+			if int(response[APIKey]['remaining']) < 20:
+				logging.warning("NMA remaining msgs: %s" , str(remainingMsgs))
+			else:
+				logging.debug("NMA remaining msgs: %s" , str(remainingMsgs))
+		else:
+			logging.warning("NMA response: %s - %s" , str(response[APIKey]['code']), str(response[APIKey]['message']))
+	except:
+		logging.error("cannot read pynma response")
+		logging.debug("cannot read pynma response", exc_info=True)
+		return						
+
 
 ##
 #
@@ -42,12 +86,74 @@ def onLoad():
 	# local variables
 	global application
 	global APIKey
+	global usecsv
+	global fmsAPIKeyList
+	global zveiAPIKeyList
+	global pocAPIKeyList
 	
 	# load config:
 	configHandler.checkConfig("notifyMyAndroid")
-	APIKey = globals.config.get("notifyMyAndroid","APIKey")
 	application = globals.config.get("notifyMyAndroid","appName")
+	usecsv = globals.config.getboolean("notifyMyAndroid","usecsv")
 
+	# if no csv should use, we take the APIKey directly
+	if usecsv == False:
+		APIKey = globals.config.get("notifyMyAndroid","APIKey")
+	else:
+		# import the csv-file
+		try:
+			logging.debug("-- loading nma.csv")
+			with open(globals.script_path+'/csv/nma.csv') as csvfile:
+				# DictReader expected structure described in first line of csv-file
+				reader = csv.DictReader(csvfile)
+				for row in reader:
+					logging.debug(row)
+					# only import rows with an supported types
+					supportedTypes = ["FMS", "ZVEI", "POC"]
+					if row['typ'] in supportedTypes:
+						try:
+							if "FMS" in row['typ']:
+								# if len for id in mainList raise an KeyErrorException, we have to init it... 
+								try: 
+									if len(fmsAPIKeyList[row['id']]) > 0:
+										pass
+								except KeyError:
+									fmsAPIKeyList[row['id']] = []
+								# data structure: fmsAPIKeyList[fms][i] = (APIKey, priority)
+								fmsAPIKeyList[row['id']].append((row['APIKey'], row['priority']))
+								
+							elif "ZVEI" in row['typ']:
+								# if len for id in mainList raise an KeyErrorException, we have to init it... 
+								try: 
+									if len(zveiAPIKeyList[row['id']]) > 0:
+										pass
+								except KeyError:
+									zveiAPIKeyList[row['id']] = []
+								# data structure: zveiAPIKeyList[zvei][i] = (APIKey, priority)
+								zveiAPIKeyList[row['id']].append((row['APIKey'], row['priority']))
+								
+							elif "POC" in row['typ']:
+								# if len for id in mainList raise an KeyErrorException, we have to init it... 
+								try: 
+									if len(pocAPIKeyList[row['id']]) > 0:
+										pass
+								except KeyError:
+									pocAPIKeyList[row['id']] = []
+								# data structure: zveiAPIKeyList[ric][i] = (APIKey, priority)
+								pocAPIKeyList[row['id']].append((row['APIKey'], row['priority']))
+								
+						except:
+							# skip entry in case of an exception
+							logging.debug("error in shifting...", exc_info=True)
+							pass
+					# if row['typ'] in supportedTypes
+				# for row in reader:
+			logging.debug("-- loading csv finished")
+		except:
+			logging.error("loading csvList for nma failed")
+			logging.debug("loading csvList for nma failed", exc_info=True)
+			raise
+	# and if usecsv == True
 	return
 
 
@@ -76,55 +182,99 @@ def run(typ,freq,data):
 	# local variables
 	global application
 	global APIKey
+	global remainingMsgs
+	global usecsv
+	global fmsAPIKeyList
+	global zveiAPIKeyList
+	global pocAPIKeyList
 	
 	try:
 		try:
 			#
 			# initialize to pyNMA
 			#
-			nma = pynma.PyNMA(APIKey)
-
+			nma = pynma.PyNMA()
 		except:
 			logging.error("cannot initialize pyNMA")
-			logging.debug("cannot initialize %s-socket", exc_info=True)
+			logging.debug("cannot initialize pyNMA", exc_info=True)
 			# Without class, plugin couldn't work
 			return
-
+			
 		else:
 			# toDo is equals for all types, so only check if typ is supported
 			supportedTypes = ["FMS", "ZVEI", "POC"]
 			if typ in supportedTypes:
 				logging.debug("Start %s to NMA", typ)
 				try:
-					# send data
-					event = data['description']
+					# build event and msg
+					event = uft8Converter.convertToUTF8(data['description'])
 					msg   = timeHandler.curtime() 
 					if len(data['msg']) > 0:
 						msg += "\n" + data['msg']
-					response = nma.push(application, uft8Converter.convertToUTF8(event), uft8Converter.convertToUTF8(msg), priority=globals.config.getint("notifyMyAndroid","priority"))
+					msg = uft8Converter.convertToUTF8(msg)
+					
+					# if not using csv-import, all is simple...
+					if usecsv == False:
+						response = nma.pushWithAPIKey(APIKey, application, event, msg, priority=globals.config.getint("notifyMyAndroid","priority"))
+						checkResponse(response, APIKey)
+					else:
+						if "FMS" in typ:
+							# lets look for fms in fmsAPIKeyList
+							xID = data['fms']
+							try:
+								# data structure: fmsAPIKeyList[xID][i] = (xAPIKey, xPriority)
+								for i in range(len(fmsAPIKeyList[xID])):
+									(xAPIKey, xPriority) = fmsAPIKeyList[xID][i]
+									response = nma.pushWithAPIKey(xAPIKey, application, event, msg, priority=xPriority)
+									checkResponse(response, xAPIKey)
+							except KeyError:
+								# nothing found
+								pass
+								
+						elif "ZVEI" in typ:
+							# lets look for zvei in zveiAPIKeyList
+							xID = data['zvei']
+							try:
+								# data structure: zveiAPIKeyList[xID][i] = (xAPIKey, xPriority)
+								for i in range(len(zveiAPIKeyList[xID])):
+									(xAPIKey, xPriority) = zveiAPIKeyList[xID][i]
+									response = nma.pushWithAPIKey(xAPIKey, application, event, msg, priority=xPriority)
+									checkResponse(response, xAPIKey)
+							except KeyError:
+								# nothing found
+								pass
+								
+						elif "POC" in typ:
+							xID = ""
+							# 1. lets look for ric+functionChar in pocAPIKeyList
+							try:
+								xID = data['ric'] + data['functionChar']
+								# data structure: pocAPIKeyList[xID][i] = (xAPIKey, xPriority)
+								for i in range(len(pocAPIKeyList[xID])):
+									(xAPIKey, xPriority) = pocAPIKeyList[xID][i]
+									response = nma.pushWithAPIKey(xAPIKey, application, event, msg, priority=xPriority)
+									checkResponse(response, xAPIKey)
+							except KeyError:
+								# nothing found
+								pass
+							# 2. lets look for ric* in pocAPIKeyList
+							try:
+								xID = data['ric'] + "*"
+								# data structure: pocAPIKeyList[xID][i] = (xAPIKey, xPriority)
+								for i in range(len(pocAPIKeyList[xID])):
+									(xAPIKey, xPriority) = pocAPIKeyList[xID][i]
+									logging.debug("-- found %s, %s", xAPIKey, xPriority)
+									response = nma.pushWithAPIKey(xAPIKey, application, event, msg, priority=xPriority)
+									checkResponse(response, xAPIKey)
+							except KeyError:
+								# nothing found
+								pass
+						# end if "POC" in typ
+					# end if usecsv == True
 				except:
 					logging.error("%s to NMA failed", typ)
 					logging.debug("%s to NMA failed", typ, exc_info=True)
 					return
-				else:
-					try:
-						#
-						# check HTTP-Response
-						#
-						if str(response[APIKey]['code']) == "200": #Check HTTP Response an print a Log or Error
-							logging.debug("NMA response: %s" , str(response[APIKey]['code']))
-							if int(response[APIKey]['remaining']) == 0:
-								logging.error("NMA remaining msgs: %s" , str(response[APIKey]['remaining']))
-							if int(response[APIKey]['remaining']) < 20:
-								logging.warning("NMA remaining msgs: %s" , str(response[APIKey]['remaining']))
-							else:
-								logging.debug("NMA remaining msgs: %s" , str(response[APIKey]['remaining']))
-						else:
-							logging.warning("NMA response: %s - %s" , str(response[APIKey]['code']), str(response[APIKey]['message']))
-					except: #otherwise
-						logging.error("cannot read pynma response")
-						logging.debug("cannot read pynma response", exc_info=True)
-						return						
 			else:
 				logging.warning("Invalid Typ: %s", typ)
 
