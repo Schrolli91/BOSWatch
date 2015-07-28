@@ -8,6 +8,10 @@ Global variables
 @author: Bastian Schroll
 """
 
+# version info
+versionNr = "2.1-dev"
+buildDate = "2015/07/28"
+
 # Global variables
 config = 0
 script_path = ""
@@ -26,11 +30,3 @@ filterList = []
 fmsDescribtionList  = {}
 zveiDescribtionList = {}
 ricDescribtionList  = {}
-
-# returns the version or build date
-# function -> read only in script
-def getVers(mode="vers"):
-	if mode == "vers":
-		return "2.1-dev"
-	elif mode == "date":
-		return "2015/07/27"

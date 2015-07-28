@@ -7,6 +7,7 @@ little Helper to replace fast and easy the standard wildcards
 for direct use in plugins to save code
 
 @author: Bastian Schroll
+@author: Jens Herrmann
 """
 
 import logging
@@ -14,7 +15,7 @@ import logging
 from includes.helper import timeHandler
 
 
-def replaceWildcards(text,data):
+def replaceWildcards(text, data, lineBrakeAllowed=False):
 	"""
 	Replace all official Wildcards with the Information from the data[] var
 
@@ -22,6 +23,8 @@ def replaceWildcards(text,data):
 	@param   text: Input text with wildcards
 	@type    data: map
 	@param   data: map of data (structure see interface.txt)
+	@type    lineBrakeAllowed: Boolean
+	@param   lineBrakeAllowed: switch to allow lineBreak (%BR%) as wildcard
 
 	@return:    text with replaced wildcards
 	@exception: Exception if Error at replace
@@ -29,6 +32,12 @@ def replaceWildcards(text,data):
 	try:
 		# replace date and time wildcards
 		text = text.replace("%TIME%", timeHandler.getTime()).replace("%DATE%", timeHandler.getDate())
+		
+		# replace some special chars
+		if lineBrakeAllowed == True:
+			text = text.replace("%BR%", "\r\n")
+		text = text.replace("%LPAR%", "(")
+		text = text.replace("%RPAR%", ")")
 
 		# replace FMS data
 		if "fms" in data: text = text.replace("%FMS%", data["fms"])

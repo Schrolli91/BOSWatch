@@ -153,8 +153,8 @@ try:
 	# For debug display/log args
 	#
 	try:
-		logging.debug("SW Version:	%s",globals.getVers("vers"))
-		logging.debug("Build Date:	%s",globals.getVers("date"))
+		logging.debug("SW Version:	%s",globals.versionNr)
+		logging.debug("Build Date:	%s",globals.buildDate)
 		logging.debug("BOSWatch given arguments")
 		if args.test:
 			logging.debug(" - Test-Mode!")
