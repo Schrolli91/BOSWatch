@@ -402,6 +402,10 @@ finally:
 	finally:
 		# Close Logging
 		logging.debug("close Logging")
+		# Waiting for all Threads to write there logs
+		if globals.config.getboolean("BOSWatch","processAlarmAsync") == True:
+			logging.debug("waiting 3s for threads...")
+			time.sleep(3)
 		logging.info("BOSWatch exit()")
 		logging.shutdown()
 		if nmaHandler:

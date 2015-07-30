@@ -11,14 +11,48 @@ Handler for the filter and plugins at an alarm
 """
 
 import logging # Global logger
+from threading import Thread
 
 from includes import globals  # Global variables
 
 ##
 #
+# decide to run AlarmHandler sync or async
+#
+def processAlarmHandler(typ, freq, data):
+	"""
+	Function to decide if the alarm process will call sync
+
+	@type    typ:  string (FMS|ZVEI|POC)
+	@param   typ:  Typ of the dataset
+	@type    freq: string
+	@param   freq: frequency of the SDR Stick
+	@type    data: map of data (structure see interface.txt)
+	@param   data: Contains the parameter
+
+	@requires:  active plugins in pluginList
+	@requires:  Configuration has to be set in the config.ini
+
+	@return:    nothing
+	@exception: Exception if starting a Thread failed
+	"""
+	if globals.config.getboolean("BOSWatch","processAlarmAsync") == True:
+		logging.debug("starting processAlarm async")
+		try:
+			Thread(target=processAlarm, args=(typ, freq, data)).start()
+		except:
+			logging.error("Error in starting alarm processing async")
+			logging.debug("Error in starting alarm processing async", exc_info=True)
+			pass
+	else:
+		processAlarm(typ, freq, data)
+		
+
+##
+#
 # main function for central filtering and calling the plugins
 #
-def processAlarm(typ,freq,data):
+def processAlarm(typ, freq, data):
 	"""
 	Function to process filters and plugins at Alarm
 
@@ -59,4 +93,6 @@ def processAlarm(typ,freq,data):
 					pass
 		logging.debug("[END ALARM]")
 	except:
-		logging.exception("Error in alarm processing")
+		logging.error("Error in alarm processing")
+		logging.debug("Error in alarm processing", exc_info=True)
+		pass

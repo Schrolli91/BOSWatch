@@ -22,7 +22,7 @@ from includes import doubleFilter  # double alarm filter
 #
 def decode(freq, decoded):
 	"""
-	Export FMS Information from Multimon-NG RAW String and call alarmHandler.processAlarm()
+	Export FMS Information from Multimon-NG RAW String and call alarmHandler.processAlarmHandler()
 
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
@@ -59,7 +59,7 @@ def decode(freq, decoded):
 					# processing the alarm
 					try:
 						from includes import alarmHandler
-						alarmHandler.processAlarm("FMS", freq, data)
+						alarmHandler.processAlarmHandler("FMS", freq, data)
 					except:
 						logging.error("processing alarm failed")
 						logging.debug("processing alarm failed", exc_info=True)
