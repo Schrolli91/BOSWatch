@@ -10,7 +10,7 @@ Global variables
 
 # version info
 versionNr = "2.1-dev"
-buildDate = "2015/07/29"
+buildDate = "2015/07/30"
 
 # Global variables
 config = 0

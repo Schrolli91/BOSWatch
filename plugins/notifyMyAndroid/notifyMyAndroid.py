@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 """
 notifyMyAndroid-Plugin to dispatch FMS-, ZVEI- and POCSAG-messages via UDP/TCP
@@ -20,7 +20,7 @@ from includes import globals  # Global variables
 
 from includes.helper import configHandler
 from includes.helper import timeHandler
-from includes.helper import uft8Converter  # UTF-8 converter
+from includes.helper import stringConverter
 from includes.pynma import pynma
 
 
@@ -93,7 +93,7 @@ def onLoad():
 	
 	# load config:
 	configHandler.checkConfig("notifyMyAndroid")
-	application = globals.config.get("notifyMyAndroid","appName")
+	application = stringConverter.convertToUnicode(globals.config.get("notifyMyAndroid","appName"))
 	usecsv = globals.config.getboolean("notifyMyAndroid","usecsv")
 
 	# if no csv should use, we take the APIKey directly
@@ -207,11 +207,12 @@ def run(typ,freq,data):
 				logging.debug("Start %s to NMA", typ)
 				try:
 					# build event and msg
-					event = uft8Converter.convertToUTF8(data['description'])
-					msg   = timeHandler.curtime() 
-					if len(data['msg']) > 0:
+					# pyNMA expect strings are not in UTF-8
+					event = stringConverter.convertToUnicode(data['description'])
+					msg   = timeHandler.curtime()
+					if ("POC" in typ) and (len(data['msg']) > 0):
 						msg += "\n" + data['msg']
-					msg = uft8Converter.convertToUTF8(msg)
+					msg = stringConverter.convertToUnicode(msg)
 					
 					# if not using csv-import, all is simple...
 					if usecsv == False:

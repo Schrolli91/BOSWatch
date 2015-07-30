@@ -14,7 +14,7 @@ import logging # Global logger
 import csv # for loading the description files
 
 from includes import globals  # Global variables
-from includes.helper import uft8Converter  # UTF-8 converter
+from includes.helper import stringConverter
 
 
 ##
@@ -39,7 +39,7 @@ def loadCSV(typ, idField):
 				# only import rows with an integer as id
 				if row[idField].isdigit() == True:
 					try:
-						resultList[row[idField]] = uft8Converter.convertToUTF8(row['description'])
+						resultList[row[idField]] = stringConverter.convertToUTF8(row['description'])
 					except:
 						# skip entry in case of an exception
 						pass
