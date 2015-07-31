@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 """
 doubleFilter is the central function to filter out double alarms.
@@ -19,6 +19,8 @@ from includes import globals  # Global variables
 #
 # ListStructure [0..n] = (ID, TimeStamp, msg)
 #
+doubleList = []
+
 
 def checkID(typ, id, msg=""):
 	"""
@@ -29,11 +31,12 @@ def checkID(typ, id, msg=""):
 	@return:    True if check was OK
 	@return:    False if double was found
 	"""
+	global doubleList
 	timestamp = int(time.time()) # Get Timestamp
 
 	logging.debug("checkID: %s (%s)", id, msg)
-	for i in range(len(globals.doubleList)):
-		(xID, xTimestamp, xMsg) = globals.doubleList[i]
+	for i in range(len(doubleList)):
+		(xID, xTimestamp, xMsg) = doubleList[i]
 		# given ID found?
 		# return False if the first entry in double_ignore_time is found, we will not check for younger ones...
 		if id == xID and timestamp < xTimestamp + globals.config.getint("BOSWatch", "doubleFilter_ignore_time"):
@@ -59,12 +62,13 @@ def newEntry(id, msg = ""):
 
 	@return:    nothing
 	"""
+	global doubleList
 	timestamp = int(time.time()) # Get Timestamp
-	globals.doubleList.append((id, timestamp, msg.strip()))
+	doubleList.append((id, timestamp, msg.strip()))
 
 	logging.debug("Added %s to doubleList", id)
 
 	# now check if list has more than n entries:
-	if len(globals.doubleList) > globals.config.getint("BOSWatch", "doubleFilter_ignore_entries"):
+	if len(doubleList) > globals.config.getint("BOSWatch", "doubleFilter_ignore_entries"):
 		# we have to kill the oldest one
-		globals.doubleList.pop(0)
+		doubleList.pop(0)

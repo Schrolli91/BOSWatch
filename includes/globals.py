@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 
 """
 Global variables
@@ -10,23 +10,12 @@ Global variables
 
 # version info
 versionNr = "2.1-dev"
-buildDate = "2015/07/30"
+buildDate = "2015/07/31"
 
 # Global variables
 config = 0
 script_path = ""
 log_path = ""
 
-# double alarm
-doubleList = []
-
 # pluginLoader
 pluginList = {}
-
-# filter
-filterList = []
-
-# idDescribing
-fmsDescribtionList  = {}
-zveiDescribtionList = {}
-ricDescribtionList  = {}
