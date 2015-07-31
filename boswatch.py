@@ -26,10 +26,10 @@ import subprocess   # for starting rtl_fm and multimon-ng
 
 from includes import globals  # Global variables
 from includes import MyTimedRotatingFileHandler  # extension of TimedRotatingFileHandler
-from includes import converter  # converter functions
 from includes import signalHandler  # TERM-Handler for use script as a daemon
 from includes import checkSubprocesses  # check startup of the subprocesses
 from includes.helper import configHandler
+from includes.helper import freqConverter
 
 
 #
@@ -159,7 +159,7 @@ try:
 		if args.test:
 			logging.debug(" - Test-Mode!")
 
-		logging.debug(" - Frequency: %s", converter.freqToHz(args.freq))
+		logging.debug(" - Frequency: %s", freqConverter.freqToHz(args.freq))
 		logging.debug(" - Device: %s", args.device)
 		logging.debug(" - PPM Error: %s", args.error)
 		logging.debug(" - Squelch: %s", args.squelch)
@@ -306,7 +306,7 @@ try:
 			command = ""
 			if globals.config.has_option("BOSWatch","rtl_path"):
 				command = globals.config.get("BOSWatch","rtl_path")
-			command = command+"rtl_fm -d "+str(args.device)+" -f "+str(converter.freqToHz(args.freq))+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100"
+			command = command+"rtl_fm -d "+str(args.device)+" -f "+str(freqConverter.freqToHz(args.freq))+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100"
 			rtl_fm = subprocess.Popen(command.split(),
 					#stdin=rtl_fm.stdout,
 					stdout=subprocess.PIPE,
@@ -359,7 +359,7 @@ try:
 		while True:
 			decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
 			from includes import decoder
-			decoder.decode(converter.freqToHz(args.freq), decoded)
+			decoder.decode(freqConverter.freqToHz(args.freq), decoded)
 
 	else:
 		logging.debug("start testing")
@@ -368,7 +368,7 @@ try:
 			if (len(testData.rstrip(' \t\n\r')) > 1) and ("#" not in testData[0]):
 				logging.info("Testdata: %s", testData.rstrip(' \t\n\r'))
 				from includes import decoder
-				decoder.decode(converter.freqToHz(args.freq), testData)
+				decoder.decode(freqConverter.freqToHz(args.freq), testData)
 				time.sleep(1)
 		logging.debug("test finished")
 
