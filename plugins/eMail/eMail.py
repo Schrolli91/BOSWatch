@@ -11,7 +11,6 @@ eMail-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages via eMail/SMTP
 
 import logging # Global logger
 
-import time
 import smtplib #for the SMTP client
 from email.mime.text import MIMEText # Import the email modules we'll need
 from email.utils import formatdate # need for confirm to RFC2822 standard

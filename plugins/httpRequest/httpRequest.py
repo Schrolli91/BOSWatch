@@ -16,7 +16,6 @@ from urlparse import urlparse #for split the URL into url and path
 
 from includes import globals  # Global variables
 
-from includes.helper import timeHandler
 from includes.helper import wildcardHandler
 from includes.helper import configHandler
 

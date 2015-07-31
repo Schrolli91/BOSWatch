@@ -173,6 +173,7 @@ In the data map are the folowing informations:
 **ZVEI:**
 - zvei
 - description
+- timestamp
 
 **FMS:**
 - fms
@@ -181,6 +182,7 @@ In the data map are the folowing informations:
 - directionText
 - tsi
 - description
+- timestamp
 
 **POCSAG:**
 - ric
@@ -189,3 +191,4 @@ In the data map are the folowing informations:
 - msg
 - bitrate
 - description
+- timestamp

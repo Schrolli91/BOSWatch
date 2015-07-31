@@ -209,7 +209,7 @@ def run(typ,freq,data):
 					# build event and msg
 					# pyNMA expect strings are not in UTF-8
 					event = stringConverter.convertToUnicode(data['description'])
-					msg   = timeHandler.curtime()
+					msg   = timeHandler.getDateTime(data['timestamp'])
 					if ("POC" in typ) and (len(data['msg']) > 0):
 						msg += "\n" + data['msg']
 					msg = stringConverter.convertToUnicode(msg)

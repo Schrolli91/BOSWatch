@@ -11,7 +11,7 @@ Handler for the filter and plugins at an alarm
 """
 
 import logging # Global logger
-from threading import Thread
+import time    # timestamp
 
 from includes import globals  # Global variables
 
@@ -39,6 +39,7 @@ def processAlarmHandler(typ, freq, data):
 	if globals.config.getboolean("BOSWatch","processAlarmAsync") == True:
 		logging.debug("starting processAlarm async")
 		try:
+			from threading import Thread
 			Thread(target=processAlarm, args=(typ, freq, data)).start()
 		except:
 			logging.error("Error in starting alarm processing async")
@@ -70,15 +71,17 @@ def processAlarm(typ, freq, data):
 	"""
 	try:
 		logging.debug("[  ALARM  ]")
+		# timestamp, to make sure, that all plugins use the same time
+		data['timestamp'] = int(time.time())
 		# Go to all plugins in pluginList
 		for pluginName, plugin in globals.pluginList.items():
 			# if enabled use RegEx-filter
 			if globals.config.getint("BOSWatch","useRegExFilter"):
 				from includes import filter
-				if filter.checkFilters(typ,data,pluginName,freq):
+				if filter.checkFilters(typ, data, pluginName, freq):
 					logging.debug("call Plugin: %s", pluginName)
 					try:
-						plugin.run(typ,freq,data)
+						plugin.run(typ, freq, data)
 						logging.debug("return from: %s", pluginName)
 					except:
 						# call next plugin, if one has thrown an exception
@@ -86,7 +89,7 @@ def processAlarm(typ, freq, data):
 			else: # RegEX filter off - call plugin directly
 				logging.debug("call Plugin: %s", pluginName)
 				try:
-					plugin.run(typ,freq,data)
+					plugin.run(typ, freq, data)
 					logging.debug("return from: %s", pluginName)
 				except:
 					# call next plugin, if one has thrown an exception
