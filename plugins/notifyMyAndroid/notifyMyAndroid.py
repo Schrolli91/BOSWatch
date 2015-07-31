@@ -29,7 +29,7 @@ application = "BOSWatch"
 APIKey = None
 remainingMsgs = None
 usecsv = False
-# data structures: xAPIKeyList[id][i] = (APIKey, priority)
+# data structures: xAPIKeyList[id][i] = (APIKey, priority, eventPrefix)
 fmsAPIKeyList = {}
 zveiAPIKeyList = {}
 pocAPIKeyList = {}
@@ -120,7 +120,7 @@ def onLoad():
 								except KeyError:
 									fmsAPIKeyList[row['id']] = []
 								# data structure: fmsAPIKeyList[fms][i] = (APIKey, priority)
-								fmsAPIKeyList[row['id']].append((row['APIKey'], row['priority']))
+								fmsAPIKeyList[row['id']].append((row['APIKey'], row['priority'], row['eventPrefix']))
 								
 							elif "ZVEI" in row['typ']:
 								# if len for id in mainList raise an KeyErrorException, we have to init it... 
@@ -130,7 +130,7 @@ def onLoad():
 								except KeyError:
 									zveiAPIKeyList[row['id']] = []
 								# data structure: zveiAPIKeyList[zvei][i] = (APIKey, priority)
-								zveiAPIKeyList[row['id']].append((row['APIKey'], row['priority']))
+								zveiAPIKeyList[row['id']].append((row['APIKey'], row['priority'], row['eventPrefix']))
 								
 							elif "POC" in row['typ']:
 								# if len for id in mainList raise an KeyErrorException, we have to init it... 
@@ -140,7 +140,7 @@ def onLoad():
 								except KeyError:
 									pocAPIKeyList[row['id']] = []
 								# data structure: zveiAPIKeyList[ric][i] = (APIKey, priority)
-								pocAPIKeyList[row['id']].append((row['APIKey'], row['priority']))
+								pocAPIKeyList[row['id']].append((row['APIKey'], row['priority'], row['eventPrefix']))
 								
 						except:
 							# skip entry in case of an exception
@@ -223,10 +223,13 @@ def run(typ,freq,data):
 							# lets look for fms in fmsAPIKeyList
 							xID = data['fms']
 							try:
-								# data structure: fmsAPIKeyList[xID][i] = (xAPIKey, xPriority)
+								# data structure: fmsAPIKeyList[xID][i] = (xAPIKey, xPriority, xEventPrefix)
 								for i in range(len(fmsAPIKeyList[xID])):
-									(xAPIKey, xPriority) = fmsAPIKeyList[xID][i]
-									response = nma.pushWithAPIKey(xAPIKey, application, event, msg, priority=xPriority)
+									xEvent = event
+									(xAPIKey, xPriority, xEventPrefix) = fmsAPIKeyList[xID][i]
+									if len(xEventPrefix) > 0:
+										xEvent = xEventPrefix + ": " + xEvent
+									response = nma.pushWithAPIKey(xAPIKey, application, xEvent, msg, priority=xPriority)
 									checkResponse(response, xAPIKey)
 							except KeyError:
 								# nothing found
@@ -236,10 +239,13 @@ def run(typ,freq,data):
 							# lets look for zvei in zveiAPIKeyList
 							xID = data['zvei']
 							try:
-								# data structure: zveiAPIKeyList[xID][i] = (xAPIKey, xPriority)
+								# data structure: zveiAPIKeyList[xID][i] = (xAPIKey, xPriority, xEventPrefix)
 								for i in range(len(zveiAPIKeyList[xID])):
-									(xAPIKey, xPriority) = zveiAPIKeyList[xID][i]
-									response = nma.pushWithAPIKey(xAPIKey, application, event, msg, priority=xPriority)
+									xEvent = event
+									(xAPIKey, xPriority, xEventPrefix) = zveiAPIKeyList[xID][i]
+									if len(xEventPrefix) > 0:
+										xEvent = xEventPrefix + ": " + xEvent
+									response = nma.pushWithAPIKey(xAPIKey, application, xEvent, msg, priority=xPriority)
 									checkResponse(response, xAPIKey)
 							except KeyError:
 								# nothing found
@@ -250,10 +256,13 @@ def run(typ,freq,data):
 							# 1. lets look for ric+functionChar in pocAPIKeyList
 							try:
 								xID = data['ric'] + data['functionChar']
-								# data structure: pocAPIKeyList[xID][i] = (xAPIKey, xPriority)
+								# data structure: pocAPIKeyList[xID][i] = (xAPIKey, xPriority, xEventPrefix)
 								for i in range(len(pocAPIKeyList[xID])):
-									(xAPIKey, xPriority) = pocAPIKeyList[xID][i]
-									response = nma.pushWithAPIKey(xAPIKey, application, event, msg, priority=xPriority)
+									xEvent = event
+									(xAPIKey, xPriority, xEventPrefix) = pocAPIKeyList[xID][i]
+									if len(xEventPrefix) > 0:
+										xEvent = xEventPrefix + ": " + xEvent
+									response = nma.pushWithAPIKey(xAPIKey, application, xEvent, msg, priority=xPriority)
 									checkResponse(response, xAPIKey)
 							except KeyError:
 								# nothing found
@@ -261,11 +270,13 @@ def run(typ,freq,data):
 							# 2. lets look for ric* in pocAPIKeyList
 							try:
 								xID = data['ric'] + "*"
-								# data structure: pocAPIKeyList[xID][i] = (xAPIKey, xPriority)
+								# data structure: pocAPIKeyList[xID][i] = (xAPIKey, xPriority, xEventPrefix)
 								for i in range(len(pocAPIKeyList[xID])):
-									(xAPIKey, xPriority) = pocAPIKeyList[xID][i]
-									logging.debug("-- found %s, %s", xAPIKey, xPriority)
-									response = nma.pushWithAPIKey(xAPIKey, application, event, msg, priority=xPriority)
+									xEvent = event
+									(xAPIKey, xPriority, xEventPrefix) = pocAPIKeyList[xID][i]
+									if len(xEventPrefix) > 0:
+										xEvent = xEventPrefix + ": " + xEvent
+									response = nma.pushWithAPIKey(xAPIKey, application, xEvent, msg, priority=xPriority)
 									checkResponse(response, xAPIKey)
 							except KeyError:
 								# nothing found
