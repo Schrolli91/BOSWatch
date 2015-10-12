@@ -140,6 +140,10 @@ defined wildcards:
 - `%DATE%` = Date (by script)
 - `%DESCR%` = Description from csv-file
 
+- `%BR%` = new line
+- `%LPAR%` = "("
+- `%RPAR%` = ")"
+
 **FMS:**
 - `%FMS%` = FMS Code
 - `%STATUS%` = FMS Status

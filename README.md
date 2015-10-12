@@ -24,6 +24,8 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - Logfiles for better troubleshooting
 - verbose/quiet mode for more/none information
 - Ready for use BOSWatch as daemon
+- possibility to start plugins asynchron
+- NMA Error Handler
 
 ##### Features for the future:
 - more plugins
@@ -43,6 +45,7 @@ If you want to code your own Plugin, see Section `Code your own Plugin` at the e
 |BosMon|send data to BosMon server|:white_check_mark:|:white_check_mark:|:white_check_mark:|
 |firEmergency|send data to firEmergency server|:x:|:white_check_mark:|:white_check_mark:|
 |jsonSocket|send data as jsonString to a socket server|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|NMA|send data to Notify my Android|:white_check_mark:|:white_check_mark:|:white_check_mark:|
 
 - for more Information to the plugins see `config.ini`
 
@@ -80,7 +83,7 @@ only POCSAG to MySQL with the text "ALARM:" in the message
 `pocTest = POC;msg;MySQL;*;ALARM:`
 
 ##### Web frontend (obsolete)
-New version in future - old data in folder `/www/`
+old data in folder `/exampeAddOns/simpleWeb/`
 
 ~~Put the files in folder /wwww/ into your local webserver folder (f.e. /var/www/).
 Now you must edit the "config.php" with your userdata to your local database.

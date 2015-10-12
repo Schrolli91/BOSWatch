@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `bos_pocsag` (
   `bitrate` int(4),
   `msg` text,
   `description` text,
-  PRIMARY KEY `ID` (`ID`)
+  PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
