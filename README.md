@@ -33,7 +33,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 
 
 ###Plugins
-If you want to code your own Plugin, see Section `Code your own Plugin` at the end of this readme.MD
+If you want to code your own Plugin, see `plugins/README.md`.
 
 ##### Implemented plugins:
 
@@ -149,6 +149,3 @@ Thanks to smith_fms and McBo from Funkmeldesystem.de - Forum for Inspiration and
 ### Code your own Plugin
 See `plugins/README.md`
 
-~~To code your own Plugin look at the litte example `/plugins/template/template.py`~~
-
-~~In the text-file `plugins/interface.txt` are all relevant data, that your plugin can use.~~
