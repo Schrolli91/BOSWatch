@@ -49,6 +49,7 @@ def printHeader(args):
 		if "POC2400" in args.demod:
 			print "- POC2400"
 		print "Squelch: "+str(args.squelch)
+		print "Gain: "+str(args.gain)
 		if args.verbose:
 			print "Verbose Mode!"
 		if args.test:

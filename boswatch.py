@@ -47,6 +47,7 @@ try:
 	parser.add_argument("-e", "--error", help="Frequency-Error of your device in PPM", type=int, default=0)
 	parser.add_argument("-a", "--demod", help="Demodulation functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
 	parser.add_argument("-s", "--squelch", help="Level of squelch", type=int, default=0)
+	parser.add_argument("-g", "--gain", help="Level of gain", type=int, default=0)
 	parser.add_argument("-u", "--usevarlog", help="Use '/var/log/boswatch' for logfiles instead of subdir 'log' in BOSWatch directory", action="store_true")
 	parser.add_argument("-v", "--verbose", help="Shows more information", action="store_true")
 	parser.add_argument("-q", "--quiet", help="Shows no information. Only logfiles", action="store_true")
@@ -163,6 +164,7 @@ try:
 		logging.debug(" - Device: %s", args.device)
 		logging.debug(" - PPM Error: %s", args.error)
 		logging.debug(" - Squelch: %s", args.squelch)
+		logging.debug(" - Gain: %s", args.gain)
 
 		demodulation = ""
 		if "FMS" in args.demod:
@@ -217,7 +219,7 @@ try:
 		logging.debug("cannot read config file", exc_info=True)
 		exit(1)
 
-		
+
 	#
 	# Set the loglevel and backupCount of the file handler
 	#
@@ -232,7 +234,7 @@ try:
 		logging.debug("cannot set loglevel of fileHandler", exc_info=True)
 		pass
 
-		
+
 	#
 	# Add NMA logging handler
 	#
@@ -255,10 +257,10 @@ try:
 		logging.error("cannot add NMA logging handler")
 		logging.debug("cannot add NMA logging handler", exc_info=True)
 		pass
-		
-		
+
+
 	# initialization was fine, continue with main program...
-		
+
 	#
 	# Load plugins
 	#
@@ -306,7 +308,7 @@ try:
 			command = ""
 			if globals.config.has_option("BOSWatch","rtl_path"):
 				command = globals.config.get("BOSWatch","rtl_path")
-			command = command+"rtl_fm -d "+str(args.device)+" -f "+str(freqConverter.freqToHz(args.freq))+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100"
+			command = command+"rtl_fm -d "+str(args.device)+" -f "+str(freqConverter.freqToHz(args.freq))+" -M fm -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+"  -g "+str(args.gain)+" -s 22050"
 			rtl_fm = subprocess.Popen(command.split(),
 					#stdin=rtl_fm.stdout,
 					stdout=subprocess.PIPE,
