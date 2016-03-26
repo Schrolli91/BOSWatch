@@ -13,7 +13,7 @@ import logging # Global logger
 import re #Regex for Filter Check
 
 from includes import globals  # Global variables
-from includes import converter  # converter functions
+from includes.helper import freqConverter  # converter functions
 
 
 # local variables
