@@ -308,7 +308,7 @@ try:
 			command = ""
 			if globals.config.has_option("BOSWatch","rtl_path"):
 				command = globals.config.get("BOSWatch","rtl_path")
-			command = command+"rtl_fm -d "+str(args.device)+" -f "+str(freqConverter.freqToHz(args.freq))+" -M fm -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+"  -g "+str(args.gain)+" -s 22050"
+			command = command+"rtl_fm -d "+str(args.device)+" -f "+str(freqConverter.freqToHz(args.freq))+" -M fm -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g "+str(args.gain)+" -s 22050"
 			rtl_fm = subprocess.Popen(command.split(),
 					#stdin=rtl_fm.stdout,
 					stdout=subprocess.PIPE,
