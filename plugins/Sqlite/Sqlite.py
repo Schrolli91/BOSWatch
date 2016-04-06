@@ -90,7 +90,7 @@ def run(typ, freq, data):
                         # strUTFmsg = strMsg.decode('utf-8')
                         # strUTFDescription = strDescription.decode('utf-8')
 
-                        cursor.execute("INSERT INTO " + globals.config.get("Sqlite", "tablePOC") + " (time,ric,function,functionChar,msg,bitrate,description) VALUES (FROM_UNIXTIME(?),?,?,?,?,?,?)",
+                        cursor.execute("INSERT INTO " + globals.config.get("Sqlite", "tablePOC") + " (time,ric,function,functionChar,msg,bitrate,description) VALUES (strftime('%Y-%m-%d %H:%M:%S','now'),?,?,?,?,?,?)",
                                        (data["ric"], data["function"], data["functionChar"], data["msg"], data["bitrate"], data["description"]))
                         logging.info("Daten in Sqlite geschrieben")
                     else:
