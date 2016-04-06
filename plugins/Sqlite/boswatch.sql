@@ -2,7 +2,7 @@
 -- phpLiteAdmin database dump (https://bitbucket.org/phpliteadmin/public)
 -- phpLiteAdmin version: 1.9.6
 -- Exported: 1:18pm on March 5, 2016 (CET)
--- database file: /var/www/html/database/boswatch_all.sqlite
+-- database file: /var/www/html/database/boswatch.sqlite
 ----
 BEGIN TRANSACTION;
 
@@ -11,7 +11,7 @@ BEGIN TRANSACTION;
 ----
 CREATE TABLE 'bos_pocsag' (
 'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-'time (utc)' DATETIME NOT NULL,
+'time_utc' DATETIME NOT NULL,
 'ric' TEXT NOT NULL DEFAULT '0',
 'function' INTEGER NOT NULL DEFAULT 0 ,
 'functionChar' TEXT NOT NULL DEFAULT '0',

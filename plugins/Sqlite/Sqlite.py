@@ -72,7 +72,7 @@ def run(typ, freq, data):
                 logging.debug("connect to Sqlite")
                 dbPath = globals.config.get("Sqlite", "database_path")
                 dbName = globals.config.get("Sqlite", "database_name")
-                connection = sqlite3.connect("dbPath" + "dbName")
+                connection = sqlite3.connect(dbPath + dbName)
                 cursor = connection.cursor()
             except:
                 logging.error("cannot connect to Sqlite")
@@ -85,13 +85,13 @@ def run(typ, freq, data):
                     logging.debug("Insert %s", typ)
 
                     if typ == "POC":
-                        # strMsg = data["msg"]
-                        # strDescription = data["description"]
-                        # strUTFmsg = strMsg.decode('utf-8')
-                        # strUTFDescription = strDescription.decode('utf-8')
+                        strMsg = data["msg"]
+                        strDescription = data["description"]
+                        strUTFmsg = strMsg.decode('utf-8')
+                        strUTFDescription = strDescription.decode('utf-8')
 
-                        cursor.execute("INSERT INTO " + globals.config.get("Sqlite", "tablePOC") + " (time,ric,function,functionChar,msg,bitrate,description) VALUES (strftime('%Y-%m-%d %H:%M:%S','now'),?,?,?,?,?,?)",
-                                       (data["ric"], data["function"], data["functionChar"], data["msg"], data["bitrate"], data["description"]))
+                        cursor.execute("INSERT INTO " + globals.config.get("Sqlite", "tablePOC") + " (time_utc,ric,function,functionChar,msg,bitrate,description) VALUES (strftime('%Y-%m-%d %H:%M:%S','now'),?,?,?,?,?,?)",
+                                       (data["ric"], data["function"], data["functionChar"], strUTFmsg, data["bitrate"], strUTFDescription))
                         logging.info("Daten in Sqlite geschrieben")
                     else:
                         logging.warning("Invalid Typ: %s", typ)
