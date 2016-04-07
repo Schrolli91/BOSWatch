@@ -128,11 +128,15 @@ def getDescription(typ, id):
         pass
 
     # write description at loglevel = info when 'idDescribed' = 1 and 'described_info' = 1
+    description_info = 0
     if globals.config.getint("FMS", "idDescribed") and globals.config.getint("FMS", "described_info"):
-        logging.info(" - result for %s: %s", id, resultStr)
+        description_info = 1
     elif globals.config.getint("ZVEI", "idDescribed") and globals.config.getint("ZVEI", "described_info"):
-        logging.info(" - result for %s: %s", id, resultStr)
+        description_info = 1
     elif globals.config.getint("POC", "idDescribed") and globals.config.getint("POC", "described_info"):
+        description_info = 1
+
+    if description_info:
         logging.info(" - result for %s: %s", id, resultStr)
     else:
         logging.debug(" - result for %s: %s", id, resultStr)
