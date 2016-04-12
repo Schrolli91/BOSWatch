@@ -17,7 +17,7 @@ import logging  # Global logger
 from includes import globals  # Global variables
 
 # Helper function, uncomment to use
-# from includes.helper import timeHandler
+from includes.helper import timeHandler
 # from includes.helper import wildcardHandler
 from includes.helper import configHandler
 
@@ -90,6 +90,7 @@ def run(typ, freq, data):
                 strDescription = data["description"]
                 strUTFmsg = strMsg.decode('utf-8')
                 strUTFDescription = strDescription.decode('utf-8')
+                sysTime = str(timeHandler.getTime())
 
                 #client = pushnotify.get_client('prowl', application='pushnotify examples')
                 client = pushnotify.get_client('prowl', application=globals.config.get("prowl", "appName"))
@@ -97,7 +98,7 @@ def run(typ, freq, data):
                 client.add_key(globals.config.get("prowl", "APIKey"))
 
                 event = data["functionChar"] + ": " + strUTFDescription + " (" + data["ric"] + ")"
-                desc = strUTFmsg
+                desc = sysTime + " " + strUTFmsg
 
                 try:
                     client.notify(desc, event, split=True, kwargs={'priority': prio})
