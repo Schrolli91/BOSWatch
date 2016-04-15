@@ -46,6 +46,8 @@ If you want to code your own Plugin, see `plugins/README.md`.
 |firEmergency|send data to firEmergency server|:x:|:white_check_mark:|:white_check_mark:|
 |jsonSocket|send data as jsonString to a socket server|:white_check_mark:|:white_check_mark:|:white_check_mark:|
 |NMA|send data to Notify my Android|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|Sqlite|insert data into Sqlite database|:x:|:x:|:white_check_mark:|
+|prowl|send data to Prowl (iOS Push)|:x:|:x:|:white_check_mark:|
 
 - for more Information to the plugins see `config.ini`
 
