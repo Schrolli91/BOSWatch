@@ -363,6 +363,15 @@ try:
 			from includes import decoder
 			decoder.decode(freqConverter.freqToHz(args.freq), decoded)
 
+			# write multimon-ng raw data
+			if globals.config.getboolean("BOSWatch","writeMultimonRaw"):
+				try:
+					rawMmOut = open("mm_raw.txt", "w")
+					rawMmOut.write(decoded)
+				except:
+					logging.warning("cannot write raw multimon data")
+				finally:
+					rawMmOut.close()
 	else:
 		logging.debug("start testing")
 		testFile = open(globals.script_path+"/testdata/testdata.txt","r")
