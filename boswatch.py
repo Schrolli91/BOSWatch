@@ -139,8 +139,10 @@ try:
 		mon_log = open(globals.log_path+"multimon.log", "w")
 		rtl_log.write("")
 		mon_log.write("")
+		rawMmOut.write("")
 		rtl_log.close()
 		mon_log.close()
+		rawMmOut.close()
 		logging.debug("BOSWatch has started")
 		logging.debug("Logfiles cleared")
 
@@ -366,7 +368,6 @@ try:
 			# write multimon-ng raw data
 			if globals.config.getboolean("BOSWatch","writeMultimonRaw"):
 				try:
-					rawMmOut = open("mm_raw.txt", "w")
 					rawMmOut.write(decoded)
 				except:
 					logging.warning("cannot write raw multimon data")
