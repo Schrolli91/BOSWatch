@@ -137,6 +137,7 @@ try:
 		fh.doRollover()
 		rtl_log = open(globals.log_path+"rtl_fm.log", "w")
 		mon_log = open(globals.log_path+"multimon.log", "w")
+		rawMmOut = open(globals.log_path+"mm_raw.txt", "w")
 		rtl_log.write("")
 		mon_log.write("")
 		rawMmOut.write("")
@@ -368,6 +369,7 @@ try:
 			# write multimon-ng raw data
 			if globals.config.getboolean("BOSWatch","writeMultimonRaw"):
 				try:
+					rawMmOut = open(globals.log_path+"mm_raw.txt", "a")
 					rawMmOut.write(decoded)
 				except:
 					logging.warning("cannot write raw multimon data")
