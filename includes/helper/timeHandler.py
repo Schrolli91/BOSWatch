@@ -32,12 +32,12 @@ def curtime(format="%d.%m.%Y %H:%M:%S", timestamp=""):
 		if timestamp == "":
 			return time.strftime(format)
 		else:
-			return time.strftime(format, time.gmtime(timestamp))
+			return time.strftime(format, time.localtime(timestamp))
 	except:
 		logging.warning("error in time-format-string")
 		logging.debug("error in time-format-string", exc_info=True)
 
-		
+
 def getDateTime(timestamp=""):
 	"""
 	Returns the date and time
@@ -46,7 +46,7 @@ def getDateTime(timestamp=""):
 	"""
 	return curtime("%d.%m.%Y %H:%M:%S", timestamp)
 
-	
+
 def getDate(timestamp=""):
 	"""
 	Returns the date
@@ -55,7 +55,7 @@ def getDate(timestamp=""):
 	"""
 	return curtime("%d.%m.%Y", timestamp)
 
-	
+
 def getTime(timestamp=""):
 	"""
 	Returns the time
@@ -63,7 +63,7 @@ def getTime(timestamp=""):
 	@return: Formated time
 	"""
 	return curtime("%H:%M:%S", timestamp)
-	
+
 
 def getTimestamp():
 	"""
