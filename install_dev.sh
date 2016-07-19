@@ -27,7 +27,7 @@ tput cup 13 15
 echo "[ 2/10] [##--------]"
 tput cup 15 5
 echo "-> download GIT an other stuff.........."
-apt-get -y install git cmake build-essential libusb-1.0 qt4-qmake qt4-default libpulse-dev libx11-dev sox >> ~/boswatch/install/setup_log.txt 2>&1
+apt-get -y install git cmake build-essential libusb-1.0 qt4-qmake qt4-default qt5-default libpulse-dev libx11-dev sox >> ~/boswatch/install/setup_log.txt 2>&1
 
 tput cup 13 15
 echo "[ 3/10] [###-------]"
