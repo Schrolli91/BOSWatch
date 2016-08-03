@@ -1,6 +1,6 @@
 #!/bin/bash
-user=root
-password=root
+user=boswatch
+password=boswatch
 
 count=$(mysql boswatch -u $user -p$password -se "select minute(timediff(now(),time)) as timediff from bos_signal order by time desc limit 1")
 
