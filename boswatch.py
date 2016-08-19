@@ -43,7 +43,7 @@ try:
 									epilog="More options you can find in the extern config.ini file in the folder /config")
 	# parser.add_argument("-c", "--channel", help="BOS Channel you want to listen")
 	parser.add_argument("-f", "--freq", help="Frequency you want to listen", required=True)
-	parser.add_argument("-d", "--device", help="Device you want to use (Check with rtl_test)", type=int, default=0)
+	parser.add_argument("-d", "--device", help="Device you want to use (Check with rtl_test) RTL-ID or RTL-SN")
 	parser.add_argument("-e", "--error", help="Frequency-Error of your device in PPM", type=int, default=0)
 	parser.add_argument("-a", "--demod", help="Demodulation functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
 	parser.add_argument("-s", "--squelch", help="Level of squelch", type=int, default=0)
