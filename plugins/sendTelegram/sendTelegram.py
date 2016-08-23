@@ -6,7 +6,7 @@ Plugin to send FMS-, ZVEI- and POCSAG-messages via Telegram
 
 @author: Peter Laemmle
 
-@requires: none
+@requires: Telegram BOT token, Telegram chat ID, library python-telegram-bot and optional googlemaps
 """
 
 #
