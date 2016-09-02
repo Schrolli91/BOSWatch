@@ -31,7 +31,7 @@ def removeF(zvei):
 	"""
 	if "F" in zvei:
 		zvei_old = zvei
-		for i in range(1, 5):
+		for i in range(1, len(zvei_old)):
 			if zvei[i] == "F":
 				zvei = zvei.replace("F",zvei[i-1],1)
 		logging.debug("resolve F: %s -> %s", zvei_old, zvei)
