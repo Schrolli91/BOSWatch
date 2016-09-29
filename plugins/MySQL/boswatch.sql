@@ -34,7 +34,7 @@ USE boswatch;
 -- Benutzer erstellen für Datenbank `boswatch`
 --
 
-GRANT ALL ON * to 'boswatch'@'localhost' identified by 'boswatch1.mysql';
+GRANT ALL ON * to 'boswatch'@'localhost' identified by 'root';
 FLUSH PRIVILEGES;
 
 -- --------------------------------------------------------
