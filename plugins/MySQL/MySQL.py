@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 MySQL-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages to a MySQL database
@@ -91,7 +91,7 @@ def run(typ,freq,data):
 				# Connect to MySQL
 				#
 				logging.debug("connect to MySQL")
-				connection = mysql.connector.connect(host = globals.config.get("MySQL","dbserver"), user = globals.config.get("MySQL","dbuser"), passwd = globals.config.get("MySQL","dbpassword"), db = globals.config.get("MySQL","database"))
+				connection = mysql.connector.connect(host = globals.config.get("MySQL","dbserver"), user = globals.config.get("MySQL","dbuser"), passwd = globals.config.get("MySQL","dbpassword"), db = globals.config.get("MySQL","database"), charset='utf8')
 				cursor = connection.cursor()
 			except:
 				logging.error("cannot connect to MySQL")
@@ -104,10 +104,10 @@ def run(typ,freq,data):
 					logging.debug("Insert %s", typ)
 
 					if typ == "FMS":
-						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableFMS")+" (time,fms,status,direction,directionText,tsi,description) VALUES (NOW(),%s,%s,%s,%s,%s,%s)",(data["fms"],data["status"],data["direction"],data["directionText"],data["tsi"],data["description"]))
+						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableFMS")+" (time, fms, status, direction, directionText, tsi, description) VALUES (FROM_UNIXTIME(%s),%s,%s,%s,%s,%s,%s)", (data["timestamp"], data["fms"], data["status"], data["direction"], data["directionText"], data["tsi"], data["description"]))
 
 					elif typ == "ZVEI":
-						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time,zvei,description) VALUES (NOW(),%s,%s)",(data["zvei"],data["description"]))
+						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time, zvei, description) VALUES (FROM_UNIXTIME(%s),%s,%s)", (data["timestamp"], data["zvei"], data["description"]))
 
 					elif typ == "POC":
 						if isSignal(data["ric"]):
@@ -115,7 +115,7 @@ def run(typ,freq,data):
 							if cursor.rowcount == 0:
 								cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableSIG")+" (time,ric) VALUES (NOW(),"+data["ric"]+")")
 						else:
-							cursor.execute("INSERT INTO "+globals.config.get("MySQL","tablePOC")+" (time,ric,funktion,funktionChar,msg,bitrate,description) VALUES (NOW(),%s,%s,%s,%s,%s,%s)",(data["ric"],data["function"],data["functionChar"],data["msg"],data["bitrate"],data["description"]))
+						  cursor.execute("INSERT INTO "+globals.config.get("MySQL","tablePOC")+" (time, ric, function, functionChar, msg, bitrate, description) VALUES (FROM_UNIXTIME(%s),%s,%s,%s,%s,%s,%s)", (data["timestamp"], data["ric"], data["function"], data["functionChar"], data["msg"], data["bitrate"], data["description"]))
 
 					else:
 						logging.warning("Invalid Typ: %s", typ)
