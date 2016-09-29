@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 Functions to Load and import the Plugins

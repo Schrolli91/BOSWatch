@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: utf-8 -*-
 
 """
 Function to expand the dataset with a description.
@@ -10,10 +10,17 @@ Function to expand the dataset with a description.
 """
 
 import logging # Global logger
-
 import csv # for loading the description files
 
 from includes import globals  # Global variables
+from includes.helper import stringConverter
+
+
+# local variables
+fmsDescribtionList  = {}
+zveiDescribtionList = {}
+ricDescribtionList  = {}
+
 
 ##
 #
@@ -36,7 +43,11 @@ def loadCSV(typ, idField):
 				logging.debug(row)
 				# only import rows with an integer as id
 				if row[idField].isdigit() == True:
-					resultList[row[idField]] = row['description']
+					try:
+						resultList[row[idField]] = stringConverter.convertToUTF8(row['description'])
+					except:
+						# skip entry in case of an exception
+						pass
 		logging.debug("-- loading csv finished")
 	except:
 		logging.error("loading csvList for typ: %s failed", typ)
@@ -61,15 +72,18 @@ def loadDescriptionLists():
 
 		if globals.config.getint("FMS", "idDescribed"):
 			logging.debug("- load FMS description list")
-			globals.fmsDescribtionList = loadCSV("fms", "fms")
+			global fmsDescribtionList
+			fmsDescribtionList = loadCSV("fms", "fms")
 
 		if globals.config.getint("ZVEI", "idDescribed"):
 			logging.debug("- load ZVEI description list")
-			globals.zveiDescribtionList = loadCSV("zvei", "zvei")
+			global zveiDescribtionList
+			zveiDescribtionList = loadCSV("zvei", "zvei")
 
 		if globals.config.getint("POC", "idDescribed"):
 			logging.debug("- load pocsag description list")
-			globals.ricDescribtionList = loadCSV("poc", "ric")
+			global ricDescribtionList
+			ricDescribtionList = loadCSV("poc", "ric")
 
 	except:
 		logging.error("cannot load description lists")
@@ -92,11 +106,14 @@ def getDescription(typ, id):
 	logging.debug("look up description lists")
 	try:
 		if typ == "FMS":
-			resultStr = globals.fmsDescribtionList[id]
+			global fmsDescribtionList
+			resultStr = fmsDescribtionList[id]
 		elif typ == "ZVEI":
-			resultStr = globals.zveiDescribtionList[id]
+			global zveiDescribtionList
+			resultStr = zveiDescribtionList[id]
 		elif typ == "POC":
-			resultStr = globals.ricDescribtionList[id]
+			global ricDescribtionList
+			resultStr = ricDescribtionList[id]
 		else:
 			logging.warning("Invalid Typ: %s", typ)
 

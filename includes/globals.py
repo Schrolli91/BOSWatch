@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: utf-8 -*-
 
 """
 Global variables
@@ -8,29 +8,14 @@ Global variables
 @author: Bastian Schroll
 """
 
+# version info
+versionNr = "2.1-dev"
+buildDate = "2015/12/26"
+
 # Global variables
 config = 0
 script_path = ""
 log_path = ""
 
-# double alarm
-doubleList = []
-
 # pluginLoader
 pluginList = {}
-
-# filter
-filterList = []
-
-# idDescribing
-fmsDescribtionList  = {}
-zveiDescribtionList = {}
-ricDescribtionList  = {}
-
-# returns the version or build date
-# function -> read only in script
-def getVers(mode="vers"):
-	if mode == "vers":
-		return "2.0"
-	elif mode == "date":
-		return " 2015/07/13"

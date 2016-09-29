@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 jsonSocket-Plugin to dispatch FMS-, ZVEI- and POCSAG-messages via UDP/TCP

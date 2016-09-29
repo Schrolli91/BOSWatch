@@ -140,6 +140,10 @@ defined wildcards:
 - `%DATE%` = Date (by script)
 - `%DESCR%` = Description from csv-file
 
+- `%BR%` = new line
+- `%LPAR%` = "("
+- `%RPAR%` = ")"
+
 **FMS:**
 - `%FMS%` = FMS Code
 - `%STATUS%` = FMS Status
@@ -173,6 +177,7 @@ In the data map are the folowing informations:
 **ZVEI:**
 - zvei
 - description
+- timestamp
 
 **FMS:**
 - fms
@@ -181,6 +186,7 @@ In the data map are the folowing informations:
 - directionText
 - tsi
 - description
+- timestamp
 
 **POCSAG:**
 - ric
@@ -189,3 +195,4 @@ In the data map are the folowing informations:
 - msg
 - bitrate
 - description
+- timestamp
