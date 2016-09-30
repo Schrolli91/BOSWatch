@@ -45,11 +45,11 @@ def onLoad():
 	global RICforLocationAPIKey
 	global GoogleAPIKey
 
-	configHandler.checkConfig("sendTelegram")
-	BOTTokenAPIKey = globals.config.get("sendTelegram","BOTTokenAPIKey")
-	BOTChatIDAPIKey = globals.config.get("sendTelegram","BOTChatIDAPIKey")
-	RICforLocationAPIKey = globals.config.get("sendTelegram","RICforLocationAPIKey")
-	GoogleAPIKey = globals.config.get("sendTelegram","GoogleAPIKey")
+	configHandler.checkConfig("Telegram")
+	BOTTokenAPIKey = globals.config.get("Telegram","BOTTokenAPIKey")
+	BOTChatIDAPIKey = globals.config.get("Telegram","BOTChatIDAPIKey")
+	RICforLocationAPIKey = globals.config.get("Telegram","RICforLocationAPIKey")
+	GoogleAPIKey = globals.config.get("Telegram","GoogleAPIKey")
 	
 	return
 
@@ -84,7 +84,7 @@ def run(typ,freq,data):
 	global GoogleAPIKey
 
 	try:
-		if configHandler.checkConfig("sendTelegram"): #read and debug the config (let empty if no config used)
+		#if configHandler.checkConfig("Telegram"): #read and debug the config (let empty if no config used)
 
 			########## User Plugin CODE ##########
 			if typ == "POC":
