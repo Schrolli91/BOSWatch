@@ -20,6 +20,26 @@ from includes import globals  # Global variables
 
 from includes.helper import configHandler
 
+def isSignal(poc_id):
+        """
+        @type    poc_id: string
+        @param   poc_id: POCSAG Ric
+
+        @requires:  Configuration has to be set in the config.ini
+
+        @return:    True if the Ric is Signal, other False
+        @exception: none
+        """
+        # If RIC is Signal return True, else False
+        if globals.config.get("MySQL", "signal_ric"):
+                if poc_id in globals.config.get("MySQL", "signal_ric"):
+                        logging.info("RIC %s is signal", poc_id)
+                        return True
+                else:
+                        logging.info("RIC %s is not signal", poc_id)
+                        return False
+
+
 ##
 #
 # onLoad (init) function of plugin
@@ -90,7 +110,12 @@ def run(typ,freq,data):
 						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableZVEI")+" (time, zvei, description) VALUES (FROM_UNIXTIME(%s),%s,%s)", (data["timestamp"], data["zvei"], data["description"]))
 
 					elif typ == "POC":
-						cursor.execute("INSERT INTO "+globals.config.get("MySQL","tablePOC")+" (time, ric, function, functionChar, msg, bitrate, description) VALUES (FROM_UNIXTIME(%s),%s,%s,%s,%s,%s,%s)", (data["timestamp"], data["ric"], data["function"], data["functionChar"], data["msg"], data["bitrate"], data["description"]))
+						if isSignal(data["ric"]):
+							cursor.execute("UPDATE "+globals.config.get("MySQL","tableSIG")+" SET time = NOW() WHERE ric = "+data["ric"])
+							if cursor.rowcount == 0:
+								cursor.execute("INSERT INTO "+globals.config.get("MySQL","tableSIG")+" (time,ric) VALUES (NOW(),"+data["ric"]+")")
+						else:
+						  cursor.execute("INSERT INTO "+globals.config.get("MySQL","tablePOC")+" (time, ric, function, functionChar, msg, bitrate, description) VALUES (FROM_UNIXTIME(%s),%s,%s,%s,%s,%s,%s)", (data["timestamp"], data["ric"], data["function"], data["functionChar"], data["msg"], data["bitrate"], data["description"]))
 
 					else:
 						logging.warning("Invalid Typ: %s", typ)
