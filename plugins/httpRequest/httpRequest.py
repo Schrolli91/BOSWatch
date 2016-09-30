@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 httpRequest-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages to an URL
@@ -16,7 +16,6 @@ from urlparse import urlparse #for split the URL into url and path
 
 from includes import globals  # Global variables
 
-from includes.helper import timeHandler
 from includes.helper import wildcardHandler
 from includes.helper import configHandler
 

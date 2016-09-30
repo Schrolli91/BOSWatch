@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 #
 """
 BOSWatch
@@ -26,9 +26,10 @@ import subprocess   # for starting rtl_fm and multimon-ng
 
 from includes import globals  # Global variables
 from includes import MyTimedRotatingFileHandler  # extension of TimedRotatingFileHandler
-from includes import converter  # converter functions
 from includes import signalHandler  # TERM-Handler for use script as a daemon
 from includes import checkSubprocesses  # check startup of the subprocesses
+from includes.helper import configHandler
+from includes.helper import freqConverter
 
 
 #
@@ -46,6 +47,7 @@ try:
 	parser.add_argument("-e", "--error", help="Frequency-Error of your device in PPM", type=int, default=0)
 	parser.add_argument("-a", "--demod", help="Demodulation functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
 	parser.add_argument("-s", "--squelch", help="Level of squelch", type=int, default=0)
+	parser.add_argument("-g", "--gain", help="Level of gain", type=int, default=100)
 	parser.add_argument("-u", "--usevarlog", help="Use '/var/log/boswatch' for logfiles instead of subdir 'log' in BOSWatch directory", action="store_true")
 	parser.add_argument("-v", "--verbose", help="Shows more information", action="store_true")
 	parser.add_argument("-q", "--quiet", help="Shows no information. Only logfiles", action="store_true")
@@ -68,6 +70,7 @@ try:
 	# initialization:
 	rtl_fm = None
 	multimon_ng = None
+	nmaHandler = None
 
 	try:
 		#
@@ -134,10 +137,13 @@ try:
 		fh.doRollover()
 		rtl_log = open(globals.log_path+"rtl_fm.log", "w")
 		mon_log = open(globals.log_path+"multimon.log", "w")
+		rawMmOut = open(globals.log_path+"mm_raw.txt", "w")
 		rtl_log.write("")
 		mon_log.write("")
+		rawMmOut.write("")
 		rtl_log.close()
 		mon_log.close()
+		rawMmOut.close()
 		logging.debug("BOSWatch has started")
 		logging.debug("Logfiles cleared")
 
@@ -151,16 +157,17 @@ try:
 	# For debug display/log args
 	#
 	try:
-		logging.debug("SW Version:	%s",globals.getVers("vers"))
-		logging.debug("Build Date:	%s",globals.getVers("date"))
+		logging.debug("SW Version:	%s",globals.versionNr)
+		logging.debug("Build Date:	%s",globals.buildDate)
 		logging.debug("BOSWatch given arguments")
 		if args.test:
 			logging.debug(" - Test-Mode!")
 
-		logging.debug(" - Frequency: %s", converter.freqToHz(args.freq))
+		logging.debug(" - Frequency: %s", freqConverter.freqToHz(args.freq))
 		logging.debug(" - Device: %s", args.device)
 		logging.debug(" - PPM Error: %s", args.error)
 		logging.debug(" - Squelch: %s", args.squelch)
+		logging.debug(" - Gain: %s", args.gain)
 
 		demodulation = ""
 		if "FMS" in args.demod:
@@ -205,29 +212,21 @@ try:
 		globals.config.read(globals.script_path+"/config/config.ini")
 		# if given loglevel is debug:
 		if globals.config.getint("BOSWatch","loglevel") == 10:
-			logging.debug(" - BOSWatch:")
-			for key,val in globals.config.items("BOSWatch"):
-				logging.debug(" -- %s = %s", key, val)
-			logging.debug(" - FMS:")
-			for key,val in globals.config.items("FMS"):
-				logging.debug(" -- %s = %s", key, val)
-			logging.debug(" - ZVEI:")
-			for key,val in globals.config.items("ZVEI"):
-				logging.debug(" -- %s = %s", key, val)
-			logging.debug(" - POC:")
-			for key,val in globals.config.items("POC"):
-				logging.debug(" -- %s = %s", key, val)
+			configHandler.checkConfig("BOSWatch")
+			configHandler.checkConfig("FMS")
+			configHandler.checkConfig("ZVEI")
+			configHandler.checkConfig("POC")
 	except:
 		# we couldn't work without config -> exit
 		logging.critical("cannot read config file")
 		logging.debug("cannot read config file", exc_info=True)
 		exit(1)
 
-	# initialization was fine, continue with main program...
+
+	#
+	# Set the loglevel and backupCount of the file handler
+	#
 	try:
-		#
-		# Set the loglevel and backupCount of the file handler
-		#
 		logging.debug("set loglevel of fileHandler to: %s",globals.config.getint("BOSWatch","loglevel"))
 		fh.setLevel(globals.config.getint("BOSWatch","loglevel"))
 		logging.debug("set backupCount of fileHandler to: %s", globals.config.getint("BOSWatch","backupCount"))
@@ -237,6 +236,33 @@ try:
 		logging.error("cannot set loglevel of fileHandler")
 		logging.debug("cannot set loglevel of fileHandler", exc_info=True)
 		pass
+
+
+	#
+	# Add NMA logging handler
+	#
+	try:
+		if configHandler.checkConfig("NMAHandler"):
+			# is NMAHandler enabled?
+			if globals.config.getboolean("NMAHandler", "enableHandler") == True:
+				# we only could do something, if an APIKey is given:
+				if len(globals.config.get("NMAHandler","APIKey")) > 0:
+					logging.debug("add NMA logging handler")
+					from includes import NMAHandler
+					if globals.config.get("NMAHandler","appName") == "":
+						nmaHandler = NMAHandler.NMAHandler(globals.config.get("NMAHandler","APIKey"))
+					else:
+						nmaHandler = NMAHandler.NMAHandler(globals.config.get("NMAHandler","APIKey"), globals.config.get("NMAHandler","appName"))
+					nmaHandler.setLevel(globals.config.getint("NMAHandler","loglevel"))
+					myLogger.addHandler(nmaHandler)
+	except:
+		# It's an error, but we could work without that stuff...
+		logging.error("cannot add NMA logging handler")
+		logging.debug("cannot add NMA logging handler", exc_info=True)
+		pass
+
+
+	# initialization was fine, continue with main program...
 
 	#
 	# Load plugins
@@ -285,7 +311,7 @@ try:
 			command = ""
 			if globals.config.has_option("BOSWatch","rtl_path"):
 				command = globals.config.get("BOSWatch","rtl_path")
-			command = command+"rtl_fm -d "+str(args.device)+" -f "+str(converter.freqToHz(args.freq))+" -M fm -s 22050 -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g 100"
+			command = command+"rtl_fm -d "+str(args.device)+" -f "+str(freqConverter.freqToHz(args.freq))+" -M fm -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g "+str(args.gain)+" -s 22050"
 			rtl_fm = subprocess.Popen(command.split(),
 					#stdin=rtl_fm.stdout,
 					stdout=subprocess.PIPE,
@@ -338,8 +364,17 @@ try:
 		while True:
 			decoded = str(multimon_ng.stdout.readline()) #Get line data from multimon stdout
 			from includes import decoder
-			decoder.decode(converter.freqToHz(args.freq), decoded)
+			decoder.decode(freqConverter.freqToHz(args.freq), decoded)
 
+			# write multimon-ng raw data
+			if globals.config.getboolean("BOSWatch","writeMultimonRaw"):
+				try:
+					rawMmOut = open(globals.log_path+"mm_raw.txt", "a")
+					rawMmOut.write(decoded)
+				except:
+					logging.warning("cannot write raw multimon data")
+				finally:
+					rawMmOut.close()
 	else:
 		logging.debug("start testing")
 		testFile = open(globals.script_path+"/testdata/testdata.txt","r")
@@ -347,7 +382,7 @@ try:
 			if (len(testData.rstrip(' \t\n\r')) > 1) and ("#" not in testData[0]):
 				logging.info("Testdata: %s", testData.rstrip(' \t\n\r'))
 				from includes import decoder
-				decoder.decode(converter.freqToHz(args.freq), testData)
+				decoder.decode(freqConverter.freqToHz(args.freq), testData)
 				time.sleep(1)
 		logging.debug("test finished")
 
@@ -381,7 +416,13 @@ finally:
 	finally:
 		# Close Logging
 		logging.debug("close Logging")
+		# Waiting for all Threads to write there logs
+		if globals.config.getboolean("BOSWatch","processAlarmAsync") == True:
+			logging.debug("waiting 3s for threads...")
+			time.sleep(3)
 		logging.info("BOSWatch exit()")
 		logging.shutdown()
+		if nmaHandler:
+			nmaHandler.close()
 		fh.close()
 		ch.close()

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: utf-8 -*-
 
 """
 doubleFilter is the central function to filter out double alarms.
@@ -19,6 +19,8 @@ from includes import globals  # Global variables
 #
 # ListStructure [0..n] = (ID, TimeStamp, msg)
 #
+doubleList = []
+
 
 def checkID(typ, id, msg=""):
 	"""
@@ -29,17 +31,23 @@ def checkID(typ, id, msg=""):
 	@return:    True if check was OK
 	@return:    False if double was found
 	"""
+	global doubleList
 	timestamp = int(time.time()) # Get Timestamp
 
-	for i in range(len(globals.doubleList)):
-		(xID, xTimestamp, xMsg) = globals.doubleList[i]
+	logging.debug("checkID: %s (%s)", id, msg)
+	for i in range(len(doubleList)):
+		(xID, xTimestamp, xMsg) = doubleList[i]
 		# given ID found?
 		# return False if the first entry in double_ignore_time is found, we will not check for younger ones...
 		if id == xID and timestamp < xTimestamp + globals.config.getint("BOSWatch", "doubleFilter_ignore_time"):
+			logging.debug("-- previous id %s is within doubleFilter_ignore_time (%ss)", xID, globals.config.getint("BOSWatch", "doubleFilter_ignore_time"))
 			# if wanted, we have to check the msg additional
 			if "POC" in typ and globals.config.getint("BOSWatch", "doubleFilter_check_msg"):
+				logging.debug("-- compare msg:")
+				logging.debug("---- current msg: (%s)", msg.strip())
+				logging.debug("---- previous msg: (%s)", xMsg)
 				# if msg is a substring of xMsg we found a double
-				if msg in xMsg:
+				if msg.strip() in xMsg:
 					logging.info("%s double alarm (id+msg): %s within %s second(s)", typ, xID, timestamp-xTimestamp)
 					return False
 			else:
@@ -54,12 +62,13 @@ def newEntry(id, msg = ""):
 
 	@return:    nothing
 	"""
+	global doubleList
 	timestamp = int(time.time()) # Get Timestamp
-	globals.doubleList.append((id, timestamp, msg))
+	doubleList.append((id, timestamp, msg.strip()))
 
 	logging.debug("Added %s to doubleList", id)
 
 	# now check if list has more than n entries:
-	if len(globals.doubleList) > globals.config.getint("BOSWatch", "doubleFilter_ignore_entries"):
+	if len(doubleList) > globals.config.getint("BOSWatch", "doubleFilter_ignore_entries"):
 		# we have to kill the oldest one
-		globals.doubleList.pop(0)
+		doubleList.pop(0)

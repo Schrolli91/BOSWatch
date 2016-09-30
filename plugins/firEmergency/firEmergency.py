@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 firEmergency-Plugin to dispatch ZVEI- and POCSAG - messages to firEmergency
@@ -18,6 +18,8 @@ import socket
 from includes import globals  # Global variables
 
 from includes.helper import configHandler
+from includes.helper import stringConverter
+
 
 ###
 #
@@ -85,7 +87,8 @@ def run(typ,freq,data):
 				elif typ == "ZVEI":
 					logging.debug("ZVEI to firEmergency")
 					try:
-							firXML = "<event>\n<address>"+data["zvei"]+"</address>\n<description>"+data["description"]+"</description>\n<message>"+data["zvei"]+" alarmiert.</message>\n</event>\n"
+							description = stringConverter.convertToUTF8(data["description"])
+							firXML = "<event>\n<address>"+data["zvei"]+"</address>\n<description>"+description+"</description>\n<message>"+data["zvei"]+"</message>\n</event>\n"
 							firSocket.send(firXML)
 					except:
 							logging.error("%s to firEmergency failed", typ)
@@ -97,7 +100,9 @@ def run(typ,freq,data):
 					logging.debug("POC to firEmergency")
 					try:
 							# !!! Subric+"XX" because of an Issuse in firEmergency !!!
-							firXML = "<event>\n<address>"+data["ric"]+"</address>\n<status>"+data["function"]+"XX</status>\n<description>"+data["description"]+"</description>\n<message>"+data["msg"]+"</message>\n</event>\n"
+							description = stringConverter.convertToUTF8(data["description"])
+							msg =  stringConverter.convertToUTF8(data["msg"])
+							firXML = "<event>\n<address>"+data["ric"]+"</address>\n<status>"+data["function"]+"XX</status>\n<description>"+description+"</description>\n<message>"+msg+"</message>\n</event>\n"
 							firSocket.send(firXML)
 					except:
 							logging.error("%s to firEmergency failed", typ)

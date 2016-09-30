@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 #
 
 """
@@ -16,3 +16,8 @@ class MyTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
 	def setBackupCount(self, backupCount):
 		"""Set/Change backupCount"""
 		self.backupCount = backupCount
+		
+	def close(self):
+		"""Make shure logfile will be flushed"""
+		self.flush()
+		super(self.__class__, self).close()
