@@ -101,3 +101,7 @@ def run(typ,freq,data):
 				logging.error("cannot send HTTP request")
 				logging.debug("cannot send HTTP request", exc_info=True)
 				return
+	except:
+		logging.error("cannot send HTTP request")
+		logging.debug("cannot send HTTP request", exc_info=True)
+		return
