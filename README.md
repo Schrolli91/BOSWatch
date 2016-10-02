@@ -1,5 +1,11 @@
-Codacy static code analysis of develop Branch
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d512976554354a199555bd34ed179bb1)](https://www.codacy.com/app/Schrolli91/BOSWatch?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Schrolli91/BOSWatch&amp;utm_campaign=Badge_Grade)
+**Codacy - static code analysis:**
+
+|branch|quality|
+|---|---|
+|master-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|
+|develop-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|
+
+
 
 ![# BOSWatch](/boswatch.png)
 
