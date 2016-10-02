@@ -22,7 +22,7 @@ def replaceWildcards(text, data, lineBrakeAllowed=False):
 	@type    text: string
 	@param   text: Input text with wildcards
 	@type    data: map
-	@param   data: map of data (structure see interface.txt)
+	@param   data: map of data (structure see readme.md in plugin folder)
 	@type    lineBrakeAllowed: Boolean
 	@param   lineBrakeAllowed: switch to allow lineBreak (%BR%) as wildcard
 

@@ -87,7 +87,7 @@ def run(typ,freq,data):
 
 	@type    typ:  string (FMS|ZVEI|POC)
 	@param   typ:  Typ of the dataset for sending via eMail
-	@type    data: map of data (structure see interface.txt)
+	@type    data: map of data (structure see readme.md in plugin folder)
 	@param   data: Contains the parameter for dispatch to eMail.
 	@type    freq: string
 	@keyword freq: frequency of the SDR Stick

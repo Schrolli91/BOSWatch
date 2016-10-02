@@ -27,7 +27,7 @@ def processAlarmHandler(typ, freq, data):
 	@param   typ:  Typ of the dataset
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
-	@type    data: map of data (structure see interface.txt)
+	@type    data: map of data (structure see readme.md in plugin folder)
 	@param   data: Contains the parameter
 
 	@requires:  active plugins in pluginList
@@ -61,7 +61,7 @@ def processAlarm(typ, freq, data):
 	@param   typ:  Typ of the dataset
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
-	@type    data: map of data (structure see interface.txt)
+	@type    data: map of data (structure see readme.md in plugin folder)
 	@param   data: Contains the parameter
 
 	@requires:  active plugins in pluginList

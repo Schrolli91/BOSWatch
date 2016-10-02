@@ -71,7 +71,7 @@ No filter for a combination typ/plugin = all data will pass
 
 Syntax: `INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX` (separator `;`)
 - `TYP` = the data typ (FMS|ZVEI|POC)
-- `DATAFIELD` = the field of the data array (See interface.txt)
+- `DATAFIELD` = the field of the data array (see readme.md in plugin folder)
 - `PLUGIN` = the name of the plugin to call with this filter (* for all)
 - `FREQUENZ` = the frequenz to use the filter (for more SDR sticks (* for all))
 - `REGEX` = the RegEX
