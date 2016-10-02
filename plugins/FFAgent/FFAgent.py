@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 FFAgent-Plugin to send FMS-, ZVEI- and POCSAG - messages to FF-Agent

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 Pushover-Plugin to send FMS-, ZVEI- and POCSAG - messages to Pushover Clients
