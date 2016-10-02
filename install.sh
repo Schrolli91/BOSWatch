@@ -11,7 +11,7 @@ echo "                 by Bastian Schroll                 "
 echo ""
 echo "This may take a several minutes... Don't panic!"
 echo ""
-echo "Caution, script doesn't install a Webserver with PHP and MySQL"
+echo "Caution, the script doesn't install a Webserver with PHP and MySQL"
 echo "so you have to install it later manually if you want to use the MySQL features"
 
 mkdir -p ~/boswatch/install
@@ -25,7 +25,7 @@ apt-get update -y > ~/boswatch/install/setup_log.txt 2>&1
 tput cup 13 15
 echo "[ 2/10] [##--------]"
 tput cup 15 5
-echo "-> downloading GIT an other stuff.........."
+echo "-> downloading GIT and other stuff.........."
 apt-get -y install git cmake build-essential libusb-1.0 qt4-qmake libpulse-dev libx11-dev sox >> ~/boswatch/install/setup_log.txt 2>&1
 
 tput cup 13 15
@@ -90,7 +90,7 @@ git clone https://github.com/Schrolli91/BOSWatch >> ~/boswatch/install/setup_log
 tput cup 13 15
 echo "[10/10] [##########]"
 tput cup 15 5
-echo "-> Configuring BOSWatch........................"
+echo "-> Configuring BOSWatch................"
 cd ~/boswatch
 chmod +x *
 echo "# BOSWatch - blacklist the DVB drivers to avoid conflict with the SDR driver\n blacklist dvb_usb_rtl28xxu \n blacklist rtl2830\n blacklist dvb_usb_v2\n blacklist dvb_core" >> /etc/modprobe.d/boswatch_blacklist_sdr.conf
