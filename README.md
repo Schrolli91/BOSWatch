@@ -1,3 +1,6 @@
+Codacy static code analysis of develop Branch
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d512976554354a199555bd34ed179bb1)](https://www.codacy.com/app/Schrolli91/BOSWatch?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Schrolli91/BOSWatch&amp;utm_campaign=Badge_Grade)
+
 ![# BOSWatch](/boswatch.png)
 
 :satellite: Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG :satellite:
@@ -148,4 +151,3 @@ Thanks to smith_fms and McBo from Funkmeldesystem.de - Forum for Inspiration and
 
 ### Code your own Plugin
 See `plugins/README.md`
-
