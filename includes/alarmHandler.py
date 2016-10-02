@@ -47,7 +47,7 @@ def processAlarmHandler(typ, freq, data):
 			pass
 	else:
 		processAlarm(typ, freq, data)
-		
+
 
 ##
 #

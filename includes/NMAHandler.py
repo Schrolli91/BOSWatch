@@ -14,11 +14,11 @@ class NMAHandler(logging.Handler): # Inherit from logging.Handler
 	"""
 	Handler instances dispatch logging events to NotifyMyAndroid.
 	"""
-	
+
 	def __init__(self, APIKey, application="BOSWatch", event="Logging-Handler"):
 		"""
 		Initializes the handler with NMA-specific parameters.
-		
+
 		@param   APIKey:      might be a string containing 1 key or an array of keys
 		@param   application: application name [256]
 		@param   event:       event name       [1000]
@@ -38,7 +38,7 @@ class NMAHandler(logging.Handler): # Inherit from logging.Handler
 		"""
 		# record.message is the log message
 		message = record.message
-		
+
 		# if exist, add details as NMA event:
 		# record.module is the module- or filename
 		if (len(record.module) > 0):
@@ -51,7 +51,7 @@ class NMAHandler(logging.Handler): # Inherit from logging.Handler
 		else:
 			# we have to set an event-text, use self.event now
 			event = self.event
-			
+
 		# record.levelno is the log level
 		# loglevel: 10 = debug    => priority: -2
 		# loglevel: 20 = info     => priority: -1
@@ -68,6 +68,6 @@ class NMAHandler(logging.Handler): # Inherit from logging.Handler
 			priority = -1
 		else:
 			priority = -2
-			
+
 		# pynma.push(self, application="", event="", description="", url="", contenttype=None, priority=0, batch_mode=False, html=False)
 		self.nma.push(application=self.application, event=event, description=message, priority=priority)

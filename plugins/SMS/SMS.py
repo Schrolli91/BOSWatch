@@ -2,9 +2,9 @@
 # -*- coding: UTF-8 -*-
 
 """
-This plugin enables the function of sendig SMS to 
+This plugin enables the function of sendig SMS to
 a given number defined in config.ini
-It is sensitive to ric and subric, also defined in 
+It is sensitive to ric and subric, also defined in
 config.ini
 
 @author: Jens Herrmann
@@ -87,16 +87,16 @@ def run(typ,freq,data):
 		if configHandler.checkConfig("SMS"): #read and debug the config (let empty if no config used)
 			if typ == "POC": # only available for POC!
 				logging.debug("Plugin SMS enabled")
-				
+
 				# get number of cases and build a RIC-Array
 				i = globals.config.get("SMS","quantity")
 				aRic = []
-				
+
 				# build the array
 				for x in range (1, int(i) + 1):
 					# check the number of subrics
 					subric = globals.config.get("SMS","subric" + str(x))
-					if len(subric) > 1: # we have more than one subric						
+					if len(subric) > 1: # we have more than one subric
 						subric_list = subric.split(",")
 						for y in range (0, len(subric_list)):
 							sric = subric_list[y].replace(' ','')
@@ -112,37 +112,37 @@ def run(typ,freq,data):
 						tmp.append(globals.config.get("SMS","ric" + str(x)) + subric)
 						tmp.append(x)
 						aRic.append(tmp) # 2D-Array...
-				
+
 				# Debug: Display the multidimensional array aRic
 				#logging.debug("aRic: %s", aRic)
-				
+
 				target = data["ric"] + data["functionChar"]
-				
+
 				#logging.debug("Searching for any occurences of %s", target)
 				#if target in aRic:
 				try:
 					index = find(aRic, target)
 				except:
 					logging.error("RIC not found")
-					
+
 				logging.debug("Return from find: %s", index)
 				if index != -1:
 					case = aRic[index[0]][1]
 					logging.debug("Enabling case %s", case)
-									
+
 					text = globals.config.get("SMS","text" + str(case))
 					number = globals.config.get("SMS","phonenumber" + str(case))
-					
+
 					#just for debug
 					logging.debug("Aktivierter Text: %s", text)
 					logging.debug("Aktivierte Nummer: %s", number)
-						
+
 					# send sms
 					try:
 						sm = gammu.StateMachine()
 						sm.ReadConfig()
 						sm.Init()
-						
+
 						message = {
 							'Text': text,
 							'SMSC': {'Location': 1},
@@ -153,7 +153,7 @@ def run(typ,freq,data):
 						logging.error("Failed to send SMS")
 					else:
 						logging.debug("Falsche SUB-RIC entdeckt - weiter gehts!")
-					
+
 			else:
 				logging.warning("Invalid Typ: %s", typ)
 			########## User Plugin CODE ##########

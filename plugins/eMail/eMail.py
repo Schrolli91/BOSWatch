@@ -130,12 +130,12 @@ def run(typ,freq,data):
 						subject = globals.config.get("eMail", "fms_subject")
 						# replace wildcards with helper function
 						subject = wildcardHandler.replaceWildcards(subject, data)
-						
+
 						# read mailtext-structure from config.ini
 						mailtext = globals.config.get("eMail", "fms_message")
 						# replace wildcards with helper function
 						mailtext = wildcardHandler.replaceWildcards(mailtext, data, lineBrakeAllowed=True)
-						
+
 						# send eMail
 						doSendmail(server, subject, mailtext)
 					except:
@@ -150,12 +150,12 @@ def run(typ,freq,data):
 						subject = globals.config.get("eMail", "zvei_subject")
 						# replace wildcards with helper function
 						subject = wildcardHandler.replaceWildcards(subject, data)
-						
+
 						# read mailtext-structure from config.ini
 						mailtext = globals.config.get("eMail", "zvei_message")
 						# replace wildcards with helper function
 						mailtext = wildcardHandler.replaceWildcards(mailtext, data, lineBrakeAllowed=True)
-						
+
 						# send eMail
 						doSendmail(server, subject, mailtext)
 					except:
@@ -170,12 +170,12 @@ def run(typ,freq,data):
 						subject = globals.config.get("eMail", "poc_subject")
 						# replace wildcards with helper function
 						subject = wildcardHandler.replaceWildcards(subject, data)
-						
+
 						# read mailtext-structure from config.ini
 						mailtext = globals.config.get("eMail", "poc_message")
 						# replace wildcards with helper function
 						mailtext = wildcardHandler.replaceWildcards(mailtext, data, lineBrakeAllowed=True)
-						
+
 						# send eMail
 						doSendmail(server, subject, mailtext)
 					except:

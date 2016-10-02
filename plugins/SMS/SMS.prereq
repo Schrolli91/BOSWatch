@@ -11,6 +11,6 @@ Daten eintragen
 PIN-Abfrage deaktivieren mittels minicom
 minicom -D /dev/ttyUSB0
 ATI # alle infos
-	
+
 AT+CLCK="SC",0,"0000" # 0000 = PIN
 AT+CLCK="SC",2 # Status-Check

@@ -46,7 +46,7 @@ def onLoad():
 	BOTChatIDAPIKey = globals.config.get("Telegram","BOTChatIDAPIKey")
 	RICforLocationAPIKey = globals.config.get("Telegram","RICforLocationAPIKey")
 	GoogleAPIKey = globals.config.get("Telegram","GoogleAPIKey")
-	
+
 	return
 
 
@@ -69,7 +69,7 @@ def run(typ,freq,data):
 	@return:    nothing
 	@exception: nothing, make sure this function will never thrown an exception
 	"""
-	
+
 	global BOTTokenKey
 	global BOTChatIDAPIKey
 	global RICforLocationAPIKey
@@ -83,17 +83,17 @@ def run(typ,freq,data):
 				logging.debug("Compose output from POCSAG-message")
 				# compose message content
 				output = timeHandler.curtime()+"\n"+data["ric"]+"("+data["functionChar"]+")\n"+data["description"]+"\n"+data["msg"]
-				
+
 				# Initiate Telegram Bot
 				logging.debug("Initiate Telegram BOT")
-				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)	
+				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
 
 				# Send message to chat via Telegram BOT API
 				logging.debug("Send message to chat via Telegram BOT API")
 				bot.sendMessage('%s' % BOTChatIDAPIKey, output)
 
 				# Generate location information only for specific RIC
-				if data["ric"] == RICforLocationAPIKey:				
+				if data["ric"] == RICforLocationAPIKey:
 					# Generate map
 					logging.debug("Extract address from POCSAG message")
 					address = "+".join(data["msg"].split(')')[0].split('/',1)[1].replace('(',' ').split())

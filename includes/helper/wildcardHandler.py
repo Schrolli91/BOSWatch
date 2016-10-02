@@ -32,7 +32,7 @@ def replaceWildcards(text, data, lineBrakeAllowed=False):
 	try:
 		# replace date and time wildcards
 		text = text.replace("%TIME%", timeHandler.getTime(data["timestamp"])).replace("%DATE%", timeHandler.getDate(data["timestamp"]))
-		
+
 		# replace some special chars
 		if lineBrakeAllowed == True:
 			text = text.replace("%BR%", "\r\n")

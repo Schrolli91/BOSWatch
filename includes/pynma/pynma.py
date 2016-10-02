@@ -14,7 +14,7 @@ except ImportError:
 
 __version__ = "1.0"
 
-API_SERVER = 'www.notifymyandroid.com' 
+API_SERVER = 'www.notifymyandroid.com'
 ADD_PATH   = '/publicapi/notify'
 
 USER_AGENT="PyNMA/v%s"%__version__
@@ -75,7 +75,7 @@ takes 2 optional arguments:
                 apikey = [apikey]
         self._apikey          = uniq(apikey)
         return self.push(application, event, description, url, contenttype, priority, batch_mode, html)
-			
+
     def push(self, application="", event="", description="", url="", contenttype=None, priority=0, batch_mode=False, html=False):
         """Pushes a message on the registered API keys.
 takes 5 arguments:
@@ -99,10 +99,10 @@ Warning: using batch_mode will return error only if all API keys are bad
 
         if url:
             datas['url'] = url[:512]
-        
+
         if contenttype == "text/html" or html == True: # Currently only accepted content type
             datas['content-type'] = "text/html"
-        
+
         if self._developerkey:
             datas['developerkey'] = self._developerkey
 
@@ -118,7 +118,7 @@ Warning: using batch_mode will return error only if all API keys are bad
             res = self.callapi('POST', ADD_PATH, datas)
             results[datas['apikey']] = res
         return results
-        
+
     def callapi(self, method, path, args):
         headers = { 'User-Agent': USER_AGENT }
         if method == "POST":
@@ -135,7 +135,7 @@ Warning: using batch_mode will return error only if all API keys are bad
                    'message': str(e)
                    }
             pass
-        
+
         return res
 
     def _parse_reponse(self, response):
@@ -152,5 +152,3 @@ Warning: using batch_mode will return error only if all API keys are bad
                 res['message'] = elem.firstChild.nodeValue
                 res['type']    = elem.tagName
                 return res
-                                        
-    

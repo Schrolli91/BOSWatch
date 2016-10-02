@@ -66,7 +66,7 @@ def checkResponse(response, APIKey):
 	except:
 		logging.error("cannot read pynma response")
 		logging.debug("cannot read pynma response", exc_info=True)
-		return						
+		return
 
 
 ##
@@ -90,7 +90,7 @@ def onLoad():
 	global fmsAPIKeyList
 	global zveiAPIKeyList
 	global pocAPIKeyList
-	
+
 	# load config:
 	configHandler.checkConfig("notifyMyAndroid")
 	application = stringConverter.convertToUnicode(globals.config.get("notifyMyAndroid","appName"))
@@ -113,35 +113,35 @@ def onLoad():
 					if row['typ'] in supportedTypes:
 						try:
 							if "FMS" in row['typ']:
-								# if len for id in mainList raise an KeyErrorException, we have to init it... 
-								try: 
+								# if len for id in mainList raise an KeyErrorException, we have to init it...
+								try:
 									if len(fmsAPIKeyList[row['id']]) > 0:
 										pass
 								except KeyError:
 									fmsAPIKeyList[row['id']] = []
 								# data structure: fmsAPIKeyList[fms][i] = (APIKey, priority)
 								fmsAPIKeyList[row['id']].append((row['APIKey'], row['priority'], row['eventPrefix']))
-								
+
 							elif "ZVEI" in row['typ']:
-								# if len for id in mainList raise an KeyErrorException, we have to init it... 
-								try: 
+								# if len for id in mainList raise an KeyErrorException, we have to init it...
+								try:
 									if len(zveiAPIKeyList[row['id']]) > 0:
 										pass
 								except KeyError:
 									zveiAPIKeyList[row['id']] = []
 								# data structure: zveiAPIKeyList[zvei][i] = (APIKey, priority)
 								zveiAPIKeyList[row['id']].append((row['APIKey'], row['priority'], row['eventPrefix']))
-								
+
 							elif "POC" in row['typ']:
-								# if len for id in mainList raise an KeyErrorException, we have to init it... 
-								try: 
+								# if len for id in mainList raise an KeyErrorException, we have to init it...
+								try:
 									if len(pocAPIKeyList[row['id']]) > 0:
 										pass
 								except KeyError:
 									pocAPIKeyList[row['id']] = []
 								# data structure: zveiAPIKeyList[ric][i] = (APIKey, priority)
 								pocAPIKeyList[row['id']].append((row['APIKey'], row['priority'], row['eventPrefix']))
-								
+
 						except:
 							# skip entry in case of an exception
 							logging.debug("error in shifting...", exc_info=True)
@@ -165,7 +165,7 @@ def onLoad():
 def run(typ,freq,data):
 	"""
 	This function is the implementation of the notifyMyAndroid-Plugin.
-	
+
 	The configuration is set in the config.ini.
 
 	@type    typ:  string (FMS|ZVEI|POC)
@@ -187,7 +187,7 @@ def run(typ,freq,data):
 	global fmsAPIKeyList
 	global zveiAPIKeyList
 	global pocAPIKeyList
-	
+
 	try:
 		try:
 			#
@@ -199,7 +199,7 @@ def run(typ,freq,data):
 			logging.debug("cannot initialize pyNMA", exc_info=True)
 			# Without class, plugin couldn't work
 			return
-			
+
 		else:
 			# toDo is equals for all types, so only check if typ is supported
 			supportedTypes = ["FMS", "ZVEI", "POC"]
@@ -213,7 +213,7 @@ def run(typ,freq,data):
 					if ("POC" in typ) and (len(data['msg']) > 0):
 						msg += "\n" + data['msg']
 					msg = stringConverter.convertToUnicode(msg)
-					
+
 					# if not using csv-import, all is simple...
 					if usecsv == False:
 						response = nma.pushWithAPIKey(APIKey, application, event, msg, priority=globals.config.getint("notifyMyAndroid","priority"))
@@ -234,7 +234,7 @@ def run(typ,freq,data):
 							except KeyError:
 								# nothing found
 								pass
-								
+
 						elif "ZVEI" in typ:
 							# lets look for zvei in zveiAPIKeyList
 							xID = data['zvei']
@@ -250,7 +250,7 @@ def run(typ,freq,data):
 							except KeyError:
 								# nothing found
 								pass
-								
+
 						elif "POC" in typ:
 							xID = ""
 							# 1. lets look for ric+functionChar in pocAPIKeyList

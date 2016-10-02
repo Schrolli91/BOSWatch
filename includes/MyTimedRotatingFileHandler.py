@@ -16,7 +16,7 @@ class MyTimedRotatingFileHandler(logging.handlers.TimedRotatingFileHandler):
 	def setBackupCount(self, backupCount):
 		"""Set/Change backupCount"""
 		self.backupCount = backupCount
-		
+
 	def close(self):
 		"""Make shure logfile will be flushed"""
 		self.flush()
