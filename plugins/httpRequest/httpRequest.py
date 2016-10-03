@@ -1,21 +1,29 @@
 #!/usr/bin/python
-# -*- coding: UTF-8 -*-
+# -*- coding: cp1252 -*-
 
 """
 httpRequest-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages to an URL
 
 @author: Bastian Schroll
+@author: TheJockel
+
 
 @requires: httpRequest-Configuration has to be set in the config.ini
 """
 
+#
+# Imports
+#
+#import httplib #for the HTTP request
+import urllib2
+import urllib
 import time
 import logging # Global logger
-import httplib #for the HTTP request
-from urlparse import urlparse #for split the URL into url and path
-
+import string
 from includes import globalVars  # Global variables
 
+# Helper function, uncomment to use
+#from includes.helper import timeHandler
 from includes.helper import wildcardHandler
 from includes.helper import configHandler
 
@@ -68,13 +76,15 @@ def run(typ,freq,data):
 				if typ == "FMS":
 					url = globalVars.config.get("httpRequest", "fms_url") #Get URL
 					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
+					url = url.replace(" ","%20") # replace space with %20 to be a vaild http request
 				elif typ == "ZVEI":
 					url = globalVars.config.get("httpRequest", "zvei_url") #Get URL
 					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
+					url = url.replace(" ","%20") # replace space with %20 to be a vaild http request
 				elif typ == "POC":
 					url = globalVars.config.get("httpRequest", "poc_url") #Get URL
 					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
-
+					url = url.replace(" ","%20") # replace space with %20 to be a vaild http request
 				else:
 					logging.warning("Invalid Typ: %s", typ)
 					return
@@ -84,37 +94,19 @@ def run(typ,freq,data):
 				# HTTP-Request
 				#
 				logging.debug("send %s HTTP request", typ)
-				url = urlparse(url) #split URL into path and querry
-				httprequest = httplib.HTTPConnection(url[2]) #connect to URL Path
-				httprequest.request("GET", url[5]) #send URL Querry per GET
+
+				try:
+				    resp = urllib2.urlopen(url)
+				except urllib2.HTTPError as e:
+    					logging.error("HTTP response: %s", e.code)
+				except urllib2.URLError as e:
+    					logging.error("HTTP-specific error: %s", e.args)
+
 
 			except:
 				logging.error("cannot send HTTP request")
 				logging.debug("cannot send HTTP request", exc_info=True)
 				return
-
-			else:
-				try:
-					#
-					# check HTTP-Response
-					#
-					httpresponse = httprequest.getresponse()
-					if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
-						logging.debug("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))
-					else:
-						logging.warning("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))
-				except: #otherwise
-					logging.error("cannot get HTTP response")
-					logging.debug("cannot get HTTP response", exc_info=True)
-					return
-
-			finally:
-				logging.debug("close HTTP-Connection")
-				try:
-					httprequest.close()
-				except:
-					pass
-
 	except:
 		logging.error("unknown error")
 		logging.debug("unknown error", exc_info=True)
