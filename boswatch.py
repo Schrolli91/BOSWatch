@@ -281,8 +281,8 @@ try:
 	#
 	try:
 		if globals.config.getboolean("BOSWatch","useRegExFilter"):
-			from includes import filter
-			filter.loadFilters()
+			from includes import regexFilter
+			regexFilter.loadFilters()
 	except:
 		# It's an error, but we could work without that stuff...
 		logging.error("cannot load filters")

@@ -77,8 +77,8 @@ def processAlarm(typ, freq, data):
 		for pluginName, plugin in globals.pluginList.items():
 			# if enabled use RegEx-filter
 			if globals.config.getint("BOSWatch","useRegExFilter"):
-				from includes import filter
-				if filter.checkFilters(typ, data, pluginName, freq):
+				from includes import regexFilter
+				if regexFilter.checkFilters(typ, data, pluginName, freq):
 					logging.debug("call Plugin: %s", pluginName)
 					try:
 						plugin.run(typ, freq, data)
