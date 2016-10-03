@@ -34,14 +34,14 @@ def loadFilters():
 		# For each entry in config.ini [Filters] section
 		for key,val in globalVars.config.items("Filters"):
 			logging.debug(" - %s = %s", key, val)
-			filter = val.split(";")
+			filterData = val.split(";")
 
 			# resolve the * for freqToHz()
-			if not filter[3] == "*":
-				filter[3] = converter.freqToHz(filter[3])
+			if not filterData[3] == "*":
+				filterData[3] = converter.freqToHz(filterData[3])
 
 			# insert splitet data into filterList
-			filterList.append({"name": key, "typ": filter[0], "dataField": filter[1], "plugin": filter[2], "freq": filter[3], "regex": filter[4]})
+			filterList.append({"name": key, "typ": filterData[0], "dataField": filterData[1], "plugin": filterData[2], "freq": filterData[3], "regex": filterData[4]})
 	except:
 		logging.error("cannot read config file")
 		logging.debug("cannot read config file", exc_info=True)
