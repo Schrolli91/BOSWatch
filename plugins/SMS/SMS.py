@@ -89,18 +89,18 @@ def run(typ,freq,data):
 				logging.debug("Plugin SMS enabled")
 
 				# get number of cases and build a RIC-Array
-				i = globals.config.get("SMS","quantity")
+				i = globalVars.config.get("SMS","quantity")
 				aRic = []
 
 				# build the array
 				for x in range (1, int(i) + 1):
 					# check the number of subrics
-					subric = globals.config.get("SMS","subric" + str(x))
+					subric = globalVars.config.get("SMS","subric" + str(x))
 					if len(subric) > 1: # we have more than one subric
 						subric_list = subric.split(",")
 						for y in range (0, len(subric_list)):
 							sric = subric_list[y].replace(' ','')
-							full_ric = globals.config.get("SMS","ric" + str(x)) + sric
+							full_ric = globalVars.config.get("SMS","ric" + str(x)) + sric
 							case = x
 							tmp = []
 							tmp.append(full_ric)
@@ -109,7 +109,7 @@ def run(typ,freq,data):
 					else:
 						#get ric AND subric at once with ONE subric
 						tmp = []
-						tmp.append(globals.config.get("SMS","ric" + str(x)) + subric)
+						tmp.append(globalVars.config.get("SMS","ric" + str(x)) + subric)
 						tmp.append(x)
 						aRic.append(tmp) # 2D-Array...
 
@@ -130,8 +130,8 @@ def run(typ,freq,data):
 					case = aRic[index[0]][1]
 					logging.debug("Enabling case %s", case)
 
-					text = globals.config.get("SMS","text" + str(case))
-					number = globals.config.get("SMS","phonenumber" + str(case))
+					text = globalVars.config.get("SMS","text" + str(case))
+					number = globalVars.config.get("SMS","phonenumber" + str(case))
 
 					#just for debug
 					logging.debug("Aktivierter Text: %s", text)

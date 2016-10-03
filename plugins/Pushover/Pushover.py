@@ -67,27 +67,27 @@ def run(typ,freq,data):
 				logging.debug("send Pushover %s", typ)
 
 			        if data["function"] == '1':
-			                priority = globals.config.get("Pushover", "SubA")
+			                priority = globalVars.config.get("Pushover", "SubA")
 			        elif data["function"] == '2':
-			                priority = globals.config.get("Pushover", "SubB")
+			                priority = globalVars.config.get("Pushover", "SubB")
 			        elif data["function"] == '3':
-			                priority = globals.config.get("Pushover", "SubC")
+			                priority = globalVars.config.get("Pushover", "SubC")
 			        elif data["function"] == '4':
-			                priority = globals.config.get("Pushover", "SubD")
+			                priority = globalVars.config.get("Pushover", "SubD")
 			        else:
 			                priority = 0
 
 				conn = httplib.HTTPSConnection("api.pushover.net:443")
 				conn.request("POST", "/1/messages.json",
 				urllib.urlencode({
-					"token": globals.config.get("Pushover", "api_key"),
-					"user": globals.config.get("Pushover", "user_key"),
+					"token": globalVars.config.get("Pushover", "api_key"),
+					"user": globalVars.config.get("Pushover", "user_key"),
 					"message": "<b>"+data["description"]+"</b><br>"+data["msg"].replace(";", "<br>"),
-					"html": globals.config.get("Pushover", "html"),
-					"title": globals.config.get("Pushover", "title"),
+					"html": globalVars.config.get("Pushover", "html"),
+					"title": globalVars.config.get("Pushover", "title"),
 					"priority": priority,
-					"retry": globals.config.get("Pushover", "retry"),
-					"expire": globals.config.get("Pushover", "expire")
+					"retry": globalVars.config.get("Pushover", "retry"),
+					"expire": globalVars.config.get("Pushover", "expire")
 				}),{"Content-type": "application/x-www-form-urlencoded"})
 
 			except:

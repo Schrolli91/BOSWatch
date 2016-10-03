@@ -70,7 +70,7 @@ def run(typ,freq,data):
 				# connect to firEmergency
 				#
 				firSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-				firSocket.connect((globals.config.get("firEmergency", "firserver"), globals.config.getint("firEmergency", "firport")))
+				firSocket.connect((globalVars.config.get("firEmergency", "firserver"), globalVars.config.getint("firEmergency", "firport")))
 			except:
 				logging.error("cannot connect to firEmergency")
 				logging.debug("cannot connect to firEmergency", exc_info=True)

@@ -70,11 +70,11 @@ def run(typ,freq,data):
 				conn = httplib.HTTPSConnection("gateway.sms77.de:443")
 				conn.request("POST", "",
 				urllib.urlencode({
-					"u": globals.config.get("Sms77", "user"),
-					"p": globals.config.get("Sms77", "password"),
-					"to": globals.config.get("Sms77", "to"),
-					"from": globals.config.get("Sms77", "from"),
-					"type": globals.config.get("Sms77", "type"),
+					"u": globalVars.config.get("Sms77", "user"),
+					"p": globalVars.config.get("Sms77", "password"),
+					"to": globalVars.config.get("Sms77", "to"),
+					"from": globalVars.config.get("Sms77", "from"),
+					"type": globalVars.config.get("Sms77", "type"),
 					"text": data["description"]+"<br>"+data["msg"].replace(";", "<br>")
 				}),{"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"})
 

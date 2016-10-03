@@ -60,7 +60,7 @@ def bosMonRequest(httprequest, params, headers):
 		#
 		# BosMon/HTTP-Request
 		#
-		httprequest.request("POST", "/telegramin/"+globals.config.get("BosMon", "bosmon_channel")+"/input.xml", params, headers)
+		httprequest.request("POST", "/telegramin/"+globalVars.config.get("BosMon", "bosmon_channel")+"/input.xml", params, headers)
 	except:
 		logging.error("request to BosMon failed")
 		logging.debug("request to BosMon failed", exc_info=True)
@@ -110,12 +110,12 @@ def run(typ,freq,data):
 				headers['Content-type'] = "application/x-www-form-urlencoded"
 				headers['Accept'] = "text/plain"
 				# if an user is set in the config.ini we will use HTTP-Authorization
-				if globals.config.get("BosMon", "bosmon_user"):
+				if globalVars.config.get("BosMon", "bosmon_user"):
 					# generate b64encoded autorization-token for HTTP-request
-					headers['Authorization'] = "Basic {0}".format(base64.b64encode("{0}:{1}".format(globals.config.get("BosMon", "bosmon_user"), globals.config.get("BosMon", "bosmon_password"))))
+					headers['Authorization'] = "Basic {0}".format(base64.b64encode("{0}:{1}".format(globalVars.config.get("BosMon", "bosmon_user"), globalVars.config.get("BosMon", "bosmon_password"))))
 				logging.debug("connect to BosMon")
 				# open connection to BosMon-Server
-				httprequest = httplib.HTTPConnection(globals.config.get("BosMon", "bosmon_server"), globals.config.get("BosMon", "bosmon_port"), timeout=5)
+				httprequest = httplib.HTTPConnection(globalVars.config.get("BosMon", "bosmon_server"), globalVars.config.get("BosMon", "bosmon_port"), timeout=5)
 				# debug-level to shell (0=no debug|1)
 				httprequest.set_debuglevel(0)
 			except:

@@ -59,13 +59,13 @@ def doSendmail(server, subject, mailtext):
 	"""
 	try:
 		msg = MIMEText(mailtext, 'plain', 'UTF-8')
-		msg['From'] = globals.config.get("eMail", "from")
-		msg['To']   = globals.config.get("eMail", "to")
+		msg['From'] = globalVars.config.get("eMail", "from")
+		msg['To']   = globalVars.config.get("eMail", "to")
 		msg['Subject'] = subject
 		msg['Date'] = formatdate()
 		msg['Message-Id'] = make_msgid()
-		msg['Priority'] = globals.config.get("eMail", "priority")
-		server.sendmail(globals.config.get("eMail", "from"), globals.config.get("eMail", "to").split(), msg.as_string())
+		msg['Priority'] = globalVars.config.get("eMail", "priority")
+		server.sendmail(globalVars.config.get("eMail", "from"), globalVars.config.get("eMail", "to").split(), msg.as_string())
 	except:
 		logging.error("send eMail failed")
 		logging.debug("send eMail failed", exc_info=True)
@@ -103,17 +103,17 @@ def run(typ,freq,data):
 				#
 				# connect to SMTP-Server
 				#
-				server = smtplib.SMTP(globals.config.get("eMail", "smtp_server"), globals.config.get("eMail", "smtp_port"))
+				server = smtplib.SMTP(globalVars.config.get("eMail", "smtp_server"), globalVars.config.get("eMail", "smtp_port"))
 				# debug-level to shell (0=no debug|1)
 				server.set_debuglevel(0)
 
 				# if tls is enabled, starttls
-				if globals.config.get("eMail", "tls"):
+				if globalVars.config.get("eMail", "tls"):
 					server.starttls()
 
 				# if user is given, login
-				if globals.config.get("eMail", "user"):
-					server.login(globals.config.get("eMail", "user"), globals.config.get("eMail", "password"))
+				if globalVars.config.get("eMail", "user"):
+					server.login(globalVars.config.get("eMail", "user"), globalVars.config.get("eMail", "password"))
 
 			except:
 				logging.error("cannot connect to eMail")
@@ -127,12 +127,12 @@ def run(typ,freq,data):
 					logging.debug("Start FMS to eMail")
 					try:
 						# read subject-structure from config.ini
-						subject = globals.config.get("eMail", "fms_subject")
+						subject = globalVars.config.get("eMail", "fms_subject")
 						# replace wildcards with helper function
 						subject = wildcardHandler.replaceWildcards(subject, data)
 
 						# read mailtext-structure from config.ini
-						mailtext = globals.config.get("eMail", "fms_message")
+						mailtext = globalVars.config.get("eMail", "fms_message")
 						# replace wildcards with helper function
 						mailtext = wildcardHandler.replaceWildcards(mailtext, data, lineBrakeAllowed=True)
 
@@ -147,12 +147,12 @@ def run(typ,freq,data):
 					logging.debug("Start ZVEI to eMail")
 					try:
 						# read subject-structure from config.ini
-						subject = globals.config.get("eMail", "zvei_subject")
+						subject = globalVars.config.get("eMail", "zvei_subject")
 						# replace wildcards with helper function
 						subject = wildcardHandler.replaceWildcards(subject, data)
 
 						# read mailtext-structure from config.ini
-						mailtext = globals.config.get("eMail", "zvei_message")
+						mailtext = globalVars.config.get("eMail", "zvei_message")
 						# replace wildcards with helper function
 						mailtext = wildcardHandler.replaceWildcards(mailtext, data, lineBrakeAllowed=True)
 
@@ -167,12 +167,12 @@ def run(typ,freq,data):
 					logging.debug("Start POC to eMail")
 					try:
 						# read subject-structure from config.ini
-						subject = globals.config.get("eMail", "poc_subject")
+						subject = globalVars.config.get("eMail", "poc_subject")
 						# replace wildcards with helper function
 						subject = wildcardHandler.replaceWildcards(subject, data)
 
 						# read mailtext-structure from config.ini
-						mailtext = globals.config.get("eMail", "poc_message")
+						mailtext = globalVars.config.get("eMail", "poc_message")
 						# replace wildcards with helper function
 						mailtext = wildcardHandler.replaceWildcards(mailtext, data, lineBrakeAllowed=True)
 

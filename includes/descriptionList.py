@@ -36,7 +36,7 @@ def loadCSV(typ, idField):
 	resultList = {}
 	try:
 		logging.debug("-- loading %s.csv", typ)
-		with open(globals.script_path+'/csv/'+typ+'.csv') as csvfile:
+		with open(globalVars.script_path+'/csv/'+typ+'.csv') as csvfile:
 			# DictReader expected structure described in first line of csv-file
 			reader = csv.DictReader(csvfile)
 			for row in reader:
@@ -70,17 +70,17 @@ def loadDescriptionLists():
 	try:
 		logging.debug("loading description lists")
 
-		if globals.config.getint("FMS", "idDescribed"):
+		if globalVars.config.getint("FMS", "idDescribed"):
 			logging.debug("- load FMS description list")
 			global fmsDescribtionList
 			fmsDescribtionList = loadCSV("fms", "fms")
 
-		if globals.config.getint("ZVEI", "idDescribed"):
+		if globalVars.config.getint("ZVEI", "idDescribed"):
 			logging.debug("- load ZVEI description list")
 			global zveiDescribtionList
 			zveiDescribtionList = loadCSV("zvei", "zvei")
 
-		if globals.config.getint("POC", "idDescribed"):
+		if globalVars.config.getint("POC", "idDescribed"):
 			logging.debug("- load pocsag description list")
 			global ricDescribtionList
 			ricDescribtionList = loadCSV("poc", "ric")

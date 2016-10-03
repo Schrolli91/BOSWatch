@@ -34,22 +34,22 @@ def isAllowed(poc_id):
 	"""
 	# 1.) If allowed RICs is set, only they will path,
 	#       If RIC is the right one return True, else False
-	if globals.config.get("POC", "allow_ric"):
-		if poc_id in globals.config.get("POC", "allow_ric"):
+	if globalVars.config.get("POC", "allow_ric"):
+		if poc_id in globalVars.config.get("POC", "allow_ric"):
 			logging.info("RIC %s is allowed", poc_id)
 			return True
 		else:
 			logging.info("RIC %s is not in the allowed list", poc_id)
 			return False
 	# 2.) If denied RIC, return False
-	elif poc_id in globals.config.get("POC", "deny_ric"):
+	elif poc_id in globalVars.config.get("POC", "deny_ric"):
 		logging.info("RIC %s is denied by config.ini", poc_id)
 		return False
 	# 3.) Check Range, return False if outside def. range
-	elif int(poc_id) < globals.config.getint("POC", "filter_range_start"):
+	elif int(poc_id) < globalVars.config.getint("POC", "filter_range_start"):
 		logging.info("RIC %s out of filter range (start)", poc_id)
 		return False
-	elif int(poc_id) > globals.config.getint("POC", "filter_range_end"):
+	elif int(poc_id) > globalVars.config.getint("POC", "filter_range_end"):
 		logging.info("RIC %s out of filter range (end)", poc_id)
 		return False
 	return True
@@ -111,7 +111,7 @@ def decode(freq, decoded):
 						# Add function as character a-d to dataset
 						data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
 						# If enabled, look up description
-						if globals.config.getint("POC", "idDescribed"):
+						if globalVars.config.getint("POC", "idDescribed"):
 							from includes import descriptionList
 							data["description"] = descriptionList.getDescription("POC", poc_id)
 						# processing the alarm

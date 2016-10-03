@@ -76,21 +76,21 @@ try:
 		#
 		# Script-pathes
 		#
-		globals.script_path = os.path.dirname(os.path.abspath(__file__))
+		globalVars.script_path = os.path.dirname(os.path.abspath(__file__))
 
 		#
 		# Set log_path
 		#
 		if args.usevarlog:
-			globals.log_path = "/var/log/BOSWatch/"
+			globalVars.log_path = "/var/log/BOSWatch/"
 		else:
-			globals.log_path = globals.script_path+"/log/"
+			globalVars.log_path = globalVars.script_path+"/log/"
 
 		#
 		# If necessary create log-path
 		#
-		if not os.path.exists(globals.log_path):
-			os.mkdir(globals.log_path)
+		if not os.path.exists(globalVars.log_path):
+			os.mkdir(globalVars.log_path)
 	except:
 		# we couldn't work without logging -> exit
 		print "ERROR: cannot initialize paths"
@@ -106,7 +106,7 @@ try:
 		#formatter = logging.Formatter('%(asctime)s - %(module)-15s %(funcName)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
 		formatter = logging.Formatter('%(asctime)s - %(module)-15s [%(levelname)-8s] %(message)s', '%d.%m.%Y %H:%M:%S')
 		# create a file logger
-		fh = MyTimedRotatingFileHandler.MyTimedRotatingFileHandler(globals.log_path+"boswatch.log", "midnight", interval=1, backupCount=999)
+		fh = MyTimedRotatingFileHandler.MyTimedRotatingFileHandler(globalVars.log_path+"boswatch.log", "midnight", interval=1, backupCount=999)
 		# Starts with log level >= Debug
 		# will be changed with config.ini-param later
 		fh.setLevel(logging.DEBUG)
@@ -135,9 +135,9 @@ try:
 		# Clear the logfiles
 		#
 		fh.doRollover()
-		rtl_log = open(globals.log_path+"rtl_fm.log", "w")
-		mon_log = open(globals.log_path+"multimon.log", "w")
-		rawMmOut = open(globals.log_path+"mm_raw.txt", "w")
+		rtl_log = open(globalVars.log_path+"rtl_fm.log", "w")
+		mon_log = open(globalVars.log_path+"multimon.log", "w")
+		rawMmOut = open(globalVars.log_path+"mm_raw.txt", "w")
 		rtl_log.write("")
 		mon_log.write("")
 		rawMmOut.write("")
@@ -157,8 +157,8 @@ try:
 	# For debug display/log args
 	#
 	try:
-		logging.debug("SW Version:	%s",globals.versionNr)
-		logging.debug("Build Date:	%s",globals.buildDate)
+		logging.debug("SW Version:	%s",globalVars.versionNr)
+		logging.debug("Build Date:	%s",globalVars.buildDate)
 		logging.debug("BOSWatch given arguments")
 		if args.test:
 			logging.debug(" - Test-Mode!")
@@ -208,10 +208,10 @@ try:
 	#
 	try:
 		logging.debug("reading config file")
-		globals.config = ConfigParser.ConfigParser()
-		globals.config.read(globals.script_path+"/config/config.ini")
+		globalVars.config = ConfigParser.ConfigParser()
+		globalVars.config.read(globalVars.script_path+"/config/config.ini")
 		# if given loglevel is debug:
-		if globals.config.getint("BOSWatch","loglevel") == 10:
+		if globalVars.config.getint("BOSWatch","loglevel") == 10:
 			configHandler.checkConfig("BOSWatch")
 			configHandler.checkConfig("FMS")
 			configHandler.checkConfig("ZVEI")
@@ -227,10 +227,10 @@ try:
 	# Set the loglevel and backupCount of the file handler
 	#
 	try:
-		logging.debug("set loglevel of fileHandler to: %s",globals.config.getint("BOSWatch","loglevel"))
-		fh.setLevel(globals.config.getint("BOSWatch","loglevel"))
-		logging.debug("set backupCount of fileHandler to: %s", globals.config.getint("BOSWatch","backupCount"))
-		fh.setBackupCount(globals.config.getint("BOSWatch","backupCount"))
+		logging.debug("set loglevel of fileHandler to: %s",globalVars.config.getint("BOSWatch","loglevel"))
+		fh.setLevel(globalVars.config.getint("BOSWatch","loglevel"))
+		logging.debug("set backupCount of fileHandler to: %s", globalVars.config.getint("BOSWatch","backupCount"))
+		fh.setBackupCount(globalVars.config.getint("BOSWatch","backupCount"))
 	except:
 		# It's an error, but we could work without that stuff...
 		logging.error("cannot set loglevel of fileHandler")
@@ -244,16 +244,16 @@ try:
 	try:
 		if configHandler.checkConfig("NMAHandler"):
 			# is NMAHandler enabled?
-			if globals.config.getboolean("NMAHandler", "enableHandler") == True:
+			if globalVars.config.getboolean("NMAHandler", "enableHandler") == True:
 				# we only could do something, if an APIKey is given:
-				if len(globals.config.get("NMAHandler","APIKey")) > 0:
+				if len(globalVars.config.get("NMAHandler","APIKey")) > 0:
 					logging.debug("add NMA logging handler")
 					from includes import NMAHandler
-					if globals.config.get("NMAHandler","appName") == "":
-						nmaHandler = NMAHandler.NMAHandler(globals.config.get("NMAHandler","APIKey"))
+					if globalVars.config.get("NMAHandler","appName") == "":
+						nmaHandler = NMAHandler.NMAHandler(globalVars.config.get("NMAHandler","APIKey"))
 					else:
-						nmaHandler = NMAHandler.NMAHandler(globals.config.get("NMAHandler","APIKey"), globals.config.get("NMAHandler","appName"))
-					nmaHandler.setLevel(globals.config.getint("NMAHandler","loglevel"))
+						nmaHandler = NMAHandler.NMAHandler(globalVars.config.get("NMAHandler","APIKey"), globalVars.config.get("NMAHandler","appName"))
+					nmaHandler.setLevel(globalVars.config.getint("NMAHandler","loglevel"))
 					myLogger.addHandler(nmaHandler)
 	except:
 		# It's an error, but we could work without that stuff...
@@ -280,7 +280,7 @@ try:
 	# Load filters
 	#
 	try:
-		if globals.config.getboolean("BOSWatch","useRegExFilter"):
+		if globalVars.config.getboolean("BOSWatch","useRegExFilter"):
 			from includes import regexFilter
 			regexFilter.loadFilters()
 	except:
@@ -293,7 +293,7 @@ try:
 	# Load description lists
 	#
 	try:
-		if globals.config.getboolean("FMS","idDescribed") or globals.config.getboolean("ZVEI","idDescribed") or globals.config.getboolean("POC","idDescribed"):
+		if globalVars.config.getboolean("FMS","idDescribed") or globalVars.config.getboolean("ZVEI","idDescribed") or globalVars.config.getboolean("POC","idDescribed"):
 			from includes import descriptionList
 			descriptionList.loadDescriptionLists()
 	except:
@@ -309,13 +309,13 @@ try:
 		if not args.test:
 			logging.debug("starting rtl_fm")
 			command = ""
-			if globals.config.has_option("BOSWatch","rtl_path"):
-				command = globals.config.get("BOSWatch","rtl_path")
+			if globalVars.config.has_option("BOSWatch","rtl_path"):
+				command = globalVars.config.get("BOSWatch","rtl_path")
 			command = command+"rtl_fm -d "+str(args.device)+" -f "+str(freqConverter.freqToHz(args.freq))+" -M fm -p "+str(args.error)+" -E DC -F 0 -l "+str(args.squelch)+" -g "+str(args.gain)+" -s 22050"
 			rtl_fm = subprocess.Popen(command.split(),
 					#stdin=rtl_fm.stdout,
 					stdout=subprocess.PIPE,
-					stderr=open(globals.log_path+"rtl_fm.log","a"),
+					stderr=open(globalVars.log_path+"rtl_fm.log","a"),
 					shell=False)
 			# rtl_fm doesn't self-destruct, when an error occurs
 			# wait a moment to give the subprocess a chance to write the logfile
@@ -336,13 +336,13 @@ try:
 		if not args.test:
 			logging.debug("starting multimon-ng")
 			command = ""
-			if globals.config.has_option("BOSWatch","multimon_path"):
-				command = globals.config.get("BOSWatch","multimon_path")
+			if globalVars.config.has_option("BOSWatch","multimon_path"):
+				command = globalVars.config.get("BOSWatch","multimon_path")
 			command = command+"multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - "
 			multimon_ng = subprocess.Popen(command.split(),
 				stdin=rtl_fm.stdout,
 				stdout=subprocess.PIPE,
-				stderr=open(globals.log_path+"multimon.log","a"),
+				stderr=open(globalVars.log_path+"multimon.log","a"),
 				shell=False)
 			# multimon-ng  doesn't self-destruct, when an error occurs
 			# wait a moment to give the subprocess a chance to write the logfile
@@ -367,9 +367,9 @@ try:
 			decoder.decode(freqConverter.freqToHz(args.freq), decoded)
 
 			# write multimon-ng raw data
-			if globals.config.getboolean("BOSWatch","writeMultimonRaw"):
+			if globalVars.config.getboolean("BOSWatch","writeMultimonRaw"):
 				try:
-					rawMmOut = open(globals.log_path+"mm_raw.txt", "a")
+					rawMmOut = open(globalVars.log_path+"mm_raw.txt", "a")
 					rawMmOut.write(decoded)
 				except:
 					logging.warning("cannot write raw multimon data")
@@ -377,7 +377,7 @@ try:
 					rawMmOut.close()
 	else:
 		logging.debug("start testing")
-		testFile = open(globals.script_path+"/testdata/testdata.txt","r")
+		testFile = open(globalVars.script_path+"/testdata/testdata.txt","r")
 		for testData in testFile:
 			if (len(testData.rstrip(' \t\n\r')) > 1) and ("#" not in testData[0]):
 				logging.info("Testdata: %s", testData.rstrip(' \t\n\r'))
@@ -417,7 +417,7 @@ finally:
 		# Close Logging
 		logging.debug("close Logging")
 		# Waiting for all Threads to write there logs
-		if globals.config.getboolean("BOSWatch","processAlarmAsync") == True:
+		if globalVars.config.getboolean("BOSWatch","processAlarmAsync") == True:
 			logging.debug("waiting 3s for threads...")
 			time.sleep(3)
 		logging.info("BOSWatch exit()")

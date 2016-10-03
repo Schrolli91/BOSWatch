@@ -93,17 +93,17 @@ def onLoad():
 
 	# load config:
 	configHandler.checkConfig("notifyMyAndroid")
-	application = stringConverter.convertToUnicode(globals.config.get("notifyMyAndroid","appName"))
-	usecsv = globals.config.getboolean("notifyMyAndroid","usecsv")
+	application = stringConverter.convertToUnicode(globalVars.config.get("notifyMyAndroid","appName"))
+	usecsv = globalVars.config.getboolean("notifyMyAndroid","usecsv")
 
 	# if no csv should use, we take the APIKey directly
 	if usecsv == False:
-		APIKey = globals.config.get("notifyMyAndroid","APIKey")
+		APIKey = globalVars.config.get("notifyMyAndroid","APIKey")
 	else:
 		# import the csv-file
 		try:
 			logging.debug("-- loading nma.csv")
-			with open(globals.script_path+'/csv/nma.csv') as csvfile:
+			with open(globalVars.script_path+'/csv/nma.csv') as csvfile:
 				# DictReader expected structure described in first line of csv-file
 				reader = csv.DictReader(csvfile)
 				for row in reader:
@@ -216,7 +216,7 @@ def run(typ,freq,data):
 
 					# if not using csv-import, all is simple...
 					if usecsv == False:
-						response = nma.pushWithAPIKey(APIKey, application, event, msg, priority=globals.config.getint("notifyMyAndroid","priority"))
+						response = nma.pushWithAPIKey(APIKey, application, event, msg, priority=globalVars.config.getint("notifyMyAndroid","priority"))
 						checkResponse(response, APIKey)
 					else:
 						if "FMS" in typ:

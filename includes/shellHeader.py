@@ -30,8 +30,8 @@ def printHeader(args):
 		print "            German BOS Information Script           "
 		print "          by Bastian Schroll, Jens Herrmann         "
 		print ""
-		print "SW Version:	"+globals.versionNr
-		print "Build Date:	"+globals.buildDate
+		print "SW Version:	"+globalVars.versionNr
+		print "Build Date:	"+globalVars.buildDate
 		print ""
 
 		print "Frequency:   "+args.freq

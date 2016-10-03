@@ -66,13 +66,13 @@ def run(typ,freq,data):
 				# Create URL
 				#
 				if typ == "FMS":
-					url = globals.config.get("httpRequest", "fms_url") #Get URL
+					url = globalVars.config.get("httpRequest", "fms_url") #Get URL
 					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
 				elif typ == "ZVEI":
-					url = globals.config.get("httpRequest", "zvei_url") #Get URL
+					url = globalVars.config.get("httpRequest", "zvei_url") #Get URL
 					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
 				elif typ == "POC":
-					url = globals.config.get("httpRequest", "poc_url") #Get URL
+					url = globalVars.config.get("httpRequest", "poc_url") #Get URL
 					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
 
 				else:

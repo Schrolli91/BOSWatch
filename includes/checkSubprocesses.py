@@ -21,7 +21,7 @@ def checkRTL():
 	@exception: Exception when checkRTL throws an unexpected error
 	"""
 	try:
-		rtlLog = open(globals.log_path+"rtl_fm.log","r").read()
+		rtlLog = open(globalVars.log_path+"rtl_fm.log","r").read()
 		if ("exiting" in rtlLog) or  ("Failed to open" in rtlLog):
 			logging.debug("\n%s", rtlLog)
 			raise OSError("starting rtl_fm returns an error")
@@ -41,7 +41,7 @@ def checkMultimon():
 	@exception: Exception when checkMultimon throws an unexpected error
 	"""
 	try:
-		multimonLog = open(globals.log_path+"multimon.log","r").read()
+		multimonLog = open(globalVars.log_path+"multimon.log","r").read()
 		if ("invalid" in multimonLog) or ("error" in multimonLog):
 			logging.debug("\n%s", multimonLog)
 			raise OSError("starting multimon-ng returns an error")

@@ -39,10 +39,10 @@ def checkID(typ, id, msg=""):
 		(xID, xTimestamp, xMsg) = doubleList[i]
 		# given ID found?
 		# return False if the first entry in double_ignore_time is found, we will not check for younger ones...
-		if id == xID and timestamp < xTimestamp + globals.config.getint("BOSWatch", "doubleFilter_ignore_time"):
-			logging.debug("-- previous id %s is within doubleFilter_ignore_time (%ss)", xID, globals.config.getint("BOSWatch", "doubleFilter_ignore_time"))
+		if id == xID and timestamp < xTimestamp + globalVars.config.getint("BOSWatch", "doubleFilter_ignore_time"):
+			logging.debug("-- previous id %s is within doubleFilter_ignore_time (%ss)", xID, globalVars.config.getint("BOSWatch", "doubleFilter_ignore_time"))
 			# if wanted, we have to check the msg additional
-			if "POC" in typ and globals.config.getint("BOSWatch", "doubleFilter_check_msg"):
+			if "POC" in typ and globalVars.config.getint("BOSWatch", "doubleFilter_check_msg"):
 				logging.debug("-- compare msg:")
 				logging.debug("---- current msg: (%s)", msg.strip())
 				logging.debug("---- previous msg: (%s)", xMsg)
@@ -69,6 +69,6 @@ def newEntry(id, msg = ""):
 	logging.debug("Added %s to doubleList", id)
 
 	# now check if list has more than n entries:
-	if len(doubleList) > globals.config.getint("BOSWatch", "doubleFilter_ignore_entries"):
+	if len(doubleList) > globalVars.config.getint("BOSWatch", "doubleFilter_ignore_entries"):
 		# we have to kill the oldest one
 		doubleList.pop(0)

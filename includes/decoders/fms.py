@@ -53,7 +53,7 @@ def decode(freq, decoded):
 					logging.info("FMS:%s Status:%s Richtung:%s TSI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
 					data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "directionText":fms_directionText, "tsi":fms_tsi, "description":fms_id[0:8]}
 					# If enabled, look up description
-					if globals.config.getint("FMS", "idDescribed"):
+					if globalVars.config.getint("FMS", "idDescribed"):
 						from includes import descriptionList
 						data["description"] = descriptionList.getDescription("FMS", fms_id[0:8])
 					# processing the alarm

@@ -18,10 +18,10 @@ from includes import globalVars  # Global variables
 
 def loadPlugins():
 	"""
-	Load all plugins into globals.pluginList
+	Load all plugins into globalVars.pluginList
 
 	@return:    nothing
-	@exception: Exception if insert into globals.pluginList failed
+	@exception: Exception if insert into globalVars.pluginList failed
 	"""
 	try:
 		logging.debug("loading plugins")
@@ -41,8 +41,8 @@ def loadPlugins():
 					# Try to call the .onLoad() routine for all active plugins
 					logging.debug("call %s.onLoad()", i["name"])
 					plugin.onLoad()
-					# Add it to globals.pluginList
-					globals.pluginList[i["name"]] = plugin
+					# Add it to globalVars.pluginList
+					globalVars.pluginList[i["name"]] = plugin
 				except:
 					# call next plugin, if one has thrown an exception
 					logging.error("error calling %s.onLoad()", i["name"])
@@ -63,7 +63,7 @@ def getPlugins():
 	"""
 	try:
 		logging.debug("Search in plugin folder")
-		PluginFolder = globals.script_path+"/plugins"
+		PluginFolder = globalVars.script_path+"/plugins"
 		plugins = []
 		# Go to all Folders in the Plugin-Dir
 		for i in os.listdir(PluginFolder):
@@ -75,7 +75,7 @@ def getPlugins():
 
 			# is the plugin enabled in the config-file?
 			try:
-				if globals.config.getint("Plugins", i):
+				if globalVars.config.getint("Plugins", i):
 					info = imp.find_module(i, [location])
 					plugins.append({"name": i, "info": info})
 					logging.debug("Plugin [ENABLED ] %s", i)

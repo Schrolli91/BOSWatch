@@ -71,18 +71,18 @@ def run(typ,freq,data):
 				#
 				logging.debug("send FFAgent %s", typ)
 
-				if globals.config.get("FFAgent", "live") == "1":
+				if globalVars.config.get("FFAgent", "live") == "1":
 					url = "https://api.service.ff-agent.com/v1/WebService/triggerAlarm"
 				else:
 					url = "https://free.api.service.ff-agent.com/v1/WebService/triggerAlarm"
 
-				serverCertFile = globals.config.get("FFAgent", "serverCertFile")
-				clientCertFile = globals.config.get("FFAgent", "clientCertFile")
-				clientCertPass = globals.config.get("FFAgent", "clientCertPass")
-				webApiToken = globals.config.get("FFAgent", "webApiToken")
-				webApiKey = globals.config.get("FFAgent", "webApiKey")
-				accessToken = globals.config.get("FFAgent", "accessToken")
-				selectiveCallCode = globals.config.get("FFAgent", "selectiveCallCode")
+				serverCertFile = globalVars.config.get("FFAgent", "serverCertFile")
+				clientCertFile = globalVars.config.get("FFAgent", "clientCertFile")
+				clientCertPass = globalVars.config.get("FFAgent", "clientCertPass")
+				webApiToken = globalVars.config.get("FFAgent", "webApiToken")
+				webApiKey = globalVars.config.get("FFAgent", "webApiKey")
+				accessToken = globalVars.config.get("FFAgent", "accessToken")
+				selectiveCallCode = globalVars.config.get("FFAgent", "selectiveCallCode")
 
 				# data["description"]
 				msg_split = data["msg"].split(';')
@@ -105,7 +105,7 @@ def run(typ,freq,data):
 					"alarmMessage" : ""
 				}
 
-				if globals.config.get("FFAgent", "test") == "1":
+				if globalVars.config.get("FFAgent", "test") == "1":
 					alarmData = {
 						"alarmDate" : "",
 						"keyword" : "Test",
@@ -135,7 +135,7 @@ def run(typ,freq,data):
 					"hmac": hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()
 				}
 
-				if globals.config.get("FFAgent", "live") == "1":
+				if globalVars.config.get("FFAgent", "live") == "1":
 					r = requests.post(url, data=alarmData, headers=headers, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
 				else:
 					r = requests.post(url, data=alarmData, headers=alarmHeaders, verify=serverCertFile)

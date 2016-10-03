@@ -32,7 +32,7 @@ def loadFilters():
 	try:
 		logging.debug("loading filters")
 		# For each entry in config.ini [Filters] section
-		for key,val in globals.config.items("Filters"):
+		for key,val in globalVars.config.items("Filters"):
 			logging.debug(" - %s = %s", key, val)
 			filter = val.split(";")
 

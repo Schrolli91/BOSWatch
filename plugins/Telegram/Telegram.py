@@ -42,10 +42,10 @@ def onLoad():
 	global GoogleAPIKey
 
 	configHandler.checkConfig("Telegram")
-	BOTTokenAPIKey = globals.config.get("Telegram","BOTTokenAPIKey")
-	BOTChatIDAPIKey = globals.config.get("Telegram","BOTChatIDAPIKey")
-	RICforLocationAPIKey = globals.config.get("Telegram","RICforLocationAPIKey")
-	GoogleAPIKey = globals.config.get("Telegram","GoogleAPIKey")
+	BOTTokenAPIKey = globalVars.config.get("Telegram","BOTTokenAPIKey")
+	BOTChatIDAPIKey = globalVars.config.get("Telegram","BOTChatIDAPIKey")
+	RICforLocationAPIKey = globalVars.config.get("Telegram","RICforLocationAPIKey")
+	GoogleAPIKey = globalVars.config.get("Telegram","GoogleAPIKey")
 
 	return
 

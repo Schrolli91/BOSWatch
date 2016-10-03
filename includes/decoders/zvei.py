@@ -65,7 +65,7 @@ def decode(freq, decoded):
 				logging.info("5-Ton: %s", zvei_id)
 				data = {"zvei":zvei_id, "description":zvei_id}
 				# If enabled, look up description
-				if globals.config.getint("ZVEI", "idDescribed"):
+				if globalVars.config.getint("ZVEI", "idDescribed"):
 					from includes import descriptionList
 					data["description"] = descriptionList.getDescription("ZVEI", zvei_id)
 				# processing the alarm
