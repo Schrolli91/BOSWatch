@@ -94,7 +94,13 @@ def run(typ,freq,data):
 				# HTTP-Request
 				#
 				logging.debug("send %s HTTP request", typ)
-				urllib2.urlopen(url)
+
+				try:
+				    resp = urllib2.urlopen(url)
+				except urllib2.HTTPError as e:
+    					logging.error("HTTP response: %s", e.code)
+				except urllib2.URLError as e:
+    					logging.error("HTTP-specific error: %s", e.args)
 
 
 			except:
