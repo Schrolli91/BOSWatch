@@ -38,7 +38,7 @@ def loadFilters():
 
 			# resolve the * for freqToHz()
 			if not filterData[3] == "*":
-				filterData[3] = converter.freqToHz(filterData[3])
+				filterData[3] = freqConverter.freqToHz(filterData[3])
 
 			# insert splitet data into filterList
 			filterList.append({"name": key, "typ": filterData[0], "dataField": filterData[1], "plugin": filterData[2], "freq": filterData[3], "regex": filterData[4]})
