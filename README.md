@@ -5,6 +5,9 @@
 |master-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|
 |develop-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|
 
+**Achtung:** Die readme ist veraltet - Neue Informationen werden im Laufe der Zeit in das Github Wiki integriert!
+
+**Attention:** This readme is outdated - New informations will be integrated in the Github Wiki!
 
 
 ![# BOSWatch](/boswatch.png)
