@@ -75,6 +75,9 @@ def run(typ,freq,data):
 	try:
 		if configHandler.checkConfig("template"): #read and debug the config (let empty if no config used)
 
+			logging.debug(globalVars.config.get("template", "test1"))
+			logging.debug(globalVars.config.get("template", "test2"))
+
 			########## User Plugin CODE ##########
 			if typ == "FMS":
 				logging.warning("%s not supported", typ)

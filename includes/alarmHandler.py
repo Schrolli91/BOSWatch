@@ -44,7 +44,6 @@ def processAlarmHandler(typ, freq, data):
 		except:
 			logging.error("Error in starting alarm processing async")
 			logging.debug("Error in starting alarm processing async", exc_info=True)
-			pass
 	else:
 		processAlarm(typ, freq, data)
 
@@ -98,4 +97,3 @@ def processAlarm(typ, freq, data):
 	except:
 		logging.error("Error in alarm processing")
 		logging.debug("Error in alarm processing", exc_info=True)
-		pass

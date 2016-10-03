@@ -121,7 +121,6 @@ def decode(freq, decoded):
 						except:
 							logging.error("processing alarm failed")
 							logging.debug("processing alarm failed", exc_info=True)
-							pass
 					# in every time save old data for double alarm
 					doubleFilter.newEntry(poc_id+poc_sub, poc_text)
 				else:
