@@ -12,7 +12,7 @@ Function to expand the dataset with a description.
 import logging # Global logger
 import csv # for loading the description files
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 from includes.helper import stringConverter
 
 

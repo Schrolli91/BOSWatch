@@ -13,7 +13,7 @@ POCSAG Decoder
 import logging # Global logger
 import re      # Regex for validation
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 from includes import doubleFilter  # double alarm filter
 
 ##

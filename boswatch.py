@@ -24,7 +24,7 @@ import os           # for log mkdir
 import time         # for time.sleep()
 import subprocess   # for starting rtl_fm and multimon-ng
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 from includes import MyTimedRotatingFileHandler  # extension of TimedRotatingFileHandler
 from includes import signalHandler  # TERM-Handler for use script as a daemon
 from includes import checkSubprocesses  # check startup of the subprocesses

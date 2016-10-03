@@ -17,7 +17,7 @@ import httplib #for the HTTP request
 import urllib #for the HTTP request with parameters
 import base64 #for the HTTP request with User/Password
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 from includes.helper import configHandler
 

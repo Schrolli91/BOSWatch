@@ -10,7 +10,7 @@ Used in boswatch.py at startup and designated for watching-service
 
 import logging
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 
 def checkRTL():

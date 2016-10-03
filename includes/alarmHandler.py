@@ -13,7 +13,7 @@ Handler for the filter and plugins at an alarm
 import logging # Global logger
 import time    # timestamp
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 ##
 #

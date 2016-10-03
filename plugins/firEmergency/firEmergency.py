@@ -15,7 +15,7 @@ firEmergency configuration:
 import logging # Global logger
 import socket
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 from includes.helper import configHandler
 from includes.helper import stringConverter

@@ -16,7 +16,7 @@ import logging # Global logger
 import mysql
 import mysql.connector
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 from includes.helper import configHandler
 

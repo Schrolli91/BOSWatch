@@ -12,7 +12,7 @@ Functions for the RegEX filter
 import logging # Global logger
 import re #Regex for Filter Check
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 from includes.helper import freqConverter  # converter functions
 
 

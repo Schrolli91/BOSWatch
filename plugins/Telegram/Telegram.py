@@ -12,7 +12,7 @@ Plugin to send FMS-, ZVEI- and POCSAG-messages via Telegram
 #
 import logging # Global logger
 import httplib, urllib, telegram, googlemaps
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 # Helper function, uncomment to use
 from includes.helper import configHandler

@@ -14,7 +14,7 @@ import imp
 import os
 
 from ConfigParser import NoOptionError # we need this exception
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 def loadPlugins():
 	"""

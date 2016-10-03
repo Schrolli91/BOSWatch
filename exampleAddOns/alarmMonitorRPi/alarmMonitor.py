@@ -36,7 +36,7 @@ import json # for data
 from threading import Thread
 import pygame
 
-import globals
+import globalData
 
 try: 
 	#

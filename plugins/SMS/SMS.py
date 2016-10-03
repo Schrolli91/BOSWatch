@@ -18,7 +18,7 @@ config.ini
 # Imports
 #
 import logging # Global logger
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 # Helper function, uncomment to use
 #from includes.helper import timeHandler

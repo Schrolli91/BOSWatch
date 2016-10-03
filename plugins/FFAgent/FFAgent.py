@@ -15,7 +15,7 @@ import hmac, hashlib
 import json, requests
 import string
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 from includes.helper import timeHandler
 from includes.helper import configHandler

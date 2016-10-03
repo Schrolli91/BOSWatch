@@ -14,7 +14,7 @@ import logging # Global logger
 import socket  # for connection
 import json    # for data-transfer
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 from includes.helper import configHandler
 

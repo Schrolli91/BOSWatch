@@ -66,7 +66,7 @@ test2 = 123456
 #### 3.2 Read data from config.ini
 To read yout configuration data you must import the `globals.py` where the global config-object is located:
 ```python
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 ```
 
 Now you can get your configuration data with:

@@ -10,7 +10,7 @@ for direct use in plugins to save code
 """
 
 import logging
-from includes import globals
+from includes import globalVars
 
 
 def checkConfig(section=""):

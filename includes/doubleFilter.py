@@ -14,7 +14,7 @@ and the time ignoring the id in case of a double alarm
 import logging # Global logger
 import time    # timestamp for doublealarm
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 #
 # ListStructure [0..n] = (ID, TimeStamp, msg)

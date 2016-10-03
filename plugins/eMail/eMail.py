@@ -16,7 +16,7 @@ from email.mime.text import MIMEText # Import the email modules we'll need
 from email.utils import formatdate # need for confirm to RFC2822 standard
 from email.utils import make_msgid # need for confirm to RFC2822 standard
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 from includes.helper import timeHandler # helper function
 from includes.helper import configHandler # helper function

@@ -13,7 +13,7 @@ import time
 import logging # Global logger
 import httplib #for the HTTP request
 import urllib
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 from includes.helper import timeHandler
 from includes.helper import configHandler
