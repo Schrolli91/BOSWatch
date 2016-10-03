@@ -151,7 +151,6 @@ try:
 		# It's an error, but we could work without that stuff...
 		logging.error("cannot clear Logfiles")
 		logging.debug("cannot clear Logfiles", exc_info=True)
-		pass
 
 	#
 	# For debug display/log args
@@ -235,7 +234,6 @@ try:
 		# It's an error, but we could work without that stuff...
 		logging.error("cannot set loglevel of fileHandler")
 		logging.debug("cannot set loglevel of fileHandler", exc_info=True)
-		pass
 
 
 	#
@@ -259,7 +257,6 @@ try:
 		# It's an error, but we could work without that stuff...
 		logging.error("cannot add NMA logging handler")
 		logging.debug("cannot add NMA logging handler", exc_info=True)
-		pass
 
 
 	# initialization was fine, continue with main program...
@@ -287,7 +284,6 @@ try:
 		# It's an error, but we could work without that stuff...
 		logging.error("cannot load filters")
 		logging.debug("cannot load filters", exc_info=True)
-		pass
 
 	#
 	# Load description lists
@@ -300,7 +296,6 @@ try:
 		# It's an error, but we could work without that stuff...
 		logging.error("cannot load description lists")
 		logging.debug("cannot load description lists", exc_info=True)
-		pass
 
 	#
 	# Start rtl_fm

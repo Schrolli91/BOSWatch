@@ -134,7 +134,6 @@ Warning: using batch_mode will return error only if all API keys are bad
                    'code':    600,
                    'message': str(e)
                    }
-            pass
 
         return res
 

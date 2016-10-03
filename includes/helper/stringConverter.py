@@ -39,7 +39,6 @@ def decodeString(inputString = ""):
 				logging.debug("no encoding found", exc_info=True)
 				# no fixing possible, raise exception
 				raise
-			pass
 	return decodedString
 
 

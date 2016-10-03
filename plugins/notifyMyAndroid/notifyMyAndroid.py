@@ -145,7 +145,6 @@ def onLoad():
 						except:
 							# skip entry in case of an exception
 							logging.debug("error in shifting...", exc_info=True)
-							pass
 					# if row['typ'] in supportedTypes
 				# for row in reader:
 			logging.debug("-- loading csv finished")

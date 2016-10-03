@@ -34,7 +34,6 @@ def loadPlugins():
 				# call next plugin, if one has thrown an exception
 				logging.error("error loading plugin: %s", i["name"])
 				logging.debug("error loading plugin: %s", i["name"], exc_info=True)
-				pass
 			else: # only call onLoad() and insert into pluginList[] if import is succesfull
 
 				try:
@@ -47,7 +46,6 @@ def loadPlugins():
 					# call next plugin, if one has thrown an exception
 					logging.error("error calling %s.onLoad()", i["name"])
 					logging.debug("error calling %s.onLoad()", exc_info=True)
-					pass
 	except:
 		logging.error("cannot load plugins")
 		logging.debug("cannot load plugins", exc_info=True)
@@ -84,7 +82,6 @@ def getPlugins():
 			# no entry for plugin found in config-file
 			except NoOptionError:
 				logging.warning("Plugin [NO CONF ] %s", i)
-				pass
 	except:
 		logging.error("Error during plugin search")
 		logging.debug("Error during plugin search", exc_info=True)

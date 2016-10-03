@@ -88,7 +88,6 @@ def loadDescriptionLists():
 	except:
 		logging.error("cannot load description lists")
 		logging.debug("cannot load description lists", exc_info=True)
-		pass
 
 
 ##
@@ -125,7 +124,6 @@ def getDescription(typ, id):
 	except:
 		logging.error("Error during look up description lists")
 		logging.debug("Error during look up description lists", exc_info=True)
-		pass
 
 	logging.debug(" - result for %s: %s", id, resultStr)
 	return resultStr
