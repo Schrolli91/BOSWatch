@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 httpRequest-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages to an URL
@@ -14,7 +14,6 @@ httpRequest-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages to an URL
 #
 # Imports
 #
-#import httplib #for the HTTP request
 import urllib2
 import urllib
 import time
@@ -89,7 +88,6 @@ def run(typ,freq,data):
 					logging.warning("Invalid Typ: %s", typ)
 					return
 
-
 				#
 				# HTTP-Request
 				#
@@ -98,10 +96,9 @@ def run(typ,freq,data):
 				try:
 				    resp = urllib2.urlopen(url)
 				except urllib2.HTTPError as e:
-    					logging.error("HTTP response: %s", e.code)
+    					logging.warning("HTTP response: %s", e.code)
 				except urllib2.URLError as e:
-    					logging.error("HTTP-specific error: %s", e.args)
-
+    					logging.warning("HTTP-specific error: %s", e.args)
 
 			except:
 				logging.error("cannot send HTTP request")
