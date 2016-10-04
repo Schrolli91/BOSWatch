@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 tput clear
 tput civis
 echo "     ____  ____  ______       __      __       __   "
@@ -6,7 +6,6 @@ echo "    / __ )/ __ \/ ___/ |     / /___ _/ /______/ /_  "
 echo "   / __  / / / /\__ \| | /| / / __  / __/ ___/ __ \ "
 echo "  / /_/ / /_/ /___/ /| |/ |/ / /_/ / /_/ /__/ / / / "
 echo " /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  "
-echo "       !!! WARNING: This is the DEV BRANCH !!!      "
 echo "            German BOS Information Script           "
 echo "                 by Bastian Schroll                 "
 echo ""
@@ -33,7 +32,7 @@ for (( i=1; i<=$#; i=$i+2 )); do
 
       -b|--branch)
       case $arg2 in
-        dev) branch=dev ;;
+        dev) echo "       !!! WARNING: you are using the DEV BRANCH !!!      "; branch=dev ;;
         *) branch=master ;;
       esac ;;
 
@@ -42,6 +41,8 @@ for (( i=1; i<=$#; i=$i+2 )); do
 done
 
 mkdir -p $boswatchpath/install
+
+echo ""
 
 tput cup 13 15
 echo "[ 1/10] [#---------]"
@@ -79,7 +80,7 @@ tput cup 15 5
 echo "-> download multimon-ng................"
 cd $boswatchpath/install
 git clone https://github.com/EliasOenal/multimonNG.git >> $boswatchpath/install/setup_log.txt 2>&1
-cd multimonNG/
+cd $boswatchpath/install/multimonNG/
 
 tput cup 13 15
 echo "[ 6/10] [######----]"
@@ -98,7 +99,7 @@ echo "-> download MySQL Connector for Python."
 cd $boswatchpath/install
 wget "http://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-1.0.9.tar.gz/from/http://cdn.mysql.com/" -O mysql-connector.tar >> $boswatchpath/install/setup_log.txt 2>&1
 tar xfv mysql-connector.tar >> $boswatchpath/install/setup_log.txt 2>&1
-cd mysql-connector-python*
+cd $boswatchpath/install/mysql-connector-python*
 
 tput cup 13 15
 echo "[ 8/10] [########--]"
