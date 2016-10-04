@@ -70,11 +70,6 @@ def run(typ,freq,data):
 	@exception: nothing, make sure this function will never thrown an exception
 	"""
 
-	global BOTTokenKey
-	global BOTChatIDAPIKey
-	global RICforLocationAPIKey
-	global GoogleAPIKey
-
 	try:
 		#if configHandler.checkConfig("Telegram"): #read and debug the config (let empty if no config used)
 
