@@ -87,9 +87,6 @@ def onLoad():
 	global application
 	global APIKey
 	global usecsv
-	global fmsAPIKeyList
-	global zveiAPIKeyList
-	global pocAPIKeyList
 
 	# load config:
 	configHandler.checkConfig("notifyMyAndroid")
@@ -180,10 +177,6 @@ def run(typ,freq,data):
 	@return:    nothing
 	"""
 	# local variables
-	global application
-	global APIKey
-	global remainingMsgs
-	global usecsv
 	global fmsAPIKeyList
 	global zveiAPIKeyList
 	global pocAPIKeyList
