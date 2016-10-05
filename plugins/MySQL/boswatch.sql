@@ -103,22 +103,6 @@ CREATE TABLE IF NOT EXISTS `bos_signal` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `bos_weblogin`
---
-
-CREATE TABLE IF NOT EXISTS `bos_weblogin` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `user` VARCHAR(150) DEFAULT NULL,
-    `password` VARCHAR(32) DEFAULT NULL,
-    `isadmin` BOOLEAN DEFAULT FALSE,
-    PRIMARY KEY (`id`)
-)  ENGINE=MYISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
-
-INSERT INTO `bos_weblogin` (`id`, `user`, `password`, `isadmin`) VALUES (NULL, 'admin', '21232f297a57a5a743894a0e4a801fc3', '1');
-
--- --------------------------------------------------------
-
---
 -- Schedule für Tabelle `bos_pocsag`
 --
 CREATE EVENT IF NOT EXISTS `Delete POCSAG Entries > 3 Months`
