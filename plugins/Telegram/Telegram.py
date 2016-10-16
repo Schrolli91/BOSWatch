@@ -73,7 +73,7 @@ def run(typ,freq,data):
 	@return:    nothing
 	@exception: nothing, make sure this function will never thrown an exception
 	"""
-	
+
 	try:
 		########## User Plugin CODE ##########
 		try:
@@ -81,21 +81,20 @@ def run(typ,freq,data):
 				logging.debug("Compose output from POCSAG-message")
 				# compose message content
 				output = timeHandler.curtime()+"\n"+data["ric"]+"("+data["functionChar"]+")\n"+data["description"]+"\n"+data["msg"]
-				
+
 				# Initiate Telegram Bot
 				logging.debug("Initiate Telegram BOT")
-				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)	
-
+				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
 				# Send message to chat via Telegram BOT API
 				logging.debug("Send message to chat via Telegram BOT API")
 				bot.sendMessage('%s' % BOTChatIDAPIKey, output)
 
 				# Generate location information only for specific RIC
-				if data["ric"] == RICforLocationAPIKey:				
+				if data["ric"] == RICforLocationAPIKey:
 					# Generate map
 					logging.debug("Extract address from POCSAG message")
 					address = "+".join(data["msg"].split(')')[0].split('/',1)[1].replace('(',' ').split())
-				
+
 					logging.debug("Retrieve maps from Google")
 					url = "+".join(["http://maps.googleapis.com/maps/api/staticmap?markers=", address, "&size=480x640&maptype=roadmap&zoom=16&key=", GoogleAPIKey])
 					urllib.urlretrieve(url, "overview_map.png")
