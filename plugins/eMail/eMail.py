@@ -103,7 +103,7 @@ def run(typ,freq,data):
 					#
 				# connect to SMTP-Server
 				#
-				server = smtplib.SMTP(globals.config.get("eMail", "smtp_server"), globals.config.get("eMail", "smtp_port"))
+				server = smtplib.SMTP_SSL(globals.config.get("eMail", "smtp_server"), globals.config.get("eMail", "smtp_port"))
 				# debug-level to shell (0=no debug|1)
 				server.set_debuglevel(0)
 
