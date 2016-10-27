@@ -31,20 +31,8 @@ from includes.helper import configHandler
 # will be called one time by the pluginLoader on start
 #
 def onLoad():
-	"""
-	While loading the plugins by pluginLoader.loadPlugins()
-	this onLoad() routine is called one time for initialize the plugin
-
-	@requires:  nothing
-
-	@return:    nothing
-	@exception: Exception if init has an fatal error so that the plugin couldn't work
-
-	"""
 	try:
-		########## User onLoad CODE ##########
 		pass
-		########## User onLoad CODE ##########
 	except:
 		logging.error("unknown error")
 		logging.debug("unknown error", exc_info=True)
@@ -58,8 +46,6 @@ def onLoad():
 def run(typ,freq,data):
 	try:
 		if configHandler.checkConfig("yowsup"): #read and debug the config (let empty if no config used)
-
-			########## User Plugin CODE ##########
 			if typ == "FMS":
 				logging.warning("%s not supported", typ)
 			elif typ == "ZVEI":
@@ -76,7 +62,6 @@ def run(typ,freq,data):
 					return
 			else:
 				logging.warning("Invalid Typ: %s", typ)
-			########## User Plugin CODE ##########
 
 	except:
 		logging.error("unknown error")
