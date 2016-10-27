@@ -1,0 +1,51 @@
+#!/usr/bin/python
+# -*- coding: cp1252 -*-
+
+"""
+Yowsup-Plugin to dispatch POCSAG - messages to WhatsApp Numbers or Chats
+
+@author: fwmarcel
+
+@requires: 	yowsup2 has to be installed
+			whatsapp number and password
+			yowsup-Configuration has to be set in the config.ini
+"""
+
+import logging
+import sys, subprocess
+import shlex
+
+from includes import globals
+from includes.helper import configHandler
+
+def onLoad():
+	try:
+		pass
+	except:
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)
+		raise
+
+def run(typ,freq,data):
+	try:
+		if configHandler.checkConfig("yowsup"):
+			if typ == "FMS":
+				logging.warning("%s not supported", typ)
+			elif typ == "ZVEI":
+				logging.warning("%s not supported", typ)
+			elif typ == "POC":
+				try:
+					logging.debug("Try to send message")
+					devnull = open('/dev/null', 'w')
+					yowsup = subprocess.Popen(shlex.split('yowsup-cli demos -l' +globals.config.get("yowsup","sender")+ ':' + globals.config.get("yowsup","password") + ' --send ' +globals.config.get("yowsup","empfaenger") +' "' + data["msg"] +'"'), stdout=devnull)
+					logging.debug("Message has been sent")
+				except:
+					logging.error("Message not send")
+					logging.debug("Message not send")
+					return
+			else:
+				logging.warning("Invalid Typ: %s", typ)
+
+	except:
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)
