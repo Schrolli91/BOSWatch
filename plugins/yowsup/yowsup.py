@@ -11,10 +11,7 @@ Yowsup-Plugin to dispatch POCSAG - messages to WhatsApp Numbers or Chats
 			yowsup-Configuration has to be set in the config.ini
 """
 
-#
-# Imports
-#
-import logging # Global logger
+import logging
 import sys, subprocess
 import shlex
 
@@ -31,7 +28,7 @@ def onLoad():
 
 def run(typ,freq,data):
 	try:
-		if configHandler.checkConfig("yowsup"): #read and debug the config (let empty if no config used)
+		if configHandler.checkConfig("yowsup"):
 			if typ == "FMS":
 				logging.warning("%s not supported", typ)
 			elif typ == "ZVEI":
