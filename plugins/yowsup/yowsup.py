@@ -18,18 +18,9 @@ import logging # Global logger
 import sys, subprocess
 import shlex
 
-from includes import globals  # Global variables
-
-# Helper function, uncomment to use
-#from includes.helper import timeHandler
-#from includes.helper import wildcardHandler
+from includes import globals
 from includes.helper import configHandler
 
-##
-#
-# onLoad (init) function of plugin
-# will be called one time by the pluginLoader on start
-#
 def onLoad():
 	try:
 		pass
@@ -38,11 +29,6 @@ def onLoad():
 		logging.debug("unknown error", exc_info=True)
 		raise
 
-##
-#
-# Main function of plugin
-# will be called by the alarmHandler
-#
 def run(typ,freq,data):
 	try:
 		if configHandler.checkConfig("yowsup"): #read and debug the config (let empty if no config used)
