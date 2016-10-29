@@ -39,13 +39,13 @@ def run(typ,freq,data):
 					text = globalVars.config.get("yowsup","fms_message")
 					text = wildcardHandler.replaceWildcards(text, data) 
 					cmd = 'yowsup-cli demos -l ' + sender + ':' + password + ' -s ' + empfaenger + ' "' + text + '" -M'
-					subprocess.call(shlex.split(cmd))
+					subprocess.call(shlex.split(cmd), stdout=devnull, stderr=devnull)
 					logging.debug("Message has been sent")
 			elif typ == "ZVEI":
 					text = globalVars.config.get("yowsup","zvei_message")
 					text = wildcardHandler.replaceWildcards(text, data) 
 					cmd = 'yowsup-cli demos -l ' + sender + ':' + password + ' -s ' + empfaenger + ' "' + text + '" -M'
-					subprocess.call(shlex.split(cmd))
+					subprocess.call(shlex.split(cmd), stdout=devnull, stderr=devnull)
 					logging.debug("Message has been sent")
 			elif typ == "POC":
 				try:
