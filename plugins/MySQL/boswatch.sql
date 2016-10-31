@@ -73,6 +73,10 @@ CREATE TABLE IF NOT EXISTS `bos_pocsag` (
     PRIMARY KEY (`ID`)
 )  ENGINE=MYISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
 
+-- rename old columns including little error-prevention
+ALTER IGNORE TABLE `bos_pocsag` change `funktion` `function` INT(1);
+ALTER IGNORE TABLE `bos_pocsag` change `funktionChar` `functionChar` TEXT(1);
+
 -- --------------------------------------------------------
 
 --
