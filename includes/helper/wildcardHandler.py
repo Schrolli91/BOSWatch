@@ -12,6 +12,8 @@ for direct use in plugins to save code
 
 import logging
 
+from includes import globalVars
+
 from includes.helper import timeHandler
 
 
@@ -53,6 +55,10 @@ def replaceWildcards(text, data, lineBrakeAllowed=False):
 		if "ric" in data: text = text.replace("%RIC%", data["ric"])
 		if "function" in data: text = text.replace("%FUNC%", data["function"])
 		if "functionChar" in data: text = text.replace("%FUNCCHAR%", data["functionChar"])
+		if data["function"] == "1": text = text.replace("%FUNCTEXT%", globalVars.config.get("POC","rica"))
+		if data["function"] == "2": text = text.replace("%FUNCTEXT%", globalVars.config.get("POC","ricb"))
+		if data["function"] == "3": text = text.replace("%FUNCTEXT%", globalVars.config.get("POC","ricc"))
+		if data["function"] == "4": text = text.replace("%FUNCTEXT%", globalVars.config.get("POC","ricd"))
 		if "msg" in data: text = text.replace("%MSG%", data["msg"])
 		if "bitrate" in data: text = text.replace("%BITRATE%", str(data["bitrate"]))
 
