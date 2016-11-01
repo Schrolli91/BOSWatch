@@ -65,13 +65,17 @@ CREATE TABLE IF NOT EXISTS `bos_pocsag` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `time` DATETIME NOT NULL,
     `ric` VARCHAR(7) NOT NULL DEFAULT '0',
-    `funktion` INT(1) NOT NULL,
-    `funktionChar` TEXT(1) NOT NULL,
+    `function` INT(1) NOT NULL,
+    `functionChar` TEXT(1) NOT NULL,
     `msg` TEXT NOT NULL,
     `bitrate` INT(4) NOT NULL,
     `description` TEXT NOT NULL,
     PRIMARY KEY (`ID`)
 )  ENGINE=MYISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
+
+-- rename old columns including little error-prevention
+ALTER IGNORE TABLE `bos_pocsag` change `funktion` `function` INT(1);
+ALTER IGNORE TABLE `bos_pocsag` change `funktionChar` `functionChar` TEXT(1);
 
 -- --------------------------------------------------------
 
