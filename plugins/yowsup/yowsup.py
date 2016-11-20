@@ -18,7 +18,7 @@ import os
 
 from includes import globalVars
 
-'from includes.helper import timeHandler
+#from includes.helper import timeHandler
 from includes.helper import wildcardHandler
 from includes.helper import configHandler
 

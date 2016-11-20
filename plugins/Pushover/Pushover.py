@@ -14,7 +14,7 @@ import httplib #for the HTTP request
 import urllib
 from includes import globalVars  # Global variables
 
-'from includes.helper import timeHandler
+#from includes.helper import timeHandler
 from includes.helper import configHandler
 
 ##

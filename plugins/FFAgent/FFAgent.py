@@ -15,7 +15,7 @@ import json, requests
 
 from includes import globalVars  # Global variables
 
-'from includes.helper import timeHandler
+#from includes.helper import timeHandler
 from includes.helper import configHandler
 
 ##
