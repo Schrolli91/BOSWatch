@@ -15,10 +15,7 @@ httpRequest-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages to an URL
 # Imports
 #
 import urllib2
-import urllib
-import time
 import logging # Global logger
-import string
 from includes import globalVars  # Global variables
 
 # Helper function, uncomment to use

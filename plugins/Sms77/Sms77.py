@@ -9,13 +9,12 @@ SMS77-Plugin to send FMS-, ZVEI- and POCSAG - messages to SMS77
 @requires: SMS77-Configuration has to be set in the config.ini
 """
 
-import time
 import logging # Global logger
 import httplib #for the HTTP request
 import urllib
 from includes import globalVars  # Global variables
 
-from includes.helper import timeHandler
+'from includes.helper import timeHandler
 from includes.helper import configHandler
 
 ##

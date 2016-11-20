@@ -9,13 +9,12 @@ Pushover-Plugin to send FMS-, ZVEI- and POCSAG - messages to Pushover Clients
 @requires: Pushover-Configuration has to be set in the config.ini
 """
 
-import time
 import logging # Global logger
 import httplib #for the HTTP request
 import urllib
 from includes import globalVars  # Global variables
 
-from includes.helper import timeHandler
+'from includes.helper import timeHandler
 from includes.helper import configHandler
 
 ##

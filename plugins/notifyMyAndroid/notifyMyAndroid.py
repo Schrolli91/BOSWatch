@@ -10,9 +10,6 @@ notifyMyAndroid-Plugin to dispatch FMS-, ZVEI- and POCSAG-messages via UDP/TCP
 """
 
 import logging # Global logger
-
-import socket  # for connection
-import json    # for data-transfer
 import csv     # for loading the APIKeys
 
 
