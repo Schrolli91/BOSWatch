@@ -17,12 +17,12 @@ import time    # timestamp for doublealarm
 from includes import globalVars  # Global variables
 
 #
-# ListStructure [0..n] = (ID, TimeStamp, msg)
+# ListStructure [0..n] = (Data, TimeStamp, msg)
 #
 doubleList = []
 
 
-def checkID(typ, id, msg=""):
+def checkID(typ, data, msg=""):
 	"""
 	check if id was called in the last x sec and n entries
 
@@ -34,12 +34,12 @@ def checkID(typ, id, msg=""):
 	global doubleList
 	timestamp = int(time.time()) # Get Timestamp
 
-	logging.debug("checkID: %s (%s)", id, msg)
+	logging.debug("checkID: %s (%s)", data, msg)
 	for i in range(len(doubleList)):
 		(xID, xTimestamp, xMsg) = doubleList[i]
 		# given ID found?
 		# return False if the first entry in double_ignore_time is found, we will not check for younger ones...
-		if id == xID and timestamp < xTimestamp + globalVars.config.getint("BOSWatch", "doubleFilter_ignore_time"):
+		if data == xID and timestamp < xTimestamp + globalVars.config.getint("BOSWatch", "doubleFilter_ignore_time"):
 			logging.debug("-- previous id %s is within doubleFilter_ignore_time (%ss)", xID, globalVars.config.getint("BOSWatch", "doubleFilter_ignore_time"))
 			# if wanted, we have to check the msg additional
 			if "POC" in typ and globalVars.config.getint("BOSWatch", "doubleFilter_check_msg"):
@@ -56,7 +56,7 @@ def checkID(typ, id, msg=""):
 	return True
 
 
-def newEntry(id, msg = ""):
+def newEntry(data, msg = ""):
 	"""
 	new entry in double alarm list
 
@@ -64,9 +64,9 @@ def newEntry(id, msg = ""):
 	"""
 	global doubleList
 	timestamp = int(time.time()) # Get Timestamp
-	doubleList.append((id, timestamp, msg.strip()))
+	doubleList.append((data, timestamp, msg.strip()))
 
-	logging.debug("Added %s to doubleList", id)
+	logging.debug("Added %s to doubleList", data)
 
 	# now check if list has more than n entries:
 	if len(doubleList) > globalVars.config.getint("BOSWatch", "doubleFilter_ignore_entries"):

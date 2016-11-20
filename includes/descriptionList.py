@@ -94,25 +94,25 @@ def loadDescriptionLists():
 #
 # public function for getting a description
 #
-def getDescription(typ, id):
+def getDescription(typ, data):
 	"""
 	Get description for id.
 	Will return id if no description will be found.
 
 	@return:    description as string
 	"""
-	resultStr = id;
+	resultStr = data;
 	logging.debug("look up description lists")
 	try:
 		if typ == "FMS":
 			global fmsDescribtionList
-			resultStr = fmsDescribtionList[id]
+			resultStr = fmsDescribtionList[data]
 		elif typ == "ZVEI":
 			global zveiDescribtionList
-			resultStr = zveiDescribtionList[id]
+			resultStr = zveiDescribtionList[data]
 		elif typ == "POC":
 			global ricDescribtionList
-			resultStr = ricDescribtionList[id]
+			resultStr = ricDescribtionList[data]
 		else:
 			logging.warning("Invalid Typ: %s", typ)
 
@@ -125,5 +125,5 @@ def getDescription(typ, id):
 		logging.error("Error during look up description lists")
 		logging.debug("Error during look up description lists", exc_info=True)
 
-	logging.debug(" - result for %s: %s", id, resultStr)
+	logging.debug(" - result for %s: %s", data, resultStr)
 	return resultStr
