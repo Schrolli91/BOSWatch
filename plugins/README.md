@@ -158,6 +158,7 @@ defined wildcards:
 - `%RIC%` = Pocsag RIC
 - `%FUNC%` = Pocsac function/Subric (1-4)
 - `%FUNCCHAR%` = Pocsac function/Subric als character (a-d)
+- `%FUNCTEXT%` = Pocsac function/Subric static massage definded in pocsag section
 - `%MSG%` = Message of the Pocsag telegram
 - `%BITRATE%` = Bitrate of the Pocsag telegram
 
