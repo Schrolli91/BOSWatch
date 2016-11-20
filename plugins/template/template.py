@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 template plugin to show the function and usage of plugins
@@ -17,7 +17,7 @@ For more information take a look into the other plugins
 # Imports
 #
 import logging # Global logger
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 # Helper function, uncomment to use
 #from includes.helper import timeHandler
@@ -62,7 +62,7 @@ def run(typ,freq,data):
 
 	@type    typ:  string (FMS|ZVEI|POC)
 	@param   typ:  Typ of the dataset
-	@type    data: map of data (structure see interface.txt)
+	@type    data: map of data (structure see readme.md in plugin folder)
 	@param   data: Contains the parameter for dispatch
 	@type    freq: string
 	@keyword freq: frequency of the SDR Stick
@@ -74,6 +74,9 @@ def run(typ,freq,data):
 	"""
 	try:
 		if configHandler.checkConfig("template"): #read and debug the config (let empty if no config used)
+
+			logging.debug(globalVars.config.get("template", "test1"))
+			logging.debug(globalVars.config.get("template", "test2"))
 
 			########## User Plugin CODE ##########
 			if typ == "FMS":

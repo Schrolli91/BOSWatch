@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 #
 
 """
@@ -10,7 +10,7 @@ for direct use in plugins to save code
 """
 
 import logging
-from includes import globals
+from includes import globalVars
 
 
 def checkConfig(section=""):
@@ -27,7 +27,9 @@ def checkConfig(section=""):
 		if section is not "": # read only data if section is given
 			logging.debug("read [%s] from config file", section)
 
-			for key,val in globals.config.items(section):
+			for key,val in globalVars.config.items(section):
+				if ("password" in key) or ("apikey" in key):
+					val = "***"
 				logging.debug(" - %s = %s", key, val)
 
 		return True

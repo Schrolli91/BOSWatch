@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 FMS Decoder
@@ -12,7 +12,7 @@ FMS Decoder
 import logging # Global logger
 import re      # Regex for validation
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 from includes import doubleFilter  # double alarm filter
 
 ##
@@ -22,7 +22,7 @@ from includes import doubleFilter  # double alarm filter
 #
 def decode(freq, decoded):
 	"""
-	Export FMS Information from Multimon-NG RAW String and call alarmHandler.processAlarm()
+	Export FMS Information from Multimon-NG RAW String and call alarmHandler.processAlarmHandler()
 
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
@@ -53,17 +53,16 @@ def decode(freq, decoded):
 					logging.info("FMS:%s Status:%s Richtung:%s TSI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
 					data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "directionText":fms_directionText, "tsi":fms_tsi, "description":fms_id[0:8]}
 					# If enabled, look up description
-					if globals.config.getint("FMS", "idDescribed"):
+					if globalVars.config.getint("FMS", "idDescribed"):
 						from includes import descriptionList
 						data["description"] = descriptionList.getDescription("FMS", fms_id[0:8])
 					# processing the alarm
 					try:
 						from includes import alarmHandler
-						alarmHandler.processAlarm("FMS", freq, data)
+						alarmHandler.processAlarmHandler("FMS", freq, data)
 					except:
 						logging.error("processing alarm failed")
 						logging.debug("processing alarm failed", exc_info=True)
-						pass
 				# in every time save old data for double alarm
 				doubleFilter.newEntry(fms_id)
 			else:

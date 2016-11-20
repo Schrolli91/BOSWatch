@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 Shows the header in shell if quiet mode is not active
@@ -10,7 +10,7 @@ Shows the header in shell if quiet mode is not active
 @requires: none
 """
 
-from includes import globals
+from includes import globalVars
 
 def printHeader(args):
 	"""
@@ -30,8 +30,8 @@ def printHeader(args):
 		print "            German BOS Information Script           "
 		print "          by Bastian Schroll, Jens Herrmann         "
 		print ""
-		print "SW Version:	"+globals.getVers("vers")
-		print "Build Date:	"+globals.getVers("date")
+		print "SW Version:	"+globalVars.versionNr
+		print "Build Date:	"+globalVars.buildDate
 		print ""
 
 		print "Frequency:   "+args.freq
@@ -49,6 +49,7 @@ def printHeader(args):
 		if "POC2400" in args.demod:
 			print "- POC2400"
 		print "Squelch: "+str(args.squelch)
+		print "Gain: "+str(args.gain)
 		if args.verbose:
 			print "Verbose Mode!"
 		if args.test:

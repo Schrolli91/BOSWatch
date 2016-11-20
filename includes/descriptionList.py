@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: utf-8 -*-
 
 """
 Function to expand the dataset with a description.
@@ -10,10 +10,17 @@ Function to expand the dataset with a description.
 """
 
 import logging # Global logger
-
 import csv # for loading the description files
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
+from includes.helper import stringConverter
+
+
+# local variables
+fmsDescribtionList  = {}
+zveiDescribtionList = {}
+ricDescribtionList  = {}
+
 
 ##
 #
@@ -29,14 +36,18 @@ def loadCSV(typ, idField):
 	resultList = {}
 	try:
 		logging.debug("-- loading %s.csv", typ)
-		with open(globals.script_path+'/csv/'+typ+'.csv') as csvfile:
+		with open(globalVars.script_path+'/csv/'+typ+'.csv') as csvfile:
 			# DictReader expected structure described in first line of csv-file
 			reader = csv.DictReader(csvfile)
 			for row in reader:
 				logging.debug(row)
 				# only import rows with an integer as id
 				if row[idField].isdigit() == True:
-					resultList[row[idField]] = row['description']
+					try:
+						resultList[row[idField]] = stringConverter.convertToUTF8(row['description'])
+					except:
+						# skip entry in case of an exception
+						pass
 		logging.debug("-- loading csv finished")
 	except:
 		logging.error("loading csvList for typ: %s failed", typ)
@@ -59,44 +70,49 @@ def loadDescriptionLists():
 	try:
 		logging.debug("loading description lists")
 
-		if globals.config.getint("FMS", "idDescribed"):
+		if globalVars.config.getint("FMS", "idDescribed"):
 			logging.debug("- load FMS description list")
-			globals.fmsDescribtionList = loadCSV("fms", "fms")
+			global fmsDescribtionList
+			fmsDescribtionList = loadCSV("fms", "fms")
 
-		if globals.config.getint("ZVEI", "idDescribed"):
+		if globalVars.config.getint("ZVEI", "idDescribed"):
 			logging.debug("- load ZVEI description list")
-			globals.zveiDescribtionList = loadCSV("zvei", "zvei")
+			global zveiDescribtionList
+			zveiDescribtionList = loadCSV("zvei", "zvei")
 
-		if globals.config.getint("POC", "idDescribed"):
+		if globalVars.config.getint("POC", "idDescribed"):
 			logging.debug("- load pocsag description list")
-			globals.ricDescribtionList = loadCSV("poc", "ric")
+			global ricDescribtionList
+			ricDescribtionList = loadCSV("poc", "ric")
 
 	except:
 		logging.error("cannot load description lists")
 		logging.debug("cannot load description lists", exc_info=True)
-		pass
 
 
 ##
 #
 # public function for getting a description
 #
-def getDescription(typ, id):
+def getDescription(typ, data):
 	"""
 	Get description for id.
 	Will return id if no description will be found.
 
 	@return:    description as string
 	"""
-	resultStr = id;
+	resultStr = data;
 	logging.debug("look up description lists")
 	try:
 		if typ == "FMS":
-			resultStr = globals.fmsDescribtionList[id]
+			global fmsDescribtionList
+			resultStr = fmsDescribtionList[data]
 		elif typ == "ZVEI":
-			resultStr = globals.zveiDescribtionList[id]
+			global zveiDescribtionList
+			resultStr = zveiDescribtionList[data]
 		elif typ == "POC":
-			resultStr = globals.ricDescribtionList[id]
+			global ricDescribtionList
+			resultStr = ricDescribtionList[data]
 		else:
 			logging.warning("Invalid Typ: %s", typ)
 
@@ -108,7 +124,6 @@ def getDescription(typ, id):
 	except:
 		logging.error("Error during look up description lists")
 		logging.debug("Error during look up description lists", exc_info=True)
-		pass
 
-	logging.debug(" - result for %s: %s", id, resultStr)
+	logging.debug(" - result for %s: %s", data, resultStr)
 	return resultStr

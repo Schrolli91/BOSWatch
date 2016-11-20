@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 Functions to Load and import the Plugins
@@ -14,14 +14,14 @@ import imp
 import os
 
 from ConfigParser import NoOptionError # we need this exception
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 def loadPlugins():
 	"""
-	Load all plugins into globals.pluginList
+	Load all plugins into globalVars.pluginList
 
 	@return:    nothing
-	@exception: Exception if insert into globals.pluginList failed
+	@exception: Exception if insert into globalVars.pluginList failed
 	"""
 	try:
 		logging.debug("loading plugins")
@@ -34,20 +34,18 @@ def loadPlugins():
 				# call next plugin, if one has thrown an exception
 				logging.error("error loading plugin: %s", i["name"])
 				logging.debug("error loading plugin: %s", i["name"], exc_info=True)
-				pass
 			else: # only call onLoad() and insert into pluginList[] if import is succesfull
 
 				try:
 					# Try to call the .onLoad() routine for all active plugins
 					logging.debug("call %s.onLoad()", i["name"])
 					plugin.onLoad()
-					# Add it to globals.pluginList
-					globals.pluginList[i["name"]] = plugin
+					# Add it to globalVars.pluginList
+					globalVars.pluginList[i["name"]] = plugin
 				except:
 					# call next plugin, if one has thrown an exception
 					logging.error("error calling %s.onLoad()", i["name"])
 					logging.debug("error calling %s.onLoad()", exc_info=True)
-					pass
 	except:
 		logging.error("cannot load plugins")
 		logging.debug("cannot load plugins", exc_info=True)
@@ -63,7 +61,7 @@ def getPlugins():
 	"""
 	try:
 		logging.debug("Search in plugin folder")
-		PluginFolder = globals.script_path+"/plugins"
+		PluginFolder = globalVars.script_path+"/plugins"
 		plugins = []
 		# Go to all Folders in the Plugin-Dir
 		for i in os.listdir(PluginFolder):
@@ -75,7 +73,7 @@ def getPlugins():
 
 			# is the plugin enabled in the config-file?
 			try:
-				if globals.config.getint("Plugins", i):
+				if globalVars.config.getint("Plugins", i):
 					info = imp.find_module(i, [location])
 					plugins.append({"name": i, "info": info})
 					logging.debug("Plugin [ENABLED ] %s", i)
@@ -84,7 +82,6 @@ def getPlugins():
 			# no entry for plugin found in config-file
 			except NoOptionError:
 				logging.warning("Plugin [NO CONF ] %s", i)
-				pass
 	except:
 		logging.error("Error during plugin search")
 		logging.debug("Error during plugin search", exc_info=True)

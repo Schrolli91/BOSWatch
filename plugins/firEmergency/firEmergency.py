@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 firEmergency-Plugin to dispatch ZVEI- and POCSAG - messages to firEmergency
@@ -15,9 +15,11 @@ firEmergency configuration:
 import logging # Global logger
 import socket
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 from includes.helper import configHandler
+from includes.helper import stringConverter
+
 
 ###
 #
@@ -51,7 +53,7 @@ def run(typ,freq,data):
 
 	@type    typ:  string (ZVEI|POC)
 	@param   typ:  Typ of the dataset for sending to firEmergency
-	@type    data: map of data (structure see interface.txt)
+	@type    data: map of data (structure see readme.md in plugin folder)
 	@param   data: Contains the parameter for dispatch to firEmergency.
 	@type    freq: string
 	@keyword freq: frequency is not used in this plugin
@@ -68,7 +70,7 @@ def run(typ,freq,data):
 				# connect to firEmergency
 				#
 				firSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-				firSocket.connect((globals.config.get("firEmergency", "firserver"), globals.config.getint("firEmergency", "firport")))
+				firSocket.connect((globalVars.config.get("firEmergency", "firserver"), globalVars.config.getint("firEmergency", "firport")))
 			except:
 				logging.error("cannot connect to firEmergency")
 				logging.debug("cannot connect to firEmergency", exc_info=True)
@@ -85,7 +87,8 @@ def run(typ,freq,data):
 				elif typ == "ZVEI":
 					logging.debug("ZVEI to firEmergency")
 					try:
-							firXML = "<event>\n<address>"+data["zvei"]+"</address>\n<description>"+data["description"]+"</description>\n<message>"+data["zvei"]+" alarmiert.</message>\n</event>\n"
+							description = stringConverter.convertToUTF8(data["description"])
+							firXML = "<event>\n<address>"+data["zvei"]+"</address>\n<description>"+description+"</description>\n<message>"+data["zvei"]+"</message>\n</event>\n"
 							firSocket.send(firXML)
 					except:
 							logging.error("%s to firEmergency failed", typ)
@@ -97,7 +100,9 @@ def run(typ,freq,data):
 					logging.debug("POC to firEmergency")
 					try:
 							# !!! Subric+"XX" because of an Issuse in firEmergency !!!
-							firXML = "<event>\n<address>"+data["ric"]+"</address>\n<status>"+data["function"]+"XX</status>\n<description>"+data["description"]+"</description>\n<message>"+data["msg"]+"</message>\n</event>\n"
+							description = stringConverter.convertToUTF8(data["description"])
+							msg =  stringConverter.convertToUTF8(data["msg"])
+							firXML = "<event>\n<address>"+data["ric"]+"</address>\n<status>"+data["function"]+"XX</status>\n<description>"+description+"</description>\n<message>"+msg+"</message>\n</event>\n"
 							firSocket.send(firXML)
 					except:
 							logging.error("%s to firEmergency failed", typ)

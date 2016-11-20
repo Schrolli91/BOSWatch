@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 ZVEI Decoder
@@ -12,7 +12,7 @@ ZVEI Decoder
 import logging # Global logger
 import re      # Regex for validation
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 from includes import doubleFilter  # double alarm filter
 
 ##
@@ -44,7 +44,7 @@ def removeF(zvei):
 #
 def decode(freq, decoded):
 	"""
-	Export ZVEI Information from Multimon-NG RAW String and call alarmHandler.processAlarm()
+	Export ZVEI Information from Multimon-NG RAW String and call alarmHandler.processAlarmHandler()
 
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
@@ -65,17 +65,16 @@ def decode(freq, decoded):
 				logging.info("5-Ton: %s", zvei_id)
 				data = {"zvei":zvei_id, "description":zvei_id}
 				# If enabled, look up description
-				if globals.config.getint("ZVEI", "idDescribed"):
+				if globalVars.config.getint("ZVEI", "idDescribed"):
 					from includes import descriptionList
 					data["description"] = descriptionList.getDescription("ZVEI", zvei_id)
 				# processing the alarm
 				try:
 					from includes import alarmHandler
-					alarmHandler.processAlarm("ZVEI", freq, data)
+					alarmHandler.processAlarmHandler("ZVEI", freq, data)
 				except:
 					logging.error("processing alarm failed")
 					logging.debug("processing alarm failed", exc_info=True)
-					pass
 			# in every time save old data for double alarm
 			doubleFilter.newEntry(zvei_id)
 		else:

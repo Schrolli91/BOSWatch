@@ -1,4 +1,16 @@
-![# BOSWatch](/www/gfx/logo.png)
+**Codacy - static code analysis:**
+
+|branch|quality|
+|---|---|
+|master-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|
+|develop-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|
+
+**Achtung:** Die readme ist veraltet - Neue Informationen werden im Laufe der Zeit in das Github Wiki integriert!
+
+**Attention:** This readme is outdated - New informations will be integrated in the Github Wiki!
+
+
+![# BOSWatch](/boswatch.png)
 
 :satellite: Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG :satellite:
 
@@ -24,6 +36,8 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - Logfiles for better troubleshooting
 - verbose/quiet mode for more/none information
 - Ready for use BOSWatch as daemon
+- possibility to start plugins asynchron
+- NMA Error Handler
 
 ##### Features for the future:
 - more plugins
@@ -43,6 +57,7 @@ If you want to code your own Plugin, see `plugins/README.md`.
 |BosMon|send data to BosMon server|:white_check_mark:|:white_check_mark:|:white_check_mark:|
 |firEmergency|send data to firEmergency server|:x:|:white_check_mark:|:white_check_mark:|
 |jsonSocket|send data as jsonString to a socket server|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|NMA|send data to Notify my Android|:white_check_mark:|:white_check_mark:|:white_check_mark:|
 
 - for more Information to the plugins see `config.ini`
 
@@ -68,7 +83,7 @@ No filter for a combination typ/plugin = all data will pass
 
 Syntax: `INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX` (separator `;`)
 - `TYP` = the data typ (FMS|ZVEI|POC)
-- `DATAFIELD` = the field of the data array (See interface.txt)
+- `DATAFIELD` = the field of the data array (see readme.md in plugin folder)
 - `PLUGIN` = the name of the plugin to call with this filter (* for all)
 - `FREQUENZ` = the frequenz to use the filter (for more SDR sticks (* for all))
 - `REGEX` = the RegEX
@@ -80,7 +95,7 @@ only POCSAG to MySQL with the text "ALARM:" in the message
 `pocTest = POC;msg;MySQL;*;ALARM:`
 
 ##### Web frontend (obsolete)
-New version in future - old data in folder `/www/`
+old data in folder `/exampeAddOns/simpleWeb/`
 
 ~~Put the files in folder /wwww/ into your local webserver folder (f.e. /var/www/).
 Now you must edit the "config.php" with your userdata to your local database.
@@ -145,4 +160,3 @@ Thanks to smith_fms and McBo from Funkmeldesystem.de - Forum for Inspiration and
 
 ### Code your own Plugin
 See `plugins/README.md`
-
