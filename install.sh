@@ -54,7 +54,7 @@ tput cup 13 15
 echo "[ 2/10] [##--------]"
 tput cup 15 5
 echo "-> download GIT an other stuff.........."
-apt-get -y install git cmake build-essential libusb-1.0 qt4-qmake qt4-default qt5-default libpulse-dev libx11-dev sox >> $boswatchpath/install/setup_log.txt 2>&1
+apt-get -y install git cmake build-essential libusb-1.0 qt4-qmake qt4-default libpulse-dev libx11-dev sox >> $boswatchpath/install/setup_log.txt 2>&1
 
 tput cup 13 15
 echo "[ 3/10] [###-------]"
@@ -125,12 +125,12 @@ tput cup 15 5
 echo "-> configure..........................."
 cd $boswatchpath/
 chmod +x *
-echo "# BOSWatch - blacklist the DVB drivers to avoid conflict with the SDR driver\n blacklist dvb_usb_rtl28xxu \n blacklist rtl2830\n blacklist dvb_usb_v2\n blacklist dvb_core" >> /etc/modprobe.d/boswatch_blacklist_sdr.conf
+echo $'# BOSWatch - blacklist the DVB drivers to avoid conflict with the SDR driver\n blacklist dvb_usb_rtl28xxu \n blacklist rtl2830\n blacklist dvb_usb_v2\n blacklist dvb_core' >> /etc/modprobe.d/boswatch_blacklist_sdr.conf
 
 tput cup 17 1
 echo "BOSWatch are now installed in $boswatchpath/"
 echo "Install ready!"
 
-if [ $reboot == "true" ]; then
+if [ $reboot = "true" ]; then
   /sbin/reboot
 fi
