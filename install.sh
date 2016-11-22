@@ -11,7 +11,7 @@ echo "                 by Bastian Schroll                 "
 echo ""
 echo "This may take a several minutes... Don't panic!"
 echo ""
-echo "Caution, script don't install a Webserver with PHP and MySQL"
+echo "Caution, script does not install a webserver with PHP and MySQL"
 echo "So you have to make up manually if you want to use MySQL support"
 
 boswatchpath=/opt/boswatch
@@ -48,13 +48,13 @@ echo ""
 tput cup 13 15
 echo "[ 1/10] [#---------]"
 tput cup 15 5
-echo "-> make a apt-get update................"
+echo "-> make an apt-get update................"
 apt-get update -y > $boswatchpath/install/setup_log.txt 2>&1
 
 tput cup 13 15
 echo "[ 2/10] [##--------]"
 tput cup 15 5
-echo "-> download GIT an other stuff.........."
+echo "-> download GIT and other stuff.........."
 apt-get -y install git cmake build-essential libusb-1.0 qt4-qmake qt4-default libpulse-dev libx11-dev sox >> $boswatchpath/install/setup_log.txt 2>&1
 
 tput cup 13 15
@@ -96,7 +96,7 @@ make install >> $boswatchpath/install/setup_log.txt 2>&1
 tput cup 13 15
 echo "[ 7/10] [#######---]"
 tput cup 15 5
-echo "-> download MySQL Connector for Python."
+echo "-> download MySQL connector for Python."
 cd $boswatchpath/install
 wget "http://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-1.0.9.tar.gz/from/http://cdn.mysql.com/" -O mysql-connector.tar >> $boswatchpath/install/setup_log.txt 2>&1
 tar xfv mysql-connector.tar >> $boswatchpath/install/setup_log.txt 2>&1
@@ -105,7 +105,7 @@ cd $boswatchpath/install/mysql-connector-python*
 tput cup 13 15
 echo "[ 8/10] [########--]"
 tput cup 15 5
-echo "-> install MySQL Connector for Python.."
+echo "-> install MySQL connector for Python.."
 chmod +x ./setup.py
 ./setup.py install >> $boswatchpath/install/setup_log.txt 2>&1
 
@@ -129,8 +129,10 @@ chmod +x *
 echo $'# BOSWatch - blacklist the DVB drivers to avoid conflict with the SDR driver\n blacklist dvb_usb_rtl28xxu \n blacklist rtl2830\n blacklist dvb_usb_v2\n blacklist dvb_core' >> /etc/modprobe.d/boswatch_blacklist_sdr.conf
 
 tput cup 17 1
-echo "BOSWatch are now installed in $boswatchpath/"
-echo "Install ready!"
+echo "BOSWatch is now installed in $boswatchpath/"
+echo "Installation ready!"
+
+tput cnorm
 
 if [ $reboot = "true" ]; then
   /sbin/reboot
