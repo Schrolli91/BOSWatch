@@ -16,6 +16,7 @@ echo "So you have to make up manually if you want to use MySQL support"
 
 boswatchpath=/opt/boswatch
 mkdir -p $boswatchpath
+reboot=false
 
 for (( i=1; i<=$#; i=$i+2 )); do
     t=$((i + 1))
