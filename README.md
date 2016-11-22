@@ -130,19 +130,11 @@ optional arguments:
 
 
 ### Installation
-You can easy install BOSWatch with the install.sh Script.
-- Download the install.sh in any folder you want.
-- Make it executeable `sudo chmod +x install.sh`
-- And use the script  `sudo sh install.sh`
+Please follow the instructions written down in the wiki:
 
-Now the script downloads and compile all needed data.
-At the end you can find BOSWatch in `~/boswatch/`
-Rename `config.template.ini` to `config.ini` and configure
-In case of an error during the installation, check the logfile in `~/boswatch/install/setup_log.txt`
+https://github.com/Schrolli91/BOSWatch/wiki
 
-Caution, script don't install a webserver with PHP and MySQL.
-So you have to make up manually if you want to use MySQL support.
-Database Structure `boswatch.sql` in the MySQL Plugin Folder
+You just need to download a single file since the installer manages the whole process except the installation of a webserver and a database.
 
 If you want to use BOSWatch as a daemon, you have to set your
 configuration in `service/boswatch.sh` and copy it to `/etc/init.d`.
