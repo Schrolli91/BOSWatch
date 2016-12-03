@@ -52,7 +52,7 @@ def isAllowed(poc_id):
 		allowed = 0
 		
 	# 3.) Check Range, return true if in between
-	if globalVars.config.getint("POC", "filter_range_start") < int(poc_id) < globalVars.config.getint("POC", "filter_range_end"):
+	if globalVars.config.getint("POC", "filter_range_start") <= int(poc_id) <= globalVars.config.getint("POC", "filter_range_end"):
 		logging.info("RIC %s in between filter range", poc_id)
 		return True
 	else:
