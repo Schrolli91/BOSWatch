@@ -29,28 +29,37 @@ def isAllowed(poc_id):
 
 	@requires:  Configuration has to be set in the config.ini
 
-	@return:    True if the Ric is allowed, other False
+	@return:    Checks both allow/deny-rule and filter-range (suitable for signal-RIC)
 	@exception: none
 	"""
-	# 1.) If allowed RICs is set, only they will path,
-	#       If RIC is the right one return True, else False
+	
+	allowed = 0
+	
+	# 1.) Allow
+	#       If RIC is allowed, return true; otherwise go on
 	if globalVars.config.get("POC", "allow_ric"):
 		if poc_id in globalVars.config.get("POC", "allow_ric"):
 			logging.info("RIC %s is allowed", poc_id)
 			return True
 		else:
 			logging.info("RIC %s is not in the allowed list", poc_id)
-			return False
-	# 2.) If denied RIC, return False
-	elif poc_id in globalVars.config.get("POC", "deny_ric"):
+			allowed = 0
+			
+	# 2.) Deny
+	#	If RIC is denied, mark as not allowed
+	if poc_id in globalVars.config.get("POC", "deny_ric"):
 		logging.info("RIC %s is denied by config.ini", poc_id)
-		return False
-	# 3.) Check Range, return False if outside def. range
-	elif int(poc_id) < globalVars.config.getint("POC", "filter_range_start"):
-		logging.info("RIC %s out of filter range (start)", poc_id)
-		return False
-	elif int(poc_id) > globalVars.config.getint("POC", "filter_range_end"):
-		logging.info("RIC %s out of filter range (end)", poc_id)
+		allowed = 0
+		
+	# 3.) Check Range, return true if in between
+	if globalVars.config.getint("POC", "filter_range_start") < int(poc_id) < globalVars.config.getint("POC", "filter_range_end"):
+		logging.info("RIC %s in between filter range", poc_id)
+		return True
+	else:
+		logging.info("RIC %s out of filter range", poc_id)
+		allowed = 0
+		
+	if allowed == 0:
 		return False
 	return True
 
