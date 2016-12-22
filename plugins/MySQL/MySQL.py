@@ -31,12 +31,12 @@ def isSignal(poc_id):
         @exception: none
         """
         # If RIC is Signal return True, else False
-        if globalVars.config.get("MySQL", "signal_ric"):
-                if poc_id in globalVars.config.get("MySQL", "signal_ric"):
-                        logging.info("RIC %s is signal", poc_id)
+        if globalVars.config.get("POC", "netIdent_ric"):
+                if poc_id in globalVars.config.get("POC", "netIdent_ric"):
+                        logging.info("RIC %s is net ident", poc_id)
                         return True
                 else:
-                        logging.info("RIC %s is not signal", poc_id)
+                        logging.info("RIC %s is no net ident", poc_id)
                         return False
 
 
