@@ -47,7 +47,7 @@ def isAllowed(poc_id):
 	# 2.) If denied RIC, return False
 	if poc_id in globalVars.config.get("POC", "deny_ric"):
 		logging.info("RIC %s is denied by config.ini", poc_id)
-		return False // RIC is denied - strongest way to block
+		return False # RIC is denied - strongest way to block
 	# 3.) Check Range, return False if outside def. range
 	if globalVars.config.getint("POC", "filter_range_start") < int(poc_id) < globalVars.config.getint("POC", "filter_range_end"):
 		logging.info("RIC %s in between filter range", poc_id)
