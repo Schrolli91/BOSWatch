@@ -37,14 +37,25 @@ def decode(freq, decoded):
 	try:
 		fms_service = decoded[19]            # Organisation
 		fms_country = decoded[36]            # Bundesland
-		fms_location = decoded[65:67]        # Ort
+		fms_location = decoded[61:63]        # Ort
 		fms_vehicle = decoded[72:76]         # Fahrzeug
 		fms_status = decoded[84]             # Status
 		fms_direction = decoded[101]         # Richtung
 		fms_directionText = decoded[103:110] # Richtung (Text)
 		fms_tsi = decoded[114:117]           # Taktische Kruzinformation
 
-		if "CRC correct" in decoded: #check CRC is correct
+		# shall we use the CRC-check?
+		if (globalVars.config.getboolean("FMS", "CheckCRC")):
+			if "CRC correct" in decoded:
+				# if CRC is to be checked, do so and save result
+				proceed = True
+			else:
+				proceed = False
+		else:
+			# no CRC-check required - proceed
+			proceed = True
+
+		if (proceed == True):
 			fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction # build FMS id
 			# if FMS is valid
 			if re.search("[0-9a-f]{8}[0-9a-f]{1}[01]{1}", fms_id):
