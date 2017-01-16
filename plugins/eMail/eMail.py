@@ -111,7 +111,7 @@ def run(typ,freq,data):
 				server.set_debuglevel(0)
 
 				# if tls is enabled, starttls
-				if globalVars.config.get("eMail", "tls"):
+				if globalVars.config.getboolean("eMail", "tls"):
 					server.starttls()
 
 				# if user is given, login
