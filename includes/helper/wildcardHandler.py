@@ -53,7 +53,7 @@ def replaceWildcards(text, data, lineBrakeAllowed=False):
 
 		# replace POC data
 		if "ric" in data: text = text.replace("%RIC%", data["ric"])
-		if "function" in data: 
+		if "function" in data:
 			text = text.replace("%FUNC%", data["function"])
 			if data["function"] == "1": text = text.replace("%FUNCTEXT%", globalVars.config.get("POC","rica"))
 			if data["function"] == "2": text = text.replace("%FUNCTEXT%", globalVars.config.get("POC","ricb"))

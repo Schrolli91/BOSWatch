@@ -44,16 +44,13 @@ def decode(freq, decoded):
 		fms_directionText = decoded[103:110] # Richtung (Text)
 		fms_tsi = decoded[114:117]           # Taktische Kruzinformation
 
+		proceec = True # no CRC-check required - proceed
+
 		# shall we use the CRC-check?
 		if (globalVars.config.getboolean("FMS", "CheckCRC")):
-			if "CRC correct" in decoded:
-				# if CRC is to be checked, do so and save result
-				proceed = True
-			else:
+			if "CRC correct" not in decoded:
+				# if CRC must be checked and is not correct - dont proceed
 				proceed = False
-		else:
-			# no CRC-check required - proceed
-			proceed = True
 
 		if (proceed == True):
 			fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction # build FMS id
