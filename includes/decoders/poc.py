@@ -32,9 +32,9 @@ def isAllowed(poc_id):
 	@return:    Checks both allow/deny-rule and filter-range (suitable for signal-RIC)
 	@exception: none
 	"""
-	
+
 	allowed = 0
-	
+
 	# 1.) If allowed RICs is set, only they will path,
 	#       If RIC is the right one return True, else False
 	if globalVars.config.get("POC", "allow_ric"):
@@ -62,7 +62,7 @@ def isAllowed(poc_id):
 			return True
 		else:
 			allowed = 0
-		
+
 	if allowed == 0:
 		return False
 	return True

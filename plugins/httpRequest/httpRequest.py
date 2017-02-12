@@ -91,7 +91,8 @@ def run(typ,freq,data):
 				logging.debug("send %s HTTP request", typ)
 
 				try:
-				    resp = urllib2.urlopen(url)
+				    #resp = urllib2.urlopen(url)
+					urllib2.urlopen(url)
 				except urllib2.HTTPError as e:
     					logging.warning("HTTP response: %s", e.code)
 				except urllib2.URLError as e:

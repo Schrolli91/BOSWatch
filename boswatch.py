@@ -26,7 +26,6 @@ import subprocess   # for starting rtl_fm and multimon-ng
 
 from includes import globalVars  # Global variables
 from includes import MyTimedRotatingFileHandler  # extension of TimedRotatingFileHandler
-from includes import signalHandler  # TERM-Handler for use script as a daemon
 from includes import checkSubprocesses  # check startup of the subprocesses
 from includes.helper import configHandler
 from includes.helper import freqConverter

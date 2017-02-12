@@ -18,7 +18,7 @@ from email.utils import make_msgid # need for confirm to RFC2822 standard
 
 from includes import globalVars  # Global variables
 
-from includes.helper import timeHandler # helper function
+#from includes.helper import timeHandler # helper function
 from includes.helper import configHandler # helper function
 from includes.helper import wildcardHandler # helper function
 
