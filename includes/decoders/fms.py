@@ -44,7 +44,7 @@ def decode(freq, decoded):
 		fms_directionText = decoded[103:110] # Richtung (Text)
 		fms_tsi = decoded[114:117]           # Taktische Kruzinformation
 
-		proceec = True # no CRC-check required - proceed
+		proceed = True # no CRC-check required - proceed
 
 		# shall we use the CRC-check?
 		if (globalVars.config.getboolean("FMS", "CheckCRC")):
