@@ -9,6 +9,13 @@ echo " /_____/\____//____/ |__/|__/\__,_/\__/\___/_/ /_/  "
 echo "            German BOS Information Script           "
 echo "                 by Bastian Schroll                 "
 echo ""
+
+# Make sure only root can run our script
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root!" 1>&2
+   exit 1
+fi
+
 echo "This may take a several minutes... Don't panic!"
 echo ""
 echo "Caution, script does not install a webserver with PHP and MySQL"
