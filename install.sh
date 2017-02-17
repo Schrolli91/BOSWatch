@@ -70,7 +70,7 @@ tput cup 15 5
 echo "-> download rtl_fm......................"
 cd $boswatchpath/install
 #git clone git://git.osmocom.org/rtl-sdr.git >> $boswatchpath/install/setup_log.txt 2>&1
-git https://github.com/Schrolli91/rtl-sdr.git >> $boswatchpath/install/setup_log.txt 2>&1
+git clone https://github.com/Schrolli91/rtl-sdr.git >> $boswatchpath/install/setup_log.txt 2>&1
 cd rtl-sdr/
 
 tput cup 13 15
