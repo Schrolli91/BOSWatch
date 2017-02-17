@@ -69,7 +69,8 @@ echo "[ 3/10] [###-------]"
 tput cup 15 5
 echo "-> download rtl_fm......................"
 cd $boswatchpath/install
-git clone git://git.osmocom.org/rtl-sdr.git >> $boswatchpath/install/setup_log.txt 2>&1
+#git clone git://git.osmocom.org/rtl-sdr.git >> $boswatchpath/install/setup_log.txt 2>&1
+git clone https://github.com/Schrolli91/rtl-sdr.git >> $boswatchpath/install/setup_log.txt 2>&1
 cd rtl-sdr/
 
 tput cup 13 15
@@ -87,7 +88,9 @@ echo "[ 5/10] [#####-----]"
 tput cup 15 5
 echo "-> download multimon-ng................"
 cd $boswatchpath/install
-git clone https://github.com/EliasOenal/multimonNG.git >> $boswatchpath/install/setup_log.txt 2>&1
+#git clone https://github.com/EliasOenal/multimonNG.git >> $boswatchpath/install/setup_log.txt 2>&1
+git clone https://github.com/Schrolli91/multimon-ng.git multimonNG >> $boswatchpath/install/setup_log.txt 2>&1
+
 cd $boswatchpath/install/multimonNG/
 
 tput cup 13 15
