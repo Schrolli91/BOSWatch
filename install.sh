@@ -183,10 +183,15 @@ echo $'# BOSWatch - blacklist the DVB drivers to avoid conflict with the SDR dri
 tput cup 17 1
 echo "BOSWatch is now installed in $boswatchpath/"
 echo "Installation ready!"
+tput cup 19 3
+echo "Watch out: to run BOSWatch you have to generate and modify the config.ini!"
+echo "Do the following steps to have a running version of BOSWatch:"
+echo "sudo cp $boswatchpath/BOSWatch/config/config.template.ini $boswatchpath/BOSWatch/config/config.ini"
+echo "sudo nano $boswatchpath/BOSWatch/config/config.ini"
+echo "and modify the config as you need. This step is optional if you are upgrading an old version of BOSWatch. "
 
 tput cnorm
 
 if [ $reboot = "true" ]; then
   /sbin/reboot
 fi
-
