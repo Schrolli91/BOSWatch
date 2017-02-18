@@ -30,6 +30,12 @@ from includes import checkSubprocesses  # check startup of the subprocesses
 from includes.helper import configHandler
 from includes.helper import freqConverter
 
+#
+# Check for exisiting config/config.ini-file
+#
+if not os.path.exists(os.path.dirname(os.path.abspath(__file__))+"/config/config.ini"):
+	print "ERROR: No config.ini found"
+	exit(1)
 
 #
 # ArgParser
