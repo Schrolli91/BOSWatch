@@ -32,7 +32,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-echo "This may take a several minutes... Don't panic!"
+echo "This may take several minutes... Don't panic!"
 echo ""
 echo "Caution, script does not install a webserver with PHP and MySQL"
 echo "So you have to make up manually if you want to use MySQL support"
@@ -191,6 +191,14 @@ echo "sudo nano $boswatchpath/BOSWatch/config/config.ini"
 echo "and modify the config as you need. This step is optional if you are upgrading an old version of BOSWatch. "
 
 tput cnorm
+
+# cleanup
+mkdir $boswatchpath/log/install -p
+mv $boswatchpath/install/setup_log.txt $boswatchpath/log/install/
+rm $boswatchpath/install/ -R
+
+mv $boswatchpath/BOSWatch/* $boswatchpath/
+rm $boswatchpath/BOSWatch -R
 
 if [ $reboot = "true" ]; then
   /sbin/reboot
