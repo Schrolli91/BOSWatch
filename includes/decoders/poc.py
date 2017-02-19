@@ -74,7 +74,7 @@ def isAllowed(poc_id):
 #
 def decode(freq, decoded):
 	"""
-	Export POCSAG Information from Multimon-NG RAW String and call alarmHandler.processAlarmHandler()
+	Export POCSAG information from Multimon-NG string and call alarmHandler.processAlarmHandler()
 
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
@@ -111,7 +111,7 @@ def decode(freq, decoded):
 			logging.debug("POCSAG Bitrate: %s", bitrate)
 
 			if "Alpha:" in decoded: #check if there is a text message
-				poc_text = decoded.split('Alpha:   ')[1].strip().rstrip('<EOT>').strip()
+				poc_text = decoded.split('Alpha:   ')[1].strip().replace('<NUL><NUL>','').replace('<NUL>','').replace('<NUL','').replace('< NUL>','').replace('<EOT>','').strip()
 			else:
 				poc_text = ""
 
