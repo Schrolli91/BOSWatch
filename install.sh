@@ -56,7 +56,7 @@ for (( i=1; i<=$#; i=$i+2 )); do
 
       -b|--branch)
       case $arg2 in
-        dev) echo "       !!! WARNING: you are using the DEV BRANCH !!!      "; branch=dev ;;
+        dev|develop) echo "       !!! WARNING: you are using the DEV BRANCH !!!      "; branch=dev ;;
         *) branch=master ;;
       esac ;;
 
@@ -166,10 +166,13 @@ echo "-> download BOSWatch..................."
 cd $boswatchpath/
 
 case $branch in
-  dev) git clone -b develop https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
-  exitcodefunction $? git-clone BOSWatch ;;
+#  "dev") git clone -b develop https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
+#    exitcodefunction $? git-clone BOSWatch-develop ;;
+  "dev") git clone -b develop https://github.com/thejockel/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
+    exitcodefunction $? git-clone BOSWatch-develop-jockel ;;
   *) git clone -b master https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
-  exitcodefunction $? git-clone BOSWatch ;;
+#  *) git clone -b develop https://github.com/thejockel/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
+    exitcodefunction $? git-clone BOSWatch ;;
 esac
 
 tput cup 13 15
