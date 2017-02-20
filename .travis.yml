@@ -12,8 +12,8 @@ before_script:
   - sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu trusty main"
   - sudo apt-get update -qq
   - sudo apt-get install -qq wget python2.7
-  - wget https://raw.githubusercontent.com/thejockel/BOSWatch/develop/install.sh
-#  - wget https://raw.githubusercontent.com/Schrolli91/BOSWatch/master/install.sh
+#  - wget https://raw.githubusercontent.com/thejockel/BOSWatch/develop/install.sh
+  - wget https://raw.githubusercontent.com/Schrolli91/BOSWatch/master/install.sh
   - chmod +x install.sh
   - cat /etc/os-release
   - echo ${TRAVIS_BRANCH}
