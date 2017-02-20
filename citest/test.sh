@@ -1,5 +1,5 @@
 #!/bin/bash
-bospath=/opt/boswatch/BOSWatch/
+bospath=/opt/boswatch/
 echo $module
 # ----------------------------------------------------------------------------------------------------------------------------------
 #                                                        base Tests
