@@ -2,8 +2,8 @@
 
 |branch|quality|CI-Build|
 |---|---|---|
-|master-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|[![Build Status](https://travis-ci.org/thejockel/BOSWatch.svg?branch=master)](https://travis-ci.org/thejockel/BOSWatch)|
-|develop-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|[![Build Status](https://travis-ci.org/thejockel/BOSWatch.svg?branch=develop)](https://travis-ci.org/thejockel/BOSWatch)|
+|master-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=master)](https://travis-ci.org/thejockel/BOSWatch)|
+|develop-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=develop)](https://travis-ci.org/thejockel/BOSWatch)|
 
 **Achtung:** Die readme ist veraltet - Neue Informationen werden im Laufe der Zeit in das Github Wiki integriert!
 
