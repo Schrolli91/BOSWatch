@@ -1,6 +1,11 @@
-Falls ein Bug vorliegt, bitte unten angeführte Felder ausfüllen.
+Bei Fragen und Problemen zu BOSWatch oder Plugins bitte unten gennante Informationen angeben:
 
-- **BOSWatch Version**
-- **Genutzter Branch**
-- **Kurze Fehlerbeschreibung**
-- **Logfile**
+- **BOSWatch Version + Branch**
+
+- **genutzte Plugins**
+
+- **Fehlerbeschreibung**
+
+- **Logfile (Auszug)**
+
+- **ggf. Config File (Auszug)**
