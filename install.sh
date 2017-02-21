@@ -50,8 +50,7 @@ for (( i=1; i<=$#; i=$i+2 )); do
       -r|--reboot)
         case $arg2 in
           y|yes) reboot=true ;;
-          n|no) reboot=false ;;
-          *) echo "Please use y/yes or n/no for reboot" ; exit 1 ;;
+          *) reboot=false ;;
         esac ;;
 
       -b|--branch)
