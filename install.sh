@@ -6,11 +6,13 @@ function exitcodefunction {
   module=$3
 
   if [ $errorcode -ne "0" ]; then
+    echo "Action: $action on $module failed." >> $boswatchpath/install/setup_log.txt
+    echo "Exitcode: $errorcode" >> $boswatchpath/install/setup_log.txt
     echo "Action: $action on $module failed."
     echo "Exitcode: $errorcode"
     exit 1
   else
-    echo "Action: $action on $module ok."
+    echo "Action: $action on $module ok." >> $boswatchpath/install/setup_log.txt
   fi
  }
 
