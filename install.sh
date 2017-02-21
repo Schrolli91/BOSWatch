@@ -8,8 +8,13 @@ function exitcodefunction {
   if [ $errorcode -ne "0" ]; then
     echo "Action: $action on $module failed." >> $boswatchpath/install/setup_log.txt
     echo "Exitcode: $errorcode" >> $boswatchpath/install/setup_log.txt
+
+    echo ""
     echo "Action: $action on $module failed."
     echo "Exitcode: $errorcode"
+    echo ""
+    echo " -> If you want to open an Issue at https://github.com/Schrolli91/BOSWatch/issues"
+    echo "    please post the logfile, located at $boswatchpath/install/setup_log.txt"
     exit 1
   else
     echo "Action: $action on $module ok." >> $boswatchpath/install/setup_log.txt
