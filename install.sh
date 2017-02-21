@@ -40,7 +40,6 @@ echo "Caution, script does not install a webserver with PHP and MySQL"
 echo "So you have to make up manually if you want to use MySQL support"
 
 boswatchpath=/opt/boswatch
-mkdir -p $boswatchpath
 reboot=false
 
 for (( i=1; i<=$#; i=$i+2 )); do
@@ -59,12 +58,13 @@ for (( i=1; i<=$#; i=$i+2 )); do
       esac ;;
 
       case $arg in
-        -p|--path)    echo " !!! WARNING: you install BOSWATCH to alternatove path !!! "; boswatchpath=$arg2 ;;
+        -p|--path)    echo " !!! WARNING: you install BOSWATCH to alternative path !!! "; boswatchpath=$arg2 ;;
 
       *) echo "Internal error!" ; exit 1 ;;
     esac
 done
 
+mkdir -p $boswatchpath
 mkdir -p $boswatchpath/install
 
 echo ""
