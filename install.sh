@@ -57,6 +57,7 @@ for (( i=1; i<=$#; i=$i+2 )); do
       -b|--branch)
       case $arg2 in
         dev|develop) echo "       !!! WARNING: you are using the DEV BRANCH !!!      "; branch=dev ;;
+        beta) echo "       !!! WARNING: you are using the BETA BRANCH !!!      "; branch=beta ;;
         *) branch=master ;;
       esac ;;
 
@@ -167,8 +168,9 @@ cd $boswatchpath/
 
 case $branch in
   "dev") git clone -b develop https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
-#  "dev") git clone -b develop https://github.com/thejockel/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
     exitcodefunction $? git-clone BOSWatch-develop ;;
+  "beta") git clone -b beta https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
+    exitcodefunction $? git-clone BOSWatch-beta ;;
   *) git clone -b master https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
     exitcodefunction $? git-clone BOSWatch ;;
 esac
