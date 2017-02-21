@@ -53,10 +53,13 @@ for (( i=1; i<=$#; i=$i+2 )); do
 
       -b|--branch)
       case $arg2 in
-        dev|develop) echo "       !!! WARNING: you are using the DEV BRANCH !!!      "; branch=dev ;;
-        beta) echo "       !!! WARNING: you are using the BETA BRANCH !!!      "; branch=beta ;;
+        dev|develop)  echo "       !!! WARNING: you are using the DEV BRANCH !!!       "; branch=dev ;;
+        beta)         echo "       !!! WARNING: you are using the BETA BRANCH !!!      "; branch=beta ;;
         *) branch=master ;;
       esac ;;
+
+      case $arg in
+        -p|--path)    echo " !!! WARNING: you install BOSWATCH to alternatove path !!! "; boswatchpath=$arg2 ;;
 
       *) echo "Internal error!" ; exit 1 ;;
     esac
