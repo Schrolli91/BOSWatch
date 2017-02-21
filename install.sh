@@ -47,11 +47,7 @@ for (( i=1; i<=$#; i=$i+2 )); do
     eval arg2=\$$t
 
     case $arg in
-      -r|--reboot)
-        case $arg2 in
-          y|yes) reboot=true ;;
-          *) reboot=false ;;
-        esac ;;
+      -r|--reboot) reboot=true ;;
 
       -b|--branch)
       case $arg2 in
