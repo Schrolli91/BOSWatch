@@ -50,7 +50,6 @@ for (( i=1; i<=$#; i=$i+2 )); do
       -r|--reboot)
         case $arg2 in
           y|yes) reboot=true ;;
-          n|no) reboot=false ;;
           *) reboot=false ;;
         esac ;;
 
