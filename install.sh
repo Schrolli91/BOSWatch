@@ -57,8 +57,7 @@ for (( i=1; i<=$#; i=$i+2 )); do
         *) branch=master ;;
       esac ;;
 
-      case $arg in
-        -p|--path)    echo " !!! WARNING: you install BOSWATCH to alternative path !!! "; boswatchpath=$arg2 ;;
+      -p|--path)    echo " !!! WARNING: you install BOSWATCH to alternative path !!! "; boswatchpath=$arg2 ;;
 
       *) echo "Internal error!" ; exit 1 ;;
     esac
