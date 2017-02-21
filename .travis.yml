@@ -18,7 +18,7 @@ before_script:
   - chmod +x install.sh
   - cat /etc/os-release
   - echo ${TRAVIS_BRANCH}
-  - sudo ./install.sh -b ${TRAVIS_BRANCH} -r no
+  - sudo ./install.sh -b ${TRAVIS_BRANCH}
 
 env:
   - module=bash
