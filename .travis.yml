@@ -20,7 +20,7 @@ before_script:
   - sudo ./install.sh -b ${TRAVIS_BRANCH}
 
 env:
-  - module=bash
+  - module=base
   - module=mysql
   - module=httpRequest
 
