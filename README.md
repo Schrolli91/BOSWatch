@@ -1,4 +1,5 @@
-**Codacy - static code analysis:**
+## Bitte den beta-Branch auf Fehler testen - Neues Release steht bevor
+**Der beta-Branch kann über den normalen Installer mittles dem Flag `-b beta` installiert werden**
 
 |branch|quality|CI-Build|
 |---|---|---|
