@@ -1,0 +1,373 @@
+;Diese Datei beinhaltet die Beschreibungen für die Abschnitte und Parameter
+;Syntax: 
+;[{Abschnitt}/{parameter}] der parameter 'description' ist für eine Allgemeine Beschreibung des Abschnittes
+;{Beschreibungstext, kann auch mehrzeilig sein}
+;
+[BOSWatch/description]
+if you want to start BOSWatch as a daemon with rc2.d,
+you have to set the path to rtl_fm and multimon-ng !
+ the path have to end with an /
+ blank when not used
+[BOSWatch/loglevel]
+set loglevel for logfile
+   10=debug
+   20=info
+   30=warning
+   40=error
+   50=critical
+[BOSWatch/backupCount]
+BOSWatch use a rotating logfile
+ Rotating is at midnight
+ You can set the backupCount here
+ backupCount = 7 (keeps logfiles for a week)
+[BOSWatch/rtl_path]
+f.e /usr/local/bin/
+[BOSWatch/multimon_path]
+f.e /usr/local/bin/
+[BOSWatch/processAlarmAsync]
+if you are using many Plugins or Plugins with a long execution time
+ you could execute them in an asynchronous manner
+ It must be pointed out that enabling this consume time,
+ so don't use it for one rapid Plugin
+0= off , 1=on
+[BOSWatch/useRegExFilter]
+Using RegEx-Filter 0=off 1=on
+ Filter-configuration in section Filters"
+[BOSWatch/doubleFilter_ignore_entries]
+for double check save the last n IDs
+ it is used in combination with double_ignore_time
+ 1 is required if you want to use the double alarm filter"
+[BOSWatch/doubleFilter_ignore_time]
+time to ignore same alarm (only ID is checked) (sek)
+[BOSWatch/doubleFilter_check_msg]
+ignore msg is only usefull for POCSAG (0 - off | 1 - on)
+ 0: double check ignores the msg-text (only check ID + function)
+ 1: if you want to differentiate between with/ without msg
+ f.e. if they use quick-alarm (without text, then same ric with msg)
+ you will get more then one alarm anyway if the msg is different (receiving-problems)"
+[BOSWatch/writeMultimonRaw]
+writes the multimon-ng raw data stream into a text file named mm_raw.txt
+[NMAHandler/enableHandler]
+You could use an logging handler for sending logging records to NotifyMyAndroid
+ enableHandler (0|1) will enable the NMA handler
+loglevel ="loglevel for NMAHandler (see BOSWatch loglevel description)
+[NMAHandler/APIKey]
+logging record will send to APIKey
+[NMAHandler/appName]
+You could change the name of the application (default: BOSWatch)
+(f.e. if you use more than one instance of BOSWatch)
+[FMS/idDescribed]
+look-up-table for adding a description
+ Using Description (0 - off | 1 - on)
+ descriptions loaded from csv/fms.csv
+[ZVEI/idDescribed]
+look-up-table for adding a description
+ Using Description (0 - off | 1 - on)
+ descriptions loaded from csv/zvei.csv
+[POC/allow_ric]
+some very simple filters:
+ Allow only this RICs (empty: allow all, separator ",")
+ f.e.: allow_ric = 1234566,1234567,1234568
+[POC/deny_ric]
+Deny this RICs (empty: allow all, separator ",")
+ f.e.: deny_ric = 1234566,1234567,1234568"
+[POC/filter_range_start]
+start of an allowed filter range"
+[POC/filter_range_end]
+end of an allowed filter range
+[POC/idDescribed]
+look-up-table for adding a description
+ Using Description (0 - off | 1 - on)
+ descriptions loaded from csv/poc.csv
+[POC/rica]
+Static Massages for Subric a.
+[POC/ricb]
+Static Massages for Subric b.
+[POC/ricc]
+Static Massages for Subric c.
+[POC/ricd]
+Static Massages for Subric d.
+[Filters/description]
+RegEX Filter Configuration
+http://www.regexr.com/ - RegEX Test Tool an Documentation
+No Filter for a Typ/Plugin Combination = all Data pass
+INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX
+TYP				= the Data Typ (FMS|ZVEI|POC)
+DATAFIELD	= the field of the Data Array (see readme.md in plugin folder)
+PLUGIN= the name of the Plugin to call with this Filter (* for all)
+FREQUENZ= the Frequenz to use the Filter (for more SDR Sticks (* for all))
+REGEX	= the RegEX
+[Filters/testfilter]
+f.e. only ZVEI to all Plugins with 25### at 85.5MHz
+[Filters/pocTest]
+only POCSAG to MySQL with the text "ALARM:" in the Message
+[Plugins/description]
+turn the plugins on or off (0 - off | 1 - on)
+[MySQL/description]
+MySQL configuration
+dbserver = localhost
+dbuser = boswatch
+dbpassword = root
+database = boswatch
+tables in the database
+tableFMS = bos_fms
+tableZVEI = bos_zvei
+tablePOC = bos_pocsag
+tableSIG = bos_signal
+[MySQL/signal_ric]
+Signal RICs (empty: none set, separator ",")
+ f.e.: signal_ric = 1234566,1234567,1234568
+[httpRequest/description]
+ example URL http://example.com/remote.php?DESCR=%DESCR%
+ you can use the following wildcards in your URL as GET params:
+ http://en.wikipedia.org/wiki/Query_string"
+
+[httpRequest/fms_url]
+ %FMS% = FMS Code
+ %STATUS% = FMS Status
+ %DIR% = Direction of the telegram (0/1)
+ %DIRT% = Direction of the telegram (Text-String)
+ %TSI% = Tactical Short Information (I-IV)
+ %DESCR% = Description from csv-file
+ %TIME% = Time (by script)
+ %DATE% = Date (by script)
+fms_url = http://www.google.de?code=%FMS%&stat=%STATUS%
+
+[httpRequest/zvei_url]
+%ZVEI% = ZVEI 5-tone Code
+ %DESCR% = Description from csv-file
+ %TIME% = Time (by script)
+ %DATE% = Date (by script)
+zvei_url = http://www.google.de?zvei=%ZVEI%"
+
+[httpRequest/poc_url]
+%RIC% = Pocsag RIC
+ %FUNC% = Pocsac function/Subric (1-4)
+ %FUNCCHAR% = Pocsac function/Subric als character (a-d)
+ %FUNCTEXT% = Pocsac function/Subric static massage definded in pocsag section
+ %MSG% = Message of the Pocsag telegram
+ %BITRATE% = Bitrate of the Pocsag telegram
+ %DESCR% = Description from csv-file
+ %TIME% = Time (by script)
+ %DATE% = Date (by script)
+poc_url = http://www.google.de?ric=%RIC%&subric=%FUNC%&msg=%MSG%
+[eMail/description]
+FMS Parameter
+ %FMS%     = FMS Code
+ %STATUS%  = FMS Status
+ %DIR%     = Direction of the telegram (0/1)
+ %DIRT%    = Direction of the telegram (Text-String)
+ %TSI%     = Tactical Short Information (I-IV)
+ %DESCR%   = Description, if description-module is used
+ %DATE%    = Date (by script)
+ %TIME%    = Time (by script)
+ %BR%      = Insert line wrap (only in message)
+ %LPAR%    = (
+ %RPAR%    = )
+ZVEI Parameter
+ %ZVEI%    = ZVEI 5-tone Code
+ %DESCR%   = Description, if description-module is used
+ %DATE%    = Date (by script)
+ %TIME%    = Time (by script)
+ %BR%      = Insert line wrap (only in message)
+ %LPAR%    = (
+ %RPAR%    = )
+POCSAG Parameter
+ %RIC%      = Pocsag RIC
+ %FUNC%     = Pocsac function/Subric (1-4)
+ %FUNCCHAR% = Pocsac function/Subric als character (a-d)
+ %FUNCTEXT% = Pocsac function/Subric static massage definded in pocsag section
+ %MSG%      = Message of the Pocsag telegram
+ %BITRATE%  = Bitrate of the Pocsag telegram
+ %DESCR%    = Description, if description-module is used
+ %DATE%     = Date (by script)
+ %TIME%     = Time (by script)
+ %BR%       = Insert line wrap (only in message)
+ %LPAR%     = (
+ %RPAR%     = )
+[eMail/smtp_server]
+SMTP-Server
+[eMail/smtp_port]
+Port of SMTP-Server
+[eMail/tls]
+Use tls for connection (0|1)
+[eMail/user]
+Use this, when SMTP-Server has restricted access
+[eMail/password]
+Mail Password
+[eMail/from = "local@localhost"
+[eMail/to   = "to could be more than one address, comma separated"
+
+[eMail/priority = "Priority of the eMail:
+ normal|urgent|non-urgent
+
+[eMail/fms_subject]
+FMS: %FMS%
+[eMail/fms_message]
+%DATE% %TIME%: %FMS%%BR%Status: %STATUS% - Direction: %DIRT% - TSI: %TSI%
+[eMail/zvei_subject]
+Alarm: %ZVEI%
+[eMail/zvei_message]
+%DATE% %TIME%: %ZVEI%
+[eMail/poc_subject]
+Alarm: %RIC%%LPAR%%FUNCCHAR%%RPAR%
+[eMail/poc_message]
+%DATE% %TIME% - %DESCR%: %MSG%
+[BosMon/description 9
+Server as IP of DNS-Name (without http://)
+ actually no ssl supported
+[BosMon/bosmon_server]
+
+[BosMon/bosmon_port]
+
+[BosMon/bosmon_channel]
+channel-name of typ Web-Telegramm
+[BosMon/bosmon_user]
+Use this, when BosMon has restricted access
+[BosMon/bosmon_password]
+
+[firEmergency/description]
+firEmergency configuration
+[firEmergency/firserver]
+[firEmergency/firport]
+[jsonSocket/descripton]
+ 
+[jsonSocket/protocol]
+Protocol for socket (TCP|UDP) 
+[jsonSocket/server]
+Server as IP of DNS-Name (without http://)
+[jsonSocket/port]
+Port
+[notifyMyAndroid/description]
+
+[notifyMyAndroid/APIKey]
+this APIKey is used for Plugin
+[notifyMyAndroid/priority]
+Priority goes from -2 (lowest) to 2 (highest). the default priority is 0 (normal)
+[notifyMyAndroid/appName]
+you could change the name of the application (default: BOSWatch)
+(f.e. if you use more than one instance of BOSWatch)
+usecsv = "instead of a given APIKey/priority you could import them by a csv-file (0|1)
+ APIKey and prioiry above will be ignored, if you use a csv
+ configuration loaded from csv/nma.csv
+[SMS/description]
+be aware that you need 'gammu' installed and running
+at least you need an UMTS-stick which is supported by 'gammu'
+
+[SMS/quantity]
+
+
+[SMS/ric1]
+be sensitive to single RIC
+[SMS/subric1]
+but you can watch several subrics, comma-separated
+[SMS/phonenumber1]
+a single cellphone-number
+
+[SMS/text1]
+and the text for the sms
+ ! DO NOT USE ANY UMLAUT !
+"Rueckruf Leitstelle!"
+[Sms77/description]
+SMS77 configuration
+[Sms77/user]
+Login Username
+[Sms77/password]
+Password or API Key
+[Sms77/to]
+Receiver singlenumber or groupname from adressbook
+[Sms77/from]
+Sender number or name
+[Sms77/type]
+"Type of Message (see https://www.sms77.de/funktionen/smstypen and https://www.sms77.de/funktionen/http-api)
+[FFAgent/description]
+[FFAgent/live]
+set live mode (0/1)
+[FFAgent/test]
+send messages as type test (0/1)
+[FFAgent/serverCertFile]
+path to server certificate file
+[FFAgent/clientCertFile]
+path to client certificate file (LIVE)
+[FFAgent/clientCertPass]
+path to client certificate password file (LIVE)
+[FFAgent/webApiToken]
+webapi token
+[FFAgent/webApiKey]
+webapi key
+[FFAgent/accessToken]
+access token
+[FFAgent/selectiveCallCode]
+selective Call Code
+[Pushover/description]
+ 
+[Pushover/api_key]
+Pushover API Key 
+[Pushover/user_key]
+Pushover Userkey or Groupkey to receive message
+[Pushover/title]
+Title of the message
+[Pushover/SubA]
+Adapt Pocsag Subric (a,b,c,d) to Pushover Priorities (see https://pushover.net/api"priority)
+[Pushover/SubB]
+[Pushover/SubC]
+[Pushover/SubD]
+[Pushover/retry]
+how often should Pushover re-alert in seconds (emergency-messages)
+[Pushover/expire]when should Pushover stop to re-alert in seconds (emergency-messages)"
+[Pushover/html]
+use HTML in messages (0/1)
+[Telegram/description]
+
+[Pushover/BOTTokenAPIKey]
+This is your unique BOT token. You will get it from the BotFather once you have created your BOT."
+[Pushover/BOTChatIDAPIKey]
+Create a group chat with your BOT and enter the chat ID here.
+ The plugin will send messages as your BOT and post everything in this group chat.
+[Pushover/RICforLocationAPIKey]
+The plugin can extract a location from the POCSAG message.
+ However, this will be done for the following RIC only (7 digits e.g. 0012345).
+[Pushover/GoogleAPIKey]
+This is your Google API key.
+ Required if you want to create a map based on location information received with the above RIC."
+[yowsup/descrition]
+[yowsup/empfaenger]
+number or chat-number who whants to become the news
+[yowsup/sender]
+WhatsApp-number of that the news comes
+[yowsup/password]
+password from this number
+
+[yowsup/fms_message]
+ %FMS%     = FMS Code
+ %STATUS%  = FMS Status
+ %DIR%     = Direction of the telegram (0/1)
+ %DIRT%    = Direction of the telegram (Text-String)
+ %TSI%     = Tactical Short Information (I-IV)
+ %DESCR%   = Description, if description-module is used
+ %DATE%    = Date (by script)
+ %TIME%    = Time (by script)
+ %LPAR%    = (
+ %RPAR%    = )
+[yowsup/zvei_message]
+ %ZVEI%    = ZVEI 5-tone Code
+ %DESCR%   = Description, if description-module is used
+ %DATE%    = Date (by script)
+ %TIME%    = Time (by script)
+ %LPAR%    = (
+ %RPAR%    = )
+[yowsup/poc_message]
+ %RIC%      = Pocsag RIC
+ %FUNC%     = Pocsac function/Subric (1-4)
+ %FUNCCHAR% = Pocsac function/Subric als character (a-d)
+ %MSG%      = Message of the Pocsag telegram
+ %BITRATE%  = Bitrate of the Pocsag telegram
+ %DESCR%    = Description, if description-module is used
+ %DATE%     = Date (by script)
+ %TIME%     = Time (by script)
+ %LPAR%     = (
+ %RPAR%     = )
+[template/description]
+Not ready yet
+[template/test1]
+[template/test2]
