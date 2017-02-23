@@ -383,7 +383,7 @@ try:
 				logging.info("Testdata: %s", testData.rstrip(' \t\n\r'))
 				from includes import decoder
 				decoder.decode(freqConverter.freqToHz(args.freq), testData)
-				time.sleep(1)
+				#time.sleep(1)
 		logging.debug("test finished")
 
 except KeyboardInterrupt:
