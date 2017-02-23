@@ -82,10 +82,22 @@ class Hello:
     # @param self
     # @param name Another Parameter
     # @return value Returns a Value
+
     def __init__(self, name):
+        ## @brief Constructor
+        # Longer description optinal.
+        #
+        # @param self
+        # @param name Another Parameter
         dosomething(12)
 
-    def dosomething(x):
+    def dosomething(self, x):
+        ## @brief Do something
+        # Longer description for do something.
+        #
+        # @param self
+        # @param x Another Parameter
+        # @return value Returns a 0
         dosomethingelse
         return 0
 ```
