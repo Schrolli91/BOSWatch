@@ -71,6 +71,21 @@ template  = 0
 - Aktuell wird eine ewig lange Config geladen, obwohl 90% der Plugins nicht genutzt werden
 
 
+
+## Filterung
+Ein Vernünftiges Filterkonzept sollte aufgestellt werden, welches bei POC, FMS und ZVEI gleichermaßen funktioniert
+und daher nicht 3 mal implementiert erden muss.
+
+
+
+## Versions Überprüfung
+
+über die LIB sched.py - https://docs.python.org/3/library/sched.html - können Zeitgesteuerte Events gestartet werden.
+Dies kann zur Überprüfung einer neuen Software version verwendet werden.
+information des Nutzers muss noch überlegt werden - evtl als "Alarm" absetzen über normalen Plugin weg.
+
+
+
 ## Code Dokumentation
 Dokumentiert werden sollten alle Funktion und Klassen in Doxygen gerechter Notation.
 Genaue Erklärung und Bennenung der Tags in der Doxygen Hilfe
