@@ -9,8 +9,8 @@ Global variables
 """
 
 # version info
-versionNr = "2.1"
-buildDate = "2016/11/20"
+versionNr = "2.2-beta"
+buildDate = "2016/02/23"
 
 # Global variables
 config = 0
