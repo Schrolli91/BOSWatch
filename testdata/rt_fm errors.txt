@@ -1,7 +1,0 @@
-Error Messages from RTL_FM
-
-fprintf(stderr, "Signal caught, exiting!\n");
-fprintf(stderr, "Failed to open rtlsdr device #%d.\n", dongle.dev_index);
-fprintf(stderr, "Failed to open %s\n", output.filename);
-fprintf(stderr, "\nUser cancel, exiting...\n");
-fprintf(stderr, "\nLibrary error %d, exiting...\n", r);

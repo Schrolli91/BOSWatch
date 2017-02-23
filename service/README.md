@@ -18,6 +18,7 @@ To actually use this script, put BOSWatch where you want (recommend `/usr/local/
 and make sure it is executable (e.g. `sudo chmod 755 boswatch.py`).
 Edit the init script accordingly. Copy it into /etc/init.d using e.g. `sudo cp boswatch.sh /etc/init.d`.
 Make sure the script is executable (chmod again) and make sure that it has UNIX line-endings.
+After creating this new daemon it's neccessary to do a `sudo systemctl daemon-reload` in order to make it findable.
 
 At this point you should be able to start BOSWatchcd ~/srt using the command `sudo /etc/init.d/boswatch.sh start`,
 check its status with the `sudo /etc/init.d/boswatch.sh status` argument and stop it with `sudo /etc/init.d/boswatch.sh stop`.

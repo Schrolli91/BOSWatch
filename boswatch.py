@@ -377,13 +377,13 @@ try:
 					rawMmOut.close()
 	else:
 		logging.debug("start testing")
-		testFile = open(globalVars.script_path+"/testdata/testdata.txt","r")
+		testFile = open(globalVars.script_path+"/citest/testdata.txt","r")
 		for testData in testFile:
 			if (len(testData.rstrip(' \t\n\r')) > 1) and ("#" not in testData[0]):
 				logging.info("Testdata: %s", testData.rstrip(' \t\n\r'))
 				from includes import decoder
 				decoder.decode(freqConverter.freqToHz(args.freq), testData)
-				time.sleep(1)
+				#time.sleep(1)
 		logging.debug("test finished")
 
 except KeyboardInterrupt:
