@@ -32,11 +32,11 @@ if you are using many Plugins or Plugins with a long execution time
 0= off , 1=on
 [BOSWatch/useRegExFilter]
 Using RegEx-Filter 0=off 1=on
- Filter-configuration in section Filters"
+Filter-configuration in section Filters"
 [BOSWatch/doubleFilter_ignore_entries]
 for double check save the last n IDs
- it is used in combination with double_ignore_time
- 1 is required if you want to use the double alarm filter"
+it is used in combination with double_ignore_time 
+1 is required if you want to use the double alarm filter"
 [BOSWatch/doubleFilter_ignore_time]
 time to ignore same alarm (only ID is checked) (sek)
 [BOSWatch/doubleFilter_check_msg]
@@ -101,6 +101,7 @@ REGEX	= the RegEX
 f.e. only ZVEI to all Plugins with 25### at 85.5MHz
 [Filters/pocTest]
 only POCSAG to MySQL with the text "ALARM:" in the Message
+pocTest = POC;msg;MySQL;*;ALARM:
 [Plugins/description]
 turn the plugins on or off (0 - off | 1 - on)
 [MySQL/description]

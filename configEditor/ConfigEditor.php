@@ -66,17 +66,15 @@ echo "</form>";
 function myreadinifile ($fileSource){
 $data = file_get_contents($fileSource); //read the file
 $configExplode = explode("\n", $data); //create array separate by new line
-foreach ($configExplode as $rkey=>$rvalue){
+foreach ($configExplode as $rvalue){
 	preg_match('/^\[.*/',$rvalue,$rkeyvalue);
 	if(isset($rkeyvalue[0])){
 		$rsection=ltrim($rkeyvalue[0],"[");
 		$rsection=rtrim($rsection,"]");
 	}
+	$teststring ='';
 	if (isset($rkeyvalue[0])){
 		$teststring =$rkeyvalue[0];
-	}
-	else{
-		$teststring ='';
 	}
 	if ($rvalue!=$teststring){
 		$valueContent=explode("=",$rvalue);
