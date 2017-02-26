@@ -21,35 +21,36 @@ BOSWatch use a rotating logfile
  You can set the backupCount here
  backupCount = 7 (keeps logfiles for a week)
 [BOSWatch/rtl_path]
-f.e /usr/local/bin/
+rtl_path = /usr/local/bin/
 [BOSWatch/multimon_path]
-f.e /usr/local/bin/
+multimon_path = /usr/local/bin/
 [BOSWatch/processAlarmAsync]
 if you are using many Plugins or Plugins with a long execution time
- you could execute them in an asynchronous manner
- It must be pointed out that enabling this consume time,
- so don't use it for one rapid Plugin
+you could execute them in an asynchronous manner
+It must be pointed out that enabling this consume time,
+so don't use it for one rapid Plugin
 0= off , 1=on
 [BOSWatch/useRegExFilter]
 Using RegEx-Filter 0=off 1=on
-Filter-configuration in section Filters"
+Filter-configuration in section Filters
 [BOSWatch/doubleFilter_ignore_entries]
 for double check save the last n IDs
 it is used in combination with double_ignore_time 
-1 is required if you want to use the double alarm filter"
+1 is required if you want to use the double alarm filter
 [BOSWatch/doubleFilter_ignore_time]
 time to ignore same alarm (only ID is checked) (sek)
 [BOSWatch/doubleFilter_check_msg]
 ignore msg is only usefull for POCSAG (0 - off | 1 - on)
- 0: double check ignores the msg-text (only check ID + function)
- 1: if you want to differentiate between with/ without msg
- f.e. if they use quick-alarm (without text, then same ric with msg)
- you will get more then one alarm anyway if the msg is different (receiving-problems)"
+0: double check ignores the msg-text (only check ID + function)
+1: if you want to differentiate between with/ without msg
+f.e. if they use quick-alarm (without text, then same ric with msg)
+you will get more then one alarm anyway if the msg is different (receiving-problems)
 [BOSWatch/writeMultimonRaw]
 writes the multimon-ng raw data stream into a text file named mm_raw.txt
 [NMAHandler/enableHandler]
 You could use an logging handler for sending logging records to NotifyMyAndroid
- enableHandler (0|1) will enable the NMA handler
+enableHandler (0|1) will enable the NMA handler
+[NMAHandler/loglevel]
 loglevel ="loglevel for NMAHandler (see BOSWatch loglevel description)
 [NMAHandler/APIKey]
 logging record will send to APIKey
@@ -70,15 +71,15 @@ some very simple filters:
  f.e.: allow_ric = 1234566,1234567,1234568
 [POC/deny_ric]
 Deny this RICs (empty: allow all, separator ",")
- f.e.: deny_ric = 1234566,1234567,1234568"
+f.e.: deny_ric = 1234566,1234567,1234568"
 [POC/filter_range_start]
 start of an allowed filter range"
 [POC/filter_range_end]
 end of an allowed filter range
 [POC/idDescribed]
 look-up-table for adding a description
- Using Description (0 - off | 1 - on)
- descriptions loaded from csv/poc.csv
+Using Description (0 - off | 1 - on)
+descriptions loaded from csv/poc.csv
 [POC/rica]
 Static Massages for Subric a.
 [POC/ricb]
@@ -99,6 +100,7 @@ FREQUENZ= the Frequenz to use the Filter (for more SDR Sticks (* for all))
 REGEX	= the RegEX
 [Filters/testfilter]
 f.e. only ZVEI to all Plugins with 25### at 85.5MHz
+testfilter = ZVEI;zvei;*;85500000;25[0-9]{3}
 [Filters/pocTest]
 only POCSAG to MySQL with the text "ALARM:" in the Message
 pocTest = POC;msg;MySQL;*;ALARM:
@@ -115,6 +117,21 @@ tableFMS = bos_fms
 tableZVEI = bos_zvei
 tablePOC = bos_pocsag
 tableSIG = bos_signal
+[MySQL/dbserver]
+
+[MySQL/dbuser]
+
+[MySQL/dbpassword
+]
+[MySQL/database]
+
+[MySQL/tableFMS]
+
+[MySQL/tableZVEI]
+
+[MySQL/tableSIG]
+
+
 [MySQL/signal_ric]
 Signal RICs (empty: none set, separator ",")
  f.e.: signal_ric = 1234566,1234567,1234568
