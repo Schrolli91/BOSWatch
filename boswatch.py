@@ -50,7 +50,7 @@ try:
 	parser.add_argument("-f", "--freq", help="Frequency you want to listen to", required=True)
 	parser.add_argument("-d", "--device", help="Device you want to use (check with rtl_test)", type=int, default=0)
 	parser.add_argument("-e", "--error", help="Frequency-error of your device in PPM", default=0)
-	parser.add_argument("-a", "--demod", help="Demodulation functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
+	parser.add_argument("-a", "--demod", help="Demodulation functions", choices=['FMS', 'ZVEI1', 'ZVEI2', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
 	parser.add_argument("-s", "--squelch", help="Level of squelch", type=int, default=0)
 	parser.add_argument("-g", "--gain", help="Level of gain", type=int, default=100)
 	parser.add_argument("-u", "--usevarlog", help="Use '/var/log/boswatch' for logfiles instead of subdir 'log' in BOSWatch directory", action="store_true")
@@ -177,9 +177,12 @@ try:
 		if "FMS" in args.demod:
 			demodulation += "-a FMSFSK "
 			logging.debug(" - Demod: FMS")
-		if "ZVEI" in args.demod:
+		if "ZVEI1" in args.demod:
+			demodulation += "-a ZVEI1 "
+			logging.debug(" - Demod: ZVEI1")
+		if "ZVEI2" in args.demod:
 			demodulation += "-a ZVEI2 "
-			logging.debug(" - Demod: ZVEI")
+			logging.debug(" - Demod: ZVEI2")
 		if "POC512" in args.demod:
 			demodulation += "-a POCSAG512 "
 			logging.debug(" - Demod: POC512")
