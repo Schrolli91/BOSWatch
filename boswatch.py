@@ -178,7 +178,7 @@ try:
 			demodulation += "-a FMSFSK "
 			logging.debug(" - Demod: FMS")
 		if "ZVEI" in args.demod:
-			demodulation += "-a ZVEI2 "
+			demodulation += "-a ZVEI1 "
 			logging.debug(" - Demod: ZVEI")
 		if "POC512" in args.demod:
 			demodulation += "-a POCSAG512 "
