@@ -57,7 +57,7 @@ def decode(freq, decoded):
 	@exception: Exception if ZVEI decode failed
 	"""
 	try:
-		zvei_id = decoded[14:19]    # ZVEI Code
+		zvei_id = decoded[7:12]    # ZVEI Code
 		zvei_id = removeE(zvei_id) # remove E (repeated tone)
 		if re.search("[0-9]{5}", zvei_id): # if ZVEI is valid
 			# check for double alarm
