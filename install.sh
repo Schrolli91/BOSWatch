@@ -45,6 +45,27 @@ echo "So you have to make up manually if you want to use MySQL support"
 
 boswatchpath=/opt/boswatch
 reboot=false
+didBackup=false
+
+# check for old version (for the old ones...)
+if [ -f $boswatchpath/BOSWatch/boswatch.py ]; then
+	echo "Old installation found!"
+	echo "A backup will be copied to $boswatchpath/old"
+	
+	mkdir /tmp/boswatch
+	mv $boswatchpath/BOSWatch/* /tmp/boswatch/
+	didBackup=true
+fi
+
+#and the future...
+if [ -f $boswatchpath/boswatch.py ]; then
+	echo "Old installation found!"
+	echo "A backup will be copied to $boswatchpath/old"
+	
+	mkdir /tmp/boswatch
+	mv $boswatchpath/* /tmp/boswatch/
+	didBackup=true
+fi
 
 for (( i=1; i<=$#; i=$i+2 )); do
     t=$((i + 1))
@@ -205,6 +226,16 @@ rm $boswatchpath/install/ -R
 
 mv $boswatchpath/BOSWatch/* $boswatchpath/
 rm $boswatchpath/BOSWatch -R
+
+#copy the template config to run boswatch
+cp $boswatchpath/config/config.template.ini $boswatchpath/config/config.ini
+
+
+#replay the backup
+if [ $didBackup = "true" ]; then
+	mkdir $boswatchpath/old/
+	mv /tmp/boswatch/* $boswatchpath/old/
+fi
 
 if [ $reboot = "true" ]; then
   /sbin/reboot
