@@ -33,7 +33,7 @@ def decode(freq, decoded):
 
 		# ZVEI Decoder Section
 		# check ZVEI: -> validate -> check double alarm -> log
-		elif "ZVEI2:" in decoded:
+		elif "ZVEI1:" in decoded:
 			logging.debug("received ZVEI")
 			from includes.decoders import zvei
 			zvei.decode(freq, decoded)
