@@ -17,24 +17,24 @@ from includes import doubleFilter  # double alarm filter
 
 ##
 #
-# Local function to remove the 'F'
+# Local function to remove the 'E'
 #
-def removeF(zvei):
+def removeE(zvei):
 	"""
-	Resolve the F from the repeat Tone
+	Resolve the E from the repeat Tone
 
 	@type    zvei: string
 	@param   zvei: ZVEI Information
 
-	@return:    ZVEI without F
+	@return:    ZVEI without E
 	@exception: none
 	"""
-	if "F" in zvei:
+	if "E" in zvei:
 		zvei_old = zvei
 		for i in range(1, len(zvei_old)):
-			if zvei[i] == "F":
-				zvei = zvei.replace("F",zvei[i-1],1)
-		logging.debug("resolve F: %s -> %s", zvei_old, zvei)
+			if zvei[i] == "E":
+				zvei = zvei.replace("E",zvei[i-1],1)
+		logging.debug("remove E: %s -> %s", zvei_old, zvei)
 	return zvei
 
 ##
@@ -58,7 +58,7 @@ def decode(freq, decoded):
 	"""
 	try:
 		zvei_id = decoded[7:12]    # ZVEI Code
-		zvei_id = removeF(zvei_id) # resolve F
+		zvei_id = removeE(zvei_id) # remove E (repeated tone)
 		if re.search("[0-9]{5}", zvei_id): # if ZVEI is valid
 			# check for double alarm
 			if doubleFilter.checkID("ZVEI", zvei_id):

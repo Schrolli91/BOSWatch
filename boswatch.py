@@ -26,11 +26,16 @@ import subprocess   # for starting rtl_fm and multimon-ng
 
 from includes import globalVars  # Global variables
 from includes import MyTimedRotatingFileHandler  # extension of TimedRotatingFileHandler
-from includes import signalHandler  # TERM-Handler for use script as a daemon
 from includes import checkSubprocesses  # check startup of the subprocesses
 from includes.helper import configHandler
 from includes.helper import freqConverter
 
+#
+# Check for exisiting config/config.ini-file
+#
+if not os.path.exists(os.path.dirname(os.path.abspath(__file__))+"/config/config.ini"):
+	print "ERROR: No config.ini found"
+	exit(1)
 
 #
 # ArgParser
@@ -42,15 +47,15 @@ try:
 									description="BOSWatch is a Python Script to recive and decode german BOS information with rtl_fm and multimon-NG",
 									epilog="More options you can find in the extern config.ini file in the folder /config")
 	# parser.add_argument("-c", "--channel", help="BOS Channel you want to listen")
-	parser.add_argument("-f", "--freq", help="Frequency you want to listen", required=True)
-	parser.add_argument("-d", "--device", help="Device you want to use (Check with rtl_test)", required=True)
-	parser.add_argument("-e", "--error", help="Frequency-Error of your device in PPM", type=int, default=0)
+	parser.add_argument("-f", "--freq", help="Frequency you want to listen to", required=True)
+	parser.add_argument("-d", "--device", help="Device you want to use (check with rtl_test)", type=int, default=0)
+	parser.add_argument("-e", "--error", help="Frequency-error of your device in PPM", default=0)
 	parser.add_argument("-a", "--demod", help="Demodulation functions", choices=['FMS', 'ZVEI', 'POC512', 'POC1200', 'POC2400'], required=True, nargs="+")
 	parser.add_argument("-s", "--squelch", help="Level of squelch", type=int, default=0)
 	parser.add_argument("-g", "--gain", help="Level of gain", type=int, default=100)
 	parser.add_argument("-u", "--usevarlog", help="Use '/var/log/boswatch' for logfiles instead of subdir 'log' in BOSWatch directory", action="store_true")
-	parser.add_argument("-v", "--verbose", help="Shows more information", action="store_true")
-	parser.add_argument("-q", "--quiet", help="Shows no information. Only logfiles", action="store_true")
+	parser.add_argument("-v", "--verbose", help="Show more information", action="store_true")
+	parser.add_argument("-q", "--quiet", help="Show no information. Only logfiles", action="store_true")
 	# We need this argument for testing (skip instantiate of rtl-fm and multimon-ng):
 	parser.add_argument("-t", "--test", help=argparse.SUPPRESS, action="store_true")
 	args = parser.parse_args()
@@ -173,7 +178,7 @@ try:
 			demodulation += "-a FMSFSK "
 			logging.debug(" - Demod: FMS")
 		if "ZVEI" in args.demod:
-			demodulation += "-a ZVEI2 "
+			demodulation += "-a ZVEI1 "
 			logging.debug(" - Demod: ZVEI")
 		if "POC512" in args.demod:
 			demodulation += "-a POCSAG512 "
@@ -372,13 +377,13 @@ try:
 					rawMmOut.close()
 	else:
 		logging.debug("start testing")
-		testFile = open(globalVars.script_path+"/testdata/testdata.txt","r")
+		testFile = open(globalVars.script_path+"/citest/testdata.txt","r")
 		for testData in testFile:
 			if (len(testData.rstrip(' \t\n\r')) > 1) and ("#" not in testData[0]):
 				logging.info("Testdata: %s", testData.rstrip(' \t\n\r'))
 				from includes import decoder
 				decoder.decode(freqConverter.freqToHz(args.freq), testData)
-				time.sleep(1)
+				#time.sleep(1)
 		logging.debug("test finished")
 
 except KeyboardInterrupt:

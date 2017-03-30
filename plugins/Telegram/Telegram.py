@@ -113,11 +113,28 @@ def run(typ,freq,data):
 					gcode_result = gcode.geocode(address)
 					logging.debug("Send location via Telegram BOT API")
 					bot.sendLocation('%s' % BOTChatIDAPIKey, gcode_result[0]['geometry']['location']['lat'], gcode_result[0]['geometry']['location']['lng'], disable_notification='true')
-
 			elif typ == "FMS":
-				logging.debug("FMS not supported yet")
+				logging.debug("Compose output from FMS-message")
+				# compose message content
+				output = timeHandler.curtime()+"\n"+data["fms"]+"\n"+data["description"]+"\n"+data["status"]
+
+				# Initiate Telegram Bot
+				logging.debug("Initiate Telegram BOT")
+				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
+				# Send message to chat via Telegram BOT API
+				logging.debug("Send message to chat via Telegram BOT API")
+				bot.sendMessage('%s' % BOTChatIDAPIKey, output)
 			elif typ == "ZVEI":
-				logging.debug("ZVEI not supported yet")
+				logging.debug("Compose output from ZVEI-message")
+				# compose message content
+				output = timeHandler.curtime()+"\n"+data["zvei"]+"\n"+data["description"]
+
+				# Initiate Telegram Bot
+				logging.debug("Initiate Telegram BOT")
+				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
+				# Send message to chat via Telegram BOT API
+				logging.debug("Send message to chat via Telegram BOT API")
+				bot.sendMessage('%s' % BOTChatIDAPIKey, output)
 			else:
 				logging.warning("Invalid Typ: %s", typ)
 		except Unauthorized:

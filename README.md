@@ -1,14 +1,13 @@
-## Bitte den beta-Branch auf Fehler testen - Neues Release steht bevor
-**Der beta-Branch kann über den normalen Installer mittles dem Flag `-b beta` installiert werden**
-
-|branch|quality|CI-Build|
+|Branch|Code Qualität|CI-Build|
 |---|---|---|
-|master-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=master)](https://travis-ci.org/Schrolli91/BOSWatch)|
-|develop-branch|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=develop)](https://travis-ci.org/Schrolli91/BOSWatch)|
+|master|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=master)](https://travis-ci.org/Schrolli91/BOSWatch)|
+|beta|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/beta.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=4213030)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=beta)](https://travis-ci.org/Schrolli91/BOSWatch)|
+|develop|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=develop)](https://travis-ci.org/Schrolli91/BOSWatch)|
+
 
 **Unterstützung gesucht**
 
-Zur Weiterentwicklung des Programms benötigen wir Deine Mithilfe - bitte melde dich per Issue, wenn du Anwender in einem verschlüsselten POCSAG-Netz und im (legalen) Besitz des dazugehörigen Schlüssels bist. 
+Zur Weiterentwicklung des Programms benötigen wir Deine Mithilfe - bitte melde dich per Issue, wenn du Anwender in einem verschlüsselten POCSAG-Netz und im (legalen) Besitz des dazugehörigen Schlüssels bist.
 In der Zukunft wollen wir die Möglichkeit schaffen, codierte Nachrichten zu entschlüsseln (und nur dann, wenn der Schlüssel bekannt ist!), dafür brauchen wir Dich als Tester!
 
 **Readme ist veraltet** - bitte im [Wiki](https://github.com/Schrolli91/BOSWatch/wiki) nachschauen!
@@ -133,19 +132,11 @@ optional arguments:
 
 
 ### Installation
-You can easy install BOSWatch with the install.sh Script.
-- Download the install.sh in any folder you want.
-- Make it executeable `sudo chmod +x install.sh`
-- And use the script  `sudo sh install.sh`
+Please follow the instructions written down in the wiki:
 
-Now the script downloads and compile all needed data.
-At the end you can find BOSWatch in `~/boswatch/`
-Rename `config.template.ini` to `config.ini` and configure
-In case of an error during the installation, check the logfile in `~/boswatch/install/setup_log.txt`
+https://github.com/Schrolli91/BOSWatch/wiki
 
-Caution, script don't install a webserver with PHP and MySQL.
-So you have to make up manually if you want to use MySQL support.
-Database Structure `boswatch.sql` in the MySQL Plugin Folder
+You just need to download a single file since the installer manages the whole process except the installation of a webserver and a database.
 
 If you want to use BOSWatch as a daemon, you have to set your
 configuration in `service/boswatch.sh` and copy it to `/etc/init.d`.

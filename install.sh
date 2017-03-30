@@ -8,8 +8,12 @@ function exitcodefunction {
   if [ $errorcode -ne "0" ]; then
     echo "Action: $action on $module failed." >> $boswatchpath/install/setup_log.txt
     echo "Exitcode: $errorcode" >> $boswatchpath/install/setup_log.txt
+    echo ""
     echo "Action: $action on $module failed."
     echo "Exitcode: $errorcode"
+    echo ""
+    echo " -> If you want to open an Issue at https://github.com/Schrolli91/BOSWatch/issues"
+    echo "    please post the logfile, located at $boswatchpath/install/setup_log.txt"
     exit 1
   else
     echo "Action: $action on $module ok." >> $boswatchpath/install/setup_log.txt
@@ -40,8 +44,28 @@ echo "Caution, script does not install a webserver with PHP and MySQL"
 echo "So you have to make up manually if you want to use MySQL support"
 
 boswatchpath=/opt/boswatch
-mkdir -p $boswatchpath
 reboot=false
+didBackup=false
+
+# check for old version (for the old ones...)
+if [ -f $boswatchpath/BOSWatch/boswatch.py ]; then
+	echo "Old installation found!"
+	echo "A backup will be copied to $boswatchpath/old"
+	
+	mkdir /tmp/boswatch
+	mv $boswatchpath/BOSWatch/* /tmp/boswatch/
+	didBackup=true
+fi
+
+#and the future...
+if [ -f $boswatchpath/boswatch.py ]; then
+	echo "Old installation found!"
+	echo "A backup will be copied to $boswatchpath/old"
+	
+	mkdir /tmp/boswatch
+	mv $boswatchpath/* /tmp/boswatch/
+	didBackup=true
+fi
 
 for (( i=1; i<=$#; i=$i+2 )); do
     t=$((i + 1))
@@ -49,23 +73,22 @@ for (( i=1; i<=$#; i=$i+2 )); do
     eval arg2=\$$t
 
     case $arg in
-      -r|--reboot)
-        case $arg2 in
-          y|yes) reboot=true ;;
-          n|no) reboot=false ;;
-          *) echo "Please use y/yes or n/no for reboot" ; exit 1 ;;
-        esac ;;
+      -r|--reboot) reboot=true ;;
 
       -b|--branch)
       case $arg2 in
-        dev|develop) echo "       !!! WARNING: you are using the DEV BRANCH !!!      "; branch=dev ;;
+        dev|develop)  echo "       !!! WARNING: you are using the DEV BRANCH !!!       "; branch=dev ;;
+        beta)         echo "       !!! WARNING: you are using the BETA BRANCH !!!      "; branch=beta ;;
         *) branch=master ;;
       esac ;;
+
+      -p|--path)    echo " !!! WARNING: you install BOSWATCH to alternative path !!! "; boswatchpath=$arg2 ;;
 
       *) echo "Internal error!" ; exit 1 ;;
     esac
 done
 
+mkdir -p $boswatchpath
 mkdir -p $boswatchpath/install
 
 echo ""
@@ -169,8 +192,9 @@ cd $boswatchpath/
 
 case $branch in
   "dev") git clone -b develop https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
-#  "dev") git clone -b develop https://github.com/thejockel/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
     exitcodefunction $? git-clone BOSWatch-develop ;;
+  "beta") git clone -b beta https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
+    exitcodefunction $? git-clone BOSWatch-beta ;;
   *) git clone -b master https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
     exitcodefunction $? git-clone BOSWatch ;;
 esac
@@ -202,6 +226,16 @@ rm $boswatchpath/install/ -R
 
 mv $boswatchpath/BOSWatch/* $boswatchpath/
 rm $boswatchpath/BOSWatch -R
+
+#copy the template config to run boswatch
+cp $boswatchpath/config/config.template.ini $boswatchpath/config/config.ini
+
+
+#replay the backup
+if [ $didBackup = "true" ]; then
+	mkdir $boswatchpath/old/
+	mv /tmp/boswatch/* $boswatchpath/old/
+fi
 
 if [ $reboot = "true" ]; then
   /sbin/reboot
