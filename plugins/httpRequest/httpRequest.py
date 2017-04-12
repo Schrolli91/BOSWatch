@@ -14,6 +14,7 @@ httpRequest-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages to an URL
 #
 # Imports
 #
+import urllib
 import urllib2
 import logging # Global logger
 from includes import globalVars  # Global variables
@@ -67,36 +68,41 @@ def run(typ,freq,data):
 
 			try:
 				#
-				# Create URL
+				# Replace special characters in data Strings for URL
+				#
+				for key in data:
+                                        if isinstance(data[key], basestring):
+                                                data[key] = urllib.quote(data[key])
+				#
+				# Get URLs
 				#
 				if typ == "FMS":
-					url = globalVars.config.get("httpRequest", "fms_url") #Get URL
-					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
-					url = url.replace(" ","%20") # replace space with %20 to be a vaild http request
+					urls = globalVars.config.get("httpRequest", "fms_url").split(",")
 				elif typ == "ZVEI":
-					url = globalVars.config.get("httpRequest", "zvei_url") #Get URL
-					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
-					url = url.replace(" ","%20") # replace space with %20 to be a vaild http request
+					urls = globalVars.config.get("httpRequest", "zvei_url").split(",")
 				elif typ == "POC":
-					url = globalVars.config.get("httpRequest", "poc_url") #Get URL
-					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
-					url = url.replace(" ","%20") # replace space with %20 to be a vaild http request
+					urls = globalVars.config.get("httpRequest", "poc_url").split(",")
 				else:
 					logging.warning("Invalid Typ: %s", typ)
 					return
 
 				#
+				# replace wildcards
+				#
+				for (i, url) in enumerate(urls):
+					urls[i] = wildcardHandler.replaceWildcards(urls[i].strip(), data)
+				#
 				# HTTP-Request
 				#
-				logging.debug("send %s HTTP request", typ)
+				logging.debug("send %s HTTP requests", typ)
 
-				try:
-				    #resp = urllib2.urlopen(url)
-					urllib2.urlopen(url)
-				except urllib2.HTTPError as e:
-    					logging.warning("HTTP response: %s", e.code)
-				except urllib2.URLError as e:
-    					logging.warning("HTTP-specific error: %s", e.args)
+				for url in urls:
+					try:
+						urllib2.urlopen(url)
+					except urllib2.HTTPError as e:
+    						logging.warning("HTTP response: %s", e.code)
+					except urllib2.URLError as e:
+    						logging.warning("HTTP-specific error: %s", e.args)
 
 			except:
 				logging.error("cannot send HTTP request")
