@@ -17,7 +17,7 @@ from includes import globalVars  # Global variables
 
 # Helper function, uncomment to use
 from includes.helper import configHandler
-from includes.helper import timeHandler
+from includes.helper import wildcardHandler
 
 # local variables
 BOTTokenAPIKey = None
@@ -78,10 +78,11 @@ def run(typ,freq,data):
 	try:
 		########## User Plugin CODE ##########
 		try:
-			if typ == "POC":
-				logging.debug("Compose output from POCSAG-message")
+			if typ == "POC" or typ == "FMS" or typ == "ZVEI":
+				logging.debug("Read format and compose output for %s-message" % typ)
 				# compose message content
-				output = timeHandler.curtime()+"\n"+data["ric"]+"("+data["functionChar"]+")\n"+data["description"]+"\n"+data["msg"]
+				output = globalVars.config.get("Telegram", "%s_message" % typ)
+				output = wildcardHandler.replaceWildcards(output, data, lineBrakeAllowed=True)
 
 				# Initiate Telegram Bot
 				logging.debug("Initiate Telegram BOT")
@@ -91,7 +92,7 @@ def run(typ,freq,data):
 				bot.sendMessage('%s' % BOTChatIDAPIKey, output)
 
 				# Generate location information only for specific RIC
-				if data["ric"] == RICforLocationAPIKey:
+				if typ == "POC" and data["ric"] == RICforLocationAPIKey:
 					# Generate map
 					logging.debug("Extract address from POCSAG message")
 					address = "+".join(data["msg"].split(')')[0].split('/',1)[1].replace('(',' ').split())
@@ -113,28 +114,6 @@ def run(typ,freq,data):
 					gcode_result = gcode.geocode(address)
 					logging.debug("Send location via Telegram BOT API")
 					bot.sendLocation('%s' % BOTChatIDAPIKey, gcode_result[0]['geometry']['location']['lat'], gcode_result[0]['geometry']['location']['lng'], disable_notification='true')
-			elif typ == "FMS":
-				logging.debug("Compose output from FMS-message")
-				# compose message content
-				output = timeHandler.curtime()+"\n"+data["fms"]+"\n"+data["description"]+"\n"+data["status"]
-
-				# Initiate Telegram Bot
-				logging.debug("Initiate Telegram BOT")
-				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
-				# Send message to chat via Telegram BOT API
-				logging.debug("Send message to chat via Telegram BOT API")
-				bot.sendMessage('%s' % BOTChatIDAPIKey, output)
-			elif typ == "ZVEI":
-				logging.debug("Compose output from ZVEI-message")
-				# compose message content
-				output = timeHandler.curtime()+"\n"+data["zvei"]+"\n"+data["description"]
-
-				# Initiate Telegram Bot
-				logging.debug("Initiate Telegram BOT")
-				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
-				# Send message to chat via Telegram BOT API
-				logging.debug("Send message to chat via Telegram BOT API")
-				bot.sendMessage('%s' % BOTChatIDAPIKey, output)
 			else:
 				logging.warning("Invalid Typ: %s", typ)
 		except Unauthorized:
