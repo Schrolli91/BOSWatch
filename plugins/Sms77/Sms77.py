@@ -66,8 +66,8 @@ def run(typ,freq,data):
 				#
 				logging.debug("send Sms77 %s", typ)
 
-				conn = httplib.HTTPSConnection("gateway.sms77.de:443")
-				conn.request("POST", "",
+				conn = httplib.HTTPSConnection("gateway.sms77.io",443)
+				conn.request("POST", "/api/sms",
 				urllib.urlencode({
 					"u": globalVars.config.get("Sms77", "user"),
 					"p": globalVars.config.get("Sms77", "password"),
