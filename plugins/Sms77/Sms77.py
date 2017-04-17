@@ -60,13 +60,13 @@ def run(typ,freq,data):
 		if configHandler.checkConfig("Sms77"): #read and debug the config
 			
 			# create an empty message an fill it with the required information
-			message = ""
+			message = "Alarm"
 			if typ == "FMS":
 				logging.debug("FMS detected, building message")
 				message = data["description"]+"<br>"+data["status"]
 			elif typ == "ZVEI":
 				logging.debug("ZVEI detected, building message")
-				mesage = data["description"]
+				message = data["zvei"]+" - "+data["description"]
 			elif typ == "POC":
 				logging.debug("POC detected, building message")
 				message = data["description"]+"<br>"+data["msg"].replace(";", "<br>")
