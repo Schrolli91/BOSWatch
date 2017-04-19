@@ -39,16 +39,16 @@ takes 2 optional arguments:
         self._developerkey = None
         self.developerkey(developerkey)
         if apikey:
-            if type(apikey) == str:
+            if isinstance(apikey, str):
                 apikey = [apikey]
         self._apikey          = uniq(apikey)
 
     def addkey(self, key):
         "Add a key (register ?)"
-        if type(key) == str:
+        if isinstance(key, str):
             if not key in self._apikey:
                 self._apikey.append(key)
-        elif type(key) == list:
+        elif isinstance(key, list):
             for k in key:
                 if not k in self._apikey:
                     self._apikey.append(k)
@@ -65,7 +65,7 @@ takes 2 optional arguments:
 
     def developerkey(self, developerkey):
         "Sets the developer key (and check it has the good length)"
-        if type(developerkey) == str and len(developerkey) == 48:
+        if isinstance(developerkey, str) and len(developerkey) == 48:
             self._developerkey = developerkey
 
     def pushWithAPIKey(self, apikey=[], application="", event="", description="", url="", contenttype=None, priority=0, batch_mode=False, html=False):

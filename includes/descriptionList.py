@@ -105,13 +105,10 @@ def getDescription(typ, data):
 	logging.debug("look up description lists")
 	try:
 		if typ == "FMS":
-			global fmsDescribtionList
 			resultStr = fmsDescribtionList[data]
 		elif typ == "ZVEI":
-			global zveiDescribtionList
 			resultStr = zveiDescribtionList[data]
 		elif typ == "POC":
-			global ricDescribtionList
 			resultStr = ricDescribtionList[data]
 		else:
 			logging.warning("Invalid Typ: %s", typ)

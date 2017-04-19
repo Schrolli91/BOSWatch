@@ -173,9 +173,6 @@ def run(typ,freq,data):
 	@return:    nothing
 	"""
 	# local variables
-	global fmsAPIKeyList
-	global zveiAPIKeyList
-	global pocAPIKeyList
 
 	try:
 		try:
