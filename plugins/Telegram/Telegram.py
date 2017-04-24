@@ -16,6 +16,7 @@ from telegram.error import (TelegramError, Unauthorized, BadRequest, NetworkErro
 from includes import globalVars  # Global variables
 
 # Helper function, uncomment to use
+from includes.helper import wildcardHandler
 from includes.helper import configHandler
 from includes.helper import timeHandler
 
@@ -81,14 +82,15 @@ def run(typ,freq,data):
 			if typ == "POC":
 				logging.debug("Compose output from POCSAG-message")
 				# compose message content
-				output = timeHandler.curtime()+"\n"+data["ric"]+"("+data["functionChar"]+")\n"+data["description"]+"\n"+data["msg"]
+				text = globalVars.config.get("Telegram","poc_message")
+				text = wildcardHandler.replaceWildcards(text, data)
 
 				# Initiate Telegram Bot
 				logging.debug("Initiate Telegram BOT")
 				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
 				# Send message to chat via Telegram BOT API
 				logging.debug("Send message to chat via Telegram BOT API")
-				bot.sendMessage('%s' % BOTChatIDAPIKey, output)
+				bot.sendMessage('%s' % BOTChatIDAPIKey, "text")
 
 				# Generate location information only for specific RIC
 				if data["ric"] == RICforLocationAPIKey:
@@ -116,25 +118,27 @@ def run(typ,freq,data):
 			elif typ == "FMS":
 				logging.debug("Compose output from FMS-message")
 				# compose message content
-				output = timeHandler.curtime()+"\n"+data["fms"]+"\n"+data["description"]+"\n"+data["status"]
+				text = globalVars.config.get("Telegram","fms_message")
+				text = wildcardHandler.replaceWildcards(text, data)
 
 				# Initiate Telegram Bot
 				logging.debug("Initiate Telegram BOT")
 				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
 				# Send message to chat via Telegram BOT API
 				logging.debug("Send message to chat via Telegram BOT API")
-				bot.sendMessage('%s' % BOTChatIDAPIKey, output)
+				bot.sendMessage('%s' % BOTChatIDAPIKey, "text")
 			elif typ == "ZVEI":
 				logging.debug("Compose output from ZVEI-message")
 				# compose message content
-				output = timeHandler.curtime()+"\n"+data["zvei"]+"\n"+data["description"]
+				text = globalVars.config.get("Telegram","zvei_message")
+				text = wildcardHandler.replaceWildcards(text, data)
 
 				# Initiate Telegram Bot
 				logging.debug("Initiate Telegram BOT")
 				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
 				# Send message to chat via Telegram BOT API
 				logging.debug("Send message to chat via Telegram BOT API")
-				bot.sendMessage('%s' % BOTChatIDAPIKey, output)
+				bot.sendMessage('%s' % BOTChatIDAPIKey, "text")
 			else:
 				logging.warning("Invalid Typ: %s", typ)
 		except Unauthorized:
