@@ -90,7 +90,7 @@ def run(typ,freq,data):
 				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
 				# Send message to chat via Telegram BOT API
 				logging.debug("Send message to chat via Telegram BOT API")
-				bot.sendMessage('%s' % BOTChatIDAPIKey, "text")
+				bot.sendMessage('%s' % BOTChatIDAPIKey, text)
 
 				# Generate location information only for specific RIC
 				if data["ric"] == RICforLocationAPIKey:
@@ -126,7 +126,7 @@ def run(typ,freq,data):
 				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
 				# Send message to chat via Telegram BOT API
 				logging.debug("Send message to chat via Telegram BOT API")
-				bot.sendMessage('%s' % BOTChatIDAPIKey, "text")
+				bot.sendMessage('%s' % BOTChatIDAPIKey, text)
 			elif typ == "ZVEI":
 				logging.debug("Compose output from ZVEI-message")
 				# compose message content
@@ -138,7 +138,7 @@ def run(typ,freq,data):
 				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
 				# Send message to chat via Telegram BOT API
 				logging.debug("Send message to chat via Telegram BOT API")
-				bot.sendMessage('%s' % BOTChatIDAPIKey, "text")
+				bot.sendMessage('%s' % BOTChatIDAPIKey, text)
 			else:
 				logging.warning("Invalid Typ: %s", typ)
 		except Unauthorized:
