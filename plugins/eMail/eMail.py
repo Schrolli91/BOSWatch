@@ -137,7 +137,7 @@ def run(typ,freq,data):
 						# read mailtext-structure from config.ini
 						mailtext = globalVars.config.get("eMail", "fms_message")
 						# replace wildcards with helper function
-						mailtext = wildcardHandler.replaceWildcards(mailtext, data, lineBrakeAllowed=True)
+						mailtext = wildcardHandler.replaceWildcards(mailtext, data)
 
 						# send eMail
 						doSendmail(server, subject, mailtext)
@@ -157,7 +157,7 @@ def run(typ,freq,data):
 						# read mailtext-structure from config.ini
 						mailtext = globalVars.config.get("eMail", "zvei_message")
 						# replace wildcards with helper function
-						mailtext = wildcardHandler.replaceWildcards(mailtext, data, lineBrakeAllowed=True)
+						mailtext = wildcardHandler.replaceWildcards(mailtext, data)
 
 						# send eMail
 						doSendmail(server, subject, mailtext)
@@ -177,7 +177,7 @@ def run(typ,freq,data):
 						# read mailtext-structure from config.ini
 						mailtext = globalVars.config.get("eMail", "poc_message")
 						# replace wildcards with helper function
-						mailtext = wildcardHandler.replaceWildcards(mailtext, data, lineBrakeAllowed=True)
+						mailtext = wildcardHandler.replaceWildcards(mailtext, data)
 
 						# send eMail
 						doSendmail(server, subject, mailtext)
