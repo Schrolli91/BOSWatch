@@ -83,8 +83,7 @@ def run(typ,freq,data):
 				logging.debug("Compose output from POCSAG-message")
 				# compose message content
 				text = globalVars.config.get("Telegram","poc_message")
-				text = wildcardHandler.replaceWildcards(text, data)
-
+				text = wildcardHandler.replaceWildcards(text, data, lineBrakeAllowed=True)
 				# Initiate Telegram Bot
 				logging.debug("Initiate Telegram BOT")
 				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
@@ -119,7 +118,7 @@ def run(typ,freq,data):
 				logging.debug("Compose output from FMS-message")
 				# compose message content
 				text = globalVars.config.get("Telegram","fms_message")
-				text = wildcardHandler.replaceWildcards(text, data)
+				text = wildcardHandler.replaceWildcards(text, data, lineBrakeAllowed=True)
 
 				# Initiate Telegram Bot
 				logging.debug("Initiate Telegram BOT")
@@ -131,7 +130,7 @@ def run(typ,freq,data):
 				logging.debug("Compose output from ZVEI-message")
 				# compose message content
 				text = globalVars.config.get("Telegram","zvei_message")
-				text = wildcardHandler.replaceWildcards(text, data)
+				text = wildcardHandler.replaceWildcards(text, data, lineBrakeAllowed=True)
 
 				# Initiate Telegram Bot
 				logging.debug("Initiate Telegram BOT")
