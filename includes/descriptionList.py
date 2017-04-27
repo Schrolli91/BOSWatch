@@ -113,6 +113,8 @@ def getDescription(typ, data):
 		elif typ == "POC":
 			global ricDescribtionList
 			resultStr = ricDescribtionList[data]
+			if not resultStr:
+				resultStr = ricDescribtionList[data[:-1]]
 		else:
 			logging.warning("Invalid Typ: %s", typ)
 
