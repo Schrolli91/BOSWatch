@@ -17,7 +17,7 @@ from includes import globalVars
 from includes.helper import timeHandler
 
 
-def replaceWildcards(text, data, lineBrakeAllowed=False):
+def replaceWildcards(text, data):
 	"""
 	Replace all official Wildcards with the Information from the data[] var
 
@@ -25,8 +25,6 @@ def replaceWildcards(text, data, lineBrakeAllowed=False):
 	@param   text: Input text with wildcards
 	@type    data: map
 	@param   data: map of data (structure see readme.md in plugin folder)
-	@type    lineBrakeAllowed: Boolean
-	@param   lineBrakeAllowed: switch to allow lineBreak (%BR%) as wildcard
 
 	@return:    text with replaced wildcards
 	@exception: Exception if Error at replace
@@ -36,8 +34,7 @@ def replaceWildcards(text, data, lineBrakeAllowed=False):
 		text = text.replace("%TIME%", timeHandler.getTime(data["timestamp"])).replace("%DATE%", timeHandler.getDate(data["timestamp"]))
 
 		# replace some special chars
-		if lineBrakeAllowed == True:
-			text = text.replace("%BR%", "\r\n")
+		text = text.replace("%BR%", "\r\n")
 		text = text.replace("%LPAR%", "(")
 		text = text.replace("%RPAR%", ")")
 
