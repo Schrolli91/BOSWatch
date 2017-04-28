@@ -11,6 +11,7 @@ Function to expand the dataset with a description.
 
 import logging # Global logger
 import csv # for loading the description files
+import re # for matching IDs with a regular expression
 
 from includes import globalVars  # Global variables
 from includes.helper import stringConverter
@@ -41,8 +42,8 @@ def loadCSV(typ, idField):
 			reader = csv.DictReader(csvfile)
 			for row in reader:
 				logging.debug(row)
-				# only import rows with an integer as id
-				if row[idField].isdigit() == True:
+				# only import rows with an integer as id, allow subrics though
+				if re.match("^[0-9]+[A-D]?$", idField, re.IGNORECASE):
 					try:
 						resultList[row[idField]] = stringConverter.convertToUTF8(row['description'])
 					except:
