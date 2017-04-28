@@ -113,9 +113,8 @@ def getDescription(typ, data):
 			resultStr = zveiDescribtionList[data]
 		elif typ == "POC":
 			global ricDescribtionList
-			resultStr = ricDescribtionList[data]
-			if not resultStr:
-				resultStr = ricDescribtionList[data[:-1]]
+			resultStr = ricDescribtionList[data[:-1]] # MainRIC
+			resultStr += " " + ricDescribtionList[data] # SubRIC
 		else:
 			logging.warning("Invalid Typ: %s", typ)
 
