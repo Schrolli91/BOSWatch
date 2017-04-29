@@ -81,15 +81,15 @@ def run(typ,freq,data):
 			if typ == "POC" or typ == "FMS" or typ == "ZVEI":
 				logging.debug("Read format and compose output for %s-message" % typ)
 				# compose message content
-				output = globalVars.config.get("Telegram", "%s_message" % typ)
-				output = wildcardHandler.replaceWildcards(output, data, lineBrakeAllowed=True)
+				text = globalVars.config.get("Telegram", "%s_message" % typ)
+				text = wildcardHandler.replaceWildcards(text, data)
 
 				# Initiate Telegram Bot
 				logging.debug("Initiate Telegram BOT")
 				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
 				# Send message to chat via Telegram BOT API
 				logging.debug("Send message to chat via Telegram BOT API")
-				bot.sendMessage('%s' % BOTChatIDAPIKey, output)
+				bot.sendMessage('%s' % BOTChatIDAPIKey, text)
 
 				# Generate location information only for specific RIC
 				if typ == "POC" and data["ric"] == RICforLocationAPIKey:
