@@ -45,11 +45,7 @@ def loadCSV(typ, idField):
 				# only import rows with an integer as id, allow subrics though
 				if re.match("^[0-9]+[A-D]?$", row[idField], re.IGNORECASE):
 					try:
-						if len(row[idField]) > 7:
-							if row[idField][7].isupper():
-								tmp = row[idField].lower()
-								row[idField] = tmp;
-						resultList[row[idField]] = stringConverter.convertToUTF8(row['description'])
+						resultList[row[idField].lower()] = stringConverter.convertToUTF8(row['description'])
 					except:
 						# skip entry in case of an exception
 						pass
