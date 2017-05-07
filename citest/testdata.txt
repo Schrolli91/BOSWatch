@@ -1,0 +1,120 @@
+# Testdata for the BOSWatch Test Mode function
+# Data in Multimon-NG Raw Format
+# Data is alternately passed to the decoder to simulate an used Radio-Frequency
+
+#
+# POCSAG
+# ------
+#
+# The following settings in config.ini are expected for POCSAG
+#
+# [BOSWatch]
+# useDescription = 1
+# doubleFilter_ignore_entries = 10
+# doubleFilter_check_msg = 1
+#
+# [POC]
+# deny_ric = 7777777
+# filter_range_start = 0000005
+# filter_range_end =   8999999
+# idDescribed = 1
+#
+
+# bitrate
+POCSAG512: Address: 1000512  Function: 1  Alpha:   BOSWatch-Test ÖÄÜß: okay
+POCSAG1200: Address: 1001200  Function: 1  Alpha:   BOSWatch-Test: okay
+POCSAG2400: Address: 1002400  Function: 1  Alpha:   BOSWatch-Test: okay
+
+# function-code
+POCSAG512: Address: 1000000  Function: 0  Alpha:   BOSWatch-Test: okay
+POCSAG512: Address: 1000001  Function: 1  Alpha:   BOSWatch-Test: okay
+POCSAG512: Address: 1000002  Function: 2  Alpha:   BOSWatch-Test: okay
+POCSAG512: Address: 1000003  Function: 3  Alpha:   BOSWatch-Test: okay
+
+# german special sign
+POCSAG512: Address: 1200001  Function: 1  Alpha:   BOSWatch-Test ÖÄÜß: okay
+POCSAG512: Address: 1200001  Function: 1  Alpha:   BOSWatch-Test öäü: okay
+
+# witch csv
+POCSAG512: Address: 1234567  Function: 1  Alpha:   BOSWatch-Test: with csv
+
+# without csv
+POCSAG1200: Address: 2345678  Function: 2  Alpha:   BOSWatch-Test: without csv
+POCSAG2400: Address: 3456789  Function: 3  Alpha:   BOSWatch-Test: without csv
+
+# OHNE TEXT????
+POCSAG1200: Address: 1100000  Function: 0
+POCSAG1200: Address: 1100000  Function: 1
+POCSAG1200: Address: 1100000  Function: 2
+POCSAG1200: Address: 1100000  Function: 3
+
+# duplicate with same and other msg
+POCSAG1200: Address: 2000001  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
+POCSAG1200: Address: 2000001  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
+POCSAG1200: Address: 2000001  Function: 2  Alpha:   BOSWatch-Testing: okay
+
+# duplicate in different order
+POCSAG1200: Address: 2100000  Function: 2
+POCSAG1200: Address: 2100001  Function: 2
+POCSAG1200: Address: 2100002  Function: 2
+POCSAG1200: Address: 2100000  Function: 2
+POCSAG1200: Address: 2100001  Function: 2
+POCSAG1200: Address: 2100002  Function: 2
+POCSAG1200: Address: 2100000  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
+POCSAG1200: Address: 2100001  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
+POCSAG1200: Address: 2100002  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
+POCSAG1200: Address: 2100000  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
+POCSAG1200: Address: 2100001  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
+POCSAG1200: Address: 2100002  Function: 2  Alpha:   BOSWatch-Test: second is a duplicate
+
+# invalid
+POCSAG512: Address:       3  Function: 0  Alpha:   BOSWatch-Test: okay
+POCSAG512: Address:      33  Function: 0  Alpha:   BOSWatch-Test: okay
+POCSAG512: Address:     333  Function: 0  Alpha:   BOSWatch-Test: okay
+POCSAG512: Address:    3333  Function: 0  Alpha:   BOSWatch-Test: okay
+POCSAG512: Address:   33333  Function: 0  Alpha:   BOSWatch-Test: okay
+POCSAG512: Address:  333333  Function: 0  Alpha:   BOSWatch-Test: okay
+POCSAG512: Address: 3333333  Function: 0  Alpha:   BOSWatch-Test: okay
+POCSAG512: Address: 333333F  Function: 0  Alpha:   BOSWatch-Test: invalid
+POCSAG512: Address: 333333F  Function: 1  Alpha:   BOSWatch-Test: invalid
+POCSAG512: Address: 3333333  Function: 4  Alpha:   BOSWatch-Test: invalid
+
+# denied
+POCSAG1200: Address: 7777777  Function: 1  Alpha:   BOSWatch-Test: denied
+
+# out of filter Range
+POCSAG1200: Address: 0000004  Function: 1  Alpha:   BOSWatch-Test: out of filter start
+POCSAG1200: Address: 9000000  Function: 1  Alpha:   BOSWatch-Test: out of filter end
+
+# regEx-Filter?
+
+
+#
+# FMS
+# ---
+#
+FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=I  (ohneNA,ohneSIGNAL)) CRC correct
+FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     1=LST->FZG 2=I  (ohneNA,ohneSIGNAL)) CRC correct
+FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=II (ohneNA,mit SIGNAL)) CRC correct
+FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     1=LST->FZG 2=III(mit NA,ohneSIGNAL)) CRC correct
+FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Status  3=Einsatz Ab     0=FZG->LST 2=IV (mit NA,mit SIGNAL)) CRC correct
+
+
+#
+# ZVEI
+# ----
+#
+
+#with csv description
+ZVEI1: 12345
+#without csv description
+ZVEI1: 56789
+#duplicate
+ZVEI1: 56789
+#with repeat Tone
+ZVEI1: 1F2F3
+#in case of invalid id
+ZVEI1: 135
+#in case of a double-tone for siren n-'D's are sended
+ZVEI1: DDD
+ZVEI1: DDDDD

@@ -1,19 +1,44 @@
 #!/usr/bin/python
-# -*- coding: cp1252 -*-
+# -*- coding: UTF-8 -*-
 
 """
 httpRequest-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages to an URL
 
 @author: Bastian Schroll
+@author: TheJockel
+
 
 @requires: httpRequest-Configuration has to be set in the config.ini
 """
 
+#
+# Imports
+#
+import urllib2
 import logging # Global logger
-import httplib #for the HTTP request
-from urlparse import urlparse #for split the URL into url and path
+from includes import globalVars  # Global variables
 
-from includes import globals  # Global variables
+# Helper function, uncomment to use
+#from includes.helper import timeHandler
+from includes.helper import wildcardHandler
+from includes.helper import configHandler
+
+##
+#
+# onLoad (init) function of plugin
+# will be called one time by the pluginLoader on start
+#
+def onLoad():
+	"""
+	While loading the plugins by pluginLoader.loadPlugins()
+	this onLoad() routine is called one time for initialize the plugin
+
+	@requires:  nothing
+
+	@return:    nothing
+	"""
+	# nothing to do for this plugin
+	return
 
 
 ##
@@ -28,74 +53,55 @@ def run(typ,freq,data):
 
 	@type    typ:  string (FMS|ZVEI|POC)
 	@param   typ:  Typ of the dataset
-	@type    data: map of data (structure see interface.txt)
+	@type    data: map of data (structure see readme.md in plugin folder)
 	@param   data: Contains the parameter
 	@type    freq: string
 	@keyword freq: frequency of the SDR Stick
 
 	@requires:  httpRequest-Configuration has to be set in the config.ini
-	
+
 	@return:    nothing
-	@exception: Exception if ConfigParser failed
-	@exception: Exception if http Request failed
-	@exception: Exception if http Response failed
 	"""
 	try:
-		#
-		# ConfigParser
-		#
-		logging.debug("reading config file")
-		try:
-			for key,val in globals.config.items("httpRequest"):
-				logging.debug(" - %s = %s", key, val)
-		except:
-			logging.exception("cannot read config file")
-		
-		try:
-			#
-			# Create URL
-			#
-			logging.debug("send %s HTTP request", typ)
-			
-			if typ == "FMS":
-				url = globals.config.get("httpRequest", "fms_url") #Get URL
-				url = url.replace("%FMS%", data["fms"]).replace("%STATUS%", data["status"]) #replace Wildcards in URL
-				url = url.replace("%DIR%", data["direction"]).replace("%TSI%", data["tsi"]) #replace Wildcards in URL
-			elif typ == "ZVEI":
-				url = globals.config.get("httpRequest", "zvei_url") #Get URL
-				url = url.replace("%ZVEI%", data["zvei"]) #replace Wildcards in URL
-			elif typ == "POC":
-				url = globals.config.get("httpRequest", "poc_url") #Get URL
-				url = url.replace("%RIC%", data["ric"]).replace("%FUNC%", data["function"]) #replace Wildcards in URL
-				url = url.replace("%MSG%", data["msg"]).replace("%BITRATE%", data["bitrate"]) #replace Wildcards in URL
-			else:
-				logging.warning("Invalid Typ: %s", typ)	
-			
-			#
-			# HTTP-Request
-			#
-			url = urlparse(url) #split URL into path and querry
-			httprequest = httplib.HTTPConnection(url[2]) #connect to URL Path
-			httprequest.request("GET", url[5]) #send URL Querry per GET
-			
-		except:
-			logging.exception("cannot send HTTP request")
-		else:
+		if configHandler.checkConfig("httpRequest"): #read and debug the config
+
 			try:
-				# 
-				# check HTTP-Response
 				#
-				httpresponse = httprequest.getresponse()
-				if str(httpresponse.status) == "200": #Check HTTP Response an print a Log or Error
-					logging.debug("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))
+				# Create URL
+				#
+				if typ == "FMS":
+					url = globalVars.config.get("httpRequest", "fms_url") #Get URL
+					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
+					url = url.replace(" ","%20") # replace space with %20 to be a vaild http request
+				elif typ == "ZVEI":
+					url = globalVars.config.get("httpRequest", "zvei_url") #Get URL
+					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
+					url = url.replace(" ","%20") # replace space with %20 to be a vaild http request
+				elif typ == "POC":
+					url = globalVars.config.get("httpRequest", "poc_url") #Get URL
+					url = wildcardHandler.replaceWildcards(url, data) # replace wildcards with helper function
+					url = url.replace(" ","%20") # replace space with %20 to be a vaild http request
 				else:
-					logging.warning("HTTP response: %s - %s" , str(httpresponse.status), str(httpresponse.reason))
-			except: #otherwise
-				logging.exception("cannot get HTTP response")
-				
-		finally:
-			logging.debug("close HTTP-Connection")
-			httprequest.close()
-	
+					logging.warning("Invalid Typ: %s", typ)
+					return
+
+				#
+				# HTTP-Request
+				#
+				logging.debug("send %s HTTP request", typ)
+
+				try:
+				    #resp = urllib2.urlopen(url)
+					urllib2.urlopen(url)
+				except urllib2.HTTPError as e:
+    					logging.warning("HTTP response: %s", e.code)
+				except urllib2.URLError as e:
+    					logging.warning("HTTP-specific error: %s", e.args)
+
+			except:
+				logging.error("cannot send HTTP request")
+				logging.debug("cannot send HTTP request", exc_info=True)
+				return
 	except:
-		logging.exception("unknown error")
+		logging.error("unknown error")
+		logging.debug("unknown error", exc_info=True)
