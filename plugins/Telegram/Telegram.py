@@ -78,7 +78,7 @@ def run(typ,freq,data):
 	try:
 		########## User Plugin CODE ##########
 		try:
-			if typ == "POC" or typ == "FMS" or typ == "ZVEI":
+			if typ in ("POC", "FMS", "ZVEI"):
 				logging.debug("Read format and compose output for %s-message" % typ)
 				# compose message content
 				text = globalVars.config.get("Telegram", "%s_message" % typ)
