@@ -31,12 +31,10 @@ def checkID(typ, data, msg=""):
 	@return:    True if check was OK
 	@return:    False if double was found
 	"""
-	global doubleList
 	timestamp = int(time.time()) # Get Timestamp
 
 	logging.debug("checkID: %s (%s)", data, msg)
-	for i in range(len(doubleList)):
-		(xID, xTimestamp, xMsg) = doubleList[i]
+	for (xID, xTimestamp, xMsg) in doubleList:
 		# given ID found?
 		# return False if the first entry in double_ignore_time is found, we will not check for younger ones...
 		if data == xID and timestamp < xTimestamp + globalVars.config.getint("BOSWatch", "doubleFilter_ignore_time"):
