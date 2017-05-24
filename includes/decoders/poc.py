@@ -126,7 +126,7 @@ def decode(freq, decoded):
 						# If enabled, look up description
 						if globalVars.config.getint("POC", "idDescribed"):
 							from includes import descriptionList
-							data["description"] = descriptionList.getDescription("POC", poc_id)
+							data["description"] = descriptionList.getDescription("POC", poc_id+data["functionChar"])
 						# processing the alarm
 						try:
 							from includes import alarmHandler
