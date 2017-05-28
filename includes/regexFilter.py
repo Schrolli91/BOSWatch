@@ -89,7 +89,7 @@ def checkFilters(typ, data, plugin, freq):
 			return False
 		else:
 			logging.debug("no Filter found")
-			return True
+			return False
 
 	except:
 		logging.error("Error in filter checking")
