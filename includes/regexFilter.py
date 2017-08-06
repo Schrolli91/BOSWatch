@@ -28,7 +28,6 @@ def loadFilters():
 
 	@return:    nothing
 	"""
-	global filterList
 	try:
 		logging.debug("loading filters")
 		# For each entry in config.ini [Filters] section
