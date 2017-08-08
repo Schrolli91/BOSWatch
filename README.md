@@ -1,4 +1,18 @@
-![# BOSWatch](/www/gfx/logo.png)
+|Branch|Code Qualität|CI-Build|
+|---|---|---|
+|master|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=master)](https://travis-ci.org/Schrolli91/BOSWatch)|
+|beta|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/beta.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=4213030)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=beta)](https://travis-ci.org/Schrolli91/BOSWatch)|
+|develop|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=develop)](https://travis-ci.org/Schrolli91/BOSWatch)|
+
+
+**Unterstützung gesucht**
+
+Zur Weiterentwicklung des Programms benötigen wir Deine Mithilfe - bitte melde dich per Issue, wenn du Anwender in einem verschlüsselten POCSAG-Netz und im (legalen) Besitz des dazugehörigen Schlüssels bist.
+In der Zukunft wollen wir die Möglichkeit schaffen, codierte Nachrichten zu entschlüsseln (und nur dann, wenn der Schlüssel bekannt ist!), dafür brauchen wir Dich als Tester!
+
+**Readme ist veraltet** - bitte im [Wiki](https://github.com/Schrolli91/BOSWatch/wiki) nachschauen!
+
+![# BOSWatch](/boswatch.png)
 
 :satellite: Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG :satellite:
 
@@ -24,6 +38,8 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - Logfiles for better troubleshooting
 - verbose/quiet mode for more/none information
 - Ready for use BOSWatch as daemon
+- possibility to start plugins asynchron
+- NMA Error Handler
 
 ##### Features for the future:
 - more plugins
@@ -31,7 +47,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 
 
 ###Plugins
-If you want to code your own Plugin, see Section `Code your own Plugin` at the end of this readme.MD
+If you want to code your own Plugin, see `plugins/README.md`.
 
 ##### Implemented plugins:
 
@@ -43,6 +59,7 @@ If you want to code your own Plugin, see Section `Code your own Plugin` at the e
 |BosMon|send data to BosMon server|:white_check_mark:|:white_check_mark:|:white_check_mark:|
 |firEmergency|send data to firEmergency server|:x:|:white_check_mark:|:white_check_mark:|
 |jsonSocket|send data as jsonString to a socket server|:white_check_mark:|:white_check_mark:|:white_check_mark:|
+|NMA|send data to Notify my Android|:white_check_mark:|:white_check_mark:|:white_check_mark:|
 
 - for more Information to the plugins see `config.ini`
 
@@ -68,7 +85,7 @@ No filter for a combination typ/plugin = all data will pass
 
 Syntax: `INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX` (separator `;`)
 - `TYP` = the data typ (FMS|ZVEI|POC)
-- `DATAFIELD` = the field of the data array (See interface.txt)
+- `DATAFIELD` = the field of the data array (see readme.md in plugin folder)
 - `PLUGIN` = the name of the plugin to call with this filter (* for all)
 - `FREQUENZ` = the frequenz to use the filter (for more SDR sticks (* for all))
 - `REGEX` = the RegEX
@@ -80,7 +97,7 @@ only POCSAG to MySQL with the text "ALARM:" in the message
 `pocTest = POC;msg;MySQL;*;ALARM:`
 
 ##### Web frontend (obsolete)
-New version in future - old data in folder `/www/`
+old data in folder `/exampeAddOns/simpleWeb/`
 
 ~~Put the files in folder /wwww/ into your local webserver folder (f.e. /var/www/).
 Now you must edit the "config.php" with your userdata to your local database.
@@ -115,19 +132,11 @@ optional arguments:
 
 
 ### Installation
-You can easy install BOSWatch with the install.sh Script.
-- Download the install.sh in any folder you want.
-- Make it executeable `sudo chmod +x install.sh`
-- And use the script  `sudo sh install.sh`
+Please follow the instructions written down in the wiki:
 
-Now the script downloads and compile all needed data.
-At the end you can find BOSWatch in `~/boswatch/`
-Rename `config.template.ini` to `config.ini` and configure
-In case of an error during the installation, check the logfile in `~/boswatch/install/setup_log.txt`
+https://github.com/Schrolli91/BOSWatch/wiki
 
-Caution, script don't install a webserver with PHP and MySQL.
-So you have to make up manually if you want to use MySQL support.
-Database Structure `boswatch.sql` in the MySQL Plugin Folder
+You just need to download a single file since the installer manages the whole process except the installation of a webserver and a database.
 
 If you want to use BOSWatch as a daemon, you have to set your
 configuration in `service/boswatch.sh` and copy it to `/etc/init.d`.
@@ -145,7 +154,3 @@ Thanks to smith_fms and McBo from Funkmeldesystem.de - Forum for Inspiration and
 
 ### Code your own Plugin
 See `plugins/README.md`
-
-~~To code your own Plugin look at the litte example `/plugins/template/template.py`~~
-
-~~In the text-file `plugins/interface.txt` are all relevant data, that your plugin can use.~~

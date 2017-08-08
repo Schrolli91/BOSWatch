@@ -64,20 +64,20 @@ test2 = 123456
 ```
 
 #### 3.2 Read data from config.ini
-To read yout configuration data you must import the `globals.py` where the global config-object is located:
+To read yout configuration data you must import the `globalVars.py` where the global config-object is located:
 ```python
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 ```
 
 Now you can get your configuration data with:
 ```python
-VALUE = globals.config.get("SECTION", "OPTION") #Gets any value
+VALUE = globalVars.config.get("SECTION", "OPTION") #Gets any value
 ```
 or better, use this:
 ```python
-VALUE = globals.config.getint("SECTION", "OPTION") #Value must be an Integer
-VALUE = globals.config.getfloat("SECTION", "OPTION") #Value must be an Float
-VALUE = globals.config.getboolean("SECTION", "OPTION") #Value must be an Boolean
+VALUE = globalVars.config.getint("SECTION", "OPTION") #Value must be an Integer
+VALUE = globalVars.config.getfloat("SECTION", "OPTION") #Value must be an Float
+VALUE = globalVars.config.getboolean("SECTION", "OPTION") #Value must be an Boolean
 ```
 
 
@@ -140,6 +140,10 @@ defined wildcards:
 - `%DATE%` = Date (by script)
 - `%DESCR%` = Description from csv-file
 
+- `%BR%` = new line
+- `%LPAR%` = "("
+- `%RPAR%` = ")"
+
 **FMS:**
 - `%FMS%` = FMS Code
 - `%STATUS%` = FMS Status
@@ -154,6 +158,7 @@ defined wildcards:
 - `%RIC%` = Pocsag RIC
 - `%FUNC%` = Pocsac function/Subric (1-4)
 - `%FUNCCHAR%` = Pocsac function/Subric als character (a-d)
+- `%FUNCTEXT%` = Pocsac function/Subric static massage definded in pocsag section
 - `%MSG%` = Message of the Pocsag telegram
 - `%BITRATE%` = Bitrate of the Pocsag telegram
 
@@ -173,6 +178,7 @@ In the data map are the folowing informations:
 **ZVEI:**
 - zvei
 - description
+- timestamp
 
 **FMS:**
 - fms
@@ -181,6 +187,7 @@ In the data map are the folowing informations:
 - directionText
 - tsi
 - description
+- timestamp
 
 **POCSAG:**
 - ric
@@ -189,3 +196,4 @@ In the data map are the folowing informations:
 - msg
 - bitrate
 - description
+- timestamp

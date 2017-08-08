@@ -106,15 +106,15 @@ FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Stat
 #
 
 #with csv description
-ZVEI2: 12345
+ZVEI1: 12345
 #without csv description
-ZVEI2: 56789
+ZVEI1: 56789
 #duplicate
-ZVEI2: 56789
+ZVEI1: 56789
 #with repeat Tone
-ZVEI2: 1F2F3
+ZVEI1: 1F2F3
 #in case of invalid id
-ZVEI2: 135
+ZVEI1: 135
 #in case of a double-tone for siren n-'D's are sended
-ZVEI2: DDD
-ZVEI2: DDDDD
+ZVEI1: DDD
+ZVEI1: DDDDD

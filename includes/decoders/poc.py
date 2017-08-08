@@ -13,7 +13,7 @@ POCSAG Decoder
 import logging # Global logger
 import re      # Regex for validation
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 from includes import doubleFilter  # double alarm filter
 
 ##
@@ -29,28 +29,41 @@ def isAllowed(poc_id):
 
 	@requires:  Configuration has to be set in the config.ini
 
-	@return:    True if the Ric is allowed, other False
+	@return:    Checks both allow/deny-rule and filter-range (suitable for signal-RIC)
 	@exception: none
 	"""
+
+	allowed = 0
+
 	# 1.) If allowed RICs is set, only they will path,
 	#       If RIC is the right one return True, else False
-	if globals.config.get("POC", "allow_ric"):
-		if poc_id in globals.config.get("POC", "allow_ric"):
+	if globalVars.config.get("POC", "allow_ric"):
+		if poc_id in globalVars.config.get("POC", "allow_ric"):
 			logging.info("RIC %s is allowed", poc_id)
 			return True
 		else:
 			logging.info("RIC %s is not in the allowed list", poc_id)
-			return False
+			allowed = 0
 	# 2.) If denied RIC, return False
-	elif poc_id in globals.config.get("POC", "deny_ric"):
+	if poc_id in globalVars.config.get("POC", "deny_ric"):
 		logging.info("RIC %s is denied by config.ini", poc_id)
-		return False
+		return False # RIC is denied - strongest way to block
 	# 3.) Check Range, return False if outside def. range
-	elif int(poc_id) < globals.config.getint("POC", "filter_range_start"):
-		logging.info("RIC %s out of filter range (start)", poc_id)
-		return False
-	elif int(poc_id) > globals.config.getint("POC", "filter_range_end"):
-		logging.info("RIC %s out of filter range (end)", poc_id)
+	if globalVars.config.getint("POC", "filter_range_start") < int(poc_id) < globalVars.config.getint("POC", "filter_range_end"):
+		logging.info("RIC %s in between filter range", poc_id)
+		return True
+	else:
+		logging.info("RIC %s out of filter range", poc_id)
+		allowed = 0
+	# 4.) Implementation for net identifiers
+	if globalVars.config.get("POC", "netIdent_ric"):
+		if poc_id in globalVars.config.get("POC", "netIdent_ric"):
+			logging.info("RIC %s as net identifier", poc_id)
+			return True
+		else:
+			allowed = 0
+
+	if allowed == 0:
 		return False
 	return True
 
@@ -61,7 +74,7 @@ def isAllowed(poc_id):
 #
 def decode(freq, decoded):
 	"""
-	Export POCSAG Information from Multimon-NG RAW String and call alarmHandler.processAlarm()
+	Export POCSAG information from Multimon-NG string and call alarmHandler.processAlarmHandler()
 
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
@@ -98,7 +111,7 @@ def decode(freq, decoded):
 			logging.debug("POCSAG Bitrate: %s", bitrate)
 
 			if "Alpha:" in decoded: #check if there is a text message
-				poc_text = decoded.split('Alpha:   ')[1].strip().rstrip('<EOT>').strip()
+				poc_text = decoded.split('Alpha:   ')[1].strip().replace('<NUL><NUL>','').replace('<NUL>','').replace('<NUL','').replace('< NUL>','').replace('<EOT>','').strip()
 			else:
 				poc_text = ""
 
@@ -111,17 +124,16 @@ def decode(freq, decoded):
 						# Add function as character a-d to dataset
 						data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
 						# If enabled, look up description
-						if globals.config.getint("POC", "idDescribed"):
+						if globalVars.config.getint("POC", "idDescribed"):
 							from includes import descriptionList
 							data["description"] = descriptionList.getDescription("POC", poc_id)
 						# processing the alarm
 						try:
 							from includes import alarmHandler
-							alarmHandler.processAlarm("POC", freq, data)
+							alarmHandler.processAlarmHandler("POC", freq, data)
 						except:
 							logging.error("processing alarm failed")
 							logging.debug("processing alarm failed", exc_info=True)
-							pass
 					# in every time save old data for double alarm
 					doubleFilter.newEntry(poc_id+poc_sub, poc_text)
 				else:
