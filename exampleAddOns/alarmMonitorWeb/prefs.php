@@ -11,7 +11,7 @@ session_start();
 ?> 
 
 <?php 
-if(($_SESSION["username"])!="Test") 
+if(($_SESSION["username"])!="admin") 
    { 
    echo "Sie sind nicht berechtigt fuer diesen Bereich"; 
    exit; 
@@ -27,7 +27,7 @@ include("tpl/a_header.php");
 			<div class="wrapper style3">
 				<div class="title">Einstellungen</div>
 				<div id="highlights" class="container" style="">
-				
+				<!--
 				<tr>
 				<td>Filter Range Start:</td><td>
 <input type="text" size="24" maxlength="50" value="
@@ -43,7 +43,7 @@ $ini_array = parse_ini_file("config.ini");
 echo($ini_array['filter_range_end']);
 ?>
 "></td>
-</tr>
+</tr>-->
 			</div>
 			</div>
 
