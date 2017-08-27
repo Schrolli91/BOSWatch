@@ -10,7 +10,7 @@
 	</tr>
 	<?php 
 	
-	$db->query("SELECT id, time, ric, funktion, text, description FROM ".$tablePOC." ORDER BY id DESC LIMIT 100");
+	$db->query("SELECT id, time, ric, function, msg, description FROM ".$tablePOC." ORDER BY id DESC LIMIT 100");
 	$Rows = array();
 	while ($daten = $db->fetchAssoc())
 	{
@@ -29,10 +29,10 @@
 		//	echo "<td>". $poc['id'] . "</td>";
 		//	
 			echo "<td>". $poc['description'] . "</td>";
-			echo "<td>". $poc['text'] . "</td>";
+			echo "<td>". $poc['msg'] . "</td>";
 			echo "<td>". $time . "</td>";
 			echo "<td>". $poc['ric'] . "</td>";
-			echo "<td>". $poc['funktion'] . "</td>";
+			echo "<td>". $poc['function'] . "</td>";
 			echo "</tr>";
 		}
 	?>

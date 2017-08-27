@@ -1,8 +1,8 @@
 <?php
 
 $dbhost = "localhost";
-$dbuser = "USERNAME";
-$dbpassword = "PASSWORD";
+$dbuser = "boswatch";
+$dbpassword = "boswatch";
 $database = "boswatch";
 
 $tableFMS = "bos_fms";

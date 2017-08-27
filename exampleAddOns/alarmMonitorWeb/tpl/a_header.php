@@ -41,7 +41,8 @@
 								<li><a href="show_fms.php">FMS</a></li>
 								<li><a href="show_zvei.php">ZVEI</a></li>
 								<li><a href="prefs.php">Einstellungen</a></li>
-								<li><a href="eintragen.html">Nutzer anlegen</a></li>
+								<li><a href="eintragen.php">Nutzer anlegen</a></li>
+								<li><a href="logout.php">Ausloggen</a></li>
 							</ul>
 						</nav>
 
