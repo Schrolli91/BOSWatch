@@ -1,31 +1,26 @@
 # Changelog
 
-### __[Unreleased]__
-#### Added
-#### Changed
-#### Deprecated
-#### Removed
-#### Fixed
-#### Security
 
-### __[v2.2]__
-### __[v2.1]__
-### __[v2.0]__
+#### __[v2.2.1]__ - 19.09.2017
+##### Added
+- Neues Service Script
+- Eigene Message fpr jeden Typ im Telegram Plugin
+
+##### Changed
+- Name der csv Dateien um überschreiben bei Update zu vermeiden
+- Description Liste kann nun zusätzlich Einträge für jede Subric enthalten
+- RegEX verbietet nun grundsätzlich alles - Es muss explizit zugelassen werden
+
+##### Deprecated
+##### Removed
+##### Fixed
+- Bug im SMS77 Plugin
+
+##### Security
+
+
+----------------------------
 
 
 Zum schreiben des Changelog's siehe:
 http://keepachangelog.com/de/1.0.0/
-
-### Arten von Änderungen
-
-__Added__ für neue Features.
-
-__Changed__ für Änderungen an der bestehenden Funktionalität.
-
-__Deprecated__ für Features, die in zukünftigen Versionen entfernt werden.
-
-__Removed__ für Deprecated-Features, die in dieser Version entfernt wurden.
-
-__Fixed__ für alle Bug-Fixes.
-
-__Security__ um Benutzer im Fall von geschlossenen Sicherheitslücken zu einer Aktualisierung aufzufordern.
