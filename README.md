@@ -40,6 +40,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - Ready for use BOSWatch as daemon
 - possibility to start plugins asynchron
 - NMA Error Handler
+- Express-Alarm
 
 ##### Features for the future:
 - more plugins
