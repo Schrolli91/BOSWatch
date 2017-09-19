@@ -2,6 +2,7 @@
 
 ### __[Unreleased]__
 ##### Added
+- zuschaltbare POCSAG Express-Alarm Funktionalität
 ##### Changed
 ##### Deprecated
 ##### Removed
