@@ -35,7 +35,7 @@ POCSAG512: Address: 1000003  Function: 3  Alpha:   BOSWatch-Test: okay
 POCSAG512: Address: 1200001  Function: 1  Alpha:   BOSWatch-Test ÖÄÜß: okay
 POCSAG512: Address: 1200001  Function: 1  Alpha:   BOSWatch-Test öäü: okay
 
-# witch csv
+# with csv
 POCSAG512: Address: 1234567  Function: 1  Alpha:   BOSWatch-Test: with csv
 
 # without csv
@@ -83,8 +83,24 @@ POCSAG512: Address: 3333333  Function: 4  Alpha:   BOSWatch-Test: invalid
 POCSAG1200: Address: 7777777  Function: 1  Alpha:   BOSWatch-Test: denied
 
 # out of filter Range
-POCSAG1200: Address: 0000004  Function: 1  Alpha:   BOSWatch-Test: out of filter start
-POCSAG1200: Address: 9000000  Function: 1  Alpha:   BOSWatch-Test: out of filter end
+#POCSAG1200: Address: 0000004  Function: 1  Alpha:   BOSWatch-Test: out of filter start
+#POCSAG1200: Address: 9000000  Function: 1  Alpha:   BOSWatch-Test: out of filter end
+#
+##Probealram
+POCSAG1200: Address: 0871004  Function: 1  Alpha:   Dies ist ein Probealarm!
+## Express Alarm
+POCSAG1200: Address: 0871002  Function: 0  Alpha:   <EOT><FF>
+POCSAG1200: Address: 0860001  Function: 0 
+POCSAG1200: Address: 0860002  Function: 0 
+POCSAG1200: Address: 0860003  Function: 0 
+POCSAG1200: Address: 0860004  Function: 0 
+POCSAG1200: Address: 0860005  Function: 0 
+POCSAG1200: Address: 0860006  Function: 0 
+POCSAG1200: Address: 0860007  Function: 0 
+POCSAG1200: Address: 0860008  Function: 0 
+POCSAG1200: Address: 0860009  Function: 0 
+POCSAG1200: Address: 0860010  Function: 0 
+POCSAG1200: Address: 0871003  Function: 0  Alpha:   B2 Feuer Gebäude Pers in Gefahr. bla bla bla<NUL>
 
 # regEx-Filter?
 
