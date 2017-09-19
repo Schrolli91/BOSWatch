@@ -58,6 +58,20 @@ def run(typ,freq,data):
 	"""
 	try:
 		if configHandler.checkConfig("Sms77"): #read and debug the config
+			
+			# create an empty message an fill it with the required information
+			message = "Alarm"
+			if typ == "FMS":
+				logging.debug("FMS detected, building message")
+				message = data["description"]+"<br>"+data["status"]
+			elif typ == "ZVEI":
+				logging.debug("ZVEI detected, building message")
+				message = data["zvei"]+" - "+data["description"]
+			elif typ == "POC":
+				logging.debug("POC detected, building message")
+				message = data["description"]+"<br>"+data["msg"].replace(";", "<br>")
+			else:
+				logging.warning("Invalid typ - use empty message")
 
 			try:
 
@@ -66,15 +80,15 @@ def run(typ,freq,data):
 				#
 				logging.debug("send Sms77 %s", typ)
 
-				conn = httplib.HTTPSConnection("gateway.sms77.de:443")
-				conn.request("POST", "",
+				conn = httplib.HTTPSConnection("gateway.sms77.io",443)
+				conn.request("POST", "/api/sms",
 				urllib.urlencode({
 					"u": globalVars.config.get("Sms77", "user"),
 					"p": globalVars.config.get("Sms77", "password"),
 					"to": globalVars.config.get("Sms77", "to"),
 					"from": globalVars.config.get("Sms77", "from"),
 					"type": globalVars.config.get("Sms77", "type"),
-					"text": data["description"]+"<br>"+data["msg"].replace(";", "<br>")
+					"text": message
 				}),{"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"})
 
 			except:

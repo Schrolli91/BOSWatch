@@ -28,7 +28,6 @@ def loadFilters():
 
 	@return:    nothing
 	"""
-	global filterList
 	try:
 		logging.debug("loading filters")
 		# For each entry in config.ini [Filters] section
@@ -89,7 +88,7 @@ def checkFilters(typ, data, plugin, freq):
 			return False
 		else:
 			logging.debug("no Filter found")
-			return True
+			return False
 
 	except:
 		logging.error("Error in filter checking")

@@ -40,7 +40,7 @@ $db = new Database($dbhost, $dbuser, $dbpassword, $database, 1); //Show Error = 
 					
 					<!-- Logo -->
 						<div id="logo">
-							<h1><a href="index.html">Willkommen bei BOSWatch</a></h1>
+							<h1><a href="index.php">Willkommen bei BOSWatch</a></h1>
 						</div>
 					
 					<!-- Nav -->
@@ -74,6 +74,14 @@ name="username"><br><br>
 Dein Passwort:<br>
 <input type="password" size="24" maxlength="50"
 name="password"><br>
+
+Startanzeige:<br>
+<select name="view">
+	<option value="pocsag">POCSAG</option>
+	<option value="fms">FMS</option>
+	<option value="zvei">ZVEI</option>
+</select><br>
+
 
 <input type="submit" value="Login">
 </form>

@@ -11,6 +11,7 @@ Function to expand the dataset with a description.
 
 import logging # Global logger
 import csv # for loading the description files
+import re # for matching IDs with a regular expression
 
 from includes import globalVars  # Global variables
 from includes.helper import stringConverter
@@ -41,10 +42,10 @@ def loadCSV(typ, idField):
 			reader = csv.DictReader(csvfile)
 			for row in reader:
 				logging.debug(row)
-				# only import rows with an integer as id
-				if row[idField].isdigit() == True:
+				# only import rows with an integer as id, allow subrics though
+				if re.match("^[0-9]+[A-D]?$", row[idField], re.IGNORECASE):
 					try:
-						resultList[row[idField]] = stringConverter.convertToUTF8(row['description'])
+						resultList[row[idField].lower()] = stringConverter.convertToUTF8(row['description'])
 					except:
 						# skip entry in case of an exception
 						pass
@@ -105,14 +106,12 @@ def getDescription(typ, data):
 	logging.debug("look up description lists")
 	try:
 		if typ == "FMS":
-			global fmsDescribtionList
 			resultStr = fmsDescribtionList[data]
 		elif typ == "ZVEI":
-			global zveiDescribtionList
 			resultStr = zveiDescribtionList[data]
 		elif typ == "POC":
-			global ricDescribtionList
-			resultStr = ricDescribtionList[data]
+			resultStr = ricDescribtionList[data[:-1]] # MainRIC
+			resultStr += " " + ricDescribtionList[data] # SubRIC
 		else:
 			logging.warning("Invalid Typ: %s", typ)
 
