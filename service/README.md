@@ -1,3 +1,20 @@
+### Use BOSWatch as service ###
+
+Old description below
+
+We assume that BOSWatch is installed to /opt/boswatch! Otherwise you need to adapt all the pathes in this description and in the service-file itself.
+
+#### Adapt the script
+Enter the frequency and the decoder(s) you want to use in line 7; you can add more specific switches if you need to
+
+### Install the service
+1. Copy the file to /lib/systemd/system: sudo cp /opt/boswatch/service/boswatch.service /lib/systemd/system/
+2. Change the rights: sudo chmod 644 /lib/systemd/system/boswatch.service
+3. Enable the service: sudo systemcl enable boswatch.service
+4. Start the service: sudo systemcl start boswatch.service
+
+---
+
 ### Start BOSWatch as a daemon
 
 ##### Changing the init script

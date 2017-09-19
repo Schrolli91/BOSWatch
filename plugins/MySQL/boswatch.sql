@@ -104,44 +104,6 @@ CREATE TABLE IF NOT EXISTS `bos_signal` (
     PRIMARY KEY (`ID`)
 )  ENGINE=MYISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
 
--- --------------------------------------------------------
-
---
--- Schedule für Tabelle `bos_pocsag`
---
-CREATE EVENT IF NOT EXISTS `Delete POCSAG Entries > 3 Months`
-	ON SCHEDULE EVERY 1 DAY
-    STARTS '2016-01-01 00:00:00'
-    ON COMPLETION PRESERVE ENABLE
-    DO
-		DELETE FROM bos_pocsag WHERE time < DATE_SUB(NOW(),INTERVAL 3 MONTH);
-
--- --------------------------------------------------------
-
---
--- Schedule für Tabelle `bos_fms`
---
-
-CREATE EVENT IF NOT EXISTS `Delete FMS Entries > 3 Months`
-	ON SCHEDULE EVERY 1 DAY
-    STARTS '2016-01-01 00:00:00'
-    ON COMPLETION PRESERVE ENABLE
-    DO
-		DELETE FROM bos_fms WHERE time < DATE_SUB(NOW(),INTERVAL 3 MONTH);
-
--- --------------------------------------------------------
-
---
--- Schedule für Tabelle `bos_zvei`
---
-
-CREATE EVENT IF NOT EXISTS `Delete ZVEI Entries > 3 Months`
-	ON SCHEDULE EVERY 1 DAY
-    STARTS '2016-01-01 00:00:00'
-    ON COMPLETION PRESERVE ENABLE
-    DO
-		DELETE FROM bos_zvei WHERE time < DATE_SUB(NOW(),INTERVAL 3 MONTH);
-
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

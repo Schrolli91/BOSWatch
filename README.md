@@ -46,7 +46,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - other Ideas per Issues please
 
 
-###Plugins
+### Plugins
 If you want to code your own Plugin, see `plugins/README.md`.
 
 ##### Implemented plugins:
@@ -81,7 +81,7 @@ For the other functions see "Usage" below.
 For the RegEX filter functions see Section `[Filters]`
 http://www.regexr.com/ - RegEX test tool an documentation
 
-No filter for a combination typ/plugin = all data will pass
+If RegEX is enabled - only alloewd data will pass !
 
 Syntax: `INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX` (separator `;`)
 - `TYP` = the data typ (FMS|ZVEI|POC)

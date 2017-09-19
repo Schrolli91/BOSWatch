@@ -23,16 +23,16 @@ Simple Database Class (C) by Bastian Schroll
     function __construct($host, $user, $password, $database, $show_error = 1)
     {
         $this->show_error = $show_error;
-        @$this->conn = mysql_connect($host, $user, $password);
+        @$this->conn = mysqli_connect($host, $user, $password);
         if ($this->conn == false)
         {
-            $this->error("Keine Verbindung zum Datenbank Server!", mysql_error());
+            $this->error("Keine Verbindung zum Datenbank Server!", mysqli_error($this->conn));
             return false;
         }
 
-        if (!@mysql_select_db($database, $this->conn))
+        if (!@mysqli_select_db($this->conn, $database))
         {
-            $this->error("Datenbank nicht gefunden!", mysql_error());
+            $this->error("Datenbank nicht gefunden!", mysqli_error($this->conn));
             return false;
         }
         return true;
@@ -48,10 +48,10 @@ Simple Database Class (C) by Bastian Schroll
      */
     function query($query)
     {
-        $this->result = @mysql_query($query, $this->conn);
+        $this->result = @mysqli_query($this->conn, $query);
         if ($this->result == false)
         {
-            $this->error("Fehlerhafte Datenbank Anfrage!", mysql_error());
+            $this->error("Fehlerhafte Datenbank Anfrage!", mysqli_error($this->conn));
             return false;
         }
         return $this->result;
@@ -69,10 +69,10 @@ Simple Database Class (C) by Bastian Schroll
     {
         if ($result != null)
         {
-            return @mysql_fetch_assoc($result);
+            return @mysqli_fetch_assoc($result);
         } else
         {
-            return @mysql_fetch_assoc($this->result);
+            return @mysqli_fetch_assoc($this->result);
         }
     }
 
