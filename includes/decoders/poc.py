@@ -127,13 +127,24 @@ def decode(freq, decoded):
 						if globalVars.config.getint("POC", "idDescribed"):
 							from includes import descriptionList
 							data["description"] = descriptionList.getDescription("POC", poc_id+data["functionChar"])
-						# processing the alarm
-						try:
-							from includes import alarmHandler
-							alarmHandler.processAlarmHandler("POC", freq, data)
-						except:
-							logging.error("processing alarm failed")
-							logging.debug("processing alarm failed", exc_info=True)
+						# Express-Alarm processing if enabled and message without text ord delimiter RIC received
+						if globalVars.config.getint("ExpressAlarm", "expressAlarm") and (poc_text == "" or poc_id == globalVars.config.get("ExpressAlarm", "expressAlarm_delimiter_ric")):
+							logging.debug("POCSAG%s: %s %s %s - Express-Alarm or delimiter RIC received - buffer until text received", bitrate, poc_id, poc_sub, poc_text)
+							from includes import expressAlarm
+							expressAlarm.newEntryExpressList("POC", poc_id, poc_sub, poc_text)
+						# Express-Alarm processing if enabled and alarm message has been received
+						elif globalVars.config.getint("ExpressAlarm", "expressAlarm") and poc_text != "" and poc_id == globalVars.config.get("ExpressAlarm", "expressAlarm_ric"):
+							logging.debug("EA RIC with text message - POCSAG%s: %s %s %s", bitrate, poc_id, poc_sub, poc_text)
+							from includes import expressAlarm
+							expressAlarm.expressAlarmExec("POC", freq, data)
+						else:
+							# processing the alarm
+							try:
+								from includes import alarmHandler
+								alarmHandler.processAlarmHandler("POC", freq, data)
+							except:
+								logging.error("processing alarm failed")
+								logging.debug("processing alarm failed", exc_info=True)
 					# in every time save old data for double alarm
 					doubleFilter.newEntry(poc_id+poc_sub, poc_text)
 				else:
