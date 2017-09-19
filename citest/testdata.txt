@@ -83,10 +83,10 @@ POCSAG512: Address: 3333333  Function: 4  Alpha:   BOSWatch-Test: invalid
 POCSAG1200: Address: 7777777  Function: 1  Alpha:   BOSWatch-Test: denied
 
 # out of filter Range
-#POCSAG1200: Address: 0000004  Function: 1  Alpha:   BOSWatch-Test: out of filter start
-#POCSAG1200: Address: 9000000  Function: 1  Alpha:   BOSWatch-Test: out of filter end
-#
-##Probealram
+POCSAG1200: Address: 0000004  Function: 1  Alpha:   BOSWatch-Test: out of filter start
+POCSAG1200: Address: 9000000  Function: 1  Alpha:   BOSWatch-Test: out of filter end
+
+#Probealram
 POCSAG1200: Address: 0871004  Function: 1  Alpha:   Dies ist ein Probealarm!
 ## Express Alarm
 POCSAG1200: Address: 0871002  Function: 0  Alpha:   <EOT><FF>
