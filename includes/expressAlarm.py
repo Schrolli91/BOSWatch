@@ -29,34 +29,34 @@ def newEntryExpressList(eatyp, eapoc_id, eapoc_sub, eapoc_text):
 	if eapoc_id == globalVars.config.get("ExpressAlarm", "expressAlarm_delimiter_ric"):
 		expressList = []
 		logging.debug("Express-Alarm delimiter RIC received --> buffer cleared  %s  %s %s ", eapoc_id, eapoc_sub, eapoc_text)
-	else:	
+	else:
 		expressList.append([eatyp, eapoc_id, eapoc_sub, eapoc_text.strip(), timestamp])
 		logging.debug("Added %s  %s %s to expressList", eapoc_id, eapoc_sub, eapoc_text)
 		# check for old entries in expressList
-		for i in range(len(expressList)):
+		for i, exList in enumerate(expressList):
 			# we have to remove entries older than timestamp - ignore time
-			if int(expressList[i][4]) > timestamp-globalVars.config.getint("ExpressAlarm", "expressAlarm_ignore_time"):
-				tmpexpressList.append(expressList[i])
+			if int(exList[i][4]) > timestamp-globalVars.config.getint("ExpressAlarm", "expressAlarm_ignore_time"):
+				tmpexpressList.append(exList[i])
 	expressList = tmpexpressList
 
 
 def expressAlarmExec(typ, freq, data):
 	"""
 	call alarmHandler for every entry in expressList
-	
+
 	@return:    nothing
 	"""
 	logging.debug("data before update from expressList: %s", data)
-	for i in range(len(expressList)):    
+	for i, exList in enumerate(expressList):
 		#update with eapoc_id (RIC)
-		data['ric'] =  expressList[i][1]
+		data['ric'] =  exList[i][1]
 		#update with eapoc_sub (Sub RIC)
-		data['function'] = expressList[i][2]
+		data['function'] = exList[i][2]
 		# Add function as character a-d to dataset (reused from includes/poc.py)
 		data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
 		#update with eapoc_id (RIC)
-		data['description'] = expressList[i][1]
-		logging.debug("data after update from expressList: %s", data)  
+		data['description'] = exList[i][1]
+		logging.debug("data after update from expressList: %s", data)
 		try:
 			from includes import alarmHandler
 			alarmHandler.processAlarmHandler(typ, freq, data)
