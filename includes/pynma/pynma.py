@@ -55,10 +55,10 @@ takes 2 optional arguments:
 
     def delkey(self, key):
         "Removes a key (unregister ?)"
-        if type(key) == str:
+        if isinstance(key, str):
             if key in self._apikey:
                 self._apikey.remove(key)
-        elif type(key) == list:
+        elif isinstance(key, list):
             for k in key:
                 if key in self._apikey:
                     self._apikey.remove(k)
@@ -71,7 +71,7 @@ takes 2 optional arguments:
     def pushWithAPIKey(self, apikey=[], application="", event="", description="", url="", contenttype=None, priority=0, batch_mode=False, html=False):
         """Special Funktion"""
         if apikey:
-            if type(apikey) == str:
+            if isinstance(apikey, str):
                 apikey = [apikey]
         self._apikey          = uniq(apikey)
         return self.push(application, event, description, url, contenttype, priority, batch_mode, html)
