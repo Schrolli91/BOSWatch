@@ -127,16 +127,16 @@ def decode(freq, decoded):
 						if globalVars.config.getint("POC", "idDescribed"):
 							from includes import descriptionList
 							data["description"] = descriptionList.getDescription("POC", poc_id+data["functionChar"])
-						# Express-Alarm processing if enabled and message without text ord delimiter RIC received
-						if globalVars.config.getint("ExpressAlarm", "expressAlarm") and (poc_text == "" or poc_id == globalVars.config.get("ExpressAlarm", "expressAlarm_delimiter_ric")):
-							logging.debug("POCSAG%s: %s %s %s - Express-Alarm or delimiter RIC received - buffer until text received", bitrate, poc_id, poc_sub, poc_text)
-							from includes import expressAlarm
-							expressAlarm.newEntryExpressList("POC", poc_id, poc_sub, poc_text)
-						# Express-Alarm processing if enabled and alarm message has been received
-						elif globalVars.config.getint("ExpressAlarm", "expressAlarm") and poc_text != "" and poc_id == globalVars.config.get("ExpressAlarm", "expressAlarm_ric"):
+						# multicastAlarm processing if enabled and message without text ord delimiter RIC received
+						if globalVars.config.getint("multicastAlarm", "multicastAlarm") and (poc_text == "" or poc_id == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric")):
+							logging.debug("POCSAG%s: %s %s %s - multicastAlarm or delimiter RIC received - buffer until text received", bitrate, poc_id, poc_sub, poc_text)
+							from includes import multicastAlarm
+							multicastAlarm.newEntrymultiList("POC", poc_id, poc_sub, poc_text)
+						# multicastAlarm processing if enabled and alarm message has been received
+						elif globalVars.config.getint("multicastAlarm", "multicastAlarm") and poc_text != "" and poc_id == globalVars.config.get("multicastAlarm", "multicastAlarm_ric"):
 							logging.debug("EA RIC with text message - POCSAG%s: %s %s %s", bitrate, poc_id, poc_sub, poc_text)
-							from includes import expressAlarm
-							expressAlarm.expressAlarmExec("POC", freq, data)
+							from includes import multicastAlarm
+							multicastAlarm.multicastAlarmExec("POC", freq, data)
 						else:
 							# processing the alarm
 							try:
