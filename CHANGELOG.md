@@ -1,6 +1,6 @@
 # Changelog
 
-### __[Unreleased]__
+### __[v2.2.3]__ - unreleased
 ##### Added
 - zuschaltbare POCSAG Multicast-Alarm Funktionalität
 ##### Changed
@@ -30,7 +30,7 @@
 Zum schreiben des Changelog's siehe:
 http://keepachangelog.com/de/1.0.0/
 
-### __[Unreleased]__
+### __[version]__ - date
 ##### Added
 ##### Changed
 ##### Deprecated
