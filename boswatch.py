@@ -217,7 +217,7 @@ try:
 		# if given loglevel is debug:
 		if globalVars.config.getint("BOSWatch","loglevel") == 10:
 			configHandler.checkConfig("BOSWatch")
-			configHandler.checkConfig("ExpressAlarm")
+			configHandler.checkConfig("multicastAlarm")
 			configHandler.checkConfig("Filters")
 			configHandler.checkConfig("FMS")
 			configHandler.checkConfig("ZVEI")
