@@ -3,6 +3,7 @@
 ### __[v2.2.2]__ - unreleased
 ##### Added
 ##### Changed
+- Telegram Plugin importiert Google Maps Funktionen nur noch wenn API Key eingetragen ist [#315](https://github.com/Schrolli91/BOSWatch/pull/315)
 ##### Deprecated
 ##### Removed
 ##### Fixed
