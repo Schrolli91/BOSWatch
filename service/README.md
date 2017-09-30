@@ -10,8 +10,8 @@ Enter the frequency and the decoder(s) you want to use in line 7; you can add mo
 ### Install the service
 1. Copy the file to /lib/systemd/system: sudo cp /opt/boswatch/service/boswatch.service /lib/systemd/system/
 2. Change the rights: sudo chmod 644 /lib/systemd/system/boswatch.service
-3. Enable the service: sudo systemcl enable boswatch.service
-4. Start the service: sudo systemcl start boswatch.service
+3. Enable the service: sudo systemctl enable boswatch.service
+4. Start the service: sudo systemctl start boswatch.service
 
 ---
 
