@@ -1,5 +1,6 @@
 |Branch|Code Qualität|CI-Build|
 |---|---|---|
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d512976554354a199555bd34ed179bb1)](https://www.codacy.com/app/BOSWatch/BOSWatch?utm_source=github.com&utm_medium=referral&utm_content=Schrolli91/BOSWatch&utm_campaign=badger)
 |master|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=master)](https://travis-ci.org/Schrolli91/BOSWatch)|
 |beta|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/beta.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=4213030)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=beta)](https://travis-ci.org/Schrolli91/BOSWatch)|
 |develop|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=develop)](https://travis-ci.org/Schrolli91/BOSWatch)|
