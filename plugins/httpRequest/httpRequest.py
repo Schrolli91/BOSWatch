@@ -71,8 +71,8 @@ def run(typ,freq,data):
 				# Replace special characters in data Strings for URL
 				#
 				for key in data:
-	                if isinstance(data[key], basestring):
-	                	data[key] = urllib.quote(data[key])
+					if isinstance(data[key], basestring):
+						data[key] = urllib.quote(data[key])
 				#
 				# Get URLs
 				#
