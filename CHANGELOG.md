@@ -6,6 +6,7 @@
 ##### Deprecated
 ##### Removed
 ##### Fixed
+- Einige Code-Style Verbesserungen [#310](https://github.com/Schrolli91/BOSWatch/pull/310)
 ##### Security
 
 
