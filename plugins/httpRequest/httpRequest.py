@@ -72,7 +72,7 @@ def run(typ,freq,data):
 				#
 				for key in data:
 	                if isinstance(data[key], basestring):
-	                        data[key] = urllib.quote(data[key])
+	                	data[key] = urllib.quote(data[key])
 				#
 				# Get URLs
 				#

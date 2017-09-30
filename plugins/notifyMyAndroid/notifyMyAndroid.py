@@ -268,7 +268,7 @@ def run(typ,freq,data):
 								# nothing found
 								pass
 							# 3. lets look for ric prefixes in pocAPIKeyList
-                            for prefixLength in reversed(range(6)):
+							for prefixLength in reversed(range(6)):
                                 ricPrefix = data['ric'][:prefixLength]
                                 #fill the ric with stars
                                 ricPrefix = ricPrefix.ljust(8,'*')
