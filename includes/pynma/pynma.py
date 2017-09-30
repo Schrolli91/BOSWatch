@@ -3,14 +3,14 @@
 from xml.dom.minidom import parseString
 
 try:
-        from http.client import HTTPSConnection
+    from http.client import HTTPSConnection
 except ImportError:
-        from httplib import HTTPSConnection
+    from httplib import HTTPSConnection
 
 try:
-        from urllib.parse import urlencode
+    from urllib.parse import urlencode
 except ImportError:
-        from urllib import urlencode
+    from urllib import urlencode
 
 __version__ = "1.0"
 
