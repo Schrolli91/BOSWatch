@@ -1,11 +1,12 @@
 # Changelog
 
-### __[v2.2.3]__ - unreleased
+### __[v2.2.2]__ - unreleased
 ##### Added
 ##### Changed
 ##### Deprecated
 ##### Removed
 ##### Fixed
+- Schreibfehler in Service Readme [#313](https://github.com/Schrolli91/BOSWatch/issues/313)
 ##### Security
 
 
