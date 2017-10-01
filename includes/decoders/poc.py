@@ -117,26 +117,31 @@ def decode(freq, decoded):
 
 			if re.search("[0-9]{7}", poc_id) and re.search("[1-4]{1}", poc_sub): #if POC is valid
 				if isAllowed(poc_id):
+
 					# check for double alarm
 					if doubleFilter.checkID("POC", poc_id+poc_sub, poc_text):
-						logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
 						data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id}
 						# Add function as character a-d to dataset
 						data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
+
+						logging.info("POCSAG%s: %s %s %s ", data["bitrate"], data["ric"], data["function"], data["msg"])
+
 						# If enabled, look up description
 						if globalVars.config.getint("POC", "idDescribed"):
 							from includes import descriptionList
-							data["description"] = descriptionList.getDescription("POC", poc_id+data["functionChar"])
+							data["description"] = descriptionList.getDescription("POC", data["ric"]+data["functionChar"])
+
 						# multicastAlarm processing if enabled and message without text ord delimiter RIC received
-						if globalVars.config.getint("multicastAlarm", "multicastAlarm") and (poc_text == "" or poc_id == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric")):
-							logging.debug("POCSAG%s: %s %s %s - multicastAlarm or delimiter RIC received - buffer until text received", bitrate, poc_id, poc_sub, poc_text)
+						if globalVars.config.getint("multicastAlarm", "multicastAlarm") and (data["msg"] == "" or data["ric"] == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric")):
+							logging.debug(" - multicastAlarm or delimiter RIC received - buffer alarms until text received")
 							from includes import multicastAlarm
 							multicastAlarm.newEntrymultiList("POC", poc_id, poc_sub, poc_text)
 						# multicastAlarm processing if enabled and alarm message has been received
-						elif globalVars.config.getint("multicastAlarm", "multicastAlarm") and poc_text != "" and poc_id == globalVars.config.get("multicastAlarm", "multicastAlarm_ric"):
-							logging.debug("EA RIC with text message - POCSAG%s: %s %s %s", bitrate, poc_id, poc_sub, poc_text)
+						elif globalVars.config.getint("multicastAlarm", "multicastAlarm") and data["msg"] != "" and data["ric"] == globalVars.config.get("multicastAlarm", "multicastAlarm_ric"):
+							logging.debug(" - multicastAlarm RIC with text message")
 							from includes import multicastAlarm
 							multicastAlarm.multicastAlarmExec("POC", freq, data)
+
 						else:
 							# processing the alarm
 							try:
