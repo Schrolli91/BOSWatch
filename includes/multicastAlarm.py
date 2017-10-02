@@ -33,7 +33,7 @@ def newEntrymultiList(eatyp, eapoc_id, eapoc_sub, eapoc_text):
 		multiList.append([eatyp, eapoc_id, eapoc_sub, eapoc_text.strip(), timestamp])
 		logging.debug("Added %s  %s %s to multiList", eapoc_id, eapoc_sub, eapoc_text)
 		# check for old entries in multiList
-		for i,j in enumerate(multiList):
+		for i, _ in enumerate(multiList):
 			# we have to remove entries older than timestamp - ignore time
 			if int(multiList[i][4]) > timestamp-globalVars.config.getint("multicastAlarm", "multicastAlarm_ignore_time"):
 				tmpmultiList.append(multiList[i])
@@ -47,7 +47,7 @@ def multicastAlarmExec(typ, freq, data):
 	@return:    nothing
 	"""
 	logging.debug("data before update from multiList: %s", data)
-	for i,j in enumerate(multiList):
+	for i, _ in enumerate(multiList):
 		#update with eapoc_id (RIC)
 		data['ric'] =  multiList[i][1]
 		#update with eapoc_sub (Sub RIC)
