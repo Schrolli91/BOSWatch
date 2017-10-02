@@ -58,7 +58,7 @@ def run(typ,freq,data):
 	"""
 	try:
 		if configHandler.checkConfig("Sms77"): #read and debug the config
-			
+
 			# create an empty message an fill it with the required information
 			message = "Alarm"
 			if typ == "FMS":
