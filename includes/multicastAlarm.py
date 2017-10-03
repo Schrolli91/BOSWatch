@@ -46,7 +46,7 @@ def multicastAlarmExec(freq, data):
 	@return:    nothing
 	"""
 	logging.debug("data before update from multiList: %s", data)
-	for (xData, xTimestamp) in multiList:
+	for (xData, _) in multiList:
 		#update data with values multiList
 		data['ric'] =  xData['ric']
 		data['function'] = xData['ric']
