@@ -30,7 +30,7 @@ def newEntrymultiList(data):
 		multiList = []
 		logging.debug("multicastAlarm delimiter RIC received --> buffer cleared")
 	else:
-		multiList.append([typ, data['ric'], data['function'], data['functionChar'], data['msg'].strip(), data['description'], timestamp])
+		multiList.append([data['ric'], data['function'], data['functionChar'], data['msg'].strip(), data['description'], timestamp])
 		logging.debug("Added %s to multiList", data['ric'])
 		# check for old entries in multiList
 		for i, _ in enumerate(multiList):
