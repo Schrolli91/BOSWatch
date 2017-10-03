@@ -13,9 +13,9 @@ read -p"Do you want to install (i) or remove (r) the service? " action
 if [ "$action" == "i" ]; then
 
     # 1 Check whether the right data are in the service-file
-    
+
     read -p"Did you adapt the file boswatch.service (y/n)? " response
-    
+
     if [ "$response" == "y" ]; then
         # 2 Copy the file
         cp boswatch.service /etc/systemd/system
@@ -36,7 +36,7 @@ if [ "$action" == "i" ]; then
 else # we want to remove the service
     # stop it...
     systemctl stop boswatch.service
-    
+
     # disable it
     systemctl disable boswatch.service
 
