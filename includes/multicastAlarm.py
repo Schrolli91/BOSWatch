@@ -16,7 +16,7 @@ from includes import globalVars  # Global variables
 
 multiList = []
 
-def newEntrymultiList(typ, freq, data):
+def newEntrymultiList(data):
 	"""
 	add entry to multi alarm list and remove old entries
 
