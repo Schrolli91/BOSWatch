@@ -40,7 +40,7 @@ def newEntrymultiList(data):
 	multiList = tmpmultiList
 
 
-def multicastAlarmExec(typ, freq, data):
+def multicastAlarmExec(freq, data):
 	"""
 	call alarmHandler for every entry in multiList
 
@@ -56,7 +56,7 @@ def multicastAlarmExec(typ, freq, data):
 		logging.debug("data after update from multiList: %s", data)
 		try:
 			from includes import alarmHandler
-			alarmHandler.processAlarmHandler(typ, freq, data)
+			alarmHandler.processAlarmHandler("POC", freq, data)
 		except:
 			logging.error("processing alarm failed")
 			logging.debug("processing alarm failed", exc_info=True)
