@@ -14,6 +14,9 @@ import time    # timestamp for multicastAlarm
 
 from includes import globalVars  # Global variables
 
+#
+# ListStructure [0..n] = (Data, TimeStamp)
+#
 multiList = []
 
 def newEntrymultiList(data):
@@ -22,22 +25,18 @@ def newEntrymultiList(data):
 
 	@return:    nothing
 	"""
-	global multiList
-	tmpmultiList = []
 	timestamp = int(time.time())
 	# multicastAlarm processing if enabled and delimiter RIC has been received
 	if data['ric'] == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric"):
 		multiList = []
 		logging.debug("multicastAlarm delimiter RIC received --> buffer cleared")
 	else:
-		multiList.append([data['ric'], data['function'], data['functionChar'], data['msg'].strip(), data['description'], timestamp])
+		multiList.append([data, timestamp])
 		logging.debug("Added %s to multiList", data['ric'])
 		# check for old entries in multiList
-		for i, _ in enumerate(multiList):
-			# we have to remove entries older than timestamp - ignore time
-			if int(multiList[i][5]) > timestamp-globalVars.config.getint("multicastAlarm", "multicastAlarm_ignore_time"):
-				tmpmultiList.append(multiList[i])
-	multiList = tmpmultiList
+		for (xData, xTimestamp) in multiList:
+			if xTimestamp > timestamp-globalVars.config.getint("multicastAlarm", "multicastAlarm_ignore_time"):
+				multiList.remove([xData, xTimestamp])
 
 
 def multicastAlarmExec(freq, data):
@@ -47,12 +46,12 @@ def multicastAlarmExec(freq, data):
 	@return:    nothing
 	"""
 	logging.debug("data before update from multiList: %s", data)
-	for i, _ in enumerate(multiList):
+	for (xData, xTimestamp) in multiList:
 		#update data with values multiList
-		data['ric'] =  multiList[i][0]
-		data['function'] = multiList[i][1]
-		data['functionChar'] = multiList[i][2]
-		data['description'] = multiList[i][4]
+		data['ric'] =  xData['ric']
+		data['function'] = xData['ric']
+		data['functionChar'] = xData['ric']
+		data['description'] = xData['ric']
 		logging.debug("data after update from multiList: %s", data)
 		try:
 			from includes import alarmHandler
