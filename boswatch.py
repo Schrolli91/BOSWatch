@@ -162,6 +162,7 @@ try:
 	#
 	try:
 		logging.debug("SW Version:	%s",globalVars.versionNr)
+		logging.debug("Branch:		%s",globalVars.branch)
 		logging.debug("Build Date:	%s",globalVars.buildDate)
 		logging.debug("BOSWatch given arguments")
 		if args.test:

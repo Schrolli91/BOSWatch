@@ -8,10 +8,14 @@ We assume that BOSWatch is installed to /opt/boswatch! Otherwise you need to ada
 Enter the frequency and the decoder(s) you want to use in line 7; you can add more specific switches if you need to
 
 ### Install the service
-1. Copy the file to /lib/systemd/system: sudo cp /opt/boswatch/service/boswatch.service /lib/systemd/system/
-2. Change the rights: sudo chmod 644 /lib/systemd/system/boswatch.service
-3. Enable the service: sudo systemctl enable boswatch.service
-4. Start the service: sudo systemctl start boswatch.service
+1. Use the install-script install_service.sh as sudo: `sudo bash install_service.sh` (self explaining)
+
+OR
+
+1. Copy the file to /etc/systemd/system: sudo cp /opt/boswatch/service/boswatch.service /etc/systemd/system/
+2. Enable the service: sudo systemctl enable boswatch.service
+3. Start the service: sudo systemctl start boswatch.service
+4. Check the status: sudo systemctl status boswatch.service
 
 ---
 
