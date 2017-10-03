@@ -28,10 +28,10 @@ def newEntrymultiList(typ, freq, data):
 	# multicastAlarm processing if enabled and delimiter RIC has been received
 	if data['ric'] == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric"):
 		multiList = []
-		logging.debug("multicastAlarm delimiter RIC received --> buffer cleared  %s ", data)
+		logging.debug("multicastAlarm delimiter RIC received --> buffer cleared")
 	else:
 		multiList.append([typ, data['ric'], data['function'], data['functionChar'], data['msg'].strip(), data['description'], timestamp])
-		logging.debug("Added %s %s %s %s to multiList", data['ric'], data['function'], data['functionChar'], data['msg'].strip())
+		logging.debug("Added %s to multiList", data['ric'])
 		# check for old entries in multiList
 		for i, _ in enumerate(multiList):
 			# we have to remove entries older than timestamp - ignore time
