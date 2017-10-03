@@ -135,7 +135,8 @@ def decode(freq, decoded):
 						if globalVars.config.getint("multicastAlarm", "multicastAlarm") and (data["msg"] == "" or data["ric"] == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric")):
 							logging.debug(" - multicastAlarm or delimiter RIC received - buffer alarms until text received")
 							from includes import multicastAlarm
-							multicastAlarm.newEntrymultiList("POC", poc_id, poc_sub, poc_text)
+							multicastAlarm.newEntrymultiList("POC", freq, data)
+
 						# multicastAlarm processing if enabled and alarm message has been received
 						elif globalVars.config.getint("multicastAlarm", "multicastAlarm") and data["msg"] != "" and data["ric"] == globalVars.config.get("multicastAlarm", "multicastAlarm_ric"):
 							logging.debug(" - multicastAlarm RIC with text message")
