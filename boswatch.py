@@ -221,6 +221,10 @@ try:
 			configHandler.checkConfig("FMS")
 			configHandler.checkConfig("ZVEI")
 			configHandler.checkConfig("POC")
+			configHandler.checkConfig("Plugins")
+			configHandler.checkConfig("Filters")
+			if globalVar.config.getint("NMAHandler","enableHandler"):
+				configHandler.checkConfig("NMAHandler")
 	except:
 		# we couldn't work without config -> exit
 		logging.critical("cannot read config file")
