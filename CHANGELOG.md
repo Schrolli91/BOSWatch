@@ -2,6 +2,7 @@
 
 ### __[v2.2.2]__ - unreleased
 ##### Added
+- Installations Script für Services [#316](https://github.com/Schrolli91/BOSWatch/pull/316)
 ##### Changed
 - Telegram Plugin importiert Google Maps Funktionen nur noch wenn API Key eingetragen ist [#315](https://github.com/Schrolli91/BOSWatch/pull/315)
 - Versions Nummer und Branch Name getrennt [3fed1ac](https://github.com/Schrolli91/BOSWatch/commit/3fed1ac12af8690213766e0e81d71c237530ed2c)
