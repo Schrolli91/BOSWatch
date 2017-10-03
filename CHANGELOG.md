@@ -1,6 +1,6 @@
 # Changelog
 
-### __[v2.2.2]__ - unreleased
+### __[v2.3]__ - unreleased
 ##### Added
 - Installations Script für Services [#316](https://github.com/Schrolli91/BOSWatch/pull/316)
 ##### Changed
