@@ -25,6 +25,7 @@ def newEntrymultiList(data):
 
 	@return:    nothing
 	"""
+	global multiList
 	timestamp = int(time.time())
 	# multicastAlarm processing if enabled and delimiter RIC has been received
 	if data['ric'] == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric"):
