@@ -51,7 +51,7 @@ didBackup=false
 if [ -f $boswatchpath/BOSWatch/boswatch.py ]; then
 	echo "Old installation found!"
 	echo "A backup will be copied to $boswatchpath/old"
-	
+
 	mkdir /tmp/boswatch
 	mv $boswatchpath/BOSWatch/* /tmp/boswatch/
 	didBackup=true
@@ -61,7 +61,7 @@ fi
 if [ -f $boswatchpath/boswatch.py ]; then
 	echo "Old installation found!"
 	echo "A backup will be copied to $boswatchpath/old"
-	
+
 	mkdir /tmp/boswatch
 	mv $boswatchpath/* /tmp/boswatch/
 	didBackup=true

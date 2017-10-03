@@ -268,23 +268,23 @@ def run(typ,freq,data):
 								# nothing found
 								pass
 							# 3. lets look for ric prefixes in pocAPIKeyList
-                                                        for prefixLength in reversed(range(6)):
-                                                                ricPrefix = data['ric'][:prefixLength]
-                                                                #fill the ric with stars
-                                                                ricPrefix = ricPrefix.ljust(8,'*')
-                                                                try:
-                                                                        xID = ricPrefix
-                                                                        # data structure: pocAPIKeyList[xID][i] = (xAPIKey, xPriority, xEventPrefix)
-                                                                        for i in range(len(pocAPIKeyList[xID])):
-                                                                                xEvent = event
-                                                                                (xAPIKey, xPriority, xEventPrefix) = pocAPIKeyList[xID][i]
-                                                                                if len(xEventPrefix) > 0:
-                                                                                        xEvent = xEventPrefix + ": " + xEvent
-                                                                                response = nma.pushWithAPIKey(xAPIKey, application, xEvent, msg, priority=xPriority)
-                                                                                checkResponse(response, xAPIKey)
-                                                                except KeyError:
-                                                                        # nothing found
-                                                                        pass
+							for prefixLength in reversed(range(6)):
+								ricPrefix = data['ric'][:prefixLength]
+								#fill the ric with stars
+								ricPrefix = ricPrefix.ljust(8,'*')
+								try:
+								    xID = ricPrefix
+								    # data structure: pocAPIKeyList[xID][i] = (xAPIKey, xPriority, xEventPrefix)
+								    for i in range(len(pocAPIKeyList[xID])):
+								        xEvent = event
+								        (xAPIKey, xPriority, xEventPrefix) = pocAPIKeyList[xID][i]
+								        if len(xEventPrefix) > 0:
+								            xEvent = xEventPrefix + ": " + xEvent
+								        response = nma.pushWithAPIKey(xAPIKey, application, xEvent, msg, priority=xPriority)
+								        checkResponse(response, xAPIKey)
+								except KeyError:
+									# nothing found
+								    pass
 
 						# end if "POC" in typ
 					# end if usecsv == True
