@@ -35,7 +35,7 @@ def newEntrymultiList(data):
 		# check for old entries in multiList
 		for i, _ in enumerate(multiList):
 			# we have to remove entries older than timestamp - ignore time
-			if int(multiList[i][6]) > timestamp-globalVars.config.getint("multicastAlarm", "multicastAlarm_ignore_time"):
+			if int(multiList[i][5]) > timestamp-globalVars.config.getint("multicastAlarm", "multicastAlarm_ignore_time"):
 				tmpmultiList.append(multiList[i])
 	multiList = tmpmultiList
 
@@ -49,10 +49,10 @@ def multicastAlarmExec(freq, data):
 	logging.debug("data before update from multiList: %s", data)
 	for i, _ in enumerate(multiList):
 		#update data with values multiList
-		data['ric'] =  multiList[i][1]
-		data['function'] = multiList[i][2]
-		data['functionChar'] = multiList[i][3]
-		data['description'] = multiList[i][5]
+		data['ric'] =  multiList[i][0]
+		data['function'] = multiList[i][1]
+		data['functionChar'] = multiList[i][2]
+		data['description'] = multiList[i][4]
 		logging.debug("data after update from multiList: %s", data)
 		try:
 			from includes import alarmHandler
