@@ -110,14 +110,14 @@ def run(typ,freq,data):
 						cursor.execute("INSERT INTO "+globalVars.config.get("MySQL","tableZVEI")+" (time, zvei, description) VALUES (FROM_UNIXTIME(%s),%s,%s)", (data["timestamp"], data["zvei"], data["description"]))
 
 					elif typ == "POC":
-						if isSignal(data["ric"]):
+                        if isSignal(data["ric"]):
                             if globalVars.config.getint("POC","netIdent_histry"):
                                 cursor.execute("INSERT INTO "+globalVars.config.get("MySQL","tableSIG")+" (time,ric) VALUES (NOW(), '"+data["ric"]+"');")
                             else:
     							cursor.execute("UPDATE "+globalVars.config.get("MySQL","tableSIG")+" SET time = NOW() WHERE ric = '"+data["ric"]+"';")
     							if cursor.rowcount == 0:
     								cursor.execute("INSERT INTO "+globalVars.config.get("MySQL","tableSIG")+" (time,ric) VALUES (NOW(), '"+data["ric"]+"');")
-    					else:
+                        else:
 						  cursor.execute("INSERT INTO "+globalVars.config.get("MySQL","tablePOC")+" (time, ric, function, functionChar, msg, bitrate, description) VALUES (FROM_UNIXTIME(%s),%s,%s,%s,%s,%s,%s)", (data["timestamp"], data["ric"], data["function"], data["functionChar"], data["msg"], data["bitrate"], data["description"]))
 
 					else:
