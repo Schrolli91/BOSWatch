@@ -21,23 +21,23 @@ from includes import globalVars  # Global variables
 from includes.helper import configHandler
 
 def isSignal(poc_id):
-    """
-    @type    poc_id: string
-    @param   poc_id: POCSAG Ric
+	"""
+	@type    poc_id: string
+	@param   poc_id: POCSAG Ric
 
-    @requires:  Configuration has to be set in the config.ini
+	@requires:  Configuration has to be set in the config.ini
 
-    @return:    True if the Ric is Signal, other False
-    @exception: none
-    """
-    # If RIC is Signal return True, else False
-    if globalVars.config.get("POC", "netIdent_ric"):
-        if poc_id in globalVars.config.get("POC", "netIdent_ric"):
-            logging.info("RIC %s is net ident", poc_id)
-            return True
-        else:
-            logging.info("RIC %s is no net ident", poc_id)
-            return False
+	@return:    True if the Ric is Signal, other False
+	@exception: none
+	"""
+	# If RIC is Signal return True, else False
+	if globalVars.config.get("POC", "netIdent_ric"):
+		if poc_id in globalVars.config.get("POC", "netIdent_ric"):
+			logging.info("RIC %s is net ident", poc_id)
+			return True
+		else:
+			logging.info("RIC %s is no net ident", poc_id)
+			return False
 
 
 ##
