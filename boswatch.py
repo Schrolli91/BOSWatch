@@ -225,7 +225,7 @@ try:
 			configHandler.checkConfig("POC")
 			configHandler.checkConfig("Plugins")
 			configHandler.checkConfig("Filters")
-			if globalVar.config.getint("NMAHandler","enableHandler"):
+			if globalVars.config.getint("NMAHandler","enableHandler"):
 				configHandler.checkConfig("NMAHandler")
 	except:
 		# we couldn't work without config -> exit
