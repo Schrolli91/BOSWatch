@@ -131,8 +131,8 @@ def decode(freq, decoded):
 							from includes import descriptionList
 							data["description"] = descriptionList.getDescription("POC", data["ric"]+data["functionChar"])
 
-						# multicastAlarm processing if enabled and message without text ord delimiter RIC received
-						if globalVars.config.getint("multicastAlarm", "multicastAlarm") and (data["msg"] == "" or data["ric"] == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric")):
+						# multicastAlarm processing if enabled and a message without text or delimiter RIC or netIdent_ric received
+						if globalVars.config.getint("multicastAlarm", "multicastAlarm") and data["ric"] != globalVars.config.get("POC", "netIdent_ric") and (data["msg"] == "" or data["ric"] == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric")):
 							logging.debug(" - multicastAlarm without msg")
 							from includes import multicastAlarm
 							multicastAlarm.newEntrymultiList(data)
