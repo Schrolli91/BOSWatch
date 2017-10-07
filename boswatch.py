@@ -74,39 +74,39 @@ except:
 #
 # define a function for observing csv-files
 #
-def csv_watch():
+def csv_watch(dir):
 	wm = pyinotify.WatchManager()
 	mask = pyinotify.IN_CREATE | pyinotify.IN_MODIFY
 	t = threading.currentThread()
+	logging.debug("CSV-Watch-Dir: %s", dir)
 
 	class EventHandler(pyinotify.ProcessEvent):
 		def process_IN_CREATE(self, event):
 			try:
-				logging.debug("+++++++++++ Reloaded csv...")
+				logging.debug("Reloading csv...")
 				if globalVars.config.getboolean("FMS","idDescribed") or globalVars.config.getboolean("ZVEI","idDescribed") or globalVars.config.getboolean("POC","idDescribed"):
 					from includes import descriptionList
 					descriptionList.loadDescriptionLists()
 			except:
 				# It's an error, but we could work without that stuff...
-				logging.error("cannot load description lists")
-				logging.debug("cannot load description lists", exc_info=True)
+				logging.error("cannot reload description lists")
+				logging.debug("cannot reload description lists", exc_info=True)
 		def process_IN_MODIFY(self, event):
 			try:
-				logging.debug("++++++++++++ Reloaded csv...")
+				logging.debug("Reloading csv...")
 				if globalVars.config.getboolean("FMS","idDescribed") or globalVars.config.getboolean("ZVEI","idDescribed") or globalVars.config.getboolean("POC","idDescribed"):
 					from includes import descriptionList
 					descriptionList.loadDescriptionLists()
 			except:
 				# It's an error, but we could work without that stuff...
-				logging.error("cannot load description lists")
-				logging.debug("cannot load description lists", exc_info=True)
+				logging.error("cannot reload description lists")
+				logging.debug("cannot reload description lists", exc_info=True)
 
 	handler = EventHandler()
 	notifier = pyinotify.Notifier(wm, handler)
-	wdd = wm.add_watch('/opt/boswatch_develop/csv', mask, rec=True)
+	wdd = wm.add_watch(dir, mask, rec=True)
 
-	while getattr(t, "run", True):
-	    notifier.loop()
+	notifier.loop()
 
 #
 # Main program
@@ -201,11 +201,12 @@ try:
     # start a new oberserver.thread
     #
 	try:
-		thread = threading.Thread(target = csv_watch)
+		thread = threading.Thread(target = csv_watch, args = (globalVars.script_path+'/csv/',))
+		thread.daemon = True # start it as daemon to avoid trouble when exiting Boswatch
 		thread.start()
 		logging.debug("Thread for csv-watch started")
 	except:
-		logging.error("Unable to start thread to observe csv-directory: %s",sys.exc_info()[0])
+		logging.error("Unable to start thread to observe csv-directory.", exc_info=True)
 
 	#
 	# For debug display/log args
@@ -432,7 +433,7 @@ try:
 				logging.info("Testdata: %s", testData.rstrip(' \t\n\r'))
 				from includes import decoder
 				decoder.decode(freqConverter.freqToHz(args.freq), testData)
-#				time.sleep(10)
+				time.sleep(5)
 		logging.debug("test finished")
 
 except KeyboardInterrupt:
@@ -469,8 +470,6 @@ finally:
 		if globalVars.config.getboolean("BOSWatch","processAlarmAsync") == True:
 			logging.debug("waiting 3s for threads...")
 			time.sleep(3)
-		thread.run = False
-		thread.join()
 		logging.info("BOSWatch exit()")
 		logging.shutdown()
 		if nmaHandler:
