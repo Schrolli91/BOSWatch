@@ -2,6 +2,7 @@
 ============
 
 
+Python 3
 Verpacken der Funktionalitäten in Klassen um OOP-Grundsätze zu erreichen.
 
 
@@ -12,11 +13,13 @@ Verpacken der Funktionalitäten in Klassen um OOP-Grundsätze zu erreichen.
  - reine Dekodierung mittels rtl-fm und multimon
  - Keine Filter usw. nur die Dekoder, Daten verpacken, verschicken
  - per TCP Socket an den Server
+ - versch Eingabequellen (DVB-T Stick, Audio Eingang)
 
  ### Server:
  - Empfängt die TCP Socket Pakete der einzelnen Clients
  - Durch doubleFiltering fallen doppelt eingehende Alarme der Clienten sowieso raus
- - Danach Filterung usw. dann call an die plugins
+ - Danach Filterung nach neuen Filterkonzept
+ - dann call an die plugins
 
 
 
