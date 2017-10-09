@@ -30,14 +30,15 @@ def newEntrymultiList(data):
 	# multicastAlarm processing if enabled and delimiter RIC has been received
 	if data['ric'] == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric"):
 		multiList = []
-		logging.debug("multicastAlarm delimiter RIC received --> buffer cleared")
+		logging.debug("delimiter RIC received - buffer cleared")
 	else:
 		multiList.append([data, timestamp])
 		logging.debug("Added %s to multiList", data['ric'])
 		# check for old entries in multiList
-		for (xData, xTimestamp) in multiList:
-			if xTimestamp > timestamp-globalVars.config.getint("multicastAlarm", "multicastAlarm_ignore_time"):
+		for (xData, xTimestamp) in multiList[:]:
+			if xTimestamp < timestamp-globalVars.config.getint("multicastAlarm", "multicastAlarm_ignore_time"):
 				multiList.remove([xData, xTimestamp])
+				logging.debug("RIC %s removed - %s sec. older than current timestamp", xData['ric'], xTimestamp-timestamp)
 
 
 def multicastAlarmExec(freq, data):
@@ -50,9 +51,9 @@ def multicastAlarmExec(freq, data):
 	for (xData, _) in multiList:
 		#update data with values multiList
 		data['ric'] =  xData['ric']
-		data['function'] = xData['ric']
-		data['functionChar'] = xData['ric']
-		data['description'] = xData['ric']
+		data['function'] = xData['function']
+		data['functionChar'] = xData['functionChar']
+		data['description'] = xData['description']
 		logging.debug("data after update from multiList: %s", data)
 		try:
 			from includes import alarmHandler
