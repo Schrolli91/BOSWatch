@@ -31,6 +31,7 @@ def printHeader(args):
 		print "          by Bastian Schroll, Jens Herrmann         "
 		print ""
 		print "SW Version:	"+globalVars.versionNr
+		print "Branch:		"+globalVars.branch
 		print "Build Date:	"+globalVars.buildDate
 		print ""
 
