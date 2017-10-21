@@ -9,6 +9,7 @@
 ##### Deprecated
 ##### Removed
 ##### Fixed
+- Schreibfehler der Pfadangabe im Installer [#317](https://github.com/Schrolli91/BOSWatch/pull/317)
 - Schreibfehler in Service Readme [#313](https://github.com/Schrolli91/BOSWatch/issues/313)
 - Einige Code-Style Verbesserungen [#310](https://github.com/Schrolli91/BOSWatch/pull/310)
 ##### Security
