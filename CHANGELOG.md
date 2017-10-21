@@ -1,18 +1,18 @@
 # Changelog
 
-### __[v2.3]__ - unreleased
+
+### __[v2.2.2]__ - 21.10.2017
 ##### Added
 - Installations Script für Services [#316](https://github.com/Schrolli91/BOSWatch/pull/316)
 ##### Changed
 - Telegram Plugin importiert Google Maps Funktionen nur noch wenn API Key eingetragen ist [#315](https://github.com/Schrolli91/BOSWatch/pull/315)
 - Versions Nummer und Branch Name getrennt [3fed1ac](https://github.com/Schrolli91/BOSWatch/commit/3fed1ac12af8690213766e0e81d71c237530ed2c)
 ##### Deprecated
-##### Removed
+- Beta Branch wird mit nächstem Update entfernt [Forum](http://boswatch.de/index.php?thread/16-beta-branch-abschaffen/&postID=113#post113)
 ##### Fixed
 - Schreibfehler der Pfadangabe im Installer [#317](https://github.com/Schrolli91/BOSWatch/pull/317)
 - Schreibfehler in Service Readme [#313](https://github.com/Schrolli91/BOSWatch/issues/313)
 - Einige Code-Style Verbesserungen [#310](https://github.com/Schrolli91/BOSWatch/pull/310)
-##### Security
 
 
 ### __[v2.2.1]__ - 19.09.2017
