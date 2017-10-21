@@ -12,7 +12,7 @@ function exitcodefunction {
     echo "Action: $action on $module failed."
     echo "Exitcode: $errorcode"
     echo ""
-    echo " -> If you want to open an Issue at https://github.com/Schrolli91/BOSWatch/issues"
+    echo " -> If you want to open an issue at https://github.com/Schrolli91/BOSWatch/issues"
     echo "    please post the logfile, located at $boswatchpath/install/setup_log.txt"
     exit 1
   else
@@ -78,11 +78,10 @@ for (( i=1; i<=$#; i=$i+2 )); do
       -b|--branch)
       case $arg2 in
         dev|develop)  echo "       !!! WARNING: you are using the DEV BRANCH !!!       "; branch=dev ;;
-        beta)         echo "       !!! WARNING: you are using the BETA BRANCH !!!      "; branch=beta ;;
         *) branch=master ;;
       esac ;;
 
-      -p|--path)    echo " !!! WARNING: you install BOSWATCH to alternative path !!! "; boswatchpath=$arg2 ;;
+      -p|--path)    echo " !!! WARNING: you'll install BOSWATCH to alternative path !!! "; boswatchpath=$arg2 ;;
 
       *) echo "Internal error!" ; exit 1 ;;
     esac
@@ -205,16 +204,15 @@ tput cup 15 5
 echo "-> configure..........................."
 cd $boswatchpath/
 chmod +x *
-echo $'# BOSWatch - blacklist the DVB drivers to avoid conflict with the SDR driver\n blacklist dvb_usb_rtl28xxu \n blacklist rtl2830\n blacklist dvb_usb_v2\n blacklist dvb_core' >> /etc/modprobe.d/boswatch_blacklist_sdr.conf
+echo $'# BOSWatch - blacklist the DVB drivers to avoid conflicts with the SDR driver\n blacklist dvb_usb_rtl28xxu \n blacklist rtl2830\n blacklist dvb_usb_v2\n blacklist dvb_core' >> /etc/modprobe.d/boswatch_blacklist_sdr.conf
 
 tput cup 17 1
 echo "BOSWatch is now installed in $boswatchpath/"
 echo "Installation ready!"
 tput cup 19 3
-echo "Watch out: to run BOSWatch you have to generate and modify the config.ini!"
-echo "Do the following steps to have a running version of BOSWatch:"
-echo "sudo cp $boswatchpath/BOSWatch/config/config.template.ini $boswatchpath/BOSWatch/config/config.ini"
-echo "sudo nano $boswatchpath/BOSWatch/config/config.ini"
+echo "Watch out: to run BOSWatch you have to modify the config.ini!"
+echo "Do the following step to do so:"
+echo "sudo nano $boswatchpath/config/config.ini"
 echo "and modify the config as you need. This step is optional if you are upgrading an old version of BOSWatch. "
 
 tput cnorm
