@@ -1,6 +1,6 @@
 # Changelog
 
-### __[2.3]__ - unreleased
+### __[2.x]__ - unreleased
 ##### Added
 ##### Changed
 ##### Deprecated
