@@ -11,9 +11,11 @@ Plugin to send FMS-, ZVEI- and POCSAG-messages via Telegram
 # Imports
 #
 import logging # Global logger
-import urllib, telegram, googlemaps
+import telegram
 from telegram.error import (TelegramError, Unauthorized, BadRequest, NetworkError)
 from includes import globalVars  # Global variables
+if globalVars.config.get("Telegram","RICforLocationAPIKey"):
+	import urllib, googlemaps
 
 # Helper function, uncomment to use
 from includes.helper import wildcardHandler

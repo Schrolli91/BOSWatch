@@ -18,11 +18,12 @@ GitHUB:		https://github.com/Schrolli91/BOSWatch
 import logging
 import logging.handlers
 
-import argparse     # for parse the args
-import ConfigParser # for parse the config file
-import os           # for log mkdir
-import time         # for time.sleep()
-import subprocess   # for starting rtl_fm and multimon-ng
+import argparse		# for parse the args
+import ConfigParser	# for parse the config file
+import os			# for log mkdir
+import sys			# for py version
+import time			# for time.sleep()
+import subprocess	# for starting rtl_fm and multimon-ng
 
 from includes import globalVars  # Global variables
 from includes import MyTimedRotatingFileHandler  # extension of TimedRotatingFileHandler
@@ -162,7 +163,9 @@ try:
 	#
 	try:
 		logging.debug("SW Version:	%s",globalVars.versionNr)
+		logging.debug("Branch:		%s",globalVars.branch)
 		logging.debug("Build Date:	%s",globalVars.buildDate)
+		logging.debug("Python Vers:	%s",sys.version)
 		logging.debug("BOSWatch given arguments")
 		if args.test:
 			logging.debug(" - Test-Mode!")
@@ -220,6 +223,9 @@ try:
 			configHandler.checkConfig("FMS")
 			configHandler.checkConfig("ZVEI")
 			configHandler.checkConfig("POC")
+			configHandler.checkConfig("Plugins")
+			configHandler.checkConfig("Filters")
+			#NMAHandler is outputed below
 	except:
 		# we couldn't work without config -> exit
 		logging.critical("cannot read config file")
