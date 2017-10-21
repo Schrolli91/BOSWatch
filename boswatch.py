@@ -18,12 +18,11 @@ GitHUB:		https://github.com/Schrolli91/BOSWatch
 import logging
 import logging.handlers
 
-import argparse		# for parse the args
-import ConfigParser	# for parse the config file
-import os			# for log mkdir
-import sys			# for py version
-import time			# for time.sleep()
-import subprocess	# for starting rtl_fm and multimon-ng
+import argparse     # for parse the args
+import ConfigParser # for parse the config file
+import os           # for log mkdir
+import time         # for time.sleep()
+import subprocess   # for starting rtl_fm and multimon-ng
 
 from includes import globalVars  # Global variables
 from includes import MyTimedRotatingFileHandler  # extension of TimedRotatingFileHandler
@@ -57,6 +56,7 @@ try:
 	parser.add_argument("-u", "--usevarlog", help="Use '/var/log/boswatch' for logfiles instead of subdir 'log' in BOSWatch directory", action="store_true")
 	parser.add_argument("-v", "--verbose", help="Show more information", action="store_true")
 	parser.add_argument("-q", "--quiet", help="Show no information. Only logfiles", action="store_true")
+	
 	# We need this argument for testing (skip instantiate of rtl-fm and multimon-ng):
 	parser.add_argument("-t", "--test", help=argparse.SUPPRESS, action="store_true")
 	args = parser.parse_args()
@@ -163,9 +163,7 @@ try:
 	#
 	try:
 		logging.debug("SW Version:	%s",globalVars.versionNr)
-		logging.debug("Branch:		%s",globalVars.branch)
 		logging.debug("Build Date:	%s",globalVars.buildDate)
-		logging.debug("Python Vers:	%s",sys.version)
 		logging.debug("BOSWatch given arguments")
 		if args.test:
 			logging.debug(" - Test-Mode!")
@@ -223,9 +221,6 @@ try:
 			configHandler.checkConfig("FMS")
 			configHandler.checkConfig("ZVEI")
 			configHandler.checkConfig("POC")
-			configHandler.checkConfig("Plugins")
-			configHandler.checkConfig("Filters")
-			#NMAHandler is outputed below
 	except:
 		# we couldn't work without config -> exit
 		logging.critical("cannot read config file")
@@ -334,10 +329,41 @@ try:
 		logging.critical("cannot start rtl_fm")
 		logging.debug("cannot start rtl_fm", exc_info=True)
 		exit(1)
+	
+	#duplicate rtl_fm stdout for the record plugin and multimon-ng
+	pipe_r, pipe_w = os.pipe()
+	tee = subprocess.Popen(["tee", "/dev/fd/{}".format(pipe_w)],
+            stdin=rtl_fm.stdout, stdout=subprocess.PIPE)
 
+	
+	#
+	# Start audioplaybackstream for the record plugin
+	#
+	if (globalVars.config.get("Plugins", "record") == "1"):
+		try:
+			if not args.test:
+				logging.debug("starting playbackaudiostream")
+				command = ""
+				command = "aplay -t raw -r 22050 -D pulse -f S16_LE /dev/stdin"
+				playbackstream = subprocess.Popen(command.split(),
+					stdin=tee.stdout,
+					stdout=subprocess.PIPE,
+					stderr=open(globalVars.log_path+"playbackstream.log","a"),
+					shell=False)
+				time.sleep(3)
+			else:
+				logging.warning("!!! Test-Mode: !!! Playbackstream not started !!!")
+		except:
+			logging.critical("cannot start playbackstream")
+			logging.debug("cannot start playbackstream", exc_info=True)
+			exit(1)
+	else:
+		logging.debug("record plugin not activated. activate it in the config.ini")
+		
 	#
 	# Start multimon
 	#
+	
 	try:
 		if not args.test:
 			logging.debug("starting multimon-ng")
@@ -346,7 +372,7 @@ try:
 				command = globalVars.config.get("BOSWatch","multimon_path")
 			command = command+"multimon-ng "+str(demodulation)+" -f alpha -t raw /dev/stdin - "
 			multimon_ng = subprocess.Popen(command.split(),
-				stdin=rtl_fm.stdout,
+				stdin=pipe_r,
 				stdout=subprocess.PIPE,
 				stderr=open(globalVars.log_path+"multimon.log","a"),
 				shell=False)
