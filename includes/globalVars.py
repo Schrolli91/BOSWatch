@@ -10,8 +10,8 @@ Global variables
 
 # version info
 versionNr = "2.2.2"
-branch = "dev"
-buildDate = "unreleased"
+branch = "master"
+buildDate = "21.10.2017"
 
 
 # Global variables
