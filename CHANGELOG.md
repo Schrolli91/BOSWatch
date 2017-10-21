@@ -1,5 +1,13 @@
 # Changelog
 
+### __[2.3]__ - unreleased
+##### Added
+##### Changed
+##### Deprecated
+##### Removed
+##### Fixed
+##### Security
+
 
 ### __[v2.2.2]__ - 21.10.2017
 ##### Added
