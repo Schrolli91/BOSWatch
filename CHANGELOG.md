@@ -5,6 +5,7 @@
 ##### Changed
 ##### Deprecated
 ##### Removed
+- Beta Branch aus Readme, Installer und Travis-CI entfernt [#324](https://github.com/Schrolli91/BOSWatch/pull/324)
 ##### Fixed
 ##### Security
 
