@@ -8,10 +8,10 @@ Global variables
 @author: Bastian Schroll
 """
 
+# version info
 versionNr = "2.3"
 branch = "dev"
 buildDate = "unreleased"
-
 
 # Global variables
 config = 0
