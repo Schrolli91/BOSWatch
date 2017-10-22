@@ -13,7 +13,6 @@ versionNr = "2.3"
 branch = "dev"
 buildDate = "unreleased"
 
-
 # Global variables
 config = 0
 script_path = ""
