@@ -1,6 +1,17 @@
 # Changelog
 
 
+### __[2.x]__ - unreleased
+##### Added
+- Plugin zur automatischen Audio Aufnahme bei Alarm (ZVEI) [#327](https://github.com/Schrolli91/BOSWatch/pull/327)
+##### Changed
+##### Deprecated
+##### Removed
+- Beta Branch aus Readme, Installer und Travis-CI entfernt [#324](https://github.com/Schrolli91/BOSWatch/pull/324)
+##### Fixed
+##### Security
+
+
 ### __[v2.2.2]__ - 21.10.2017
 ##### Added
 - Installations Script für Services [#316](https://github.com/Schrolli91/BOSWatch/pull/316)

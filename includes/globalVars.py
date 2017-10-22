@@ -8,10 +8,9 @@ Global variables
 @author: Bastian Schroll
 """
 
-# version info
-versionNr = "2.2.2"
-branch = "master"
-buildDate = "21.10.2017"
+versionNr = "2.3"
+branch = "dev"
+buildDate = "unreleased"
 
 
 # Global variables
