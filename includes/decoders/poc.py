@@ -132,13 +132,13 @@ def decode(freq, decoded):
 							data["description"] = descriptionList.getDescription("POC", data["ric"]+data["functionChar"])
 
 						# multicastAlarm processing if enabled and a message without text or delimiter RIC or netIdent_ric received
-						if globalVars.config.getint("multicastAlarm", "multicastAlarm") and data["ric"] != globalVars.config.get("POC", "netIdent_ric") and (data["msg"] == "" or data["ric"] == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric")):
+						if globalVars.config.getint("multicastAlarm", "multicastAlarm") and data["ric"] != globalVars.config.get("POC", "netIdent_ric") and (data["msg"] == "" or data["ric"] in globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric")):
 							logging.debug(" - multicastAlarm without msg")
 							from includes import multicastAlarm
 							multicastAlarm.newEntrymultiList(data)
 
 						# multicastAlarm processing if enabled and alarm message has been received
-						elif globalVars.config.getint("multicastAlarm", "multicastAlarm") and data["msg"] != "" and data["ric"] == globalVars.config.get("multicastAlarm", "multicastAlarm_ric"):
+						elif globalVars.config.getint("multicastAlarm", "multicastAlarm") and data["msg"] != "" and data["ric"] in globalVars.config.get("multicastAlarm", "multicastAlarm_ric"):
 							logging.debug(" - multicastAlarm with message")
 							from includes import multicastAlarm
 							multicastAlarm.multicastAlarmExec(freq, data)
