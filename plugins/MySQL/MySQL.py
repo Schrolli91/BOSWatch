@@ -21,23 +21,23 @@ from includes import globalVars  # Global variables
 from includes.helper import configHandler
 
 def isSignal(poc_id):
-    """
-    @type    poc_id: string
-    @param   poc_id: POCSAG Ric
+	"""
+	@type    poc_id: string
+	@param   poc_id: POCSAG Ric
 
-    @requires:  Configuration has to be set in the config.ini
+	@requires:  Configuration has to be set in the config.ini
 
-    @return:    True if the Ric is Signal, other False
-    @exception: none
-    """
-    # If RIC is Signal return True, else False
-    if globalVars.config.get("POC", "netIdent_ric"):
-        if poc_id in globalVars.config.get("POC", "netIdent_ric"):
-            logging.info("RIC %s is net ident", poc_id)
-            return True
-        else:
-            logging.info("RIC %s is no net ident", poc_id)
-            return False
+	@return:    True if the Ric is Signal, other False
+	@exception: none
+	"""
+	# If RIC is Signal return True, else False
+	if globalVars.config.get("POC", "netIdent_ric"):
+		if poc_id in globalVars.config.get("POC", "netIdent_ric"):
+			logging.info("RIC %s is net ident", poc_id)
+			return True
+		else:
+			logging.info("RIC %s is no net ident", poc_id)
+			return False
 
 
 ##
@@ -111,11 +111,14 @@ def run(typ,freq,data):
 
 					elif typ == "POC":
 						if isSignal(data["ric"]):
-							cursor.execute("UPDATE "+globalVars.config.get("MySQL","tableSIG")+" SET time = NOW() WHERE ric = '"+data["ric"]+"';")
-							if cursor.rowcount == 0:
+							if globalVars.config.getint("POC","netIdent_histry"):
 								cursor.execute("INSERT INTO "+globalVars.config.get("MySQL","tableSIG")+" (time,ric) VALUES (NOW(), '"+data["ric"]+"');")
+							else:
+								cursor.execute("UPDATE "+globalVars.config.get("MySQL","tableSIG")+" SET time = NOW() WHERE ric = '"+data["ric"]+"';")
+								if cursor.rowcount == 0:
+									cursor.execute("INSERT INTO "+globalVars.config.get("MySQL","tableSIG")+" (time,ric) VALUES (NOW(), '"+data["ric"]+"');")
 						else:
-						  cursor.execute("INSERT INTO "+globalVars.config.get("MySQL","tablePOC")+" (time, ric, function, functionChar, msg, bitrate, description) VALUES (FROM_UNIXTIME(%s),%s,%s,%s,%s,%s,%s)", (data["timestamp"], data["ric"], data["function"], data["functionChar"], data["msg"], data["bitrate"], data["description"]))
+							cursor.execute("INSERT INTO "+globalVars.config.get("MySQL","tablePOC")+" (time, ric, function, functionChar, msg, bitrate, description) VALUES (FROM_UNIXTIME(%s),%s,%s,%s,%s,%s,%s)", (data["timestamp"], data["ric"], data["function"], data["functionChar"], data["msg"], data["bitrate"], data["description"]))
 
 					else:
 						logging.warning("Invalid Typ: %s", typ)
