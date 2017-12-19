@@ -10,6 +10,7 @@
 - Beta Branch aus Readme, Installer und Travis-CI entfernt [#324](https://github.com/Schrolli91/BOSWatch/pull/324)
 ##### Fixed
 - Bug in httpRequest Plugin (data Field wurde überschrieben) [#337](https://github.com/Schrolli91/BOSWatch/pull/337)
+- Kommentar für FirEmergency Einstellung angepasst [#338](https://github.com/Schrolli91/BOSWatch/pull/338)
 ##### Security
 
 
