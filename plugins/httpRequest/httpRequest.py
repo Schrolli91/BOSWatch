@@ -71,7 +71,7 @@ def run(typ,freq,data):
 				# Make a copy of the data field to not overwrite the data in it
 				# Replace special characters in dataCopy Strings for URL
 				#
-				dataCopy = data
+				dataCopy = dict(data)
 				for key in dataCopy:
 					if isinstance(dataCopy[key], basestring):
 						dataCopy[key] = urllib.quote(dataCopy[key])
