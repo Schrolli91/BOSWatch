@@ -68,11 +68,13 @@ def run(typ,freq,data):
 
 			try:
 				#
-				# Replace special characters in data Strings for URL
+				# Make a copy of the data field to not overwrite the data in it
+				# Replace special characters in dataCopy Strings for URL
 				#
-				for key in data:
-					if isinstance(data[key], basestring):
-						data[key] = urllib.quote(data[key])
+				dataCopy = data
+				for key in dataCopy:
+					if isinstance(dataCopy[key], basestring):
+						dataCopy[key] = urllib.quote(dataCopy[key])
 				#
 				# Get URLs
 				#
@@ -90,7 +92,7 @@ def run(typ,freq,data):
 				# replace wildcards
 				#
 				for (i, url) in enumerate(urls):
-					urls[i] = wildcardHandler.replaceWildcards(urls[i].strip(), data)
+					urls[i] = wildcardHandler.replaceWildcards(urls[i].strip(), dataCopy)
 				#
 				# HTTP-Request
 				#
