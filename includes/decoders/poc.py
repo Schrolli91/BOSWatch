@@ -117,23 +117,40 @@ def decode(freq, decoded):
 
 			if re.search("[0-9]{7}", poc_id) and re.search("[1-4]{1}", poc_sub): #if POC is valid
 				if isAllowed(poc_id):
+
 					# check for double alarm
 					if doubleFilter.checkID("POC", poc_id+poc_sub, poc_text):
-						logging.info("POCSAG%s: %s %s %s ", bitrate, poc_id, poc_sub, poc_text)
 						data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id}
 						# Add function as character a-d to dataset
 						data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
+
+						logging.info("POCSAG%s: %s %s %s ", data["bitrate"], data["ric"], data["function"], data["msg"])
+
 						# If enabled, look up description
 						if globalVars.config.getint("POC", "idDescribed"):
 							from includes import descriptionList
-							data["description"] = descriptionList.getDescription("POC", poc_id+data["functionChar"])
-						# processing the alarm
-						try:
-							from includes import alarmHandler
-							alarmHandler.processAlarmHandler("POC", freq, data)
-						except:
-							logging.error("processing alarm failed")
-							logging.debug("processing alarm failed", exc_info=True)
+							data["description"] = descriptionList.getDescription("POC", data["ric"]+data["functionChar"])
+
+						# multicastAlarm processing if enabled and a message without text or delimiter RIC or netIdent_ric received
+						if globalVars.config.getint("multicastAlarm", "multicastAlarm") and data["ric"] != globalVars.config.get("POC", "netIdent_ric") and (data["msg"] == "" or data["ric"] in globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric")):
+							logging.debug(" - multicastAlarm without msg")
+							from includes import multicastAlarm
+							multicastAlarm.newEntrymultiList(data)
+
+						# multicastAlarm processing if enabled and alarm message has been received
+						elif globalVars.config.getint("multicastAlarm", "multicastAlarm") and data["msg"] != "" and data["ric"] in globalVars.config.get("multicastAlarm", "multicastAlarm_ric"):
+							logging.debug(" - multicastAlarm with message")
+							from includes import multicastAlarm
+							multicastAlarm.multicastAlarmExec(freq, data)
+
+						else:
+							# processing the alarm
+							try:
+								from includes import alarmHandler
+								alarmHandler.processAlarmHandler("POC", freq, data)
+							except:
+								logging.error("processing alarm failed")
+								logging.debug("processing alarm failed", exc_info=True)
 					# in every time save old data for double alarm
 					doubleFilter.newEntry(poc_id+poc_sub, poc_text)
 				else:
