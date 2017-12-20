@@ -7,3 +7,5 @@ log/
 \.project
 
 \.pydevproject
+
+\.settings/

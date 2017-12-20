@@ -1,0 +1,6 @@
+[submodule "submodules/multimon"]
+	path = submodules/multimon
+	url = https://github.com/EliasOenal/multimon-ng
+[submodule "submodules/rtl-sdr"]
+	path = submodules/rtl-sdr
+	url = https://github.com/osmocom/rtl-sdr
