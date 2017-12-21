@@ -1,7 +1,7 @@
 # Changelog
 
 
-### __[2.x]__ - unreleased
+### __[2.3]__ - 22.12.2017
 ##### Added
 - zuschaltbare POCSAG Multicast-Alarm Funktionalität [#307](https://github.com/Schrolli91/BOSWatch/pull/307)
 - Flag in Config um nur letzte Net Ident oder gesamte Historie zu speichern [#317](https://github.com/Schrolli91/BOSWatch/pull/317)
