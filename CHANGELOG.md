@@ -1,6 +1,15 @@
 # Changelog
 
 
+### __[2.3.1]__ - Unreleased
+##### Added
+##### Changed
+##### Deprecated
+##### Removed
+##### Fixed
+##### Security
+
+
 ### __[2.3]__ - 22.12.2017
 ##### Added
 - zuschaltbare POCSAG Multicast-Alarm Funktionalität [#307](https://github.com/Schrolli91/BOSWatch/pull/307)

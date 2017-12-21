@@ -9,9 +9,9 @@ Global variables
 """
 
 # version info
-versionNr = "2.3"
-branch = "master"
-buildDate = "22/12/2017"
+versionNr = "2.3.1"
+branch = "dev"
+buildDate = "unreleased"
 
 
 # Global variables
