@@ -1,3 +1,8 @@
+### Arbeiten an BOSWatch 3 gestartet
+#### Work on BOSWatch 3 has started
+## see: https://boswatch.de/index.php?thread/29-boswatch-3/
+
+
 |Branch|Code Qualität|CI-Build|
 |---|---|---|
 |master|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=master)](https://travis-ci.org/Schrolli91/BOSWatch)|
