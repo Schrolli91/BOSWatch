@@ -6,7 +6,6 @@
 |Branch|Code Qualität|CI-Build|
 |---|---|---|
 |master|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=master)](https://travis-ci.org/Schrolli91/BOSWatch)|
-|beta|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/beta.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=4213030)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=beta)](https://travis-ci.org/Schrolli91/BOSWatch)|
 |develop|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=develop)](https://travis-ci.org/Schrolli91/BOSWatch)|
 
 
@@ -52,6 +51,7 @@ unless you are developer you can use the develop-Branch - may be unstable!
 - Ready for use BOSWatch as daemon
 - possibility to start plugins asynchron
 - NMA Error Handler
+- multicastAlarm for transmission optimized networks
 
 
 ### Plugins

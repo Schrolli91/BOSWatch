@@ -1,6 +1,17 @@
 # Changelog
 
 
+### __[2.3]__ - 22.12.2017
+##### Added
+- zuschaltbare POCSAG Multicast-Alarm Funktionalität [#307](https://github.com/Schrolli91/BOSWatch/pull/307)
+- Flag in Config um nur letzte Net Ident oder gesamte Historie zu speichern [#317](https://github.com/Schrolli91/BOSWatch/pull/317)
+##### Removed
+- Beta Branch aus Readme, Installer und Travis-CI entfernt [#324](https://github.com/Schrolli91/BOSWatch/pull/324)
+##### Fixed
+- Bug in httpRequest Plugin (data Field wurde überschrieben) [#337](https://github.com/Schrolli91/BOSWatch/pull/337)
+- Kommentar für FirEmergency Einstellung angepasst [#338](https://github.com/Schrolli91/BOSWatch/pull/338)
+
+
 ### __[v2.2.2]__ - 21.10.2017
 ##### Added
 - Installations Script für Services [#316](https://github.com/Schrolli91/BOSWatch/pull/316)
