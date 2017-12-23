@@ -91,7 +91,7 @@ def run(typ,freq,data):
 				# Connect to MySQL
 				#
 				logging.debug("connect to MySQL")
-				connection = mysql.connector.connect(host = globalVars.config.get("MySQL","dbserver"), user = globalVars.config.get("MySQL","dbuser"), passwd = globalVars.config.get("MySQL","dbpassword"), db = globalVars.config.get("MySQL","database"), charset='utf8')
+				connection = mysql.connector.connect(host = globalVars.config.get("MySQL","dbserver"), port = globalVars.config.get("MySQL","dbport"), user = globalVars.config.get("MySQL","dbuser"), passwd = globalVars.config.get("MySQL","dbpassword"), db = globalVars.config.get("MySQL","database"), charset='utf8')
 				cursor = connection.cursor()
 			except:
 				logging.error("cannot connect to MySQL")
