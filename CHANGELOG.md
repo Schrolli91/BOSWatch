@@ -3,6 +3,7 @@
 
 ### __[v2.3.1]__ - Unreleased
 ##### Added
+- Config Eintrag um Port für MySQL Plugin festzulegen [#345](https://github.com/Schrolli91/BOSWatch/pull/345)
 ##### Changed
 ##### Deprecated
 ##### Removed
