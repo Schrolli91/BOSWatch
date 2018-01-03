@@ -8,6 +8,7 @@
 ##### Deprecated
 ##### Removed
 ##### Fixed
+- Fehler beim auslesen der netIdent_RIC im MySQL Plugin [#347](https://github.com/Schrolli91/BOSWatch/pull/347)
 ##### Security
 
 
