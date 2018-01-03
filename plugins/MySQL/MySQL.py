@@ -111,7 +111,7 @@ def run(typ,freq,data):
 
 					elif typ == "POC":
 						if isSignal(data["ric"]):
-							if globalVars.config.getint("POC","netIdent_histry"):
+							if globalVars.config.getint("POC","netIdent_history"):
 								cursor.execute("INSERT INTO "+globalVars.config.get("MySQL","tableSIG")+" (time,ric) VALUES (NOW(), '"+data["ric"]+"');")
 							else:
 								cursor.execute("UPDATE "+globalVars.config.get("MySQL","tableSIG")+" SET time = NOW() WHERE ric = '"+data["ric"]+"';")
