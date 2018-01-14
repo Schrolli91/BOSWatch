@@ -16,6 +16,7 @@ from includes import globalVars  # Global variables
 
 #from includes.helper import timeHandler
 from includes.helper import configHandler
+from includes.helper import wildcardHandler
 
 ##
 #
@@ -59,31 +60,62 @@ def run(typ,freq,data):
 	try:
 		if configHandler.checkConfig("Pushover"): #read and debug the config
 
-			try:
+			if typ == "FMS":
+				# 
+				# building message for FMS
+				#
+				
+				message = globalVars.config.get("Pushover", "fms_message")
+				title = globalVars.config.get("Pushover", "fms_title")
+				priority = globalVars.config.get("Pushover", "fms_prio")
+				logging.debug("Sending message: %s", message)
+				
+			elif typ == "ZVEI":
+				# 
+				# building message for ZVEI
+				#
+				message = globalVars.config.get("Pushover", "zvei_message")
+				title = globalVars.config.get("Pushover", "zvei_title")
+				priority = globalVars.config.get("Pushover", "zvei_prio")
+				logging.debug("Sending message: %s", message)
+				
+			elif typ == "POC":
+				
 				#
 				# Pushover-Request
 				#
-				logging.debug("send Pushover %s", typ)
-
-			        if data["function"] == '1':
-			                priority = globalVars.config.get("Pushover", "SubA")
-			        elif data["function"] == '2':
-			                priority = globalVars.config.get("Pushover", "SubB")
-			        elif data["function"] == '3':
-			                priority = globalVars.config.get("Pushover", "SubC")
-			        elif data["function"] == '4':
-			                priority = globalVars.config.get("Pushover", "SubD")
-			        else:
-			                priority = 0
-
+				logging.debug("send Pushover for %s", typ)
+				
+				if data["function"] == '1':
+						priority = globalVars.config.get("Pushover", "SubA")
+				elif data["function"] == '2':
+						priority = globalVars.config.get("Pushover", "SubB")
+				elif data["function"] == '3':
+						priority = globalVars.config.get("Pushover", "SubC")
+				elif data["function"] == '4':
+						priority = globalVars.config.get("Pushover", "SubD")
+				else:
+						priority = 0
+				message = globalVars.config.get("Pushover", "poc_message")
+				title = globalVars.config.get("Pushover", "poc_title")
+				
+			else:
+				logging.warning("Invalid type: %s", typ)
+				
+			try:
+				# replace the wildcards
+				message = wildcardHandler.replaceWildcards(message,data)
+				title = wildcardHandler.replaceWildcards(title,data)
+				
+				# start the connection
 				conn = httplib.HTTPSConnection("api.pushover.net:443")
 				conn.request("POST", "/1/messages.json",
 				urllib.urlencode({
 					"token": globalVars.config.get("Pushover", "api_key"),
 					"user": globalVars.config.get("Pushover", "user_key"),
-					"message": "<b>"+data["description"]+"</b><br>"+data["msg"].replace(";", "<br>"),
+					"message": message,
 					"html": globalVars.config.get("Pushover", "html"),
-					"title": globalVars.config.get("Pushover", "title"),
+					"title": title,
 					"priority": priority,
 					"retry": globalVars.config.get("Pushover", "retry"),
 					"expire": globalVars.config.get("Pushover", "expire")
@@ -94,20 +126,19 @@ def run(typ,freq,data):
 				logging.debug("cannot send Pushover request", exc_info=True)
 				return
 
-			else:
-				try:
-					#
-					# check Pushover-Response
-					#
-					response = conn.getresponse()
-					if str(response.status) == "200": #Check Pushover Response and print a Log or Error
-						logging.debug("Pushover response: %s - %s" , str(response.status), str(response.reason))
-					else:
-						logging.warning("Pushover response: %s - %s" , str(response.status), str(response.reason))
-				except: #otherwise
-					logging.error("cannot get Pushover response")
-					logging.debug("cannot get Pushover response", exc_info=True)
-					return
+			try:
+				#
+				# check Pushover-Response
+				#
+				response = conn.getresponse()
+				if str(response.status) == "200": #Check Pushover Response and print a Log or Error
+					logging.debug("Pushover response: %s - %s" , str(response.status), str(response.reason))
+				else:
+					logging.warning("Pushover response: %s - %s" , str(response.status), str(response.reason))
+			except: #otherwise
+				logging.error("cannot get Pushover response")
+				logging.debug("cannot get Pushover response", exc_info=True)
+				return
 
 			finally:
 				logging.debug("close Pushover-Connection")
