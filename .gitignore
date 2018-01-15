@@ -9,3 +9,5 @@ log/
 \.pydevproject
 
 \.settings/
+
+\.idea/
