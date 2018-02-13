@@ -132,6 +132,7 @@ def run(typ,freq,data):
 					"selectiveCallCode": selectiveCallCode,
 					"hmac": hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()
 				}
+				logging.debug(alarmHeaders)
 
 				if globalVars.config.get("FFAgent", "live") == "1":
 					r = requests.post(url, data=alarmData, headers=headers, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
