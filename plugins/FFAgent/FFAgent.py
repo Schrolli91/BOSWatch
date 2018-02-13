@@ -135,7 +135,7 @@ def run(typ,freq,data):
 				logging.debug(alarmHeaders)
 
 				if globalVars.config.get("FFAgent", "live") == "1":
-					r = requests.post(url, data=alarmData, headers=headers, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
+					r = requests.post(url, data=alarmData, headers=alarmHeaders, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
 				else:
 					r = requests.post(url, data=alarmData, headers=alarmHeaders, verify=serverCertFile)
 
