@@ -18,9 +18,6 @@ from includes import globalVars  # Global variables
 #from includes.helper import timeHandler
 from includes.helper import configHandler
 
-# needed for Ordered Dictionaries to serve correctly ordered JSON
-from collections import OrderedDict
-
 ##
 #
 # onLoad (init) function of plugin
@@ -128,13 +125,13 @@ def run(typ,freq,data):
 				alarmData = json.dumps(alarmData)
 				logging.debug(alarmData)
 
-				alarmHeaders = OrderedDict([
-					("Content-Type", "application/json"),
-					("webApiToken", webApiToken),
-					("accessToken", accessToken),
-					("selectiveCallCode", selectiveCallCode),
-					("hmac", hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest())
-				])
+				alarmHeaders = {
+					"Content-Type": "application/json",
+					"webApiToken": webApiToken,
+					"accessToken": accessToken,
+					"selectiveCallCode": selectiveCallCode,
+					"hmac": hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()
+				}
 				logging.debug(alarmHeaders)
 
 				if globalVars.config.get("FFAgent", "live") == "1":
