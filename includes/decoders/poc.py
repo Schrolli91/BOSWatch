@@ -62,11 +62,23 @@ def isAllowed(poc_id):
 			return True
 		else:
 			allowed = 0
+	# 5.) Implementation for multicastAlarm
+	if globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric"):
+		if poc_id in globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric"):
+			logging.info("RIC %s as multicastAlarm delimiter", poc_id)
+			return True
+		else:
+			allowed = 0
+	if globalVars.config.get("multicastAlarm", "multicastAlarm_ric"):
+		if poc_id in globalVars.config.get("multicastAlarm", "multicastAlarm_ric"):
+			logging.info("RIC %s as multicastAlarm message", poc_id)
+			return True
+		else:
+			allowed = 0
 
 	if allowed == 0:
 		return False
 	return True
-
 ##
 #
 # POCSAG decoder function
