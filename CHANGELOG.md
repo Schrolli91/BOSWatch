@@ -7,10 +7,13 @@
 - FMS und ZVEI Support für Pushover Plugin [#352](https://github.com/Schrolli91/BOSWatch/pull/352)
 - Benutzerdefinierte Nachrichten für Pushover Plugin in config [#352](https://github.com/Schrolli91/BOSWatch/pull/352)
 ##### Changed
+- multicastAlarm Plugin - RICs die von multicastAlarm genutzt werden, müssen nicht mehr in der config bei allow_ric bzw. filter_range_start/filter_range_end berücksichtigt werden. [#357](https://github.com/Schrolli91/BOSWatch/pull/357)
+- FFAgent Plugin - Debug Logging für die alarmHeaders eingebaut zwecks Troubleshooting [#354](https://github.com/Schrolli91/BOSWatch/pull/354)
 ##### Deprecated
 ##### Removed
 ##### Fixed
 - Fehler beim Auslesen der netIdent_RIC im MySQL Plugin [#347](https://github.com/Schrolli91/BOSWatch/pull/347)
+- FFAgent Plugin - Typo bei alarmHeaders für Live Betrieb gefixt [#354](https://github.com/Schrolli91/BOSWatch/pull/354)
 ##### Security
 
 
