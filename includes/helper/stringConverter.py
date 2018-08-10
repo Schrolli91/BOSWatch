@@ -159,7 +159,6 @@ def convertToUTF8(inputString = ""):
 				raise
 
 			# End of exception UnicodeDecodeError: check given string is already UTF-8
-			pass
 
 		except:
 			logging.warning("error checking given string")
