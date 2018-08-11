@@ -58,8 +58,8 @@ def multicastAlarmExec(freq, data):
 		try:
 			from includes import alarmHandler
 			alarmHandler.processAlarmHandler("POC", freq, data)
-			del multiList[:]
-			logging.debug("multicastAlarm finished - buffer cleared")
 		except:
 			logging.error("processing alarm failed")
 			logging.debug("processing alarm failed", exc_info=True)
+		del multiList[:]
+		logging.debug("multicastAlarm finished - buffer cleared")
