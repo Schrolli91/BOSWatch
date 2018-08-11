@@ -61,5 +61,5 @@ def multicastAlarmExec(freq, data):
 		except:
 			logging.error("processing alarm failed")
 			logging.debug("processing alarm failed", exc_info=True)
-		del multiList[:]
-		logging.debug("multicastAlarm finished - buffer cleared")
+	del multiList[:]
+	logging.debug("multicastAlarm finished - buffer cleared")
