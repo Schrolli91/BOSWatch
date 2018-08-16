@@ -9,6 +9,7 @@
 ##### Changed
 - multicastAlarm Plugin - RICs die von multicastAlarm genutzt werden, müssen nicht mehr in der config bei allow_ric bzw. filter_range_start/filter_range_end berücksichtigt werden. [#357](https://github.com/Schrolli91/BOSWatch/pull/357)
 - FFAgent Plugin - Debug Logging für die alarmHeaders eingebaut zwecks Troubleshooting [#354](https://github.com/Schrolli91/BOSWatch/pull/354)
+- multicastAlarm Plugin - Buffer nach jedem Alarm löschen - erlaubt in kombination mit "doubleFilter_check_msg" die Verwendung in Netzen, die zwischen multicastAlarm RICs auch normale Alarme senden. #370(https://github.com/Schrolli91/BOSWatch/pull/370)
 ##### Deprecated
 ##### Removed
 ##### Fixed

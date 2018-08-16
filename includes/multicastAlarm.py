@@ -29,7 +29,7 @@ def newEntrymultiList(data):
 	timestamp = int(time.time())
 	# multicastAlarm processing if enabled and delimiter RIC has been received
 	if data['ric'] == globalVars.config.get("multicastAlarm", "multicastAlarm_delimiter_ric"):
-		multiList = []
+		del multiList[:]
 		logging.debug("delimiter RIC received - buffer cleared")
 	else:
 		multiList.append([data, timestamp])
@@ -61,3 +61,5 @@ def multicastAlarmExec(freq, data):
 		except:
 			logging.error("processing alarm failed")
 			logging.debug("processing alarm failed", exc_info=True)
+	del multiList[:]
+	logging.debug("multicastAlarm finished - buffer cleared")
