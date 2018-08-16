@@ -1,7 +1,20 @@
 # Changelog
 
+### __[v2.4]__ - 17.08.2018
+##### Added
+- Config Eintrag um Port für MySQL Plugin festzulegen [#345](https://github.com/Schrolli91/BOSWatch/pull/345)
+- FMS und ZVEI Support für Pushover Plugin [#352](https://github.com/Schrolli91/BOSWatch/pull/352)
+- Benutzerdefinierte Nachrichten für Pushover Plugin in config [#352](https://github.com/Schrolli91/BOSWatch/pull/352)
+##### Changed
+- multicastAlarm Plugin - RICs die von multicastAlarm genutzt werden, müssen nicht mehr in der config bei allow_ric bzw. filter_range_start/filter_range_end berücksichtigt werden. [#357](https://github.com/Schrolli91/BOSWatch/pull/357)
+- FFAgent Plugin - Debug Logging für die alarmHeaders eingebaut zwecks Troubleshooting [#354](https://github.com/Schrolli91/BOSWatch/pull/354)
+- multicastAlarm Plugin - Buffer nach jedem Alarm löschen - erlaubt in kombination mit "doubleFilter_check_msg" die Verwendung in Netzen, die zwischen multicastAlarm RICs auch normale Alarme senden. #370(https://github.com/Schrolli91/BOSWatch/pull/370)
+##### Fixed
+- Fehler beim Auslesen der netIdent_RIC im MySQL Plugin [#347](https://github.com/Schrolli91/BOSWatch/pull/347)
+- FFAgent Plugin - Typo bei alarmHeaders für Live Betrieb gefixt [#354](https://github.com/Schrolli91/BOSWatch/pull/354)
 
-### __[2.3]__ - 22.12.2017
+
+### __[v2.3]__ - 22.12.2017
 ##### Added
 - zuschaltbare POCSAG Multicast-Alarm Funktionalität [#307](https://github.com/Schrolli91/BOSWatch/pull/307)
 - Flag in Config um nur letzte Net Ident oder gesamte Historie zu speichern [#317](https://github.com/Schrolli91/BOSWatch/pull/317)
@@ -48,7 +61,7 @@
 Zum schreiben des Changelog's siehe:
 http://keepachangelog.com/de/1.0.0/
 
-### __[version]__ - date
+### __[v#.#]__ - date
 ##### Added
 ##### Changed
 ##### Deprecated
