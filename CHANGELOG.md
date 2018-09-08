@@ -6,6 +6,7 @@
 ##### Changed
 ##### Deprecated
 ##### Removed
+- Notify-my-Andoird Plugin und Logging-Handler wegen Einstellung des Service entfernt [#374](https://github.com/Schrolli91/BOSWatch/pull/374)
 ##### Fixed
 ##### Security
 
