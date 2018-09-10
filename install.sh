@@ -78,7 +78,6 @@ for (( i=1; i<=$#; i=$i+2 )); do
       -b|--branch)
       case $arg2 in
         dev|develop)  echo "       !!! WARNING: you are using the DEV BRANCH !!!       "; branch=dev ;;
-        beta)         echo "       !!! WARNING: you are using the BETA BRANCH !!!      "; branch=beta ;;
         *) branch=master ;;
       esac ;;
 
@@ -213,7 +212,7 @@ echo "Installation ready!"
 tput cup 19 3
 echo "Watch out: to run BOSWatch you have to modify the config.ini!"
 echo "Do the following step to do so:"
-echo "sudo nano $boswatchpath/BOSWatch/config/config.ini"
+echo "sudo nano $boswatchpath/config/config.ini"
 echo "and modify the config as you need. This step is optional if you are upgrading an old version of BOSWatch. "
 
 tput cnorm

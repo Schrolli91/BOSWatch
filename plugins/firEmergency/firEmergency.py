@@ -5,7 +5,7 @@
 firEmergency-Plugin to dispatch ZVEI- and POCSAG - messages to firEmergency
 
 firEmergency configuration:
-- set input to "FMS32" at Port 5555
+- set input to "Standartschnittstelle" at Port 5555
 
 @autor: Smith-fms
 
