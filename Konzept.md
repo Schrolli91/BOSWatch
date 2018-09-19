@@ -1,5 +1,5 @@
 # BOSWatch 3.0
-============
+
 
 
 Python 3
@@ -24,54 +24,66 @@ Verpacken der Funktionalitäten in Klassen um OOP-Grundsätze zu erreichen.
 
 
 ## Konfiguration:
-- Alle Einstellungen in INI File
-- Einziges Argument beim Start des Clienten ist der Name der INI (-v -q -t sollen auch bleiben)
-- So werden mehrere Sticks auf einem Rechner einfach möglich ohne BOSWatch Ordner kopieren zu müssen
+- Alle Einstellungen werden in einer Datenbank mittels Django abgebildet.
+- Die Schnittstelle bildet eine API die direkt auf die Datenbank zugreifen kann.
+- Clienten sollen im Endausbau in der Regel nur noch einen Namen bekommen und danach den Server selber finden. ( MAGIC Paket)
+  - Der Client bekommt seine Konfiguration vom Master mitgeteilt ( aus der DB).
+- Die Einstellungen werden alle über einen Web Interface gepflegt. 
 
-### Client:
+
+## Organisationsstruktur
+
+- Die Organisation bei BOSWatch ist per definition eine Baumstruktur
+- Jedes Objekt der Organisationsstruktur (Feuerwehren,Bereiche,Einheiten)  kann __mehrere__ Autos und __einen__ Standort haben.
+- Ein Fahrzeug kann __einer__ FMS Kennung zugeordnet sein.
+- Ein Standort kann __mehrere__ Einheiten beherbergen.
+
+
+## Pluginaufruf
+
+- Ein Plugin hat eine Standard Konfiguration. 
+- Ein Plugin kann __mehrere__ Instanzen haben.
+- Eine Plugininstanz kann die Standard konfiguration des geerbten Plugins überschreiben.
+
+- Ein Plugin kann von *einem Fahrzeug, einer Einheit oder einem Standort* aufgerufen werden.
+- Ein Plugin kann zusätzlich noch auf Grund der darunter liegenden Einheiten aufgerufen werden.
+<br>Ein Beispiel: 
+ - Fuerwehr Musterhausen
+   - Bereich 1
+     - Einheit 11
+     - Einheit 12 
+<br>Sollte nun in diesem Beispiel Einheit 11 alarmiert werden. so bekommen die Einheiten "Bereich1" und "FeuerwehrMusterhausen" jeweils einen "Informations-Alarm" dieser kann je nach einstellung wie ein echer Alarm abgearbeitet werden. 
+
+
+## Plugins:
+
+Wie unter "Organisation" beschrieben benötigt das Plugin verschiedene Aufrufe.
 
 ```
-[Server]
-IP    = 127.0.0.1
-PORT  = 23
+Erstelle-Plugin
+Erstelle-Plugininstanz
 
-[Client]
-Name      = BOSWatch Client 1
-LogDir    = log/
+Start-Plugin
+Start-PluginInstanz
 
-[Stick]
-device    = 0
-Frequency = 85...M
-PPMError  = 0
-Squelch   = 0
-gain      = 100
+Alarmiere-Plugininstanz ( ARRAY{
+                             Art der Nachricht,  
+                             Text, 
+                             Zeit, 
+                             Eingangszeit} , 
+                         alarmierteEINHEIT, 
+                         originEINHEIT ( falls durch Organisationsvererbung alarmiert worden ist ) 
+                         alarmierterSTANDORT, 
+                         alarmierteFAHRZEUGE,  
+                         ARRAY{
+                             PLUGIN-CONFIG,
+                             PLUGININSTANZ-CONFIG} 
+                         )
 
-[Decoder]
-FMS       = 0
-ZVEI      = 0
-POC512    = 0
-POC1200   = 1
-POC2400   = 0
+
 ```
 
-### Server:
-```
-[Server]
-PORT  = 23
-
-[Filter]
-...
-
-[Plugins]
-MySQL     = 1
-template  = 0
-...
-```
-
-### Plugin:
-- Konfigurations Datei für Plugin mit in den Plugin Ordner
-- Plugin läd bei Bedarf seine Config selbst, die geht BOSWatch ja nichts an
-- Aktuell wird eine ewig lange Config geladen, obwohl 90% der Plugins nicht genutzt werden
+Grundsätzlich kann durch dieses Vorgehen in einem Plugin auf jedes Feld zugriffen werden. 
 
 
 
