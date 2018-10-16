@@ -86,7 +86,7 @@ def run(typ, freq, data):
 				priority = '-1'
 		else:
 			priority = globalVars.config.get("Pushover","zvei_std_prio")
-                    
+
                 message = globalVars.config.get("Pushover", "zvei_message")
                 title = globalVars.config.get("Pushover", "zvei_title")
                 logging.debug("Sending message: %s", message)
