@@ -3,6 +3,7 @@
 
 ### __[v2.#]__ - Unreleased
 ##### Added
+- Pushover-Plugin: Priorität für einzelne RIC und ZVEI in config einstellbar [#378](https://github.com/Schrolli91/BOSWatch/pull/378)
 ##### Changed
 ##### Deprecated
 ##### Removed
