@@ -100,9 +100,9 @@ def run(typ,freq,data):
 					address = "+".join(data["msg"].split(')')[0].split('/',1)[1].replace('(',' ').split())
 
 					logging.debug("Retrieve maps from Google")
-					url = "+".join(["http://maps.googleapis.com/maps/api/staticmap?markers=", address, "&size=480x640&maptype=roadmap&zoom=16&key=", GoogleAPIKey])
+					url = "".join(["http://maps.googleapis.com/maps/api/staticmap?markers=", address, "&size=480x640&maptype=roadmap&zoom=16&language=de&key=", GoogleAPIKey])
 					urllib.urlretrieve(url, "overview_map.png")
-					url = "+".join(["http://maps.googleapis.com/maps/api/staticmap?markers=", address, "&size=240x320&scale=2&maptype=hybrid&zoom=17&key=", GoogleAPIKey])
+					url = "".join(["http://maps.googleapis.com/maps/api/staticmap?markers=", address, "&size=240x320&scale=2&maptype=hybrid&zoom=17&language=de&key=", GoogleAPIKey])
 					urllib.urlretrieve(url, "detail_map.png")
 
 					# Send message and map with Telegram
