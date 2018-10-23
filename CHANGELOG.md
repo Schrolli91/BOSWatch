@@ -5,6 +5,7 @@
 ##### Added
 - Pushover-Plugin: Priorität für einzelne RIC und ZVEI in config einstellbar [#378](https://github.com/Schrolli91/BOSWatch/pull/378)
 ##### Changed
+- Kleinere Anpassungen im Telegram Plugin (Karten-Generierung) [#380](https://github.com/Schrolli91/BOSWatch/pull/380)
 ##### Deprecated
 ##### Removed
 - Notify-my-Andoird Plugin und Logging-Handler wegen Einstellung des Service entfernt [#374](https://github.com/Schrolli91/BOSWatch/pull/374)
