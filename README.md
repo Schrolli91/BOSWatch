@@ -1,3 +1,6 @@
+### Fast support on https://bwcc.boswatch.de (Mattermost-Server)
+#### Forum: https://boswatch.de
+
 ### Arbeiten an BOSWatch 3 gestartet
 #### Work on BOSWatch 3 has started
 ## see: https://boswatch.de/index.php?thread/29-boswatch-3/

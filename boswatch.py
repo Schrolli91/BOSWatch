@@ -249,29 +249,6 @@ try:
 		logging.debug("cannot set loglevel of fileHandler", exc_info=True)
 
 
-	#
-	# Add NMA logging handler
-	#
-	try:
-		if configHandler.checkConfig("NMAHandler"):
-			# is NMAHandler enabled?
-			if globalVars.config.getboolean("NMAHandler", "enableHandler") == True:
-				# we only could do something, if an APIKey is given:
-				if len(globalVars.config.get("NMAHandler","APIKey")) > 0:
-					logging.debug("add NMA logging handler")
-					from includes import NMAHandler
-					if globalVars.config.get("NMAHandler","appName") == "":
-						nmaHandler = NMAHandler.NMAHandler(globalVars.config.get("NMAHandler","APIKey"))
-					else:
-						nmaHandler = NMAHandler.NMAHandler(globalVars.config.get("NMAHandler","APIKey"), globalVars.config.get("NMAHandler","appName"))
-					nmaHandler.setLevel(globalVars.config.getint("NMAHandler","loglevel"))
-					myLogger.addHandler(nmaHandler)
-	except:
-		# It's an error, but we could work without that stuff...
-		logging.error("cannot add NMA logging handler")
-		logging.debug("cannot add NMA logging handler", exc_info=True)
-
-
 	# initialization was fine, continue with main program...
 
 	#

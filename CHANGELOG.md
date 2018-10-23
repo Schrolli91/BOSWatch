@@ -1,5 +1,16 @@
 # Changelog
 
+
+
+### __[v2.4.1]__ - 23.20.2018
+##### Added
+- Pushover-Plugin: Priorität für einzelne RIC und ZVEI in config einstellbar [#378](https://github.com/Schrolli91/BOSWatch/pull/378)
+##### Changed
+- Kleinere Anpassungen im Telegram Plugin (Karten-Generierung) [#380](https://github.com/Schrolli91/BOSWatch/pull/380)
+##### Removed
+- Notify-my-Andoird Plugin und Logging-Handler wegen Einstellung des Service entfernt [#374](https://github.com/Schrolli91/BOSWatch/pull/374)
+
+
 ### __[v2.4]__ - 17.08.2018
 ##### Added
 - Config Eintrag um Port für MySQL Plugin festzulegen [#345](https://github.com/Schrolli91/BOSWatch/pull/345)
@@ -8,7 +19,7 @@
 ##### Changed
 - multicastAlarm Plugin - RICs die von multicastAlarm genutzt werden, müssen nicht mehr in der config bei allow_ric bzw. filter_range_start/filter_range_end berücksichtigt werden. [#357](https://github.com/Schrolli91/BOSWatch/pull/357)
 - FFAgent Plugin - Debug Logging für die alarmHeaders eingebaut zwecks Troubleshooting [#354](https://github.com/Schrolli91/BOSWatch/pull/354)
-- multicastAlarm Plugin - Buffer nach jedem Alarm löschen - erlaubt in kombination mit "doubleFilter_check_msg" die Verwendung in Netzen, die zwischen multicastAlarm RICs auch normale Alarme senden. #370(https://github.com/Schrolli91/BOSWatch/pull/370)
+- multicastAlarm Plugin - Buffer nach jedem Alarm löschen - erlaubt in kombination mit "doubleFilter_check_msg" die Verwendung in Netzen, die zwischen multicastAlarm RICs auch normale Alarme senden. [#370](https://github.com/Schrolli91/BOSWatch/pull/370)
 ##### Fixed
 - Fehler beim Auslesen der netIdent_RIC im MySQL Plugin [#347](https://github.com/Schrolli91/BOSWatch/pull/347)
 - FFAgent Plugin - Typo bei alarmHeaders für Live Betrieb gefixt [#354](https://github.com/Schrolli91/BOSWatch/pull/354)
