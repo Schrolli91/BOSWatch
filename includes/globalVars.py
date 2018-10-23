@@ -9,7 +9,7 @@ Global variables
 """
 
 # version info
-versionNr = "2.4"
+versionNr = "2.4.1"
 branch = "dev"
 buildDate = "unreleased"
 
