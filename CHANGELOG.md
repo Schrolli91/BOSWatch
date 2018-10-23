@@ -1,14 +1,6 @@
 # Changelog
 
 
-### __[v#.#]__ - date
-##### Added
-##### Changed
-##### Deprecated
-##### Removed
-##### Fixed
-##### Security
-
 
 ### __[v2.4.1]__ - 23.20.2018
 ##### Added
