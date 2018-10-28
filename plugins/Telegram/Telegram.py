@@ -26,6 +26,7 @@ BOTTokenAPIKey = None
 BOTChatIDAPIKey = None
 RICforLocationAPIKey = None
 GoogleAPIKey = None
+RoutingOrigin = None
 
 ##
 #
@@ -43,12 +44,14 @@ def onLoad():
 	global BOTChatIDAPIKey
 	global RICforLocationAPIKey
 	global GoogleAPIKey
+	global RoutingOrigin
 
 	configHandler.checkConfig("Telegram")
 	BOTTokenAPIKey = globalVars.config.get("Telegram","BOTTokenAPIKey")
 	BOTChatIDAPIKey = globalVars.config.get("Telegram","BOTChatIDAPIKey")
 	RICforLocationAPIKey = globalVars.config.get("Telegram","RICforLocationAPIKey")
 	GoogleAPIKey = globalVars.config.get("Telegram","GoogleAPIKey")
+	RoutingOrigin = globalVars.config.get("Telegram","RoutingOrigin")
 
 	return
 
@@ -98,12 +101,10 @@ def run(typ,freq,data):
 					# Generate map
 					logging.debug("Extract address from POCSAG message")
 					address = "+".join(data["msg"].split(')')[0].split('/',1)[1].replace('(',' ').split())
-					# Origin for routing, use format 'City+Street+Number'
-					origin = "CityOfDeparture+Street+Number"
-
 					# Retrieve directions using Google API
 					logging.debug("Retrieve polylines from Directions API")
-					url = "".join(["https://maps.googleapis.com/maps/api/directions/json?origin=", origin, "&destination=", address, "&mode=driving&key=", GoogleAPIKey])
+					url = "".join(["https://maps.googleapis.com/maps/api/directions/json?origin=",
+						       RoutingOrigin, "&destination=", address, "&mode=driving&key=", GoogleAPIKey])
 					response = json.loads(requests.get(url).content.decode('utf-8'))
 					logging.debug("Directions API return status: %s" % response['status'])
 					
