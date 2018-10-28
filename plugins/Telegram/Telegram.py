@@ -101,6 +101,7 @@ def run(typ,freq,data):
 					# Origin for routing, use format 'City+Street+Number'
 					origin = "CityOfDeparture+Street+Number"
 
+					# Retrieve directions using Google API
 					logging.debug("Retrieve polylines from Directions API")
 					url = "".join(["https://maps.googleapis.com/maps/api/directions/json?origin=", origin, "&destination=", address, "&mode=driving&key=", GoogleAPIKey])
 					response = json.loads(requests.get(url).content.decode('utf-8'))
