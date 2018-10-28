@@ -107,9 +107,11 @@ def run(typ,freq,data):
 					logging.debug("Directions API return status: %s" % response['status'])
 					
 					logging.debug("Retrieve maps from Google")
-					url = "".join(["https://maps.googleapis.com/maps/api/staticmap?&size=480x640&maptype=roadmap&language=de&path=enc:", response['routes'][0]['overview_polyline']['points'], "&key=", GoogleAPIKey])
+					url = "".join(["https://maps.googleapis.com/maps/api/staticmap?&size=480x640&maptype=roadmap&language=de&path=enc:",
+						       response['routes'][0]['overview_polyline']['points'], "&key=", GoogleAPIKey])
 					with open("overview_map.png", "wb") as img: img.write(requests.get(url).content)
-					url = "".join(["https://maps.googleapis.com/maps/api/staticmap?markers=", address, "&size=240x320&scale=2&maptype=hybrid&zoom=17&language=de&key=", GoogleAPIKey])
+					url = "".join(["https://maps.googleapis.com/maps/api/staticmap?markers=",
+						       address, "&size=240x320&scale=2&maptype=hybrid&zoom=17&language=de&key=", GoogleAPIKey])
 					with open("detail_map.png", "wb") as img: img.write(requests.get(url).content)
 
 					# Send message and map with Telegram
@@ -119,11 +121,15 @@ def run(typ,freq,data):
 
 					# Geocoding of address
 					logging.debug("Geocode address")
-					url = "".join(["https://maps.googleapis.com/maps/api/geocode/json?address=", address, "&language=de&key=", GoogleAPIKey])
+					url = "".join(["https://maps.googleapis.com/maps/api/geocode/json?address=",
+						       address, "&language=de&key=", GoogleAPIKey])
 					gcode_result = json.loads(requests.get(url).content)
 					logging.debug("Geocoding API return status: %s" % gcode_result['status'])
 					logging.debug("Send location via Telegram BOT API")
-					bot.sendLocation('%s' % BOTChatIDAPIKey, gcode_result[results][0]['geometry']['location']['lat'], gcode_result[results][0]['geometry']['location']['lng'], disable_notification='true')
+					bot.sendLocation('%s' % BOTChatIDAPIKey,
+							 gcode_result[results][0]['geometry']['location']['lat'],
+							 gcode_result[results][0]['geometry']['location']['lng'],
+							 disable_notification='true')
 			else:
 				logging.warning("Invalid Typ: %s", typ)
 		except Unauthorized:
