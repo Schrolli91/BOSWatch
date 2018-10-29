@@ -45,6 +45,7 @@ elif [ "$action" == "r" ]; then # we want to remove the service
 
     # and remove it
     rm /etc/systemd/system/boswatch.service
+    echo "boswatch service removed"
 else # error handling
     echo "Invalid input - please try again"
     exit 1
