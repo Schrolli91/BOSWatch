@@ -107,10 +107,10 @@ def run(typ,freq,data):
 						       RoutingOrigin, "&destination=", address, "&mode=driving&key=", GoogleAPIKey])
 					response = json.loads(requests.get(url).content.decode('utf-8'))
 					logging.debug("Directions API return status: %s" % response['status'])
-					
+					# Retrieve static maps using Google API
 					logging.debug("Retrieve maps from Google")
-					url = "".join(["https://maps.googleapis.com/maps/api/staticmap?&size=480x640&maptype=roadmap&language=de&path=enc:",
-						       response['routes'][0]['overview_polyline']['points'], "&key=", GoogleAPIKey])
+					url = "".join(["https://maps.googleapis.com/maps/api/staticmap?&size=480x640&maptype=roadmap&path=enc:",
+						       response['routes'][0]['overview_polyline']['points'], "&language=de&key=", GoogleAPIKey])
 					with open("overview_map.png", "wb") as img: img.write(requests.get(url).content)
 					url = "".join(["https://maps.googleapis.com/maps/api/staticmap?markers=",
 						       address, "&size=240x320&scale=2&maptype=hybrid&zoom=17&language=de&key=", GoogleAPIKey])
