@@ -3,7 +3,9 @@
 
 ### __[v#.#]__ - date
 ##### Added
+- Telegram-Plugin: In der generierten Übersichtkarte wird eine Anfahrtsroute integriert. Der Abfahrtsort ist konfiguierbar. [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
 ##### Changed
+- Telegram-Plugin: Aufrufe der Google API erfolgen per SSL und ohne zusätzliche Bibliotheken [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
 ##### Deprecated
 ##### Removed
 ##### Fixed

@@ -4,7 +4,7 @@
 """
 Plugin to send FMS-, ZVEI- and POCSAG-messages via Telegram
 @author: Peter Laemmle
-@requires: Telegram BOT token, Telegram chat ID, library python-telegram-bot and optional googlemaps
+@requires: Telegram BOT token, Telegram chat ID, library python-telegram-bot and optional requests and json
 """
 
 #
@@ -15,7 +15,7 @@ import telegram
 from telegram.error import (TelegramError, Unauthorized, BadRequest, NetworkError)
 from includes import globalVars  # Global variables
 if globalVars.config.get("Telegram","RICforLocationAPIKey"):
-	import urllib, googlemaps
+	import requests, json
 
 # Helper function, uncomment to use
 from includes.helper import wildcardHandler
@@ -26,6 +26,7 @@ BOTTokenAPIKey = None
 BOTChatIDAPIKey = None
 RICforLocationAPIKey = None
 GoogleAPIKey = None
+RoutingOrigin = None
 
 ##
 #
@@ -43,12 +44,14 @@ def onLoad():
 	global BOTChatIDAPIKey
 	global RICforLocationAPIKey
 	global GoogleAPIKey
+	global RoutingOrigin
 
 	configHandler.checkConfig("Telegram")
 	BOTTokenAPIKey = globalVars.config.get("Telegram","BOTTokenAPIKey")
 	BOTChatIDAPIKey = globalVars.config.get("Telegram","BOTChatIDAPIKey")
 	RICforLocationAPIKey = globalVars.config.get("Telegram","RICforLocationAPIKey")
 	GoogleAPIKey = globalVars.config.get("Telegram","GoogleAPIKey")
+	RoutingOrigin = globalVars.config.get("Telegram","RoutingOrigin")
 
 	return
 
@@ -98,12 +101,20 @@ def run(typ,freq,data):
 					# Generate map
 					logging.debug("Extract address from POCSAG message")
 					address = "+".join(data["msg"].split(')')[0].split('/',1)[1].replace('(',' ').split())
-
+					# Retrieve directions using Google API
+					logging.debug("Retrieve polylines from Directions API")
+					url = "".join(["https://maps.googleapis.com/maps/api/directions/json?origin=",
+						       RoutingOrigin, "&destination=", address, "&mode=driving&key=", GoogleAPIKey])
+					response = json.loads(requests.get(url).content.decode('utf-8'))
+					logging.debug("Directions API return status: %s" % response['status'])
+					# Retrieve static maps using Google API
 					logging.debug("Retrieve maps from Google")
-					url = "".join(["http://maps.googleapis.com/maps/api/staticmap?markers=", address, "&size=480x640&maptype=roadmap&zoom=16&language=de&key=", GoogleAPIKey])
-					urllib.urlretrieve(url, "overview_map.png")
-					url = "".join(["http://maps.googleapis.com/maps/api/staticmap?markers=", address, "&size=240x320&scale=2&maptype=hybrid&zoom=17&language=de&key=", GoogleAPIKey])
-					urllib.urlretrieve(url, "detail_map.png")
+					url = "".join(["https://maps.googleapis.com/maps/api/staticmap?&size=480x640&maptype=roadmap&path=enc:",
+						       response['routes'][0]['overview_polyline']['points'], "&language=de&key=", GoogleAPIKey])
+					with open("overview_map.png", "wb") as img: img.write(requests.get(url).content)
+					url = "".join(["https://maps.googleapis.com/maps/api/staticmap?markers=",
+						       address, "&size=240x320&scale=2&maptype=hybrid&zoom=17&language=de&key=", GoogleAPIKey])
+					with open("detail_map.png", "wb") as img: img.write(requests.get(url).content)
 
 					# Send message and map with Telegram
 					logging.debug("Send message and maps via Telegram BOT")
@@ -112,10 +123,15 @@ def run(typ,freq,data):
 
 					# Geocoding of address
 					logging.debug("Geocode address")
-					gcode = googlemaps.Client(key='%s' % GoogleAPIKey)
-					gcode_result = gcode.geocode(address)
+					url = "".join(["https://maps.googleapis.com/maps/api/geocode/json?address=",
+						       address, "&language=de&key=", GoogleAPIKey])
+					gcode_result = json.loads(requests.get(url).content)
+					logging.debug("Geocoding API return status: %s" % gcode_result['status'])
 					logging.debug("Send location via Telegram BOT API")
-					bot.sendLocation('%s' % BOTChatIDAPIKey, gcode_result[0]['geometry']['location']['lat'], gcode_result[0]['geometry']['location']['lng'], disable_notification='true')
+					bot.sendLocation('%s' % BOTChatIDAPIKey,
+							 gcode_result[results][0]['geometry']['location']['lat'],
+							 gcode_result[results][0]['geometry']['location']['lng'],
+							 disable_notification='true')
 			else:
 				logging.warning("Invalid Typ: %s", typ)
 		except Unauthorized:
