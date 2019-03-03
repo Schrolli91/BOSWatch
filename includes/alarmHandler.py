@@ -14,6 +14,7 @@ import logging # Global logger
 import time    # timestamp
 
 from includes import globalVars  # Global variables
+from copy import deepcopy
 
 ##
 #
@@ -36,20 +37,20 @@ def processAlarmHandler(typ, freq, data):
 	@return:    nothing
 	@exception: Exception if starting a Thread failed
 	"""
+	#copy objects to avoid issues if the objects will be changed by plugin's or during asynch/threaded processing 
+	dctyp = deepcopy(typ)
+	dcfreq = deepcopy(freq)
+	dcdata = deepcopy(data)
 	if globalVars.config.getboolean("BOSWatch","processAlarmAsync") == True:
 		logging.debug("starting processAlarm async")
 		try:
 			from threading import Thread
-			from copy import deepcopy
-			dctyp = deepcopy(typ)
-			dcfreq = deepcopy(freq)
-			dcdata = deepcopy(data)
 			Thread(target=processAlarm, args=(dctyp, dcfreq, dcdata)).start()
 		except:
 			logging.error("Error in starting alarm processing async")
 			logging.debug("Error in starting alarm processing async", exc_info=True)
 	else:
-		processAlarm(typ, freq, data)
+		processAlarm(dctyp, dcfreq, dcdata)
 
 
 ##
