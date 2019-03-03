@@ -40,7 +40,11 @@ def processAlarmHandler(typ, freq, data):
 		logging.debug("starting processAlarm async")
 		try:
 			from threading import Thread
-			Thread(target=processAlarm, args=(typ, freq, data)).start()
+			from copy import deepcopy
+			dctyp = deepcopy(typ)
+			dcfreq = deepcopy(freq)
+			dcdata = deepcopy(data)
+			Thread(target=processAlarm, args=(dctyp, dcfreq, dcdata)).start()
 		except:
 			logging.error("Error in starting alarm processing async")
 			logging.debug("Error in starting alarm processing async", exc_info=True)
