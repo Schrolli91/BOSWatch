@@ -1,8 +1,14 @@
 # Changelog
 
 
+### __[v2.4.2]__ - 11.03.2019
+##### Added
+- Telegram-Plugin: In der generierten Übersichtkarte wird eine Anfahrtsroute integriert. Der Abfahrtsort ist konfiguierbar. [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
+##### Changed
+- Telegram-Plugin: Aufrufe der Google API erfolgen per SSL und ohne zusätzliche Bibliotheken [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
 
-### __[v2.4.1]__ - 23.20.2018
+
+### __[v2.4.1]__ - 23.10.2018
 ##### Added
 - Pushover-Plugin: Priorität für einzelne RIC und ZVEI in config einstellbar [#378](https://github.com/Schrolli91/BOSWatch/pull/378)
 ##### Changed
