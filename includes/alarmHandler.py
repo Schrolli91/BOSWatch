@@ -73,12 +73,12 @@ def processAlarm(typ, freq, data):
 		logging.debug("[  ALARM  ]")
 		# timestamp, to make sure, that all plugins use the same time
 		data['timestamp'] = int(time.time())
-		# copy objects to avoid issues if the objects will be changed by the plugin's during runtime and during asynch/threaded processing 
-		dctyp = deepcopy(typ)
-		dcfreq = deepcopy(freq)
-		dcdata = deepcopy(data)
 		# Go to all plugins in pluginList
 		for pluginName, plugin in globalVars.pluginList.items():
+			# copy objects to avoid issues if the objects will be changed by the plugin's during runtime and during asynch/threaded processing 
+			dctyp = deepcopy(typ)
+			dcfreq = deepcopy(freq)
+			dcdata = deepcopy(data)
 			# if enabled use RegEx-filter
 			if globalVars.config.getint("BOSWatch","useRegExFilter"):
 				from includes import regexFilter
