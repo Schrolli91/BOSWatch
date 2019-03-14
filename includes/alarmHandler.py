@@ -37,20 +37,16 @@ def processAlarmHandler(typ, freq, data):
 	@return:    nothing
 	@exception: Exception if starting a Thread failed
 	"""
-	#copy objects to avoid issues if the objects will be changed by plugin's or during asynch/threaded processing 
-	dctyp = deepcopy(typ)
-	dcfreq = deepcopy(freq)
-	dcdata = deepcopy(data)
 	if globalVars.config.getboolean("BOSWatch","processAlarmAsync") == True:
 		logging.debug("starting processAlarm async")
 		try:
 			from threading import Thread
-			Thread(target=processAlarm, args=(dctyp, dcfreq, dcdata)).start()
+			Thread(target=processAlarm, args=(typ, freq, data)).start()
 		except:
 			logging.error("Error in starting alarm processing async")
 			logging.debug("Error in starting alarm processing async", exc_info=True)
 	else:
-		processAlarm(dctyp, dcfreq, dcdata)
+		processAlarm(typ, freq, data)
 
 
 ##
@@ -77,15 +73,19 @@ def processAlarm(typ, freq, data):
 		logging.debug("[  ALARM  ]")
 		# timestamp, to make sure, that all plugins use the same time
 		data['timestamp'] = int(time.time())
+		#copy objects to avoid issues if the objects will be changed by the plugin's during runtime or during asynch/threaded processing 
+		dctyp = deepcopy(typ)
+		dcfreq = deepcopy(freq)
+		dcdata = deepcopy(data)
 		# Go to all plugins in pluginList
 		for pluginName, plugin in globalVars.pluginList.items():
 			# if enabled use RegEx-filter
 			if globalVars.config.getint("BOSWatch","useRegExFilter"):
 				from includes import regexFilter
-				if regexFilter.checkFilters(typ, data, pluginName, freq):
+				if regexFilter.checkFilters(dctyp, dcdata, pluginName, dcfreq):
 					logging.debug("call Plugin: %s", pluginName)
 					try:
-						plugin.run(typ, freq, data)
+						plugin.run(dctyp, dcfreq, dcdata)
 						logging.debug("return from: %s", pluginName)
 					except:
 						# call next plugin, if one has thrown an exception
@@ -93,7 +93,7 @@ def processAlarm(typ, freq, data):
 			else: # RegEX filter off - call plugin directly
 				logging.debug("call Plugin: %s", pluginName)
 				try:
-					plugin.run(typ, freq, data)
+					plugin.run(dctyp, dcfreq, dcdata)
 					logging.debug("return from: %s", pluginName)
 				except:
 					# call next plugin, if one has thrown an exception
