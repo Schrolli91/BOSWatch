@@ -73,7 +73,7 @@ def processAlarm(typ, freq, data):
 		logging.debug("[  ALARM  ]")
 		# timestamp, to make sure, that all plugins use the same time
 		data['timestamp'] = int(time.time())
-		#copy objects to avoid issues if the objects will be changed by the plugin's during runtime or during asynch/threaded processing 
+		# copy objects to avoid issues if the objects will be changed by the plugin's during runtime and during asynch/threaded processing 
 		dctyp = deepcopy(typ)
 		dcfreq = deepcopy(freq)
 		dcdata = deepcopy(data)
