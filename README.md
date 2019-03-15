@@ -1,24 +1,3 @@
-### Fast support on https://bwcc.boswatch.de (Mattermost-Server)
-#### Forum: https://boswatch.de
-
-### Arbeiten an BOSWatch 3 gestartet
-#### Work on BOSWatch 3 has started
-## see: https://boswatch.de/index.php?thread/29-boswatch-3/
-
-
-|Branch|Code Qualität|CI-Build|
-|---|---|---|
-|master|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=master)](https://travis-ci.org/Schrolli91/BOSWatch)|
-|develop|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=develop)](https://travis-ci.org/Schrolli91/BOSWatch)|
-
-
-**Unterstützung gesucht**
-
-Zur Weiterentwicklung des Programms benötigen wir Deine Mithilfe - bitte melde dich per Issue, wenn du Anwender in einem verschlüsselten POCSAG-Netz und im (legalen) Besitz des dazugehörigen Schlüssels bist.
-In der Zukunft wollen wir die Möglichkeit schaffen, codierte Nachrichten zu entschlüsseln (und nur dann, wenn der Schlüssel bekannt ist!), dafür brauchen wir Dich als Tester!
-
-**Readme ist veraltet** - bitte im [Wiki](https://github.com/Schrolli91/BOSWatch/wiki) nachschauen!
-
 ![# BOSWatch](/boswatch.png)
 
 :satellite: Python Script to receive and decode German BOS Information with rtl_fm and multimon-NG :satellite:
@@ -30,6 +9,24 @@ In der Zukunft wollen wir die Möglichkeit schaffen, codierte Nachrichten zu ent
 #### Notice:
 The intercept of the German BOS radio is **strictly prohibited** and will be prosecuted. the use is **only authorized** personnel permitted.
 The software was developed using the Multimon-NG code, a function in the real operation can not be guaranteed.
+
+
+### Fast support on https://bwcc.boswatch.de (Mattermost)
+##### Work on BOSWatch 3 has started
+
+|Branch|Code Qualität|CI-Build|
+|---|---|---|
+|master|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/master.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763821)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=master)](https://travis-ci.org/Schrolli91/BOSWatch)|
+|develop|[![Codacy Badge](https://img.shields.io/codacy/grade/d512976554354a199555bd34ed179bb1/develop.svg)](https://www.codacy.com/app/Schrolli91/BOSWatch/dashboard?bid=3763820)|[![Build Status](https://travis-ci.org/Schrolli91/BOSWatch.svg?branch=develop)](https://travis-ci.org/Schrolli91/BOSWatch)|
+
+
+**Unterstützung gesucht**
+
+Zur Weiterentwicklung des Programms benötigen wir Deine Mithilfe - bitte melde dich per Issue, wenn du Anwender in einem verschlüsselten POCSAG-Netz und im **legalen** Besitz des dazugehörigen Schlüssels bist.
+In der Zukunft wollen wir die Möglichkeit schaffen, codierte Nachrichten zu entschlüsseln (und nur dann, wenn der Schlüssel bekannt ist!), dafür brauchen wir Dich als Tester!
+
+**Readme ist veraltet** - bitte im [Wiki](https://github.com/Schrolli91/BOSWatch/wiki) nachschauen!
+
 
 
 **Please** only use Code from **master**-Branch - thats **the only stable!**
@@ -78,7 +75,7 @@ For the other functions see "Usage" below.
 For the RegEX filter functions see Section `[Filters]`
 http://www.regexr.com/ - RegEX test tool an documentation
 
-If RegEX is enabled - only alloewd data will pass !
+If RegEX is enabled - only allowed data will pass !
 
 Syntax: `INDIVIDUAL_NAME = TYP;DATAFIELD;PLUGIN;FREQUENZ;REGEX` (separator `;`)
 - `TYP` = the data typ (FMS|ZVEI|POC)

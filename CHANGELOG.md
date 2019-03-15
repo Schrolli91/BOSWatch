@@ -1,17 +1,22 @@
 # Changelog
 
-
 ### __[v#.#]__ - date
 ##### Added
 - Telegram-Plugin: In der generierten Übersichtkarte wird eine Anfahrtsroute integriert. Der Abfahrtsort ist konfiguierbar. [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
 - Hue-Plugin: Geräte die mit einer Hue bridge verbunden sind können aus BOSWatch ein- und ausgeschaltet werden. [#394](https://github.com/Schrolli91/BOSWatch/issues/394)
 ##### Changed
-- Telegram-Plugin: Aufrufe der Google API erfolgen per SSL und ohne zusätzliche Bibliotheken [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
 ##### Deprecated
 ##### Removed
 ##### Fixed
 - Asynchrone Alarme: Bei asynchroner Verarbeitung von schnell aufeinander folgenden Alarmen, wurde der Inhalt der Objekte typ, freq und data bereits vor dem Abschluss der Verarbeitung eines Alarms wieder überschrieben. Ergebnis hiervon war die Vermischung von RICs und Texten unterschiedlicher Alarme. Lösung über copy.deepcopy() [#394](https://github.com/Schrolli91/BOSWatch/issues/394)
 ##### Security
+
+
+### __[v2.4.2]__ - 11.03.2019
+##### Added
+- Telegram-Plugin: In der generierten Übersichtkarte wird eine Anfahrtsroute integriert. Der Abfahrtsort ist konfiguierbar. [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
+##### Changed
+- Telegram-Plugin: Aufrufe der Google API erfolgen per SSL und ohne zusätzliche Bibliotheken [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
 
 
 ### __[v2.4.1]__ - 23.10.2018
