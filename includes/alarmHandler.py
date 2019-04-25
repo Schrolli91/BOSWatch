@@ -14,7 +14,7 @@ import logging # Global logger
 import time    # timestamp
 
 from includes import globalVars  # Global variables
-from copy import deepcopy
+from copy import deepcopy # copy objects to avoid issues if the objects will be changed by the plugin's during runtime and during asynch/threaded processing 
 
 ##
 #
@@ -41,7 +41,7 @@ def processAlarmHandler(typ, freq, data):
 		logging.debug("starting processAlarm async")
 		try:
 			from threading import Thread
-			Thread(target=processAlarm, args=(typ, freq, data)).start()
+			Thread(target=processAlarm, args=(typ, freq, deepcopy(data))).start()
 		except:
 			logging.error("Error in starting alarm processing async")
 			logging.debug("Error in starting alarm processing async", exc_info=True)
@@ -75,17 +75,13 @@ def processAlarm(typ, freq, data):
 		data['timestamp'] = int(time.time())
 		# Go to all plugins in pluginList
 		for pluginName, plugin in globalVars.pluginList.items():
-			# copy objects to avoid issues if the objects will be changed by the plugin's during runtime and during asynch/threaded processing 
-			dctyp = deepcopy(typ)
-			dcfreq = deepcopy(freq)
-			dcdata = deepcopy(data)
 			# if enabled use RegEx-filter
 			if globalVars.config.getint("BOSWatch","useRegExFilter"):
 				from includes import regexFilter
-				if regexFilter.checkFilters(dctyp, dcdata, pluginName, dcfreq):
+				if regexFilter.checkFilters(typ, data, pluginName, freq):
 					logging.debug("call Plugin: %s", pluginName)
 					try:
-						plugin.run(dctyp, dcfreq, dcdata)
+						plugin.run(typ, freq, deepcopy(data))
 						logging.debug("return from: %s", pluginName)
 					except:
 						# call next plugin, if one has thrown an exception
@@ -93,7 +89,7 @@ def processAlarm(typ, freq, data):
 			else: # RegEX filter off - call plugin directly
 				logging.debug("call Plugin: %s", pluginName)
 				try:
-					plugin.run(dctyp, dcfreq, dcdata)
+					plugin.run(typ, freq, deepcopy(data))
 					logging.debug("return from: %s", pluginName)
 				except:
 					# call next plugin, if one has thrown an exception
