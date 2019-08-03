@@ -12,7 +12,6 @@ FFAgent-Plugin to send FMS-, ZVEI- and POCSAG - messages to FF-Agent
 import logging # Global logger
 import hmac, hashlib
 import json, requests
-import collections
 
 from includes import globalVars  # Global variables
 
@@ -126,23 +125,14 @@ def run(typ,freq,data):
 				alarmData = json.dumps(alarmData)
 				logging.debug(alarmData)
 
-				alarmHeaders = {
+				alarmHeaders = json.dumps({
 					"Content-Type": "application/json",
 					"webApiToken": webApiToken,
 					"accessToken": accessToken,
 					"selectiveCallCode": selectiveCallCode,
 					"hmac": hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()
-				}
+				})
 				logging.debug(alarmHeaders)
-
-				alarmHeaders = collections.OrderedDict(alarmHeaders)
-                alarmHeadersOrdered = collections.OrderedDict()
-                alarmHeadersOrdered["Content-Type"]=alarmHeaders["Content-Type"]
-                alarmHeadersOrdered["webApiToken"]=alarmHeaders["webApiToken"]
-                alarmHeadersOrdered["accessToken"]=alarmHeaders["accessToken"]
-                alarmHeadersOrdered["selectiveCallCode"]=alarmHeaders["selectiveCallCode"]
-                alarmHeadersOrdered["hmac"]=alarmHeaders["hmac"]
-                logging.debug(alarmHeadersOrdered)
 
 				if globalVars.config.get("FFAgent", "live") == "1":
 					r = requests.post(url, data=alarmData, headers=alarmHeaders, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
