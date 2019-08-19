@@ -138,6 +138,8 @@ def run(typ,freq,data):
 					r = requests.post(url, data=alarmData, headers={"Content-Type": "application/json", "webApiToken": webApiToken, "accessToken": accessToken, "selectiveCallCode": selectiveCallCode, "hmac": hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()}, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
 				else:
 					r = requests.post(url, data=alarmData, headers={"Content-Type": "application/json", "webApiToken": webApiToken, "accessToken": accessToken, "selectiveCallCode": selectiveCallCode, "hmac": hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()}, verify=serverCertFile)
+				
+				logging.debug(r)
 
 			except:
 				logging.error("cannot send FFAgent request")
