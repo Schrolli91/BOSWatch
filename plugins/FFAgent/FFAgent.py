@@ -135,11 +135,11 @@ def run(typ,freq,data):
 				logging.debug(alarmHeaders)
 
 				if globalVars.config.get("FFAgent", "live") == "1":
-					r = requests.post(url, data=alarmData, headers={"Content-Type": "application/json", "webApiToken": webApiToken, "accessToken": accessToken, "selectiveCallCode": selectiveCallCode, "hmac": hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()}, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
+					r = requests.post(url, data=alarmData, headers={'Content-Type': 'application/json', 'webApiToken': webApiToken, 'accessToken': accessToken, 'selectiveCallCode': selectiveCallCode, 'hmac': hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()}, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
 				else:
-					r = requests.post(url, data=alarmData, headers={"Content-Type": "application/json", "webApiToken": webApiToken, "accessToken": accessToken, "selectiveCallCode": selectiveCallCode, "hmac": hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()}, verify=serverCertFile)
+					r = requests.post(url, data=alarmData, headers={'Content-Type': 'application/json', 'webApiToken': webApiToken, 'accessToken': accessToken, 'selectiveCallCode': selectiveCallCode, 'hmac': hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()}, verify=serverCertFile)
 				
-				logging.debug(r)
+				logging.debug(response.content)
 
 			except:
 				logging.error("cannot send FFAgent request")
