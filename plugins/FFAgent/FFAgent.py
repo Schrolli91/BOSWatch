@@ -13,6 +13,8 @@ import logging # Global logger
 import hmac, hashlib
 import json, requests
 
+from collections import OrderedDict
+
 from includes import globalVars  # Global variables
 
 #from includes.helper import timeHandler
@@ -123,6 +125,7 @@ def run(typ,freq,data):
 					}
 
 				alarmData = json.dumps(alarmData)
+				
 				logging.debug(alarmData)
 				
 				alarmHeaders = {
@@ -132,14 +135,30 @@ def run(typ,freq,data):
 					"selectiveCallCode": selectiveCallCode,
 					"hmac": hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()
 				}
+				
 				logging.debug(alarmHeaders)
 
-				if globalVars.config.get("FFAgent", "live") == "1":
-					r = requests.post(url, data=alarmData, headers={'Content-Type': 'application/json', 'webApiToken': webApiToken, 'accessToken': accessToken, 'selectiveCallCode': selectiveCallCode, 'hmac': hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()}, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
-				else:
-					r = requests.post(url, data=alarmData, headers={'Content-Type': 'application/json', 'webApiToken': webApiToken, 'accessToken': accessToken, 'selectiveCallCode': selectiveCallCode, 'hmac': hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()}, verify=serverCertFile)
+	            alarmHeadersOrdered=OrderedDict()
+                alarmHeadersOrdered['webApiToken']=webApiToken
+                alarmHeadersOrdered['accessToken']=accessToken
+                alarmHeadersOrdered['selectiveCallCode']=selectiveCallCode
+                alarmHeadersOrdered['hmac']=hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()
 				
-				logging.debug(response.content)
+				logging.debug(alarmHeadersOrdered)
+
+				if globalVars.config.get("FFAgent", "live") == "1":
+					s = requests.Session()
+					s.headers = OrderedDict([('Content-Type', 'application/json')])
+					logging.debug(s.headers)
+					r = s.post(url, data=alarmData, headers=alarmHeadersOrdered, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
+
+				else:
+					s = requests.Session()
+					s.headers = OrderedDict([('Content-Type', 'application/json')])
+					logging.debug(s.headers)
+					r = s.post(url, data=alarmData, headers=alarmHeadersOrdered, verify=serverCertFile)
+				
+				logging.debug(r.request.headers)
 
 			except:
 				logging.error("cannot send FFAgent request")
