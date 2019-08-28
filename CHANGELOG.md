@@ -6,6 +6,7 @@
 - Telegram-Plugin: In der generierten Übersichtkarte wird eine Anfahrtsroute integriert. Der Abfahrtsort ist konfiguierbar. [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
 - Hue-Plugin: Geräte die mit einer Hue bridge verbunden sind können aus BOSWatch ein- und ausgeschaltet werden. [#394](https://github.com/Schrolli91/BOSWatch/issues/394)
 ##### Changed
+- FFAgent Plugin: zusätzliches OrderedDict "alarmHeadersOrdered" implementiert um das HTTP Header Ordering sicherzustellen. Zusätzlich den HTTP Request mittels Session implementiert um das Header Ordering zu bewahren. Zusätzliches Debug Logging für die Header implementiert. [#356] (https://github.com/Schrolli91/BOSWatch/issues/356)
 ##### Deprecated
 ##### Removed
 ##### Fixed
