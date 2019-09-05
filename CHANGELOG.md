@@ -1,5 +1,13 @@
 # Changelog
 
+### __[v2.#]__ - 05.09.2019
+##### Added
+##### Changed
+- POC-Decoder: Im POC-Text wird nach einem RegEx, welcher Koordinaten enthält, gesucht. Werden diese gefunden, so stehen zwei neu befüllte Data-Felder Lon bzw Lat zur Verfügung.
+##### Deprecated
+##### Removed
+##### Fixed
+##### Security
 
 ### __[v#.#]__ - date
 ##### Added
