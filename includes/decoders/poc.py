@@ -124,6 +124,19 @@ def decode(freq, decoded):
 
 			if "Alpha:" in decoded: #check if there is a text message
 				poc_text = decoded.split('Alpha:   ')[1].strip().replace('<NUL><NUL>','').replace('<NUL>','').replace('<NUL','').replace('< NUL>','').replace('<EOT>','').strip()
+				logging.debug("Using %s to find geo-tag in %s", globalVars.config.get("POC","geo_format"),poc_text)
+				m = re.search(globalVars.config.get("POC","geo_format"),poc_text)
+				if m:
+					has_geo = True
+					geo_order = globalVars.config.get("POC","geo_order").split(',')
+					if geo_order[0].lower == "lon":
+						lat = m.group(1) + "." + m.group(2)
+						lon = m.group(3) + "." + m.group(4)
+					else:
+						lon = m.group(1) + "." + m.group(2)
+						lat = m.group(3) + "." + m.group(4)
+				else:
+					has_geo = False
 			else:
 				poc_text = ""
 
@@ -132,7 +145,10 @@ def decode(freq, decoded):
 
 					# check for double alarm
 					if doubleFilter.checkID("POC", poc_id+poc_sub, poc_text):
-						data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id}
+						data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id, "has_geo":has_geo}
+						if has_geo == True:
+							data["lon"] = lon
+							data["lat"] = lat
 						# Add function as character a-d to dataset
 						data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
 
