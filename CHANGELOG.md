@@ -1,5 +1,11 @@
 # Changelog
-
+### __[v#.#]_  - date
+##### Added
+##### Changed
+##### Deprecated
+##### Removed
+##### Fixed
+##### Security
 
 
 ### __[v#.#]__ - date
@@ -8,20 +14,14 @@
 - Hue-Plugin: Geräte die mit einer Hue bridge verbunden sind können aus BOSWatch ein- und ausgeschaltet werden. [#394](https://github.com/Schrolli91/BOSWatch/issues/394)
 ##### Changed
 - FFAgent Plugin: zusätzliches OrderedDict "alarmHeadersOrdered" implementiert um das HTTP Header Ordering sicherzustellen. Zusätzlich den HTTP Request mittels Session implementiert um das Header Ordering zu bewahren. Zusätzliches Debug Logging für die Header implementiert. [#356] (https://github.com/Schrolli91/BOSWatch/issues/356)
+- POC-Decoder: Im POC-Text wird nach einem RegEx, welcher Koordinaten enthält, gesucht. Werden diese gefunden, so stehen zwei neu befüllte Data-Felder Lon bzw Lat zur Verfügung.
 ##### Deprecated
 ##### Removed
 ##### Fixed
 - Asynchrone Alarme: Bei asynchroner Verarbeitung von schnell aufeinander folgenden Alarmen, wurde der Inhalt der Objekte typ, freq und data bereits vor dem Abschluss der Verarbeitung eines Alarms wieder überschrieben. Ergebnis hiervon war die Vermischung von RICs und Texten unterschiedlicher Alarme. Lösung über copy.deepcopy() [#394](https://github.com/Schrolli91/BOSWatch/issues/394)
 ##### Security
 
-### __[v2.#]__ - 05.09.2019
-##### Added
-##### Changed
-- POC-Decoder: Im POC-Text wird nach einem RegEx, welcher Koordinaten enthält, gesucht. Werden diese gefunden, so stehen zwei neu befüllte Data-Felder Lon bzw Lat zur Verfügung.
-##### Deprecated
-##### Removed
-##### Fixed
-##### Security
+
 
 ### __[v2.4.2]__ - 11.03.2019
 ##### Added
