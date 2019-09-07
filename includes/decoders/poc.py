@@ -123,22 +123,29 @@ def decode(freq, decoded):
 			logging.debug("POCSAG Bitrate: %s", bitrate)
 
 			if "Alpha:" in decoded: #check if there is a text message
-				poc_text = decoded.split('Alpha:   ')[1].strip().replace('<NUL><NUL>','').replace('<NUL>','').replace('<NUL','').replace('< NUL>','').replace('<EOT>','').strip()
-				logging.debug("Using %s to find geo-tag in %s", globalVars.config.get("POC","geo_format"),poc_text)
-				m = re.search(globalVars.config.get("POC","geo_format"),poc_text)
-				if m:
-					has_geo = True
-					geo_order = globalVars.config.get("POC","geo_order").split(',')
-					if geo_order[0].lower == "lon":
-						lat = m.group(1) + "." + m.group(2)
-						lon = m.group(3) + "." + m.group(4)
-					else:
-						lon = m.group(1) + "." + m.group(2)
-						lat = m.group(3) + "." + m.group(4)
-				else:
-					has_geo = False
-			else:
-				poc_text = ""
+               			poc_text = decoded.split('Alpha:   ')[1].strip().replace('<NUL><NUL>','').replace('<NUL>','').replace('<NUL','').replace('< NUL>','').replace('<EOT>','').strip()
+                		try:
+                    			logging.debug("Using %s to find geo-tag in %s", globalVars.config.get("POC","geo_format"),poc_text)
+                    			m = re.search(globalVars.config.get("POC","geo_format"),poc_text)
+                    			if m:
+                        			logging.debug("Found geo-tag in message, parsing...")
+                        			has_geo = True
+                        			geo_order = globalVars.config.get("POC","geo_order").split(',')
+                        			if geo_order[0].lower == "lon":
+                            				lat = m.group(1) + "." + m.group(2)
+                            				lon = m.group(3) + "." + m.group(4)
+                        			else:
+                            				lon = m.group(1) + "." + m.group(2)
+                            				lat = m.group(3) + "." + m.group(4)
+                        			logging.debug("Finished parsing geo; lon: %s, lat: %s", lon, lat)
+                    			else:
+                        			logging.debug("No geo-tag found")
+                        			has_geo = False
+                		except:
+					logging.error("Exception caused by searching for geo-tag")
+                    			has_geo = False
+            else:
+                poc_text = ""
 
 			if re.search("[0-9]{7}", poc_id) and re.search("[1-4]{1}", poc_sub): #if POC is valid
 				if isAllowed(poc_id):
