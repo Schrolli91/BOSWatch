@@ -1,11 +1,4 @@
 # Changelog
-### __[v#.#]_  - date
-##### Added
-##### Changed
-##### Deprecated
-##### Removed
-##### Fixed
-##### Security
 
 
 ### __[v#.#]__ - date
@@ -20,7 +13,6 @@
 ##### Fixed
 - Asynchrone Alarme: Bei asynchroner Verarbeitung von schnell aufeinander folgenden Alarmen, wurde der Inhalt der Objekte typ, freq und data bereits vor dem Abschluss der Verarbeitung eines Alarms wieder überschrieben. Ergebnis hiervon war die Vermischung von RICs und Texten unterschiedlicher Alarme. Lösung über copy.deepcopy() [#394](https://github.com/Schrolli91/BOSWatch/issues/394)
 ##### Security
-
 
 
 ### __[v2.4.2]__ - 11.03.2019
