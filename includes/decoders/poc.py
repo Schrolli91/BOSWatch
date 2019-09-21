@@ -123,10 +123,10 @@ def decode(freq, decoded):
 			logging.debug("POCSAG Bitrate: %s", bitrate)
 
 			if "Alpha:" in decoded: #check if there is a text message
-                		poc_text = decoded.split('Alpha:   ')[1].strip().replace('<NUL><NUL>','').replace('<NUL>','').repl$
+                		poc_text = decoded.split('Alpha:   ')[1].strip().replace('<NUL><NUL>','').replace('<NUL>','').replace('<NUL','').replace('< NUL>','').replace('<EOT>','').strip()
                 		if globalVars.config.getint("POC","geo_enable"):
                     			try:
-                        			logging.debug("Using %s to find geo-tag in %s", globalVars.config.get("POC","geo_format"),$
+                        			logging.debug("Using %s to find geo-tag in %s", globalVars.config.get("POC","geo_format"),poc_text)
                         			m = re.search(globalVars.config.get("POC","geo_format"),poc_text)
                         			if m:
                             				logging.debug("Found geo-tag in message, parsing...")
