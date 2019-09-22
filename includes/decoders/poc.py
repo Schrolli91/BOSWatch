@@ -123,16 +123,41 @@ def decode(freq, decoded):
 			logging.debug("POCSAG Bitrate: %s", bitrate)
 
 			if "Alpha:" in decoded: #check if there is a text message
-				poc_text = decoded.split('Alpha:   ')[1].strip().replace('<NUL><NUL>','').replace('<NUL>','').replace('<NUL','').replace('< NUL>','').replace('<EOT>','').strip()
+                		poc_text = decoded.split('Alpha:   ')[1].strip().replace('<NUL><NUL>','').replace('<NUL>','').replace('<NUL','').replace('< NUL>','').replace('<EOT>','').strip()
+                		if globalVars.config.getint("POC","geo_enable"):
+                    			try:
+                        			logging.debug("Using %s to find geo-tag in %s", globalVars.config.get("POC","geo_format"),poc_text)
+                        			m = re.search(globalVars.config.get("POC","geo_format"),poc_text)
+                        			if m:
+                            				logging.debug("Found geo-tag in message, parsing...")
+                            				has_geo = True
+                            				geo_order = globalVars.config.get("POC","geo_order").split(',')
+							if geo_order[0].lower == "lon":
+								lat = m.group(1) + "." + m.group(2)
+								lon = m.group(3) + "." + m.group(4)
+							else:
+								lon = m.group(1) + "." + m.group(2)
+								lat = m.group(3) + "." + m.group(4)
+								logging.debug("Finished parsing geo; lon: %s, lat: %s", lon, lat)
+						else:
+							logging.debug("No geo-tag found")
+							has_geo = False
+					except:
+						has_geo = False
+						logging.error("Exception parsing geo-information",exc_info=true)
+				else:
+					has_geo = False
 			else:
 				poc_text = ""
-
 			if re.search("[0-9]{7}", poc_id) and re.search("[1-4]{1}", poc_sub): #if POC is valid
 				if isAllowed(poc_id):
 
 					# check for double alarm
 					if doubleFilter.checkID("POC", poc_id+poc_sub, poc_text):
-						data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id}
+						data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id, "has_geo":has_geo}
+						if has_geo == True:
+							data["lon"] = lon
+							data["lat"] = lat
 						# Add function as character a-d to dataset
 						data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
 

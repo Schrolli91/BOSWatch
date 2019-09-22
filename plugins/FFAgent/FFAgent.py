@@ -13,6 +13,8 @@ import logging # Global logger
 import hmac, hashlib
 import json, requests
 
+from collections import OrderedDict
+
 from includes import globalVars  # Global variables
 
 #from includes.helper import timeHandler
@@ -123,8 +125,9 @@ def run(typ,freq,data):
 					}
 
 				alarmData = json.dumps(alarmData)
+				
 				logging.debug(alarmData)
-
+				
 				alarmHeaders = {
 					"Content-Type": "application/json",
 					"webApiToken": webApiToken,
@@ -132,12 +135,30 @@ def run(typ,freq,data):
 					"selectiveCallCode": selectiveCallCode,
 					"hmac": hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()
 				}
+				
 				logging.debug(alarmHeaders)
 
+	            alarmHeadersOrdered=OrderedDict()
+                alarmHeadersOrdered['webApiToken']=webApiToken
+                alarmHeadersOrdered['accessToken']=accessToken
+                alarmHeadersOrdered['selectiveCallCode']=selectiveCallCode
+                alarmHeadersOrdered['hmac']=hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()
+				
+				logging.debug(alarmHeadersOrdered)
+
 				if globalVars.config.get("FFAgent", "live") == "1":
-					r = requests.post(url, data=alarmData, headers=alarmHeaders, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
+					s = requests.Session()
+					s.headers = OrderedDict([('Content-Type', 'application/json')])
+					logging.debug(s.headers)
+					r = s.post(url, data=alarmData, headers=alarmHeadersOrdered, verify=serverCertFile, cert=(clientCertFile, clientCertPass))
+
 				else:
-					r = requests.post(url, data=alarmData, headers=alarmHeaders, verify=serverCertFile)
+					s = requests.Session()
+					s.headers = OrderedDict([('Content-Type', 'application/json')])
+					logging.debug(s.headers)
+					r = s.post(url, data=alarmData, headers=alarmHeadersOrdered, verify=serverCertFile)
+				
+				logging.debug(r.request.headers)
 
 			except:
 				logging.error("cannot send FFAgent request")

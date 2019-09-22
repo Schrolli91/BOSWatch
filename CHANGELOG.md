@@ -1,6 +1,17 @@
 # Changelog
 
 
+### __[v2.4.3]__ - 22.09.1991
+##### Added
+- Telegram-Plugin: In der generierten Übersichtkarte wird eine Anfahrtsroute integriert. Der Abfahrtsort ist konfiguierbar. [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
+- Hue-Plugin: Geräte die mit einer Hue bridge verbunden sind können aus BOSWatch ein- und ausgeschaltet werden. [#394](https://github.com/Schrolli91/BOSWatch/issues/394)
+##### Changed
+- FFAgent Plugin: zusätzliches OrderedDict "alarmHeadersOrdered" implementiert um das HTTP Header Ordering sicherzustellen. Zusätzlich den HTTP Request mittels Session implementiert um das Header Ordering zu bewahren. Zusätzliches Debug Logging für die Header implementiert. [#356] (https://github.com/Schrolli91/BOSWatch/issues/356)
+- POC-Decoder: Im POC-Text wird nach einem RegEx, welcher Koordinaten enthält, gesucht. Werden diese gefunden, so stehen zwei neu befüllte Data-Felder Lon bzw Lat zur Verfügung.
+##### Fixed
+- Asynchrone Alarme: Bei asynchroner Verarbeitung von schnell aufeinander folgenden Alarmen, wurde der Inhalt der Objekte typ, freq und data bereits vor dem Abschluss der Verarbeitung eines Alarms wieder überschrieben. Ergebnis hiervon war die Vermischung von RICs und Texten unterschiedlicher Alarme. Lösung über copy.deepcopy() [#394](https://github.com/Schrolli91/BOSWatch/issues/394)
+
+
 ### __[v2.4.2]__ - 11.03.2019
 ##### Added
 - Telegram-Plugin: In der generierten Übersichtkarte wird eine Anfahrtsroute integriert. Der Abfahrtsort ist konfiguierbar. [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
