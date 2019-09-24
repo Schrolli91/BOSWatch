@@ -9,7 +9,7 @@
 ##### Security
 
 
-### __[v2.4.3]__ - 22.09.1991
+### __[v2.4.3]__ - 22.09.2019
 ##### Added
 - Telegram-Plugin: In der generierten Übersichtkarte wird eine Anfahrtsroute integriert. Der Abfahrtsort ist konfiguierbar. [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
 - Hue-Plugin: Geräte die mit einer Hue bridge verbunden sind können aus BOSWatch ein- und ausgeschaltet werden. [#394](https://github.com/Schrolli91/BOSWatch/issues/394)
