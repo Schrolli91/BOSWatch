@@ -3,8 +3,8 @@
 ### __[v2.4.4]__ - unreleased
 ##### Added
 ##### Changed
-Index für die RIC Adresse hinzugefügt #411(https://github.com/Schrolli91/BOSWatch/issues/394)
-INSERT Befehl für MySQL 8.x angepasst, Spaltennamen escaped #410(https://github.com/Schrolli91/BOSWatch/issues/410)
+- MySQL-Plugin: Index für die RIC Adresse hinzugefügt [#411](https://github.com/Schrolli91/BOSWatch/issues/394)
+- MySQL-Plugin: INSERT Befehl für MySQL 8.x angepasst, Spaltennamen escaped [#410](https://github.com/Schrolli91/BOSWatch/issues/410)
 ##### Deprecated
 ##### Removed
 ##### Fixed
