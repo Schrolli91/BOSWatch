@@ -70,7 +70,8 @@ CREATE TABLE IF NOT EXISTS `bos_pocsag` (
     `msg` TEXT NOT NULL,
     `bitrate` INT(4) NOT NULL,
     `description` TEXT NOT NULL,
-    PRIMARY KEY (`ID`)
+    PRIMARY KEY (`ID`),
+    KEY `POCSAG_RIC_IDX` (`ric`)
 )  ENGINE=MYISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
 
 -- rename old columns including little error-prevention
