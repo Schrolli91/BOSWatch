@@ -34,6 +34,7 @@ def isAllowed(poc_id):
 	"""
 
 	allowed = 0
+	has_geo = False
 
 	# 1.) If allowed RICs is set, only they will path,
 	#       If RIC is the right one return True, else False
