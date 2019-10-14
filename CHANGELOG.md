@@ -20,6 +20,7 @@
 - POC-Decoder: Im POC-Text wird nach einem RegEx, welcher Koordinaten enthält, gesucht. Werden diese gefunden, so stehen zwei neu befüllte Data-Felder Lon bzw Lat zur Verfügung. [#405](https://github.com/Schrolli91/BOSWatch/pull/405)
 ##### Fixed
 - Asynchrone Alarme: Bei asynchroner Verarbeitung von schnell aufeinander folgenden Alarmen, wurde der Inhalt der Objekte typ, freq und data bereits vor dem Abschluss der Verarbeitung eines Alarms wieder überschrieben. Ergebnis hiervon war die Vermischung von RICs und Texten unterschiedlicher Alarme. Lösung über copy.deepcopy() [#394](https://github.com/Schrolli91/BOSWatch/issues/394)
+- POC-Decoder: Bug wegen nicht zugeweisener Variable 'has_geo' [#410](https://github.com/Schrolli91/BOSWatch/issues/413) [HOTFIX]
 
 
 ### __[v2.4.2]__ - 11.03.2019
