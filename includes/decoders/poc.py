@@ -99,6 +99,8 @@ def decode(freq, decoded):
 	@return:    nothing
 	@exception: Exception if POCSAG decode failed
 	"""
+	has_geo = False
+	
 	try:
 		bitrate = 0
 
