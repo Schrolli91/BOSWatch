@@ -68,7 +68,7 @@ def run(typ, freq, data):
                 #
                 text = globalVars.config.get("Divera", "zvei_text")
                 type = globalVars.config.get("Divera", "zvei_type")
-		        priority = globalVars.config.get("Divera","zvei_std_prio")
+                priority = globalVars.config.get("Divera","zvei_std_prio")
 
             elif typ == "POC":
                 #
@@ -90,7 +90,7 @@ def run(typ, freq, data):
 
             else:
                 logging.warning("Invalid type: %s", typ)
-		        return
+                return
 
         try:
             #
