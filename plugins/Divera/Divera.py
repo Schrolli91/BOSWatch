@@ -68,20 +68,20 @@ def run(typ, freq, data):
                 #
                 text = globalVars.config.get("Divera", "zvei_text")
                 type = globalVars.config.get("Divera", "zvei_type")
-		priority = globalVars.config.get("Divera","zvei_std_prio")
+		        priority = globalVars.config.get("Divera","zvei_std_prio")
 
             elif typ == "POC":
                 #
                 # building message for POC
                 #
-		if data["function"] == '1':
-                   	priority = globalVars.config.get("Divera", "SubA")
+                if data["function"] == '1':
+                    priority = globalVars.config.get("Divera", "SubA")
                 elif data["function"] == '2':
-                  	priority = globalVars.config.get("Divera", "SubB")
+                    priority = globalVars.config.get("Divera", "SubB")
                 elif data["function"] == '3':
                     priority = globalVars.config.get("Divera", "SubC")
-       	        elif data["function"] == '4':
-               	    priority = globalVars.config.get("Divera", "SubD")
+                elif data["function"] == '4':
+                    priority = globalVars.config.get("Divera", "SubD")
                 else:
                     priority = 'false'
                         
@@ -90,62 +90,62 @@ def run(typ, freq, data):
 
             else:
                 logging.warning("Invalid type: %s", typ)
-		return
+		        return
 
-            try:
-                #
-                # Divera-Request
-                #
-                logging.debug("send Divera for %s", typ)
+        try:
+            #
+            # Divera-Request
+            #
+            logging.debug("send Divera for %s", typ)
 
-                # replace the wildcards
-                text = wildcardHandler.replaceWildcards(text, data)
-                type = wildcardHandler.replaceWildcards(type, data)
-                
-                # Logging data to send
-                logging.debug("Type    : %s", type)
-                logging.debug("Text    : %s", text)
-                logging.debug("Priority: %s", priority)
+            # replace the wildcards
+            text = wildcardHandler.replaceWildcards(text, data)
+            type = wildcardHandler.replaceWildcards(type, data)
+            
+            # Logging data to send
+            logging.debug("Type    : %s", type)
+            logging.debug("Text    : %s", text)
+            logging.debug("Priority: %s", priority)
 				
-		# check priority value
-		if (priority != 'false') and (priority != 'true'):
-		    priority = 'false'				
+            # check priority value
+            if (priority != 'false') and (priority != 'true'):
+                priority = 'false'				
 
-                # start the connection
-                conn = httplib.HTTPSConnection("www.divera247.com:443")
-                conn.request("GET", "/api/alarm",
-                             urllib.urlencode({
-                                 "accesskey": globalVars.config.get("Divera", "accesskey"),
-                                 "type": type,
-                                 "text": text,
-                                 "priority": priority,
-                             }))
+            # start the connection
+            conn = httplib.HTTPSConnection("www.divera247.com:443")
+            conn.request("GET", "/api/alarm",
+                        urllib.urlencode({
+                            "accesskey": globalVars.config.get("Divera", "accesskey"),
+                            "type": type,
+                            "text": text,
+                            "priority": priority,
+                        }))
 
-            except:
-                logging.error("cannot send Divera request")
-                logging.debug("cannot send Divera request", exc_info=True)
-                return
+        except:
+            logging.error("cannot send Divera request")
+            logging.debug("cannot send Divera request", exc_info=True)
+            return
 
+        try:
+            #
+            # check Divera-Response
+            #
+            response = conn.getresponse()
+            if str(response.status) == "200":  # Check Divera Response and print a Log or Error
+                logging.debug("Divera response: %s - %s", str(response.status), str(response.reason))
+            else:
+                logging.warning("Divera response: %s - %s", str(response.status), str(response.reason))
+        except:  # otherwise
+            logging.error("cannot get Divera response")
+            logging.debug("cannot get Divera response", exc_info=True)
+            return
+
+        finally:
+            logging.debug("close Divera-Connection")
             try:
-                #
-                # check Divera-Response
-                #
-                response = conn.getresponse()
-                if str(response.status) == "200":  # Check Divera Response and print a Log or Error
-                    logging.debug("Divera response: %s - %s", str(response.status), str(response.reason))
-                else:
-                    logging.warning("Divera response: %s - %s", str(response.status), str(response.reason))
-            except:  # otherwise
-                logging.error("cannot get Divera response")
-                logging.debug("cannot get Divera response", exc_info=True)
-                return
-
-            finally:
-                logging.debug("close Divera-Connection")
-                try:
-                    request.close()
-                except:
-                    pass
+                request.close()
+            except:
+                pass
 
     except:
         logging.error("unknown error")
