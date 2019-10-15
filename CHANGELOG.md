@@ -1,5 +1,8 @@
 # Changelog
 
+### __[Unreleased]__ - 15.10.2019
+##### Added
+- Divera-Plugin: Plugin zum Ansteuern der Divera-Api. [#415](https://github.com/Schrolli91/BOSWatch/pull/415)
 
 ### __[v2.4.3]__ - 22.09.2019
 ##### Added
