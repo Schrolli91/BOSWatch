@@ -43,7 +43,7 @@ def loadCSV(typ, idField):
 			for row in reader:
 				logging.debug(row)
 				# only import rows with an integer as id, allow subrics though
-				if re.match("^[0-9A-Fa-f]+$", row[idField], re.IGNORECASE):
+				if re.match("^[0-9A-F]+$", row[idField], re.IGNORECASE):
 					try:
 						resultList[row[idField].lower()] = stringConverter.convertToUTF8(row['description'])
 					except:
