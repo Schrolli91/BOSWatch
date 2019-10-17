@@ -128,6 +128,9 @@ def run(typ, freq, data):
                 # replace the wildcards
                 message = wildcardHandler.replaceWildcards(message, data)
                 title = wildcardHandler.replaceWildcards(title, data)
+                sound = globalVars.config.get("Pushover", "sound")
+                if not sound:
+                    sound = "pushover"
 
                 # start the connection
                 conn = httplib.HTTPSConnection("api.pushover.net:443")
@@ -138,6 +141,7 @@ def run(typ, freq, data):
                                  "message": message,
                                  "html": globalVars.config.get("Pushover", "html"),
                                  "title": title,
+                                 "sound": sound,
                                  "priority": priority,
                                  "retry": globalVars.config.get("Pushover", "retry"),
                                  "expire": globalVars.config.get("Pushover", "expire")
