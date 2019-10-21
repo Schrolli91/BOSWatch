@@ -59,7 +59,7 @@ def run(typ, freq, data):
                 # building message for FMS
                 #
                 text = globalVars.config.get("Divera", "fms_text")
-                type = globalVars.config.get("Divera", "fms_type")
+                title = globalVars.config.get("Divera", "fms_title")
                 priority = globalVars.config.get("Divera", "fms_prio")
 
             elif typ == "ZVEI":
@@ -67,7 +67,7 @@ def run(typ, freq, data):
                 # building message for ZVEI
                 #
                 text = globalVars.config.get("Divera", "zvei_text")
-                type = globalVars.config.get("Divera", "zvei_type")
+                title = globalVars.config.get("Divera", "zvei_title")
                 priority = globalVars.config.get("Divera","zvei_std_prio")
 
             elif typ == "POC":
@@ -86,7 +86,7 @@ def run(typ, freq, data):
                     priority = 'false'
                         
                 text = globalVars.config.get("Divera", "poc_text")
-                type = globalVars.config.get("Divera", "poc_type")
+                title = globalVars.config.get("Divera", "poc_title")
 
             else:
                 logging.warning("Invalid type: %s", typ)
@@ -100,10 +100,10 @@ def run(typ, freq, data):
 
             # replace the wildcards
             text = wildcardHandler.replaceWildcards(text, data)
-            type = wildcardHandler.replaceWildcards(type, data)
+            title = wildcardHandler.replaceWildcards(title, data)
             
             # Logging data to send
-            logging.debug("Type    : %s", type)
+            logging.debug("Title   : %s", title)
             logging.debug("Text    : %s", text)
             logging.debug("Priority: %s", priority)
 				
@@ -116,7 +116,7 @@ def run(typ, freq, data):
             conn.request("GET", "/api/alarm",
                         urllib.urlencode({
                             "accesskey": globalVars.config.get("Divera", "accesskey"),
-                            "type": type,
+                            "title": title,
                             "text": text,
                             "priority": priority,
                         }))
