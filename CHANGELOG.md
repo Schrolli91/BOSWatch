@@ -9,6 +9,7 @@
 ##### Deprecated
 ##### Removed
 ##### Fixed
+- Description-List: Buchstaben in FMS-Kennungen werden nun erkannt und zugelassen [#409](https://github.com/Schrolli91/BOSWatch/issues/409)
 ##### Security
 
 
