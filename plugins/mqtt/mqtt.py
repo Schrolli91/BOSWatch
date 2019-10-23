@@ -84,14 +84,12 @@ def run(typ, freq, data):
                 # building message for FMS
                 #
                 message = globalVars.config.get("mqtt", "fms_message")
-                return
 
             elif typ == "ZVEI":
                 #
                 # building message for ZVEI
                 #
                 message = globalVars.config.get("mqtt", "zvei_message")
-                return
 
             elif typ == "POC":
                 if isSignal(data["ric"]):
