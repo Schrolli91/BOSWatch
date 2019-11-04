@@ -13,6 +13,18 @@
 ##### Security
 
 
+### __[v2.4.4]__ - unreleased
+##### Added
+- Divera-Plugin: Plugin zum Ansteuern der Divera-Api. [#415](https://github.com/Schrolli91/BOSWatch/pull/415)
+##### Changed
+- MySQL-Plugin: Index für die RIC Adresse hinzugefügt [#411](https://github.com/Schrolli91/BOSWatch/issues/411)
+- MySQL-Plugin: INSERT Befehl für MySQL 8.x angepasst, Spaltennamen escaped [#410](https://github.com/Schrolli91/BOSWatch/issues/410)
+##### Deprecated
+##### Removed
+##### Fixed
+##### Security
+
+
 ### __[v2.4.3]__ - 22.09.2019
 ##### Added
 - Telegram-Plugin: In der generierten Übersichtkarte wird eine Anfahrtsroute integriert. Der Abfahrtsort ist konfiguierbar. [#382](https://github.com/Schrolli91/BOSWatch/pull/382)
