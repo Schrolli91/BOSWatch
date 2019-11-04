@@ -83,7 +83,7 @@ def run(typ, freq, data):
                 elif data["function"] == '4':
                     priority = globalVars.config.get("Divera", "SubD")
                 else:
-                    priority = 'false'
+                    priority = ''
                         
                 text = globalVars.config.get("Divera", "poc_text")
                 title = globalVars.config.get("Divera", "poc_title")
@@ -109,7 +109,8 @@ def run(typ, freq, data):
 				
             # check priority value
             if (priority != 'false') and (priority != 'true'):
-                priority = 'false'				
+                logging.info("No Priority set for type '%s'! Skipping Divera-Alarm!", typ)
+                return
 
             # start the connection
             conn = httplib.HTTPSConnection("www.divera247.com:443")
