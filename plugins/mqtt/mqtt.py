@@ -40,7 +40,14 @@ def isSignal(poc_id):
             logging.info("RIC %s is no net ident", poc_id)
             return False
 
+def onLog(client, userdata, level, buf):
+    logging.debug("buffer: %s", buf)
 
+def onConnect(client, userdata, flags, rc):
+    logging.debug("Client connected")
+
+def onDisconnect(client, userdata, rc):
+    logging.debug("Client disconnected")
 
 ##
 #
@@ -117,9 +124,41 @@ def run(typ, freq, data):
                 logging.debug("Topic   : %s", topic)
                 logging.debug("Message : %s", message)
 
+                # create Client
+                client = mqtt.Client(globalVars.config.get("mqtt", "client_name"))
+                client.on_log = onLog
+                client.on_connect = onConnect
+                client.on_disconnect = onDisconnect
+                
+                # Certification
+                use_certification = True
+                ca_crt = globalVars.config.get("mqtt", "ca_crt")
+                client_crt = globalVars.config.get("mqtt", "client_crt")
+                client_key = globalVars.config.get("mqtt", "client_key")
+                
+                if not ca_crt:
+                    logging.warning("The Certificate authority certificate (ca.crt) is not given")
+                    use_certification = False
+                if not client_crt:
+                    logging.warning("The client certifcate file (client.crt) is not given")
+                    use_certification = False
+                if not client_key:
+                    logging.warning("The client private key (client.key) is not given")
+                    use_certification = False
+
+                if use_certification == True:
+                    client.tls_set(ca_crt, client_crt, client_key)
+                else:
+                    logging.info("MQTT without Certification")
+                
                 # start the connection
-                client = mqtt.Client()
-                client.connect(globalVars.config.get("mqtt", "broker_address"))
+                host = globalVars.config.get("mqtt", "broker_address")
+                port = globalVars.config.get("mqtt", "broker_port")
+                if not port:
+                    port = 1883
+                client.connect(host, port)
+
+                # Publish
                 client.publish(topic, message)
 
             except:
