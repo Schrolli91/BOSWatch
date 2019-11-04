@@ -2,6 +2,7 @@
 
 ### __[v2.4.4]__ - unreleased
 ##### Added
+- Divera-Plugin: Plugin zum Ansteuern der Divera-Api. [#415](https://github.com/Schrolli91/BOSWatch/pull/415)
 ##### Changed
 - MySQL-Plugin: Index für die RIC Adresse hinzugefügt [#411](https://github.com/Schrolli91/BOSWatch/issues/411)
 - MySQL-Plugin: INSERT Befehl für MySQL 8.x angepasst, Spaltennamen escaped [#410](https://github.com/Schrolli91/BOSWatch/issues/410)
@@ -10,18 +11,6 @@
 ##### Removed
 ##### Fixed
 - Description-List: Buchstaben in FMS-Kennungen werden nun erkannt und zugelassen [#409](https://github.com/Schrolli91/BOSWatch/issues/409)
-##### Security
-
-
-### __[v2.4.4]__ - unreleased
-##### Added
-- Divera-Plugin: Plugin zum Ansteuern der Divera-Api. [#415](https://github.com/Schrolli91/BOSWatch/pull/415)
-##### Changed
-- MySQL-Plugin: Index für die RIC Adresse hinzugefügt [#411](https://github.com/Schrolli91/BOSWatch/issues/411)
-- MySQL-Plugin: INSERT Befehl für MySQL 8.x angepasst, Spaltennamen escaped [#410](https://github.com/Schrolli91/BOSWatch/issues/410)
-##### Deprecated
-##### Removed
-##### Fixed
 ##### Security
 
 
