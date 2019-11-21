@@ -55,21 +55,23 @@ def run(typ,freq,data):
             
 			########## User Plugin CODE ##########
 			if typ == "FMS":
-				logging.warning("%s not supported", typ)
+				th = threading.Thread(target = trigger)
+                        	th.start()
 			elif typ == "ZVEI":
-				logging.warning("%s not supported", typ)
+				th = threading.Thread(target = trigger)
+                        	th.start()
 			elif typ == "POC":
-                if globalVars.config.get("gpiocontrol", "activerics") == "":
-                    th = threading.Thread(target = trigger)
-                    th.start()
-                else
-                    if  data["ric"] in globalVars.config.get("gpiocontrol", "activerics"):
-                        th = threading.Thread(target = trigger)
-                        th.start()
-                    else:
-                        logging.info("Ric not in activerics")
-		else:
-                    logging.warning("Invalid Typ: %s", typ)
+                		if globalVars.config.get("gpiocontrol", "activerics") == "":
+                    		th = threading.Thread(target = trigger)
+                    		th.start()
+              			else
+                 			if  data["ric"] in globalVars.config.get("gpiocontrol", "activerics"):
+                				th = threading.Thread(target = trigger)
+                    				th.start()
+                    			else:
+                        			logging.info("Ric not in activerics")
+			else:
+                    		logging.warning("Invalid Typ: %s", typ)
 			########## User Plugin CODE ##########
 
 	except:
