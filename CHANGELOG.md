@@ -11,6 +11,7 @@
 ##### Removed
 ##### Fixed
 - Description-List: Buchstaben in FMS-Kennungen werden nun erkannt und zugelassen [#409](https://github.com/Schrolli91/BOSWatch/issues/409)
+- MySQL-Plugin: Volle UTF-8 Kompatibilität für Datenbankstruktur, Verbindung und Darstellung im WebUI [#398](https://github.com/Schrolli91/BOSWatch/issues/398)
 ##### Security
 
 
