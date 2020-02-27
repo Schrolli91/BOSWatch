@@ -70,7 +70,9 @@ def run(typ,freq,data):
 				# connect to firEmergency
 				#
 				firSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+				firBosMonSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 				firSocket.connect((globalVars.config.get("firEmergency", "firserver"), globalVars.config.getint("firEmergency", "firport")))
+				firBosMonSocket.connect((globalVars.config.get("firEmergency", "firserver"), globalVars.config.getint("firEmergency", "firbosmonport")))
 			except:
 				logging.error("cannot connect to firEmergency")
 				logging.debug("cannot connect to firEmergency", exc_info=True)
@@ -82,7 +84,16 @@ def run(typ,freq,data):
 				# Format given data-structure to xml-string for firEmergency
 				#
 				if typ == "FMS":
-					logging.debug("FMS not supported by firEmgency")
+					if data["direction"] == "0":
+					    try:
+					    	firXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><event format=\"2\"><telegram><type>2</type><address>"+data["fms"]+"</address><timestamp>"+str(get_epochtime_ms())+"</timestamp><status>"+data["status"]+"</status><flags>0</flags><direction>"+data["direction"]+"</direction></telegram></event>"
+					        firBosMonSocket.send(firXML)
+					    except:
+							logging.error("%s to firEmergency2 failed", typ)
+							logging.debug("%s to firEmergency2 failed", typ, exc_info=True)
+							return
+					else:
+						logging.debug("Direction "+data["direction"]+" not supported!")
 
 				elif typ == "ZVEI":
 					logging.debug("ZVEI to firEmergency")
