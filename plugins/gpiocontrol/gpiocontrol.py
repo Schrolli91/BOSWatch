@@ -1,6 +1,13 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
+"""
+
+@author: KS
+
+@requires: none
+"""
+
 # Imports
 
 import RPi.GPIO as GPIO
@@ -24,18 +31,28 @@ def onLoad():
 	"""
 	While loading the plugins by pluginLoader.loadPlugins()
 	this onLoad() routine is called one time for initialize the plugin
+
+	@requires:  nothing
+
+	@return:    nothing
+	@exception: Exception if init has an fatal error so that the plugin couldn't work
+
 	"""
 	global GPIOPIN
 	global waitTime
-    
+
 	GPIOPIN = globalVars.config.getint("gpiocontrol","pin")
-	waitTime = globalVars.config.getint("gpiocontrol","triggertime")
-    
+	waitTime = globalVars.config.getint("gpiocontrol","ontime")
 
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setwarnings(False)
 	GPIO.setup(GPIOPIN, GPIO.OUT)
-  	GPIO.output(GPIOPIN, GPIO.HIGH)
+
+	#GPIO schalten beim START
+    	#GPIO.output(GPIOPIN, GPIO.LOW)
+	#time.sleep(1)
+
+	GPIO.output(GPIOPIN, GPIO.HIGH)
 
 	return
 
@@ -45,32 +62,42 @@ def onLoad():
 # will be called by the alarmHandler
 #
 def run(typ,freq,data):
+	"""
+	@type    typ:  string (FMS|ZVEI|POC)
+	@param   typ:  Typ of the dataset
+	@type    data: map of data (structure see readme.md in plugin folder)
+	@param   data: Contains the parameter for dispatch
+	@type    freq: string
+	@keyword freq: frequency of the SDR Stick
+
+	@requires:  If necessary the configuration hast to be set in the config.ini.
+
+	@return:    nothing
+	@exception: nothing, make sure this function will never thrown an exception
+	"""
 	try:
-		if configHandler.checkConfig("gpiocontrol"): #read and debug the config
+		if configHandler.checkConfig("gpiocontrol"): #read and debug the config (let empty if no config used)
 
 			logging.debug(globalVars.config.get("gpiocontrol", "pin"))
-			logging.debug(globalVars.config.get("gpiocontrol", "triggertime"))
-   			logging.debug(globalVars.config.get("gpiocontrol", "activerics"))
-            
+			logging.debug(globalVars.config.get("gpiocontrol", "ontime"))
+
 			########## User Plugin CODE ##########
 			if typ == "FMS":
-				th = threading.Thread(target = trigger)
-                        	th.start()
+				#th = threading.Thread(target = trigger)
+				#th.start()
+				logging.warning("%s not supported", typ)
 			elif typ == "ZVEI":
-				th = threading.Thread(target = trigger)
-                        	th.start()
+				#th = threading.Thread(target = trigger)
+				#th.start()
+				logging.warning("%s not supported", typ)
 			elif typ == "POC":
-                		if globalVars.config.get("gpiocontrol", "activerics") == "":
-                    		th = threading.Thread(target = trigger)
-                    		th.start()
-              			else
-                 			if  data["ric"] in globalVars.config.get("gpiocontrol", "activerics"):
-                				th = threading.Thread(target = trigger)
-                    				th.start()
-                    			else:
-                        			logging.info("Ric not in activerics")
+				if  data["ric"] in globalVars.config.get("gpiocontrol", "activerics"):
+					th = threading.Thread(target = trigger)
+                               		th.start()
+				else:
+					logging.info("Ric not in activerics")
 			else:
-                    		logging.warning("Invalid Typ: %s", typ)
+				logging.warning("Invalid Typ: %s", typ)
 			########## User Plugin CODE ##########
 
 	except:
@@ -79,9 +106,9 @@ def run(typ,freq,data):
 
 def trigger():
 	GPIO.output(GPIOPIN, GPIO.LOW)
-	logging.info("GPIOPIN %s on", GPIOPIN)
+	logging.info("GPIOPIN %s angeschaltet", GPIOPIN)
 	time.sleep(waitTime)
-  	GPIO.output(GPIOPIN, GPIO.HIGH)
-	logging.info("GPIOPIN %s off", GPIOPIN)
+        GPIO.output(GPIOPIN, GPIO.HIGH)
+	logging.info("GPIOPIN %s ausgeschaltet", GPIOPIN)
 
 	return
