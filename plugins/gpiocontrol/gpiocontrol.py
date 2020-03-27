@@ -42,7 +42,7 @@ def onLoad():
 	global waitTime
 
 	GPIOPIN = globalVars.config.getint("gpiocontrol","pin")
-	waitTime = globalVars.config.getint("gpiocontrol","ontime")
+	waitTime = globalVars.config.getint("gpiocontrol","triggertime")
 
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setwarnings(False)
@@ -79,7 +79,7 @@ def run(typ,freq,data):
 		if configHandler.checkConfig("gpiocontrol"): #read and debug the config (let empty if no config used)
 
 			logging.debug(globalVars.config.get("gpiocontrol", "pin"))
-			logging.debug(globalVars.config.get("gpiocontrol", "ontime"))
+			logging.debug(globalVars.config.get("gpiocontrol", "triggertime"))
 
 			########## User Plugin CODE ##########
 			if typ == "FMS":
