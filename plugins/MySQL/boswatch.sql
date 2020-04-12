@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 -- --------------------------------------------------------
 
@@ -25,8 +25,8 @@ SET time_zone = "+00:00";
 -- Datenbank anlegen `boswatch`
 --
 
-CREATE DATABASE IF NOT EXISTS boswatch;
-USE boswatch;
+CREATE DATABASE IF NOT EXISTS 'boswatch' DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE 'boswatch';
 
 -- --------------------------------------------------------
 
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `bos_fms` (
     `tsi` VARCHAR(3) NOT NULL,
     `description` TEXT NOT NULL,
     PRIMARY KEY (`ID`)
-)  ENGINE=MYISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
+)  ENGINE=MYISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `bos_pocsag` (
     `description` TEXT NOT NULL,
     PRIMARY KEY (`ID`),
     KEY `POCSAG_RIC_IDX` (`ric`)
-)  ENGINE=MYISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
+)  ENGINE=MYISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
 
 -- rename old columns including little error-prevention
 #ALTER IGNORE TABLE `bos_pocsag` change `funktion` `function` INT(1);
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `bos_zvei` (
     `zvei` VARCHAR(5) NOT NULL DEFAULT '0',
     `description` TEXT NOT NULL,
     PRIMARY KEY (`ID`)
-)  ENGINE=MYISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
+)  ENGINE=MYISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `bos_signal` (
     `time` DATETIME NOT NULL,
     `ric` VARCHAR(7) NOT NULL DEFAULT '0',
     PRIMARY KEY (`ID`)
-)  ENGINE=MYISAM DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
+)  ENGINE=MYISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
