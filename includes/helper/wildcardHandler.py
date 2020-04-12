@@ -37,6 +37,12 @@ def replaceWildcards(text, data):
 		text = text.replace("%BR%", "\r\n")
 		text = text.replace("%LPAR%", "(")
 		text = text.replace("%RPAR%", ")")
+		text = text.replace("%FTA%", "<b>")
+		text = text.replace("%FTE%", "</b>")
+		text = text.replace("%KTA%", "<i>")
+		text = text.replace("%KTE%", "</i>")
+		text = text.replace("%UTA%", "<u>")
+		text = text.replace("%UTE%", "</u>")
 
 		# replace FMS data
 		if "fms" in data: text = text.replace("%FMS%", data["fms"])
