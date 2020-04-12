@@ -4,7 +4,7 @@
 ### __[v2.4.4]__ - 12.04.2020
 ##### Added
 -Telegram Plugin: Wildcards für fetten, kursiven und unterstrichenen Text hinzugefügt
-[#382](https://github.com/Schrolli91/BOSWatch/pull/440)
+[#440](https://github.com/Schrolli91/BOSWatch/pull/440)
 
 
 ### __[v2.4.3]__ - 22.09.2019
