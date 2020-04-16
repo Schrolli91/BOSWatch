@@ -1,6 +1,6 @@
 # Changelog
 
-### __[v2.4.4]__ - unreleased
+### __[v2.5]__ - 16.04.2020
 ##### Added
 - Divera-Plugin: Plugin zum Ansteuern der Divera-Api. [#415](https://github.com/Schrolli91/BOSWatch/pull/415)
 - GPIO-Control: Plugin zum Ansteuern der GPIO Pins. [#438](https://github.com/Schrolli91/BOSWatch/pull/438)
@@ -8,12 +8,9 @@
 - MySQL-Plugin: Index für die RIC Adresse hinzugefügt [#411](https://github.com/Schrolli91/BOSWatch/issues/411)
 - MySQL-Plugin: INSERT Befehl für MySQL 8.x angepasst, Spaltennamen escaped [#410](https://github.com/Schrolli91/BOSWatch/issues/410)
 - Pushover-Plugin: Konfigurationsmöglichkeit für den Sound [#418](https://github.com/Schrolli91/BOSWatch/issues/418)
-##### Deprecated
-##### Removed
 ##### Fixed
 - Description-List: Buchstaben in FMS-Kennungen werden nun erkannt und zugelassen [#409](https://github.com/Schrolli91/BOSWatch/issues/409)
 - MySQL-Plugin: Volle UTF-8 Kompatibilität für Datenbankstruktur, Verbindung und Darstellung im WebUI [#398](https://github.com/Schrolli91/BOSWatch/issues/398)
-##### Security
 
 
 ### __[v2.4.3]__ - 22.09.2019
