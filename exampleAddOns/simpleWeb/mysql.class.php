@@ -35,6 +35,10 @@ Simple Database Class (C) by Bastian Schroll
             $this->error("Datenbank nicht gefunden!", mysqli_error($this->conn));
             return false;
         }
+        
+        /* Set character set for database connection to utf8mb4 */
+        mysqli_query($this->conn, "SET NAMES 'utf8mb4'");
+        
         return true;
     }
 
