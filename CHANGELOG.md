@@ -1,5 +1,14 @@
 # Changelog
 
+### __[v2.5.1]__ - unreleased
+##### Added
+##### Changed
+##### Deprecated
+##### Removed
+##### Fixed
+##### Security
+
+
 ### __[v2.5]__ - 16.04.2020
 ##### Added
 - Divera-Plugin: Plugin zum Ansteuern der Divera-Api. [#415](https://github.com/Schrolli91/BOSWatch/pull/415)
