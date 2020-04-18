@@ -2,12 +2,13 @@
 
 ### __[v2.5.1]__ - unreleased
 ##### Added
-Plugin requirements: Added requirements.txt for all plugins requiring extra python packages so the install will be easier 
+- Plugin requirements: Added requirements.txt for all plugins requiring extra python packages so the install will be easier 
 ##### Changed
 ##### Deprecated
 ##### Removed
 ##### Fixed
 ##### Security
+
 
 ### __[v2.5]__ - 16.04.2020
 ##### Added
