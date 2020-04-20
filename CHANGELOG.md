@@ -8,6 +8,7 @@
 ##### Removed
 ##### Fixed
 - MySQL plugin: Ensure character set (utf8mb4) and collation (utf8mb4_general_ci) are set correctly when connection to database is established. [#447](https://github.com/Schrolli91/BOSWatch/pull/447)
+- E-Mail plugin: Create MIME-compliant header that can contain any kind of string.
 ##### Security
 
 
