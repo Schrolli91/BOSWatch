@@ -13,6 +13,7 @@ import logging # Global logger
 
 import smtplib #for the SMTP client
 from email.mime.text import MIMEText # Import the email modules we'll need
+from email.header import Header # Import the email modules we'll need
 from email.utils import formatdate # need for confirm to RFC2822 standard
 from email.utils import make_msgid # need for confirm to RFC2822 standard
 
@@ -61,7 +62,7 @@ def doSendmail(server, subject, mailtext):
 		msg = MIMEText(mailtext, 'plain', 'UTF-8')
 		msg['From'] = globalVars.config.get("eMail", "from")
 		msg['To']   = globalVars.config.get("eMail", "to")
-		msg['Subject'] = subject
+		msg['Subject'] = Header(subject, 'UTF-8')
 		msg['Date'] = formatdate()
 		msg['Message-Id'] = make_msgid()
 		msg['Priority'] = globalVars.config.get("eMail", "priority")
