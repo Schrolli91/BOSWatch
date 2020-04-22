@@ -110,6 +110,9 @@ def getDescription(typ, data):
 		elif typ == "ZVEI":
 			resultStr = zveiDescribtionList[data]
 		elif typ == "POC":
+			if globalVars.config.getint("POC", "onlysubric"):
+				resultStr = ricDescribtionList[data] # only SubRIC
+			else:        
 			resultStr = ricDescribtionList[data[:-1]] # MainRIC
 			resultStr += " " + ricDescribtionList[data] # SubRIC
 		else:
