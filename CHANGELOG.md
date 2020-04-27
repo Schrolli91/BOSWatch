@@ -3,7 +3,7 @@
 ### __[v2.5.1]__ - unreleased
 ##### Added
 - Plugin requirements: Added requirements.txt for all plugins requiring extra python packages so the install will be easier 
-- POC: neuer Parameter um Sub-RICs ohne Hauptdefinition zu beschreiben. Parameter 'onlysubric'. [#449](https://github.com/Schrolli91/BOSWatch/pull/449)
+- DescriptionList POC: add new description parameter for Sub-RICs without a main RIC definition. parameter 'onlysubric'. [#449](https://github.com/Schrolli91/BOSWatch/pull/449)
 ##### Changed
 ##### Deprecated
 ##### Removed
