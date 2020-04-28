@@ -11,7 +11,7 @@
 
 ### __[v2.5.1]__ - 28.04.2020
 ##### Added
-- Plugin requirements: Added requirements.txt for all plugins requiring extra python packages so the install will be easier 
+- Plugin requirements: Added requirements.txt for all plugins requiring extra python packages so the install will be easier [#446](https://github.com/Schrolli91/BOSWatch/pull/446)
 - DescriptionList POC: add new description parameter for Sub-RICs without a main RIC definition. parameter 'onlysubric'. [#449](https://github.com/Schrolli91/BOSWatch/pull/449)
 ##### Fixed
 - MySQL plugin: Ensure character set (utf8mb4) and collation (utf8mb4_general_ci) are set correctly when connection to database is established. [#447](https://github.com/Schrolli91/BOSWatch/pull/447)
