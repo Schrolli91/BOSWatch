@@ -1,16 +1,21 @@
 # Changelog
 
-### __[v2.5.1]__ - unreleased
+### __[v2.5.2]__ - unreleased
 ##### Added
-- Plugin requirements: Added requirements.txt for all plugins requiring extra python packages so the install will be easier 
-- DescriptionList POC: add new description parameter for Sub-RICs without a main RIC definition. parameter 'onlysubric'. [#449](https://github.com/Schrolli91/BOSWatch/pull/449)
 ##### Changed
 ##### Deprecated
 ##### Removed
 ##### Fixed
+##### Security
+
+
+### __[v2.5.1]__ - 28.04.2020
+##### Added
+- Plugin requirements: Added requirements.txt for all plugins requiring extra python packages so the install will be easier 
+- DescriptionList POC: add new description parameter for Sub-RICs without a main RIC definition. parameter 'onlysubric'. [#449](https://github.com/Schrolli91/BOSWatch/pull/449)
+##### Fixed
 - MySQL plugin: Ensure character set (utf8mb4) and collation (utf8mb4_general_ci) are set correctly when connection to database is established. [#447](https://github.com/Schrolli91/BOSWatch/pull/447)
 - E-Mail plugin: Create MIME-compliant header that can contain any kind of string. [#448](https://github.com/Schrolli91/BOSWatch/pull/448)
-##### Security
 
 
 ### __[v2.5]__ - 16.04.2020
