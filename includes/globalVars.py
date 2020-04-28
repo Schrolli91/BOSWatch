@@ -10,8 +10,8 @@ Global variables
 
 # version info
 versionNr = "2.5.1"
-branch = "dev"
-buildDate = "unreleased"
+branch = "master"
+buildDate = "28.04.2020"
 
 # Global variables
 config = 0
