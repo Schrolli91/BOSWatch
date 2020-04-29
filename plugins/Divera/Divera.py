@@ -69,7 +69,7 @@ def run(typ, freq, data):
                 #
                 text = globalVars.config.get("Divera", "zvei_text")
                 title = globalVars.config.get("Divera", "zvei_title")
-                priority = globalVars.config.get("Divera","zvei_std_prio")
+                priority = globalVars.config.get("Divera","zvei_prio")
                 ric = globalVars.config.get("Divera","zvei_ric")
 
             elif typ == "POC":
