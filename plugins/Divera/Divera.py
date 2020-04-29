@@ -16,6 +16,24 @@ from includes import globalVars  # Global variables
 from includes.helper import configHandler
 from includes.helper import wildcardHandler
 
+def isSignal(poc_id):
+	"""
+	@type    poc_id: string
+	@param   poc_id: POCSAG Ric
+
+	@requires:  Configuration has to be set in the config.ini
+
+	@return:    True if the Ric is Signal, other False
+	@exception: none
+	"""
+	# If RIC is Signal return True, else False
+	if globalVars.config.get("POC", "netIdent_ric"):
+		if poc_id in globalVars.config.get("POC", "netIdent_ric"):
+			logging.info("RIC %s is net ident", poc_id)
+			return True
+		else:
+			logging.info("RIC %s is no net ident", poc_id)
+			return False
 
 ##
 #
@@ -141,13 +159,15 @@ def run(typ, freq, data):
                              urllib.urlencode({
                                 "accesskey": globalVars.config.get("Divera", "accesskey"),
                                 "vehicle_ric": vehicle,
+                                "status_id": data["status"],
+                                "status_note": data["directionText"],
                                 "title": title,
                                 "text": text,
                                 "priority": priority,
                             }))
                             
-            else:
-            # start connection ZVEI / POC
+            elif typ == "ZVEI":
+            # start connection POC
                 conn = httplib.HTTPSConnection("www.divera247.com:443")
                 conn.request("GET", "/api/alarm",
                             urllib.urlencode({
@@ -157,6 +177,19 @@ def run(typ, freq, data):
                                 "text": text,
                                 "priority": priority,
                             }))
+            
+            elif typ == "POC":
+                if isSignal(data["ric"]):              
+            # start connection POC
+                         conn = httplib.HTTPSConnection("www.divera247.com:443")
+                         conn.request("GET", "/api/alarm",
+                                      urllib.urlencode({
+                                      "accesskey": globalVars.config.get("Divera", "accesskey"),
+                                      "title": title,
+                                      "ric": ric,
+                                      "text": text,
+                                      "priority": priority,
+                                      }))
 
         except:
             logging.error("cannot send Divera request")
