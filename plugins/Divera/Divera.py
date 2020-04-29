@@ -61,6 +61,7 @@ def run(typ, freq, data):
                 text = globalVars.config.get("Divera", "fms_text")
                 title = globalVars.config.get("Divera", "fms_title")
                 priority = globalVars.config.get("Divera", "fms_prio")
+                vehicle = globalVars.config.get("Divera", "fms_vehicle")
 
             elif typ == "ZVEI":
                 #
@@ -69,6 +70,7 @@ def run(typ, freq, data):
                 text = globalVars.config.get("Divera", "zvei_text")
                 title = globalVars.config.get("Divera", "zvei_title")
                 priority = globalVars.config.get("Divera","zvei_std_prio")
+                ric = globalVars.config.get("Divera","zvei_ric")
 
             elif typ == "POC":
                 #
@@ -87,6 +89,7 @@ def run(typ, freq, data):
                         
                 text = globalVars.config.get("Divera", "poc_text")
                 title = globalVars.config.get("Divera", "poc_title")
+                ric = globalVars.config.get("Divera", "poc_ric")
 
             else:
                 logging.warning("Invalid type: %s", typ)
@@ -101,9 +104,18 @@ def run(typ, freq, data):
             # replace the wildcards
             text = wildcardHandler.replaceWildcards(text, data)
             title = wildcardHandler.replaceWildcards(title, data)
+            if typ == "FMS":
+                vehicle = wildcardHandler.replaceWildcards(vehicle, data)
+            else:
+                ric = wildcardHandler.replaceWildcards(ric, data)
+            
             
             # Logging data to send
             logging.debug("Title   : %s", title)
+            if typ == "FMS":
+                logging.debug("Vehicle     : %s", vehicle)
+            else:
+                logging.debug("RIC     : %s", ric)
             logging.debug("Text    : %s", text)
             logging.debug("Priority: %s", priority)
 				
@@ -112,15 +124,39 @@ def run(typ, freq, data):
                 logging.info("No Priority set for type '%s'! Skipping Divera-Alarm!", typ)
                 return
 
-            # start the connection
-            conn = httplib.HTTPSConnection("www.divera247.com:443")
-            conn.request("GET", "/api/alarm",
-                        urllib.urlencode({
-                            "accesskey": globalVars.config.get("Divera", "accesskey"),
-                            "title": title,
-                            "text": text,
-                            "priority": priority,
-                        }))
+            # Check FMS
+            if typ == "FMS":
+                if (vehicle == ''):
+                    logging.info("No Vehicle set!");
+            
+            else:
+                if (ric == ''):
+                    logging.info("No RIC set!");
+            
+            # start connection to Divera                
+            if typ == "FMS":
+                # start the connection FMS
+                conn = httplib.HTTPSConnection("www.divera247.com:443")
+                conn.request("GET", "/api/fms",
+                             urllib.urlencode({
+                                "accesskey": globalVars.config.get("Divera", "accesskey"),
+                                "vehicle_ric": vehicle,
+                                "title": title,
+                                "text": text,
+                                "priority": priority,
+                            }))
+                            
+            else:
+            # start connection ZVEI / POC
+                conn = httplib.HTTPSConnection("www.divera247.com:443")
+                conn.request("GET", "/api/alarm",
+                            urllib.urlencode({
+                                "accesskey": globalVars.config.get("Divera", "accesskey"),
+                                "title": title,
+                                "ric": ric,
+                                "text": text,
+                                "priority": priority,
+                            }))
 
         except:
             logging.error("cannot send Divera request")
