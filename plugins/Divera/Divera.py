@@ -193,6 +193,7 @@ def run(typ, freq, data):
                                       
                 else:
                     logging.debug("RIC is net ident")
+                    return
             
             else:
                 loggin.debug("No Type is set", exc_info=True)
