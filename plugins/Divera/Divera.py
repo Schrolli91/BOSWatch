@@ -190,6 +190,13 @@ def run(typ, freq, data):
                                       "text": text,
                                       "priority": priority,
                                       }))
+                                      
+                else:
+                    logging.debug("RIC is net ident")
+            
+            else:
+                loggin.debug("No Type is set", exc_info=True)
+                return
 
         except:
             logging.error("cannot send Divera request")
