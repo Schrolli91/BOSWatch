@@ -91,23 +91,29 @@ def run(typ, freq, data):
                 ric = globalVars.config.get("Divera","zvei_ric")
 
             elif typ == "POC":
-                #
-                # building message for POC
-                #
-                if data["function"] == '1':
-                    priority = globalVars.config.get("Divera", "SubA")
-                elif data["function"] == '2':
-                    priority = globalVars.config.get("Divera", "SubB")
-                elif data["function"] == '3':
-                    priority = globalVars.config.get("Divera", "SubC")
-                elif data["function"] == '4':
-                    priority = globalVars.config.get("Divera", "SubD")
-                else:
-                    priority = ''
+                if isSignal(data["ric"]): 
+                
+                    #
+                    # building message for POC
+                    #
+                    if data["function"] == '1':
+                        priority = globalVars.config.get("Divera", "SubA")
+                    elif data["function"] == '2':
+                        priority = globalVars.config.get("Divera", "SubB")
+                    elif data["function"] == '3':
+                        priority = globalVars.config.get("Divera", "SubC")
+                    elif data["function"] == '4':
+                        priority = globalVars.config.get("Divera", "SubD")
+                    else:
+                        priority = ''
                         
-                text = globalVars.config.get("Divera", "poc_text")
-                title = globalVars.config.get("Divera", "poc_title")
-                ric = globalVars.config.get("Divera", "poc_ric")
+                    text = globalVars.config.get("Divera", "poc_text")
+                    title = globalVars.config.get("Divera", "poc_title")
+                    ric = globalVars.config.get("Divera", "poc_ric")
+
+                else:
+                    logging.debug("RIC is net ident")
+                    return
 
             else:
                 logging.warning("Invalid type: %s", typ)
@@ -179,21 +185,17 @@ def run(typ, freq, data):
                             }))
             
             elif typ == "POC":
-                if isSignal(data["ric"]):              
             # start connection POC
-                         conn = httplib.HTTPSConnection("www.divera247.com:443")
-                         conn.request("GET", "/api/alarm",
-                                      urllib.urlencode({
-                                      "accesskey": globalVars.config.get("Divera", "accesskey"),
-                                      "title": title,
-                                      "ric": ric,
-                                      "text": text,
-                                      "priority": priority,
-                                      }))
+                conn = httplib.HTTPSConnection("www.divera247.com:443")
+                conn.request("GET", "/api/alarm",
+                            urllib.urlencode({
+                                "accesskey": globalVars.config.get("Divera", "accesskey"),
+                                "title": title,
+                                "ric": ric,
+                                "text": text,
+                                "priority": priority,
+                            }))
                                       
-                else:
-                    logging.debug("RIC is net ident")
-                    return
             
             else:
                 loggin.debug("No Type is set", exc_info=True)
