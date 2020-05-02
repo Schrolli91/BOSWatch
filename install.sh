@@ -6,17 +6,17 @@ function exitcodefunction {
   module=$3
 
   if [ $errorcode -ne "0" ]; then
-    echo "Action: $action on $module failed." >> $boswatchpath/install/setup_log.txt
-    echo "Exitcode: $errorcode" >> $boswatchpath/install/setup_log.txt
+    echo "Action: $action on $module failed." >> $boswatch_install_path/setup_log.txt
+    echo "Exitcode: $errorcode" >> $boswatch_install_path/setup_log.txt
     echo ""
     echo "Action: $action on $module failed."
     echo "Exitcode: $errorcode"
     echo ""
     echo " -> If you want to open an issue at https://github.com/Schrolli91/BOSWatch/issues"
-    echo "    please post the logfile, located at $boswatchpath/install/setup_log.txt"
+    echo "    please post the logfile, located at $boswatch_install_path/setup_log.txt"
     exit 1
   else
-    echo "Action: $action on $module ok." >> $boswatchpath/install/setup_log.txt
+    echo "Action: $action on $module ok." >> $boswatch_install_path/setup_log.txt
   fi
  }
 
@@ -132,7 +132,7 @@ tput cup 13 15
 echo "[ 4/9] [####-----]"
 tput cup 15 5
 echo "-> download rtl_fm......................"
-cd $boswatchpath/install
+cd $boswatch_install_path
 git clone https://github.com/Schrolli91/rtl-sdr.git >> $boswatch_install_path/setup_log.txt 2>&1
 exitcodefunction $? git-clone rtl-sdr
 cd rtl-sdr/
@@ -161,11 +161,11 @@ tput cup 13 15
 echo "[ 6/9] [######---]"
 tput cup 15 5
 echo "-> download multimon-ng................"
-cd $boswatchpath/install
+cd $boswatch_install_path
 git clone https://github.com/Schrolli91/multimon-ng.git multimonNG >> $boswatch_install_path/setup_log.txt 2>&1
 exitcodefunction $? git-clone multimonNG
 
-cd $boswatchpath/install/multimonNG/
+cd $boswatch_install_path/multimonNG/
 
 # Compile Multimon-NG
 tput cup 13 15
@@ -177,10 +177,10 @@ cd build
 qmake ../multimon-ng.pro >> $boswatch_install_path/setup_log.txt 2>&1
 exitcodefunction $? qmake multimonNG
 
-make >> $boswatchpath/install/setup_log.txt 2>&1
+make >> $boswatch_install_path/setup_log.txt 2>&1
 exitcodefunction $? make multimonNG
 
-make install >> $boswatchpath/install/setup_log.txt 2>&1
+make install >> $boswatch_install_path/setup_log.txt 2>&1
 exitcodefunction $? qmakeinstall multimonNG
 
 # Download & Install MySQL-Connector for Python via pip
@@ -188,9 +188,9 @@ tput cup 13 15
 echo "[ 8/9] [########-]"
 tput cup 15 5
 echo "-> Download & Install MySQL connector for Python."
-cd $boswatchpath/install
+cd $boswatch_install_path
 pip install mysql-connector-python >> $boswatch_install_path/setup_log.txt 2>&1
-exitcodefunction $? download mysql-connector
+exitcodefunction $? install mysql-connector
 
 # Blacklist DVB-Drivers
 tput cup 13 15
@@ -210,7 +210,6 @@ echo "Watch out: to run BOSWatch you have to modify the config.ini!"
 echo "Do the following step to do so:"
 echo "sudo nano $boswatchpath/config/config.ini"
 echo "and modify the config as you need. This step is optional if you are upgrading an old version of BOSWatch. "
-echo "If not needed, please remove $boswatchpath/install"
 
 tput cnorm
 
