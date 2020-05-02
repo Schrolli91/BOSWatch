@@ -93,6 +93,9 @@ def run(typ, freq, data):
             elif typ == "POC":
                 if isSignal(data["ric"]): 
                 
+                    logging.debug("RIC is net ident")
+                    return
+                else:
                     #
                     # building message for POC
                     #
@@ -110,10 +113,7 @@ def run(typ, freq, data):
                     text = globalVars.config.get("Divera", "poc_text")
                     title = globalVars.config.get("Divera", "poc_title")
                     ric = globalVars.config.get("Divera", "poc_ric")
-
-                else:
-                    logging.debug("RIC is net ident")
-                    return
+                    
 
             else:
                 logging.warning("Invalid type: %s", typ)
