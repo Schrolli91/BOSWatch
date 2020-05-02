@@ -198,7 +198,6 @@ echo "[9/9] [#########]"
 tput cup 15 5
 echo "-> configure..........................."
 cd $boswatchpath/
-chmod +x *
 echo $'# BOSWatch - blacklist the DVB drivers to avoid conflicts with the SDR driver\n blacklist dvb_usb_rtl28xxu \n blacklist rtl2830\n blacklist dvb_usb_v2\n blacklist dvb_core' >> /etc/modprobe.d/boswatch_blacklist_sdr.conf
 
 # Installation is ready
