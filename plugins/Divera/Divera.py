@@ -173,7 +173,7 @@ def run(typ, freq, data):
                             }))
                             
             elif typ == "ZVEI":
-            # start connection POC
+            # start connection ZVEI
                 conn = httplib.HTTPSConnection("www.divera247.com:443")
                 conn.request("GET", "/api/alarm",
                             urllib.urlencode({
