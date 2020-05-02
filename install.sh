@@ -92,7 +92,7 @@ done
 
 # Create default paths
 mkdir -p $boswatchpath
-mkdir -p $boswatchpath/install
+mkdir -p $boswatch_install_path
 
 echo ""
 
