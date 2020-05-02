@@ -47,6 +47,7 @@ boswatchpath=/opt/boswatch
 reboot=false
 didBackup=false
 
+# Checking for Backup
 # check for old version (for the old ones...)
 if [ -f $boswatchpath/BOSWatch/boswatch.py ]; then
 	echo "Old installation found!"
@@ -67,6 +68,7 @@ if [ -f $boswatchpath/boswatch.py ]; then
 	didBackup=true
 fi
 
+# Check for Flags in command line
 for (( i=1; i<=$#; i=$i+2 )); do
     t=$((i + 1))
     eval arg=\$$i
@@ -106,7 +108,22 @@ apt-get -y install git cmake build-essential libusb-1.0 qt4-qmake qt4-default li
 exitcodefunction $? download stuff
 
 tput cup 13 15
-echo "[ 3/10] [###-------]"
+echo "[ 3/10] [#########-]"
+tput cup 15 5
+echo "-> download BOSWatch..................."
+cd $boswatchpath/
+
+case $branch in
+  "dev") git clone -b develop https://github.com/Schrolli91/BOSWatch . >> $boswatchpath/install/setup_log.txt 2>&1 && \
+    exitcodefunction $? git-clone BOSWatch-develop ;;
+  "beta") git clone -b beta https://github.com/Schrolli91/BOSWatch . >> $boswatchpath/install/setup_log.txt 2>&1 && \
+    exitcodefunction $? git-clone BOSWatch-beta ;;
+  *) git clone -b master https://github.com/Schrolli91/BOSWatch . >> $boswatchpath/install/setup_log.txt 2>&1 && \
+    exitcodefunction $? git-clone BOSWatch ;;
+esac
+
+tput cup 13 15
+echo "[ 4/10] [###-------]"
 tput cup 15 5
 echo "-> download rtl_fm......................"
 cd $boswatchpath/install
@@ -115,7 +132,7 @@ exitcodefunction $? git-clone rtl-sdr
 cd rtl-sdr/
 
 tput cup 13 15
-echo "[ 4/10] [####------]"
+echo "[ 5/10] [####------]"
 tput cup 15 5
 echo "-> compile rtl_fm......................"
 mkdir -p build && cd build
@@ -134,7 +151,7 @@ exitcodefunction $? ldconfig rtl-sdr
 
 
 tput cup 13 15
-echo "[ 5/10] [#####-----]"
+echo "[ 6/10] [#####-----]"
 tput cup 15 5
 echo "-> download multimon-ng................"
 cd $boswatchpath/install
@@ -145,7 +162,7 @@ exitcodefunction $? git-clone multimonNG
 cd $boswatchpath/install/multimonNG/
 
 tput cup 13 15
-echo "[ 6/10] [######----]"
+echo "[ 7/10] [######----]"
 tput cup 15 5
 echo "-> compile multimon-ng................."
 mkdir -p build
@@ -162,7 +179,7 @@ exitcodefunction $? qmakeinstall multimonNG
 
 
 tput cup 13 15
-echo "[ 7/10] [#######---]"
+echo "[ 8/10] [#######---]"
 tput cup 15 5
 echo "-> download MySQL connector for Python."
 cd $boswatchpath/install
@@ -175,28 +192,13 @@ exitcodefunction $? untar mysql-connector
 cd $boswatchpath/install/mysql-connector-python*
 
 tput cup 13 15
-echo "[ 8/10] [########--]"
+echo "[ 9/10] [########--]"
 tput cup 15 5
 echo "-> install MySQL connector for Python.."
 chmod +x ./setup.py
 ./setup.py install >> $boswatchpath/install/setup_log.txt 2>&1
 exitcodefunction $? setup mysql-connector
 
-
-tput cup 13 15
-echo "[ 9/10] [#########-]"
-tput cup 15 5
-echo "-> download BOSWatch..................."
-cd $boswatchpath/
-
-case $branch in
-  "dev") git clone -b develop https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
-    exitcodefunction $? git-clone BOSWatch-develop ;;
-  "beta") git clone -b beta https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
-    exitcodefunction $? git-clone BOSWatch-beta ;;
-  *) git clone -b master https://github.com/Schrolli91/BOSWatch >> $boswatchpath/install/setup_log.txt 2>&1 && \
-    exitcodefunction $? git-clone BOSWatch ;;
-esac
 
 tput cup 13 15
 echo "[10/10] [##########]"
