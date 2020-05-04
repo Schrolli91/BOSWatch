@@ -121,8 +121,6 @@ cd $boswatchpath/
 case $branch in
   "dev") git clone -b develop https://github.com/Schrolli91/BOSWatch . >> $boswatch_install_path/setup_log.txt 2>&1 && \
     exitcodefunction $? git-clone BOSWatch-develop ;;
-  "beta") git clone -b beta https://github.com/Schrolli91/BOSWatch . >> $boswatch_install_path/setup_log.txt 2>&1 && \
-    exitcodefunction $? git-clone BOSWatch-beta ;;
   *) git clone -b master https://github.com/Schrolli91/BOSWatch . >> $boswatch_install_path/setup_log.txt 2>&1 && \
     exitcodefunction $? git-clone BOSWatch ;;
 esac
