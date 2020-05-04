@@ -128,6 +128,8 @@ def run(typ, freq, data):
             # replace the wildcards
             text = wildcardHandler.replaceWildcards(text, data)
             title = wildcardHandler.replaceWildcards(title, data)
+
+            # replace the wildcards in FMS; RIC is used for ZVEI/POC
             if typ == "FMS":
                 vehicle = wildcardHandler.replaceWildcards(vehicle, data)
             else:
@@ -136,10 +138,14 @@ def run(typ, freq, data):
             
             # Logging data to send
             logging.debug("Title   : %s", title)
+            
+            # ZVEI, POC is logged, if not FMS is used
             if typ == "FMS":
                 logging.debug("Vehicle     : %s", vehicle)
             else:
                 logging.debug("RIC     : %s", ric)
+            
+            # Logging normal
             logging.debug("Text    : %s", text)
             logging.debug("Priority: %s", priority)
 				
