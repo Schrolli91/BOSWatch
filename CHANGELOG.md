@@ -4,9 +4,11 @@
 ##### Added
 ##### Changed
 - Divera Plugin: Add individual alarms for FMS, ZVEI and POC. [#451](https://github.com/Schrolli91/BOSWatch/pull/451)
+- install.sh: local git repo available at /opt/boswatch (or at your own path). Updates easier with `git pull` in /opt/boswatch. [#452](https://github.com/Schrolli91/BOSWatch/pull/452)
 ##### Deprecated
 ##### Removed
 ##### Fixed
+- install.sh: old version of mysql-connector-python removed; add new via pip [#452](https://github.com/Schrolli91/BOSWatch/pull/452) [#445](https://github.com/Schrolli91/BOSWatch/issues/445)
 ##### Security
 
 
