@@ -88,7 +88,7 @@ def run(typ, freq, data):
                 text = globalVars.config.get("Divera", "zvei_text")
                 title = globalVars.config.get("Divera", "zvei_title")
                 priority = globalVars.config.get("Divera","zvei_prio")
-                ric = globalVars.config.get("Divera","zvei_ric")
+                zvei_id = globalVars.config.get("Divera","zvei_id")
 
             elif typ == "POC":
                 if isSignal(data["ric"]): 
@@ -124,30 +124,24 @@ def run(typ, freq, data):
             # Divera-Request
             #
             logging.debug("send Divera for %s", typ)
-
-            # replace the wildcards
-            text = wildcardHandler.replaceWildcards(text, data)
+            
+            # Replace wildcards & Logging data to send
             title = wildcardHandler.replaceWildcards(title, data)
-
-            # replace the wildcards in FMS; RIC is used for ZVEI/POC
+            logging.debug("Title   : %s", title)
+            text = wildcardHandler.replaceWildcards(text, data)
+            logging.debug("Text    : %s", text)
+            
             if typ == "FMS":
                 vehicle = wildcardHandler.replaceWildcards(vehicle, data)
-            else:
-                ric = wildcardHandler.replaceWildcards(ric, data)
-            
-            
-            # Logging data to send
-            logging.debug("Title   : %s", title)
-            
-            # ZVEI, POC is logged, if not FMS is used
-            if typ == "FMS":
                 logging.debug("Vehicle     : %s", vehicle)
-            else:
+            elif typ == "POC":
+                ric = wildcardHandler.replaceWildcards(ric, data)
                 logging.debug("RIC     : %s", ric)
-            
-            # Logging normal
-            logging.debug("Text    : %s", text)
-            logging.debug("Priority: %s", priority)
+            elif typ == "ZVEI":
+                zvei_id = wildcardHandler.replaceWildcards(zvei_id, data)
+                logging.debug("ZVEI_ID     : %s", zvei_id)
+            else:
+                logging.info("No wildcards to replace and no Typ selected!")
 				
             # check priority value
             if (priority != 'false') and (priority != 'true'):
@@ -157,11 +151,20 @@ def run(typ, freq, data):
             # Check FMS
             if typ == "FMS":
                 if (vehicle == ''):
-                    logging.info("No Vehicle set!");
+                    logging.info("No Vehicle set!")
             
-            else:
+            # Check POC
+            elif typ == "POC":
                 if (ric == ''):
-                    logging.info("No RIC set!");
+                    logging.info("No RIC set!")
+             
+            # Check ZVEI       
+            elif typ == "ZVEI":
+                if (zvei_id == ''):
+                    logging.info("No ZVEI_ID set!")
+                    
+            else:
+                logging.info("No ZVEI, FMS or POC alarm")
             
             # start connection to Divera                
             if typ == "FMS":
@@ -179,13 +182,13 @@ def run(typ, freq, data):
                             }))
                             
             elif typ == "ZVEI":
-            # start connection ZVEI
+            # start connection ZVEI; zvei_id in Divera is alarm-RIC!
                 conn = httplib.HTTPSConnection("www.divera247.com:443")
                 conn.request("GET", "/api/alarm",
                             urllib.urlencode({
                                 "accesskey": globalVars.config.get("Divera", "accesskey"),
                                 "title": title,
-                                "ric": ric,
+                                "ric": zvei_id,
                                 "text": text,
                                 "priority": priority,
                             }))
