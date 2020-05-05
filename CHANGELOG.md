@@ -3,6 +3,7 @@
 ### __[v2.5.2]__ - unreleased
 ##### Added
 ##### Changed
+- Divera Plugin: Add individual alarms for FMS, ZVEI and POC. [#451](https://github.com/Schrolli91/BOSWatch/pull/451)
 ##### Deprecated
 ##### Removed
 ##### Fixed
