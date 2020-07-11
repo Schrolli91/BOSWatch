@@ -89,8 +89,6 @@ def run(typ,freq,data):
 			logging.debug("password: %s", password)
 			
 			########## User Plugin CODE ##########
-			fh = fhem.Fhem(server=server, protocol=protocol, port=port, username=username, password=password)
-			
 			if typ == "FMS":
 				fhemCommand = globalVars.config.get("fhemCmd", "commandFMS")
 			elif typ == "ZVEI":
@@ -104,6 +102,8 @@ def run(typ,freq,data):
 			fhemCommand = wildcardHandler.replaceWildcards(fhemCommand, data)
 			logging.debug("fhemCommand: %s", fhemCommand)
                         
+			fh = fhem.Fhem(server=server, protocol=protocol, port=port, username=username, password=password)
+			
 			fh.send_cmd(fhemCommand)
 			del fh
 			########## User Plugin CODE ##########
