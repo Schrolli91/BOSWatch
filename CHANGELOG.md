@@ -2,6 +2,7 @@
 
 ### __[v2.5.2]__ - unreleased
 ##### Added
+- fhemCmd-Plugin: New plugin fhemCmd to execute commands in FHEM home automation. [#457](https://github.com/Schrolli91/BOSWatch/pull/457)
 ##### Changed
 - Divera Plugin: Add individual alarms for FMS, ZVEI and POC. [#451](https://github.com/Schrolli91/BOSWatch/pull/451)
 - install.sh: local git repo available at /opt/boswatch (or at your own path). Updates easier with `git pull` in /opt/boswatch. [#452](https://github.com/Schrolli91/BOSWatch/pull/452)
