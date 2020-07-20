@@ -90,15 +90,10 @@ def run(typ,freq,data):
 							if component.name == "VEVENT":
 								event = Event()
 								event.add('summary', component.get('SUMMARY'))
-								print(component.get('SUMMARY'))
 								event.add('dtstart', component.get('DTSTART'))
-								print(component.get('DTSTART').dt)
 								event.add('dtend', component.get('dtend'))
-								print(component.get('dtend').dt)
 								event.add('dtstamp', component.get('dtstamp'))
-								print(component.get('dtstamp').dt)
 								event.add('location', component.get('location'))
-								print(component.get('LOCATION'))
 								event['uid'] = component.get('UID')
 								cal.add_component(event)
 
