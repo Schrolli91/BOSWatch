@@ -36,7 +36,7 @@ import json # for data
 from threading import Thread
 import pygame
 
-import globals
+import globalData
 
 try: 
 	#
@@ -79,14 +79,14 @@ try:
 	#
 	try:
 		logging.debug("reading config file")
-		globals.config = ConfigParser.SafeConfigParser()
-		globals.config.read("config.ini")
+		globalData.config = ConfigParser.SafeConfigParser()
+		globalData.config.read("config.ini")
 		# if given loglevel is debug:
 		logging.debug("- [AlarmMonitor]")
-		for key,val in globals.config.items("AlarmMonitor"):
+		for key,val in globalData.config.items("AlarmMonitor"):
 			logging.debug("-- %s = %s", key, val)
 		logging.debug("- [Display]")
-		for key,val in globals.config.items("Display"):
+		for key,val in globalData.config.items("Display"):
 			logging.debug("-- %s = %s", key, val)
 	except:
 		# we couldn't work without config -> exit
@@ -106,7 +106,7 @@ try:
 	#
 	try:
 		from displayServices import displayPainter, autoTurnOffDisplay, eventHandler
-		globals.screenBackground = pygame.Color(globals.config.get("AlarmMonitor","colourGreen"))
+		globalData.screenBackground = pygame.Color(globalData.config.get("AlarmMonitor","colourGreen"))
 		logging.debug("Start displayPainter-thread")
 		Thread(target=displayPainter).start()
 		logging.debug("start autoTurnOffDisplay-thread")
@@ -124,7 +124,7 @@ try:
 	#
 	logging.debug("Start socketServer")
 	sock = socket.socket () # TCP
-	sock.bind(("",globals.config.getint("AlarmMonitor","socketPort")))
+	sock.bind(("",globalData.config.getint("AlarmMonitor","socketPort")))
 	sock.listen(5)
 	logging.debug("socketServer runs")
 
@@ -132,45 +132,45 @@ try:
 	# Build Lists out of config-entries
 	#
 	logging.debug("create lists")
-	keepAliveRICs         = [int(x.strip()) for x in globals.config.get("AlarmMonitor","keepAliveRICs").replace(";", ",").split(",")]
+	keepAliveRICs         = [int(x.strip()) for x in globalData.config.get("AlarmMonitor","keepAliveRICs").replace(";", ",").split(",")]
 	logging.debug("-- keepAliveRICs: %s", keepAliveRICs)
-	alarmRICs             = [int(x.strip()) for x in globals.config.get("AlarmMonitor","alarmRICs").replace(";", ",").split(",")]
+	alarmRICs             = [int(x.strip()) for x in globalData.config.get("AlarmMonitor","alarmRICs").replace(";", ",").split(",")]
 	logging.debug("-- alarmRICs: %s", alarmRICs)
-	functionCharTestAlarm = [str(x.strip()) for x in globals.config.get("AlarmMonitor","functionCharTestAlarm").replace(";", ",").split(",")]
+	functionCharTestAlarm = [str(x.strip()) for x in globalData.config.get("AlarmMonitor","functionCharTestAlarm").replace(";", ",").split(",")]
 	logging.debug("-- functionCharTestAlarm: %s", functionCharTestAlarm)
-	functionCharAlarm     = [str(x.strip()) for x in globals.config.get("AlarmMonitor","functionCharAlarm").replace(";", ",").split(",")]
+	functionCharAlarm     = [str(x.strip()) for x in globalData.config.get("AlarmMonitor","functionCharAlarm").replace(";", ",").split(",")]
 	logging.debug("-- functionCharAlarm: %s", functionCharAlarm)
 	
 	#
 	# try to read History from MySQL-DB
 	#
 	try:
-		if globals.config.getboolean("AlarmMonitor","loadHistory") == True:
+		if globalData.config.getboolean("AlarmMonitor","loadHistory") == True:
 			import mysql.connector
 
-			for key,val in globals.config.items("MySQL"):
+			for key,val in globalData.config.items("MySQL"):
 				logging.debug("-- %s = %s", key, val)
 			
 			# Connect to DB
 			logging.debug("connect to MySQL")
-			connection = mysql.connector.connect(host = globals.config.get("MySQL","dbserver"), user = globals.config.get("MySQL","dbuser"), passwd = globals.config.get("MySQL","dbpassword"), db = globals.config.get("MySQL","database"), charset='utf8')
+			connection = mysql.connector.connect(host = globalData.config.get("MySQL","dbserver"), user = globalData.config.get("MySQL","dbuser"), passwd = globalData.config.get("MySQL","dbpassword"), db = globalData.config.get("MySQL","database"), charset='utf8')
 			cursor = connection.cursor()
 			logging.debug("MySQL connected")
 
 			# read countKeepAlive 
 			# precondition: keepAliveRICs set
 			if (len(keepAliveRICs) > 0):
-				sql = "SELECT COUNT(*) FROM "+globals.config.get("MySQL","tablePOC")+" WHERE ric IN ("+globals.config.get("AlarmMonitor","keepAliveRICs")+")"
+				sql = "SELECT COUNT(*) FROM "+globalData.config.get("MySQL","tablePOC")+" WHERE ric IN ("+globalData.config.get("AlarmMonitor","keepAliveRICs")+")"
 				cursor.execute(sql)
 				result = int(cursor.fetchone()[0])
 				if result > 0:
-					globals.countKeepAlive = result
-				logging.debug("-- countKeepAlive: %s", globals.countKeepAlive)
+					globalData.countKeepAlive = result
+				logging.debug("-- countKeepAlive: %s", globalData.countKeepAlive)
 
 			# read countAlarm 
 			# precondition: alarmRics and functionChar set
 			if (len(alarmRICs) > 0) and (len(functionCharAlarm) > 0):
-				sql = "SELECT COUNT(*) FROM "+globals.config.get("MySQL","tablePOC")+" WHERE ric IN ("+globals.config.get("AlarmMonitor","alarmRICs")+")"
+				sql = "SELECT COUNT(*) FROM "+globalData.config.get("MySQL","tablePOC")+" WHERE ric IN ("+globalData.config.get("AlarmMonitor","alarmRICs")+")"
 				if len(functionCharAlarm) == 1:
 					sql += " AND functionChar IN ('" + functionCharAlarm[0] + "')"
 				elif len(functionCharAlarm) > 1:
@@ -178,13 +178,13 @@ try:
 				cursor.execute(sql)
 				result = int(cursor.fetchone()[0])
 				if result > 0:
-					globals.countAlarm = result
-				logging.debug("-- countAlarm: %s", globals.countAlarm)
+					globalData.countAlarm = result
+				logging.debug("-- countAlarm: %s", globalData.countAlarm)
 
 			# read countTestAlarm 
 			# precondition: alarmRics and functionCharTestAlarm set
 			if (len(alarmRICs) > 0) and (len(functionCharTestAlarm) > 0):
-				sql = "SELECT COUNT(*) FROM "+globals.config.get("MySQL","tablePOC")+" WHERE ric IN ("+globals.config.get("AlarmMonitor","alarmRICs")+")"
+				sql = "SELECT COUNT(*) FROM "+globalData.config.get("MySQL","tablePOC")+" WHERE ric IN ("+globalData.config.get("AlarmMonitor","alarmRICs")+")"
 				if len(functionCharTestAlarm) == 1:
 					sql += " AND functionChar IN ('" + functionCharTestAlarm[0] + "')"
 				elif len(functionCharTestAlarm) > 1:
@@ -192,14 +192,14 @@ try:
 				cursor.execute(sql)
 				result = int(cursor.fetchone()[0])
 				if result > 0:
-					globals.countTestAlarm = result
-				logging.debug("-- countTestAlarm: %s", globals.countTestAlarm)
+					globalData.countTestAlarm = result
+				logging.debug("-- countTestAlarm: %s", globalData.countTestAlarm)
 
 			# read the last 5 events in reverse order
 			# precondition: alarmRics and (functionChar or functionCharTestAlarm) set
 			if (len(alarmRICs) > 0) and ((len(functionCharAlarm) > 0) or (len(functionCharTestAlarm) > 0)):
-				sql  = "SELECT UNIX_TIMESTAMP(time), ric, functionChar, msg, description FROM "+globals.config.get("MySQL","tablePOC")
-				sql += " WHERE ric IN ("+globals.config.get("AlarmMonitor","alarmRICs")+")"
+				sql  = "SELECT UNIX_TIMESTAMP(time), ric, functionChar, msg, description FROM "+globalData.config.get("MySQL","tablePOC")
+				sql += " WHERE ric IN ("+globalData.config.get("AlarmMonitor","alarmRICs")+")"
 				functionChar = functionCharAlarm + functionCharTestAlarm
 				if len(functionChar) == 1:
 					sql += " AND functionChar IN ('" + functionChar[0] + "')"
@@ -215,8 +215,8 @@ try:
 					data['functionChar'] = functionChar
 					data['msg'] = msg
 					data['description'] = description
-					globals.alarmHistory.append(data)
-				logging.debug("-- history data loaded: %s", len(globals.alarmHistory))
+					globalData.alarmHistory.append(data)
+				logging.debug("-- history data loaded: %s", len(globalData.alarmHistory))
 						
 			logging.info("history loaded from database")
 		# if db is enabled
@@ -239,10 +239,10 @@ try:
 	#
 	alarmSound = False
 	try:
-		if globals.config.getboolean("AlarmMonitor","playSound") == True:
-			if not globals.config.get("AlarmMonitor","soundFile") == "":
+		if globalData.config.getboolean("AlarmMonitor","playSound") == True:
+			if not globalData.config.get("AlarmMonitor","soundFile") == "":
 				pygame.mixer.init()
-				alarmSound = pygame.mixer.Sound(globals.config.get("AlarmMonitor","soundFile"))
+				alarmSound = pygame.mixer.Sound(globalData.config.get("AlarmMonitor","soundFile"))
 				logging.info("alarm with sound")
 	except:
 		# error, but we could work without sound
@@ -250,14 +250,14 @@ try:
 		logging.debug("cannot initialise alarm sound", exc_info=True)
 		pass
 				
-	globals.startTime = int(time.time())
+	globalData.startTime = int(time.time())
 	logging.info("alarmMonitor started - on standby")
 		
 	#
 	# Main Program
 	# (Threads will set abort to True if an error occurs)
 	#
-	while globals.abort == False:
+	while globalData.abort == False:
 		# accept connections from outside
 		(clientsocket, address) = sock.accept()
 		logging.debug("connected client: %s", address)
@@ -284,35 +284,35 @@ try:
 				# keep alive calculation with additional RICs
 				if int(parsed_json['ric']) in keepAliveRICs:
 					logging.info("POCSAG is alive")
-					globals.lastAlarm = curtime
-					globals.countKeepAlive += 1
+					globalData.lastAlarm = curtime
+					globalData.countKeepAlive += 1
 
 				# (test) alarm processing
 				elif int(parsed_json['ric']) in alarmRICs:
 					if parsed_json['functionChar'] in functionCharTestAlarm:
 						logging.info("--> Probealarm: %s", parsed_json['ric'])
-						globals.screenBackground = pygame.Color(globals.config.get("AlarmMonitor","colourYellow"))
-						globals.countTestAlarm += 1
+						globalData.screenBackground = pygame.Color(globalData.config.get("AlarmMonitor","colourYellow"))
+						globalData.countTestAlarm += 1
 					elif parsed_json['functionChar'] in functionCharAlarm:
 						logging.info("--> Alarm: %s", parsed_json['ric'])
-						globals.screenBackground = pygame.Color(globals.config.get("AlarmMonitor","colourRed"))
-						globals.countAlarm += 1
+						globalData.screenBackground = pygame.Color(globalData.config.get("AlarmMonitor","colourRed"))
+						globalData.countAlarm += 1
 						
 					# forward data to alarmMonitor
-					globals.data = parsed_json
-					globals.data['timestamp'] = curtime
+					globalData.data = parsed_json
+					globalData.data['timestamp'] = curtime
 					logging.debug("-- data: %s", parsed_json)
 					# save 5 alarm history entries
-					globals.alarmHistory.append(globals.data)
-					if len(globals.alarmHistory) > 5:
-						globals.alarmHistory.pop(0)
+					globalData.alarmHistory.append(globalData.data)
+					if len(globalData.alarmHistory) > 5:
+						globalData.alarmHistory.pop(0)
 					# update lastAlarm for keep alive calculation
-					globals.lastAlarm = curtime
+					globalData.lastAlarm = curtime
 					# enable display for n seconds:
-					globals.enableDisplayUntil = curtime + globals.config.getint("AlarmMonitor","showAlarmTime")
+					globalData.enableDisplayUntil = curtime + globalData.config.getint("AlarmMonitor","showAlarmTime")
 					# tell alarm-thread to turn on the display
-					globals.navigation = "alarmPage"
-					globals.showDisplay = True;
+					globalData.navigation = "alarmPage"
+					globalData.showDisplay = True;
 					
 					# play alarmSound...
 					if not alarmSound == False:
@@ -337,7 +337,7 @@ except:
 finally:
 	try:
 		logging.info("socketServer shuting down")
-		globals.running = False
+		globalData.running = False
 		sock.close()
 		logging.debug("socket closed") 
 		if not alarmSound == False:

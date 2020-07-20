@@ -23,35 +23,39 @@ Simple Database Class (C) by Bastian Schroll
     function __construct($host, $user, $password, $database, $show_error = 1)
     {
         $this->show_error = $show_error;
-        @$this->conn = mysql_connect($host, $user, $password);
+        @$this->conn = mysqli_connect($host, $user, $password);
         if ($this->conn == false)
         {
-            $this->error("Keine Verbindung zum Datenbank Server!", mysql_error());
+            $this->error("Keine Verbindung zum Datenbank Server!", mysqli_error($this->conn));
             return false;
         }
 
-        if (!@mysql_select_db($database, $this->conn))
+        if (!@mysqli_select_db($this->conn, $database))
         {
-            $this->error("Datenbank nicht gefunden!", mysql_error());
+            $this->error("Datenbank nicht gefunden!", mysqli_error($this->conn));
             return false;
         }
+        
+        /* Set character set for database connection to utf8mb4 */
+        mysqli_query($this->conn, "SET NAMES 'utf8mb4'");
+        
         return true;
     }
 
     /**
      * Database::query()
      *
-     * F�hrt einen MySQL Query aus
+     * Fuehrt einen MySQL Query aus
      *
-     * @param mixed $query Auszuf�hrender Query
+     * @param mixed $query Auszufuehrender Query
      * @return Result-Handler/FALSE
      */
     function query($query)
     {
-        $this->result = @mysql_query($query, $this->conn);
+        $this->result = @mysqli_query($this->conn, $query);
         if ($this->result == false)
         {
-            $this->error("Fehlerhafte Datenbank Anfrage!", mysql_error());
+            $this->error("Fehlerhafte Datenbank Anfrage!", mysqli_error($this->conn));
             return false;
         }
         return $this->result;
@@ -60,51 +64,51 @@ Simple Database Class (C) by Bastian Schroll
     /**
      * Database::fetchAssoc()
      *
-     * Liefert alle gefundnen Datens�tze als Assoc
+     * Liefert alle gefundnen Datensaetze als Assoc
      *
      * @param mixed $result Externer Result-Handler
-     * @return gefundene Datens�tze als Assoc
+     * @return gefundene Datensaetze als Assoc
      */
     function fetchAssoc($result = null)
     {
         if ($result != null)
         {
-            return @mysql_fetch_assoc($result);
+            return @mysqli_fetch_assoc($result);
         } else
         {
-            return @mysql_fetch_assoc($this->result);
+            return @mysqli_fetch_assoc($this->result);
         }
     }
 
     /**
      * Database::count()
      *
-     * Z�hlt alle gefundenen Datens�tze
+     * Zaehlt alle gefundenen Datensaetze
      *
      * @param mixed $result Externer Result-Handler
-     * @return Anzahl gefundener Datens�tze
+     * @return Anzahl gefundener Datensaetze
      */
     function count($result = null)
     {
         if ($result != null)
         {
-            return @mysql_num_rows($result);
+            return @mysqli_num_rows($result);
         } else
         {
-            return @mysql_num_rows($this->result);
+            return @mysqli_num_rows($this->result);
         }
     }
 
     /**
      * Database::closeConnection()
      *
-     * Schlie�t die bestehende MySQL Verbindung
+     * Schliesst die bestehende MySQL Verbindung
      *
      * @return TRUE/FALSE
      */
     function closeConnection()
     {
-        if (!@mysql_close($this->conn))
+        if (!@mysqli_close($this->conn))
         {
             $this->error("Verbindung zur Datenbank konnte nicht getrennt werden!", mysql_error());
             return false;

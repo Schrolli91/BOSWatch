@@ -35,7 +35,7 @@ POCSAG512: Address: 1000003  Function: 3  Alpha:   BOSWatch-Test: okay
 POCSAG512: Address: 1200001  Function: 1  Alpha:   BOSWatch-Test ÖÄÜß: okay
 POCSAG512: Address: 1200001  Function: 1  Alpha:   BOSWatch-Test öäü: okay
 
-# witch csv
+# with csv
 POCSAG512: Address: 1234567  Function: 1  Alpha:   BOSWatch-Test: with csv
 
 # without csv
@@ -86,6 +86,22 @@ POCSAG1200: Address: 7777777  Function: 1  Alpha:   BOSWatch-Test: denied
 POCSAG1200: Address: 0000004  Function: 1  Alpha:   BOSWatch-Test: out of filter start
 POCSAG1200: Address: 9000000  Function: 1  Alpha:   BOSWatch-Test: out of filter end
 
+#Probealram
+POCSAG1200: Address: 0871004  Function: 1  Alpha:   Dies ist ein Probealarm!
+## Multicast Alarm
+POCSAG1200: Address: 0871002  Function: 0  Alpha:   <EOT><FF>
+POCSAG1200: Address: 0860001  Function: 0 
+POCSAG1200: Address: 0860002  Function: 0 
+POCSAG1200: Address: 0860003  Function: 0 
+POCSAG1200: Address: 0860004  Function: 0 
+POCSAG1200: Address: 0860005  Function: 0 
+POCSAG1200: Address: 0860006  Function: 0 
+POCSAG1200: Address: 0860007  Function: 0 
+POCSAG1200: Address: 0860008  Function: 0 
+POCSAG1200: Address: 0860009  Function: 0 
+POCSAG1200: Address: 0860010  Function: 0 
+POCSAG1200: Address: 0871003  Function: 0  Alpha:   B2 Feuer Gebäude Pers in Gefahr. bla bla bla<NUL>
+
 # regEx-Filter?
 
 
@@ -106,15 +122,15 @@ FMS: 43f314170000 (9=Rotkreuz       3=Bayern 1         Ort 0x25=037FZG  7141Stat
 #
 
 #with csv description
-ZVEI2: 12345
+ZVEI1: 12345
 #without csv description
-ZVEI2: 56789
+ZVEI1: 56789
 #duplicate
-ZVEI2: 56789
+ZVEI1: 56789
 #with repeat Tone
-ZVEI2: 1F2F3
+ZVEI1: 1F2F3
 #in case of invalid id
-ZVEI2: 135
+ZVEI1: 135
 #in case of a double-tone for siren n-'D's are sended
-ZVEI2: DDD
-ZVEI2: DDDDD
+ZVEI1: DDD
+ZVEI1: DDDDD

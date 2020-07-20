@@ -16,6 +16,16 @@ This `.run()` routine is called every time an alarm comes in
 
 Here are the information from BOSWatch available. See section `5. Process the data from BOSWatch`
 
+#### 1.4 Requirements
+Add all required (which need to be installed separately) python packages to a requirements.txt in the plugin directory so that the user can simply install all requirements for this plugin.
+
+For examples look at [the Telegram plugin](Telegram/requirements.txt)
+
+##### 1.4.1 Requirement installation
+To install the packages from the requirements.txt run
+`pip install -r /path/to/plugin/directory/requirements.txt`
+Or because for the current version (2.5) Python2 is required
+`pip2 install -r /path/to/plungin/directory/requirements.txt` will work for sure
 
 ## 2. Use Global Logging
 #### 2.1 Init and Use
@@ -64,20 +74,20 @@ test2 = 123456
 ```
 
 #### 3.2 Read data from config.ini
-To read yout configuration data you must import the `globals.py` where the global config-object is located:
+To read yout configuration data you must import the `globalVars.py` where the global config-object is located:
 ```python
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 ```
 
 Now you can get your configuration data with:
 ```python
-VALUE = globals.config.get("SECTION", "OPTION") #Gets any value
+VALUE = globalVars.config.get("SECTION", "OPTION") #Gets any value
 ```
 or better, use this:
 ```python
-VALUE = globals.config.getint("SECTION", "OPTION") #Value must be an Integer
-VALUE = globals.config.getfloat("SECTION", "OPTION") #Value must be an Float
-VALUE = globals.config.getboolean("SECTION", "OPTION") #Value must be an Boolean
+VALUE = globalVars.config.getint("SECTION", "OPTION") #Value must be an Integer
+VALUE = globalVars.config.getfloat("SECTION", "OPTION") #Value must be an Float
+VALUE = globalVars.config.getboolean("SECTION", "OPTION") #Value must be an Boolean
 ```
 
 
@@ -158,6 +168,7 @@ defined wildcards:
 - `%RIC%` = Pocsag RIC
 - `%FUNC%` = Pocsac function/Subric (1-4)
 - `%FUNCCHAR%` = Pocsac function/Subric als character (a-d)
+- `%FUNCTEXT%` = Pocsac function/Subric static massage definded in pocsag section
 - `%MSG%` = Message of the Pocsag telegram
 - `%BITRATE%` = Bitrate of the Pocsag telegram
 
@@ -192,6 +203,7 @@ In the data map are the folowing informations:
 - ric
 - function
 - functionChar
+- ricFuncChar
 - msg
 - bitrate
 - description

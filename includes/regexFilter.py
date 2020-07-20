@@ -12,7 +12,7 @@ Functions for the RegEX filter
 import logging # Global logger
 import re #Regex for Filter Check
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 from includes.helper import freqConverter  # converter functions
 
 
@@ -28,20 +28,19 @@ def loadFilters():
 
 	@return:    nothing
 	"""
-	global filterList
 	try:
 		logging.debug("loading filters")
 		# For each entry in config.ini [Filters] section
-		for key,val in globals.config.items("Filters"):
+		for key,val in globalVars.config.items("Filters"):
 			logging.debug(" - %s = %s", key, val)
-			filter = val.split(";")
+			filterData = val.split(";")
 
 			# resolve the * for freqToHz()
-			if not filter[3] == "*":
-				filter[3] = converter.freqToHz(filter[3])
+			if not filterData[3] == "*":
+				filterData[3] = freqConverter.freqToHz(filterData[3])
 
 			# insert splitet data into filterList
-			filterList.append({"name": key, "typ": filter[0], "dataField": filter[1], "plugin": filter[2], "freq": filter[3], "regex": filter[4]})
+			filterList.append({"name": key, "typ": filterData[0], "dataField": filterData[1], "plugin": filterData[2], "freq": filterData[3], "regex": filterData[4]})
 	except:
 		logging.error("cannot read config file")
 		logging.debug("cannot read config file", exc_info=True)
@@ -55,7 +54,7 @@ def checkFilters(typ, data, plugin, freq):
 
 	@type    typ:  string (FMS|ZVEI|POC)
 	@param   typ:  Typ of the dataset
-	@type    data: map of data (structure see interface.txt)
+	@type    data: map of data (structure see readme.md in plugin folder)
 	@param   data: Contains the parameter
 	@type    plugin: string
 	@param   plugin: Name of the plugin to checked
@@ -89,7 +88,7 @@ def checkFilters(typ, data, plugin, freq):
 			return False
 		else:
 			logging.debug("no Filter found")
-			return True
+			return False
 
 	except:
 		logging.error("Error in filter checking")

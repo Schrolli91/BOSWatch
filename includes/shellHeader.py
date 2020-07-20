@@ -10,7 +10,7 @@ Shows the header in shell if quiet mode is not active
 @requires: none
 """
 
-from includes import globals
+from includes import globalVars
 
 def printHeader(args):
 	"""
@@ -30,8 +30,9 @@ def printHeader(args):
 		print "            German BOS Information Script           "
 		print "          by Bastian Schroll, Jens Herrmann         "
 		print ""
-		print "SW Version:	"+globals.versionNr
-		print "Build Date:	"+globals.buildDate
+		print "SW Version:	"+globalVars.versionNr
+		print "Branch:		"+globalVars.branch
+		print "Build Date:	"+globalVars.buildDate
 		print ""
 
 		print "Frequency:   "+args.freq

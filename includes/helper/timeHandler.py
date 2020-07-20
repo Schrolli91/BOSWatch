@@ -15,7 +15,7 @@ import logging
 import time
 
 
-def curtime(format="%d.%m.%Y %H:%M:%S", timestamp=""):
+def curtime(timeStr="%d.%m.%Y %H:%M:%S", timestamp=""):
 	"""
 	Returns formated date and/or time
 	see: https://docs.python.org/2/library/time.html#time.strftime
@@ -30,9 +30,9 @@ def curtime(format="%d.%m.%Y %H:%M:%S", timestamp=""):
 	"""
 	try:
 		if timestamp == "":
-			return time.strftime(format)
+			return time.strftime(timeStr)
 		else:
-			return time.strftime(format, time.localtime(timestamp))
+			return time.strftime(timeStr, time.localtime(timestamp))
 	except:
 		logging.warning("error in time-format-string")
 		logging.debug("error in time-format-string", exc_info=True)

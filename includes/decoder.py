@@ -27,21 +27,21 @@ def decode(freq, decoded):
 		# FMS Decoder Section
 		# check FMS: -> check CRC -> validate -> check double alarm -> log
 		if "FMS:" in decoded:
-			logging.debug("recieved FMS")
+			logging.debug("received FMS")
 			from includes.decoders import fms
 			fms.decode(freq, decoded)
 
 		# ZVEI Decoder Section
 		# check ZVEI: -> validate -> check double alarm -> log
-		elif "ZVEI2:" in decoded:
-			logging.debug("recieved ZVEI")
+		elif "ZVEI1:" in decoded:
+			logging.debug("received ZVEI")
 			from includes.decoders import zvei
 			zvei.decode(freq, decoded)
 
 		# POCSAG Decoder Section
 		# check POCSAG -> validate -> check double alarm -> log
 		elif "POCSAG512:" in decoded or "POCSAG1200:" in decoded or "POCSAG2400:" in decoded:
-			logging.debug("recieved POCSAG")
+			logging.debug("received POCSAG")
 			from includes.decoders import poc
 			poc.decode(freq, decoded)
 

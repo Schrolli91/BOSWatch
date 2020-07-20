@@ -12,7 +12,7 @@ FMS Decoder
 import logging # Global logger
 import re      # Regex for validation
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 from includes import doubleFilter  # double alarm filter
 
 ##
@@ -37,14 +37,22 @@ def decode(freq, decoded):
 	try:
 		fms_service = decoded[19]            # Organisation
 		fms_country = decoded[36]            # Bundesland
-		fms_location = decoded[65:67]        # Ort
+		fms_location = decoded[61:63]        # Ort
 		fms_vehicle = decoded[72:76]         # Fahrzeug
 		fms_status = decoded[84]             # Status
 		fms_direction = decoded[101]         # Richtung
 		fms_directionText = decoded[103:110] # Richtung (Text)
 		fms_tsi = decoded[114:117]           # Taktische Kruzinformation
 
-		if "CRC correct" in decoded: #check CRC is correct
+		proceed = True # no CRC-check required - proceed
+
+		# shall we use the CRC-check?
+		if (globalVars.config.getboolean("FMS", "CheckCRC")):
+			if "CRC correct" not in decoded:
+				# if CRC must be checked and is not correct - dont proceed
+				proceed = False
+
+		if (proceed == True):
 			fms_id = fms_service+fms_country+fms_location+fms_vehicle+fms_status+fms_direction # build FMS id
 			# if FMS is valid
 			if re.search("[0-9a-f]{8}[0-9a-f]{1}[01]{1}", fms_id):
@@ -53,7 +61,7 @@ def decode(freq, decoded):
 					logging.info("FMS:%s Status:%s Richtung:%s TSI:%s", fms_id[0:8], fms_status, fms_direction, fms_tsi)
 					data = {"fms":fms_id[0:8], "status":fms_status, "direction":fms_direction, "directionText":fms_directionText, "tsi":fms_tsi, "description":fms_id[0:8]}
 					# If enabled, look up description
-					if globals.config.getint("FMS", "idDescribed"):
+					if globalVars.config.getint("FMS", "idDescribed"):
 						from includes import descriptionList
 						data["description"] = descriptionList.getDescription("FMS", fms_id[0:8])
 					# processing the alarm
@@ -63,7 +71,6 @@ def decode(freq, decoded):
 					except:
 						logging.error("processing alarm failed")
 						logging.debug("processing alarm failed", exc_info=True)
-						pass
 				# in every time save old data for double alarm
 				doubleFilter.newEntry(fms_id)
 			else:

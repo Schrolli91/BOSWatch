@@ -14,34 +14,34 @@ alarmMonitor - displayServices
 #
 def autoTurnOffDisplay():
 	"""
-	Asynchronous function to turn of the display backlight 
-	
-	@requires: globals.showDisplay        - status of backlight
-	@requires: globals.enableDisplayUntil - given timestamp to turn off backlight
-	@requires: globals.running            - service runs as long as this is True
+	Asynchronous function to turn of the display backlight
 
-	In case of an exception the function set globals.abort to True.
+	@requires: globalData.showDisplay        - status of backlight
+	@requires: globalData.enableDisplayUntil - given timestamp to turn off backlight
+	@requires: globalData.running            - service runs as long as this is True
+
+	In case of an exception the function set globalData.abort to True.
 	This will terminate the main program.
-	
+
 	@return:    nothing
 	@exception: SystemExit exception in case of an error
 	"""
-	
+
 	import sys
 	import time
 	import logging
 	import ConfigParser
-	import globals
+	import globalData
 
 	logging.debug("autoTurnOffDisplay-thread started")
-	
+
 	try:
 		# Running will be set to False if main program is shutting down
-		while globals.running == True:
+		while globalData.running == True:
 			# check if timestamp is in the past
-			if (globals.showDisplay == True) and (globals.enableDisplayUntil < int(time.time())):
-				globals.showDisplay = False
-				globals.navigation = "alarmPage"
+			if (globalData.showDisplay == True) and (globalData.enableDisplayUntil < int(time.time())):
+				globalData.showDisplay = False
+				globalData.navigation = "alarmPage"
 				logging.info("display turned off")
 			# we will do this only one time per second
 			time.sleep(1)
@@ -49,7 +49,7 @@ def autoTurnOffDisplay():
 		logging.error("unknown error in autoTurnOffDisplay-thread")
 		logging.debug("unknown error in autoTurnOffDisplay-thread", exc_info=True)
 		# abort main program
-		globals.abort = True
+		globalData.abort = True
 		sys.exit(1)
 	finally:
 		logging.debug("exit autoTurnOffDisplay-thread")
@@ -59,20 +59,20 @@ def autoTurnOffDisplay():
 #
 # Only works as an asynchronous thread
 # will call "exit(0)" when function is finished
-#		
+#
 def eventHandler():
 	"""
 	Asynchronous function to handle pygames events
 	in particular the touchscreen events
-	
-	@requires: globals.showDisplay        - status of backlight
-	@requires: globals.enableDisplayUntil - timestamp to turn off backlight
-	@requires: globals.running            - service runs as long as this is True
+
+	@requires: globalData.showDisplay        - status of backlight
+	@requires: globalData.enableDisplayUntil - timestamp to turn off backlight
+	@requires: globalData.running            - service runs as long as this is True
 	@requires: configuration has to be set in the config.ini
 
-	In case of an exception the function set globals.abort to True.
+	In case of an exception the function set globalData.abort to True.
 	This will terminate the main program.
-	
+
 	@return:    nothing
 	@exception: SystemExit exception in case of an error
 	"""
@@ -81,26 +81,26 @@ def eventHandler():
 	import logging
 	import ConfigParser
 	import pygame
-	import globals
+	import globalData
 
 	logging.debug("eventHandler-thread started")
-	
+
 	try:
 		clock = pygame.time.Clock()
 
 		# Running will be set to False if main program is shutting down
-		while globals.running == True:
+		while globalData.running == True:
 			# This limits the while loop to a max of 2 times per second.
 			# Leave this out and we will use all CPU we can.
 			clock.tick(2)
-			
+
 			# current time for this loop:
 			curtime = int(time.time())
 
 			for event in pygame.event.get():
 				# event-handler for QUIT
-				if event.type == pygame.QUIT: 
-					globals.running = False
+				if event.type == pygame.QUIT:
+					globalData.running = False
 
 				# if touchscreen pressed
 				if event.type == pygame.MOUSEBUTTONDOWN:
@@ -109,45 +109,45 @@ def eventHandler():
 
 					# touching the screen will stop alarmSound in every case
 					pygame.mixer.stop()
-					
+
 					# touching the dark display will turn it on for n sec
-					if globals.showDisplay == False:
+					if globalData.showDisplay == False:
 						logging.info("turn ON display")
-						globals.enableDisplayUntil = curtime + globals.config.getint("AlarmMonitor","showDisplayTime")
-						globals.navigation == "alarmPage"
-						globals.showDisplay = True
+						globalData.enableDisplayUntil = curtime + globalData.config.getint("AlarmMonitor","showDisplayTime")
+						globalData.navigation == "alarmPage"
+						globalData.showDisplay = True
 					else:
 						# touching the enabled display will be content sensitive...
 						# if top 2/3: turn of display
-						yBoundary = globals.config.getint("Display","displayHeight") - 80
+						yBoundary = globalData.config.getint("Display","displayHeight") - 80
 						if 0 <= posY <= yBoundary:
 							logging.info("turn OFF display")
-							globals.showDisplay = False
-							globals.navigation = "alarmPage"
+							globalData.showDisplay = False
+							globalData.navigation = "alarmPage"
 						else:
 							# we are in the navigation area
-							globals.enableDisplayUntil = curtime + globals.config.getint("AlarmMonitor","showDisplayTime")
+							globalData.enableDisplayUntil = curtime + globalData.config.getint("AlarmMonitor","showDisplayTime")
 							if 0 <= posX <= 110:
-								globals.navigation = "historyPage"
+								globalData.navigation = "historyPage"
 							elif 111 <= posX <= 210:
-								globals.navigation = "statusPage"
+								globalData.navigation = "statusPage"
 							else:
-								globals.screenBackground = pygame.Color(globals.config.get("AlarmMonitor","colourGreen"))
-								globals.navigation = "alarmPage"
+								globalData.screenBackground = pygame.Color(globalData.config.get("AlarmMonitor","colourGreen"))
+								globalData.navigation = "alarmPage"
 					## end if showDisplay
 				## end if event MOUSEBUTTONDOWN
-			## end for event			
+			## end for event
 	except:
 		logging.error("unknown error in eventHandler-thread")
 		logging.debug("unknown error in eventHandler-thread", exc_info=True)
 		# abort main program
-		globals.abort = True
+		globalData.abort = True
 		sys.exit(1)
 	finally:
 		logging.debug("exit eventHandler-thread")
 		exit(0)
-		
-		
+
+
 #
 # Only works as an asynchronous thread
 # will call "exit(0)" when function is finished
@@ -155,21 +155,21 @@ def eventHandler():
 def displayPainter():
 	"""
 	Asynchronous function to build the display content
-	
-	@requires: globals.showDisplay        - status of backlight
-	@requires: globals.enableDisplayUntil - given timestamp when backlight will turned off
-	@requires: globals.running            - service runs as long as this is True
-	@requires: globals.data               - data of the last alarm
-	@requires: globals.lastAlarm          - timestamp of the last processing (see alarmRICs and keepAliveRICs) 
+
+	@requires: globalData.showDisplay        - status of backlight
+	@requires: globalData.enableDisplayUntil - given timestamp when backlight will turned off
+	@requires: globalData.running            - service runs as long as this is True
+	@requires: globalData.data               - data of the last alarm
+	@requires: globalData.lastAlarm          - timestamp of the last processing (see alarmRICs and keepAliveRICs)
 	@requires: configuration has to be set in the config.ini
 
-	In case of an exception the function set globals.abort to True.
+	In case of an exception the function set globalData.abort to True.
 	This will terminate the main program.
-	
+
 	@return:    nothing
 	@exception: SystemExit exception in case of an error
 	"""
-	
+
 	import sys
 	import time
 	import logging
@@ -178,102 +178,102 @@ def displayPainter():
 	import pygame
 	from wrapline import wrapline
 	from roundrects import round_rect
-	import globals
+	import globalData
 
 	logging.debug("displayPainter-thread called")
-	
+
 	try:
 		# use GPIO pin numbering convention
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setwarnings(False)
 		# set up GPIO pin for output
-		GPIO.setup(globals.config.getint("Display","GPIOPinForBacklight"), GPIO.OUT)
+		GPIO.setup(globalData.config.getint("Display","GPIOPinForBacklight"), GPIO.OUT)
 
 		pygame.init()
 
 		#screen size
-		size = (globals.config.getint("Display","displayWidth"), globals.config.getint("Display","displayHeight"))
+		size = (globalData.config.getint("Display","displayWidth"), globalData.config.getint("Display","displayHeight"))
 		screen = pygame.display.set_mode(size)
 
 		# disable mouse cursor
 		pygame.mouse.set_visible(False)
-		
+
 		#define fonts
 		fontHeader = pygame.font.Font(None, 30)
 		fontHeader.set_bold(True)
 		fontHeader.set_underline(True)
 
 		fontTime = pygame.font.Font(None, 15)
-		
+
 		fontRIC = pygame.font.Font(None, 30)
 		fontRIC.set_bold(True)
 		fontMsg = pygame.font.Font(None, 20)
 		fontHistory = pygame.font.Font(None, 15)
-		
+
 		fontStatus = pygame.font.Font(None, 20)
 		fontStatus.set_bold(True)
 		fontStatusContent = pygame.font.Font(None, 20)
 
 		fontButton = pygame.font.Font(None, 20)
-		
+
 		clock = pygame.time.Clock()
-		
+
 		# Build Lists out of config-entries
-		functionCharTestAlarm = [x.strip() for x in globals.config.get("AlarmMonitor","functionCharTestAlarm").replace(";", ",").split(",")]
+		functionCharTestAlarm = [x.strip() for x in globalData.config.get("AlarmMonitor","functionCharTestAlarm").replace(";", ",").split(",")]
 
 		logging.debug("displayPainter-thread started")
-		
+
 		# Running will be set to False if main program is shutting down
-		while globals.running == True:
+		while globalData.running == True:
 			# This limits the while loop to a max of 2 times per second.
 			# Leave this out and we will use all CPU we can.
 			clock.tick(2)
-			
+
 			# current time for this loop:
 			curtime = int(time.time())
-					
-			if globals.showDisplay == True:
+
+			if globalData.showDisplay == True:
 				# Enable LCD display
-				GPIO.output(globals.config.getint("Display","GPIOPinForBacklight"), GPIO.HIGH)
+				GPIO.output(globalData.config.getint("Display","GPIOPinForBacklight"), GPIO.HIGH)
 				# Clear the screen and set the screen background
-				screen.fill(globals.screenBackground)
+				screen.fill(globalData.screenBackground)
 				# paint black rect, so Background looks like a boarder
-				widthX = globals.config.getint("Display","displayWidth") - 20
-				widthY = globals.config.getint("Display","displayHeight") - 20
-				pygame.draw.rect(screen, pygame.Color(globals.config.get("AlarmMonitor","colourBlack")), (10, 10, widthX, widthY))
+				widthX = globalData.config.getint("Display","displayWidth") - 20
+				widthY = globalData.config.getint("Display","displayHeight") - 20
+				pygame.draw.rect(screen, pygame.Color(globalData.config.get("AlarmMonitor","colourBlack")), (10, 10, widthX, widthY))
 				# header
-				header = fontHeader.render("Alarm-Monitor", 1, pygame.Color(globals.config.get("AlarmMonitor","colourRed")))
+				header = fontHeader.render("Alarm-Monitor", 1, pygame.Color(globalData.config.get("AlarmMonitor","colourRed")))
 				(width, height) = fontHeader.size("Alarm-Monitor")
-				x = (int(globals.config.getint("Display","displayWidth")) - width)/2
+				x = (int(globalData.config.getint("Display","displayWidth")) - width)/2
 				screen.blit(header, (x, 20))
-				
+
 				# show time of last alarm
-				if globals.lastAlarm > 0:
+				if globalData.lastAlarm > 0:
 					try:
 						# format last alarm
-						lastAlarmString = time.strftime("%H:%M:%S", time.localtime(globals.lastAlarm))
+						lastAlarmString = time.strftime("%H:%M:%S", time.localtime(globalData.lastAlarm))
 						# Color time:
 						# red: lastAlarm more than n (delayForRed) seconds past
-						if (int(globals.lastAlarm) + globals.config.getint("AlarmMonitor","delayForRed")) < curtime:
-							timeColour = pygame.Color(globals.config.get("AlarmMonitor","colourRed"))
+						if (int(globalData.lastAlarm) + globalData.config.getint("AlarmMonitor","delayForRed")) < curtime:
+							timeColour = pygame.Color(globalData.config.get("AlarmMonitor","colourRed"))
 						# yellow: lastAlarm more than n (delayForYellow) seconds past
-						elif (int(globals.lastAlarm) + globals.config.getint("AlarmMonitor","delayForYellow")) < curtime:
-							timeColour = pygame.Color(globals.config.get("AlarmMonitor","colourYellow"))
+						elif (int(globalData.lastAlarm) + globalData.config.getint("AlarmMonitor","delayForYellow")) < curtime:
+							timeColour = pygame.Color(globalData.config.get("AlarmMonitor","colourYellow"))
 						# dgrey: normal
 						else:
-							timeColour = pygame.Color(globals.config.get("AlarmMonitor","colourGreen"))
+							timeColour = pygame.Color(globalData.config.get("AlarmMonitor","colourGreen"))
 						lastAlarm = fontTime.render(lastAlarmString, 1, timeColour)
 						(width, height) = fontTime.size(lastAlarmString)
-						x = globals.config.getint("Display","displayWidth") - 20 - width
+						x = globalData.config.getint("Display","displayWidth") - 20 - width
 						screen.blit(lastAlarm, (x, 20))
 					except:
 						logging.debug("unknown error in lastAlarm", exc_info=True)
 						pass
-				## end if globals.lastAlarm > 0
-				
+				## end if globalData.lastAlarm > 0
+
 				# show remaining time before display will be turned off:
-				restZeit = globals.enableDisplayUntil - curtime +1
-				zeit = fontTime.render(str(restZeit), 1, pygame.Color(globals.config.get("AlarmMonitor","colourDimGrey")))
+				restZeit = globalData.enableDisplayUntil - curtime +1
+				zeit = fontTime.render(str(restZeit), 1, pygame.Color(globalData.config.get("AlarmMonitor","colourDimGrey")))
 				screen.blit(zeit, (20, 20))
 
 				#
@@ -281,14 +281,14 @@ def displayPainter():
 				# default is "alarmPage"
 				#
 				# Startpoint for content
-				if globals.navigation == "historyPage":
+				if globalData.navigation == "historyPage":
 					try:
 						y = 50
-						for data in reversed(globals.alarmHistory):
+						for data in reversed(globalData.alarmHistory):
 							# Layout:
-							# Date Description 
+							# Date Description
 							# Time Msg
-							
+
 							# Prepare date/time block
 							dateString = time.strftime("%d.%m.%y", time.localtime(data['timestamp']))
 							timeString = time.strftime("%H:%M:%S", time.localtime(data['timestamp']))
@@ -297,12 +297,12 @@ def displayPainter():
 							else:
 								(shifting, height) = fontHistory.size(timeString)
 							shifting += 5
-							
+
 							# get colour
 							if data['functionChar'] in functionCharTestAlarm:
-								colour = globals.config.get("AlarmMonitor","colourYellow")
+								colour = globalData.config.get("AlarmMonitor","colourYellow")
 							else:
-								colour = globals.config.get("AlarmMonitor","colourRed")
+								colour = globalData.config.get("AlarmMonitor","colourRed")
 
 							# Paint Date/Time
 							screen.blit(fontHistory.render(dateString, 1, pygame.Color(colour)), (20, y))
@@ -310,159 +310,159 @@ def displayPainter():
 
 							# Paint Description
 							try:
-								textLines = wrapline(data['description'], fontHistory, (globals.config.getint("Display","displayWidth") - shifting - 40))
+								textLines = wrapline(data['description'], fontHistory, (globalData.config.getint("Display","displayWidth") - shifting - 40))
 								for index, item in enumerate(textLines):
-									textZeile = fontHistory.render(item, 1, pygame.Color(globals.config.get("AlarmMonitor","colourWhite")))
+									textZeile = fontHistory.render(item, 1, pygame.Color(globalData.config.get("AlarmMonitor","colourWhite")))
 									screen.blit(textZeile, (20 + shifting, y))
 									y += height
 							except KeyError:
 								pass
-								
+
 							# Paint Msg
 							try:
-								textLines = wrapline(data['msg'].replace("*", " * "), fontHistory, (globals.config.getint("Display","displayWidth") - shifting - 40))
+								textLines = wrapline(data['msg'].replace("*", " * "), fontHistory, (globalData.config.getint("Display","displayWidth") - shifting - 40))
 								for index, item in enumerate(textLines):
-									textZeile = fontHistory.render(item, 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
+									textZeile = fontHistory.render(item, 1, pygame.Color(globalData.config.get("AlarmMonitor","colourGrey")))
 									screen.blit(textZeile, (20 + shifting, y))
 									y += height
 							except KeyError:
 								pass
-								
+
 							# line spacing for next dataset
 							y += 2
-							
-						## end for globals.alarmHistory
-						
+
+						## end for globalData.alarmHistory
+
 					except KeyError:
 						pass
-				## end if globals.navigation == "historyPage"
-						
-				elif globals.navigation == "statusPage":
+				## end if globalData.navigation == "historyPage"
+
+				elif globalData.navigation == "statusPage":
 					(width, height) = fontStatusContent.size("Anzahl Test-Alarme:")
 					y = 70
 					x = width + 10
 					# Running since:
-					title = fontStatusContent.render("Gestartet:", 1, pygame.Color(globals.config.get("AlarmMonitor","colourWhite")))
-					content = fontStatusContent.render(time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(globals.startTime)), 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
+					title = fontStatusContent.render("Gestartet:", 1, pygame.Color(globalData.config.get("AlarmMonitor","colourWhite")))
+					content = fontStatusContent.render(time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(globalData.startTime)), 1, pygame.Color(globalData.config.get("AlarmMonitor","colourGrey")))
 					screen.blit(title,   (20,    y))
 					screen.blit(content, (20 +x, y))
 					y += height + 10
-					
+
 					# Last Alarm
-					title = fontStatusContent.render("Letzte Nachricht:", 1, pygame.Color(globals.config.get("AlarmMonitor","colourWhite")))
-					if globals.lastAlarm > 0:
-						content = fontStatusContent.render(time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(globals.lastAlarm)), 1, timeColour)
+					title = fontStatusContent.render("Letzte Nachricht:", 1, pygame.Color(globalData.config.get("AlarmMonitor","colourWhite")))
+					if globalData.lastAlarm > 0:
+						content = fontStatusContent.render(time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(globalData.lastAlarm)), 1, timeColour)
 					else:
-						content = fontStatusContent.render("-", 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
+						content = fontStatusContent.render("-", 1, pygame.Color(globalData.config.get("AlarmMonitor","colourGrey")))
 					screen.blit(title,   (20,    y))
 					screen.blit(content, (20 +x, y))
 					y += height + 10
 
 					# Number of Alarms
-					title = fontStatusContent.render("Anzahl Alarme:", 1, pygame.Color(globals.config.get("AlarmMonitor","colourWhite")))
-					content = fontStatusContent.render(str(globals.countAlarm), 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
+					title = fontStatusContent.render("Anzahl Alarme:", 1, pygame.Color(globalData.config.get("AlarmMonitor","colourWhite")))
+					content = fontStatusContent.render(str(globalData.countAlarm), 1, pygame.Color(globalData.config.get("AlarmMonitor","colourGrey")))
 					screen.blit(title,   (20,    y))
 					screen.blit(content, (20 +x, y))
 					y += height + 10
 
 					# Number of TestAlarms
-					title = fontStatusContent.render("Anzahl Test-Alarme:", 1, pygame.Color(globals.config.get("AlarmMonitor","colourWhite")))
-					content = fontStatusContent.render(str(globals.countTestAlarm), 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
+					title = fontStatusContent.render("Anzahl Test-Alarme:", 1, pygame.Color(globalData.config.get("AlarmMonitor","colourWhite")))
+					content = fontStatusContent.render(str(globalData.countTestAlarm), 1, pygame.Color(globalData.config.get("AlarmMonitor","colourGrey")))
 					screen.blit(title,   (20,    y))
 					screen.blit(content, (20 +x, y))
 					y += height + 10
-					
+
 					# Number of DAU-Msgs
-					title = fontStatusContent.render("Anzahl DAU-Tests:", 1, pygame.Color(globals.config.get("AlarmMonitor","colourWhite")))
-					content = fontStatusContent.render(str(globals.countKeepAlive), 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
+					title = fontStatusContent.render("Anzahl DAU-Tests:", 1, pygame.Color(globalData.config.get("AlarmMonitor","colourWhite")))
+					content = fontStatusContent.render(str(globalData.countKeepAlive), 1, pygame.Color(globalData.config.get("AlarmMonitor","colourGrey")))
 					screen.blit(title,   (20,    y))
 					screen.blit(content, (20 +x, y))
 					y += height + 10
-					
-				## end if globals.navigation == "statusPage"
-						
+
+				## end if globalData.navigation == "statusPage"
+
 				else:
 					y = 50
-					
+
 					# Paint Date/Time
 					try:
-						dateTimeString = time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(globals.data['timestamp']))
-						dateTimeRow = fontStatus.render(dateTimeString, 1, pygame.Color(globals.config.get("AlarmMonitor","colourDimGrey")))
+						dateTimeString = time.strftime("%d.%m.%Y %H:%M:%S", time.localtime(globalData.data['timestamp']))
+						dateTimeRow = fontStatus.render(dateTimeString, 1, pygame.Color(globalData.config.get("AlarmMonitor","colourDimGrey")))
 						(width, height) = fontStatus.size(dateTimeString)
-						x = (int(globals.config.getint("Display","displayWidth")) - width)/2
+						x = (int(globalData.config.getint("Display","displayWidth")) - width)/2
 						screen.blit(dateTimeRow, (x, y))
 						y += height + 10
 					except KeyError:
 						pass
-					
+
 					# Paint Description
 					try:
-						textLines = wrapline(globals.data['description'], fontRIC, (globals.config.getint("Display","displayWidth") - 40))
-						(width, height) = fontStatus.size(globals.data['description'])
+						textLines = wrapline(globalData.data['description'], fontRIC, (globalData.config.getint("Display","displayWidth") - 40))
+						(width, height) = fontStatus.size(globalData.data['description'])
 						for index, item in enumerate(textLines):
-							textRow = fontRIC.render(item, 1, pygame.Color(globals.config.get("AlarmMonitor","colourWhite")))
+							textRow = fontRIC.render(item, 1, pygame.Color(globalData.config.get("AlarmMonitor","colourWhite")))
 							screen.blit(textRow, (20, y))
 							y += height + 5
 					except KeyError:
 						pass
-					
+
 					# Paint Msg
 					try:
 						y += 10
-						textLines = wrapline(globals.data['msg'].replace("*", " * "), fontMsg, (globals.config.getint("Display","displayWidth") - 40))
-						(width, height) = fontStatus.size(globals.data['msg'])
+						textLines = wrapline(globalData.data['msg'].replace("*", " * "), fontMsg, (globalData.config.getint("Display","displayWidth") - 40))
+						(width, height) = fontStatus.size(globalData.data['msg'])
 						for index, item in enumerate(textLines):
-							textRow = fontMsg.render(item, 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
+							textRow = fontMsg.render(item, 1, pygame.Color(globalData.config.get("AlarmMonitor","colourGrey")))
 							screen.blit(textRow, (20, y))
 							y += height
 					except KeyError:
 						pass
 				## end if default navigation
-				
+
 				# paint navigation buttons
 				buttonWidth = 80
 				buttonHeight = 25
-				buttonY = globals.config.getint("Display","displayHeight") - buttonHeight - 2
-				
-				round_rect(screen, ( 20, buttonY, buttonWidth, buttonHeight), pygame.Color(globals.config.get("AlarmMonitor","colourDimGrey")), 10, 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
-				buttonText = fontButton.render("Verlauf", 1, pygame.Color(globals.config.get("AlarmMonitor","colourBlack")))
+				buttonY = globalData.config.getint("Display","displayHeight") - buttonHeight - 2
+
+				round_rect(screen, ( 20, buttonY, buttonWidth, buttonHeight), pygame.Color(globalData.config.get("AlarmMonitor","colourDimGrey")), 10, 1, pygame.Color(globalData.config.get("AlarmMonitor","colourGrey")))
+				buttonText = fontButton.render("Verlauf", 1, pygame.Color(globalData.config.get("AlarmMonitor","colourBlack")))
 				(width, height) = fontButton.size("Verlauf")
 				textX = 20 + (buttonWidth - width)/2
 				textY = buttonY + (buttonHeight - height)/2
 				screen.blit(buttonText, (textX, textY))
-				
-				round_rect(screen, (120, buttonY, buttonWidth, buttonHeight), pygame.Color(globals.config.get("AlarmMonitor","colourDimGrey")), 10, 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
-				buttonText = fontButton.render("Status", 1, pygame.Color(globals.config.get("AlarmMonitor","colourBlack")))
+
+				round_rect(screen, (120, buttonY, buttonWidth, buttonHeight), pygame.Color(globalData.config.get("AlarmMonitor","colourDimGrey")), 10, 1, pygame.Color(globalData.config.get("AlarmMonitor","colourGrey")))
+				buttonText = fontButton.render("Status", 1, pygame.Color(globalData.config.get("AlarmMonitor","colourBlack")))
 				(width, height) = fontButton.size("Status")
 				textX = 120 + (buttonWidth - width)/2
 				textY = buttonY + (buttonHeight - height)/2
 				screen.blit(buttonText, (textX, textY))
 
-				round_rect(screen, (220, buttonY, buttonWidth, buttonHeight), pygame.Color(globals.config.get("AlarmMonitor","colourDimGrey")), 10, 1, pygame.Color(globals.config.get("AlarmMonitor","colourGrey")))
-				buttonText = fontButton.render("Gelesen", 1, pygame.Color(globals.config.get("AlarmMonitor","colourBlack")))
+				round_rect(screen, (220, buttonY, buttonWidth, buttonHeight), pygame.Color(globalData.config.get("AlarmMonitor","colourDimGrey")), 10, 1, pygame.Color(globalData.config.get("AlarmMonitor","colourGrey")))
+				buttonText = fontButton.render("Gelesen", 1, pygame.Color(globalData.config.get("AlarmMonitor","colourBlack")))
 				(width, height) = fontButton.size("Gelesen")
 				textX = 220 + (buttonWidth - width)/2
 				textY = buttonY + (buttonHeight - height)/2
 				screen.blit(buttonText, (textX, textY))
-				
-			## end if globals.showDisplay == True
+
+			## end if globalData.showDisplay == True
 
 			else:
-				GPIO.output(globals.config.getint("Display","GPIOPinForBacklight"), GPIO.LOW)
-			
+				GPIO.output(globalData.config.getint("Display","GPIOPinForBacklight"), GPIO.LOW)
+
 			# Update display...
 			pygame.display.update()
-		## end while globals.running == True
+		## end while globalData.running == True
 
 	except:
 		logging.error("unknown error in displayPainter-thread")
 		logging.debug("unknown error in displayPainter-thread", exc_info=True)
 		# abort main program
-		globals.abort = True
+		globalData.abort = True
 		sys.exit(1)
 	finally:
 		logging.debug("exit displayPainter-thread")
-		GPIO.output(globals.config.getint("Display","GPIOPinForBacklight"), GPIO.LOW)
+		GPIO.output(globalData.config.getint("Display","GPIOPinForBacklight"), GPIO.LOW)
 		GPIO.cleanup()
 		pygame.quit()
 		exit(0)

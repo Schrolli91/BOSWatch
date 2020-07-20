@@ -1,3 +1,24 @@
+### Use BOSWatch as service ###
+
+Old description below
+
+We assume that BOSWatch is installed to /opt/boswatch! Otherwise you need to adapt all the pathes in this description and in the service-file itself.
+
+#### Adapt the script
+Enter the frequency and the decoder(s) you want to use in line 7; you can add more specific switches if you need to
+
+### Install the service
+1. Use the install-script install_service.sh as sudo: `sudo bash install_service.sh` (self explaining)
+
+OR
+
+1. Copy the file to /etc/systemd/system: sudo cp /opt/boswatch/service/boswatch.service /etc/systemd/system/
+2. Enable the service: sudo systemctl enable boswatch.service
+3. Start the service: sudo systemctl start boswatch.service
+4. Check the status: sudo systemctl status boswatch.service
+
+---
+
 ### Start BOSWatch as a daemon
 
 ##### Changing the init script
@@ -18,6 +39,7 @@ To actually use this script, put BOSWatch where you want (recommend `/usr/local/
 and make sure it is executable (e.g. `sudo chmod 755 boswatch.py`).
 Edit the init script accordingly. Copy it into /etc/init.d using e.g. `sudo cp boswatch.sh /etc/init.d`.
 Make sure the script is executable (chmod again) and make sure that it has UNIX line-endings.
+After creating this new daemon it's neccessary to do a `sudo systemctl daemon-reload` in order to make it findable.
 
 At this point you should be able to start BOSWatchcd ~/srt using the command `sudo /etc/init.d/boswatch.sh start`,
 check its status with the `sudo /etc/init.d/boswatch.sh status` argument and stop it with `sudo /etc/init.d/boswatch.sh stop`.

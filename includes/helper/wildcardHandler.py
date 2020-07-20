@@ -12,19 +12,19 @@ for direct use in plugins to save code
 
 import logging
 
+from includes import globalVars
+
 from includes.helper import timeHandler
 
 
-def replaceWildcards(text, data, lineBrakeAllowed=False):
+def replaceWildcards(text, data):
 	"""
 	Replace all official Wildcards with the Information from the data[] var
 
 	@type    text: string
 	@param   text: Input text with wildcards
 	@type    data: map
-	@param   data: map of data (structure see interface.txt)
-	@type    lineBrakeAllowed: Boolean
-	@param   lineBrakeAllowed: switch to allow lineBreak (%BR%) as wildcard
+	@param   data: map of data (structure see readme.md in plugin folder)
 
 	@return:    text with replaced wildcards
 	@exception: Exception if Error at replace
@@ -32,10 +32,9 @@ def replaceWildcards(text, data, lineBrakeAllowed=False):
 	try:
 		# replace date and time wildcards
 		text = text.replace("%TIME%", timeHandler.getTime(data["timestamp"])).replace("%DATE%", timeHandler.getDate(data["timestamp"]))
-		
+
 		# replace some special chars
-		if lineBrakeAllowed == True:
-			text = text.replace("%BR%", "\r\n")
+		text = text.replace("%BR%", "\r\n")
 		text = text.replace("%LPAR%", "(")
 		text = text.replace("%RPAR%", ")")
 
@@ -51,7 +50,12 @@ def replaceWildcards(text, data, lineBrakeAllowed=False):
 
 		# replace POC data
 		if "ric" in data: text = text.replace("%RIC%", data["ric"])
-		if "function" in data: text = text.replace("%FUNC%", data["function"])
+		if "function" in data:
+			text = text.replace("%FUNC%", data["function"])
+			if data["function"] == "1": text = text.replace("%FUNCTEXT%", globalVars.config.get("POC","rica"))
+			if data["function"] == "2": text = text.replace("%FUNCTEXT%", globalVars.config.get("POC","ricb"))
+			if data["function"] == "3": text = text.replace("%FUNCTEXT%", globalVars.config.get("POC","ricc"))
+			if data["function"] == "4": text = text.replace("%FUNCTEXT%", globalVars.config.get("POC","ricd"))
 		if "functionChar" in data: text = text.replace("%FUNCCHAR%", data["functionChar"])
 		if "msg" in data: text = text.replace("%MSG%", data["msg"])
 		if "bitrate" in data: text = text.replace("%BITRATE%", str(data["bitrate"]))

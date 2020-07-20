@@ -1,0 +1,22 @@
+ric,description
+#
+# BOSWatch CSV file for describing POCSAG-Addresses
+#
+# For each RIC-Address you could set a description-text
+# Use the structure: ric,"Description-Text"
+#
+# main RIC with subric:
+# You can even define specific subrics, therefore you
+# 1. need to specify a main RIC: 1234567, "Unit One"
+# 2. specify a certain subric: 1234567B, "Subunit Bravo"
+# The result for 1234567B will be "Unit One Subunit Bravo"
+# - Be sure having defined the main RIC (step one)! -
+#
+# Only subric:
+# Specify only the subric: 123457B, "Subunit Bravo"
+# The result for 1234567B will be "Subunit Bravo"
+# - main RIC is not required -
+#
+# !!! DO NOT delete the first line !!!
+#
+1234567,"POCSAG testdata äöüß"

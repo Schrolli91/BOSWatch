@@ -13,7 +13,8 @@ Handler for the filter and plugins at an alarm
 import logging # Global logger
 import time    # timestamp
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
+from copy import deepcopy # copy objects to avoid issues if the objects will be changed by the plugin's during runtime and during asynch/threaded processing 
 
 ##
 #
@@ -27,7 +28,7 @@ def processAlarmHandler(typ, freq, data):
 	@param   typ:  Typ of the dataset
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
-	@type    data: map of data (structure see interface.txt)
+	@type    data: map of data (structure see readme.md in plugin folder)
 	@param   data: Contains the parameter
 
 	@requires:  active plugins in pluginList
@@ -36,18 +37,17 @@ def processAlarmHandler(typ, freq, data):
 	@return:    nothing
 	@exception: Exception if starting a Thread failed
 	"""
-	if globals.config.getboolean("BOSWatch","processAlarmAsync") == True:
+	if globalVars.config.getboolean("BOSWatch","processAlarmAsync") == True:
 		logging.debug("starting processAlarm async")
 		try:
 			from threading import Thread
-			Thread(target=processAlarm, args=(typ, freq, data)).start()
+			Thread(target=processAlarm, args=(typ, freq, deepcopy(data))).start()
 		except:
 			logging.error("Error in starting alarm processing async")
 			logging.debug("Error in starting alarm processing async", exc_info=True)
-			pass
 	else:
 		processAlarm(typ, freq, data)
-		
+
 
 ##
 #
@@ -61,7 +61,7 @@ def processAlarm(typ, freq, data):
 	@param   typ:  Typ of the dataset
 	@type    freq: string
 	@param   freq: frequency of the SDR Stick
-	@type    data: map of data (structure see interface.txt)
+	@type    data: map of data (structure see readme.md in plugin folder)
 	@param   data: Contains the parameter
 
 	@requires:  active plugins in pluginList
@@ -74,14 +74,14 @@ def processAlarm(typ, freq, data):
 		# timestamp, to make sure, that all plugins use the same time
 		data['timestamp'] = int(time.time())
 		# Go to all plugins in pluginList
-		for pluginName, plugin in globals.pluginList.items():
+		for pluginName, plugin in globalVars.pluginList.items():
 			# if enabled use RegEx-filter
-			if globals.config.getint("BOSWatch","useRegExFilter"):
-				from includes import filter
-				if filter.checkFilters(typ, data, pluginName, freq):
+			if globalVars.config.getint("BOSWatch","useRegExFilter"):
+				from includes import regexFilter
+				if regexFilter.checkFilters(typ, data, pluginName, freq):
 					logging.debug("call Plugin: %s", pluginName)
 					try:
-						plugin.run(typ, freq, data)
+						plugin.run(typ, freq, deepcopy(data))
 						logging.debug("return from: %s", pluginName)
 					except:
 						# call next plugin, if one has thrown an exception
@@ -89,7 +89,7 @@ def processAlarm(typ, freq, data):
 			else: # RegEX filter off - call plugin directly
 				logging.debug("call Plugin: %s", pluginName)
 				try:
-					plugin.run(typ, freq, data)
+					plugin.run(typ, freq, deepcopy(data))
 					logging.debug("return from: %s", pluginName)
 				except:
 					# call next plugin, if one has thrown an exception
@@ -98,4 +98,3 @@ def processAlarm(typ, freq, data):
 	except:
 		logging.error("Error in alarm processing")
 		logging.debug("Error in alarm processing", exc_info=True)
-		pass

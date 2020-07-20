@@ -5,7 +5,7 @@
 firEmergency-Plugin to dispatch ZVEI- and POCSAG - messages to firEmergency
 
 firEmergency configuration:
-- set input to "FMS32" at Port 5555
+- set input to "Standartschnittstelle" at Port 5555
 
 @autor: Smith-fms
 
@@ -15,7 +15,7 @@ firEmergency configuration:
 import logging # Global logger
 import socket
 
-from includes import globals  # Global variables
+from includes import globalVars  # Global variables
 
 from includes.helper import configHandler
 from includes.helper import stringConverter
@@ -53,7 +53,7 @@ def run(typ,freq,data):
 
 	@type    typ:  string (ZVEI|POC)
 	@param   typ:  Typ of the dataset for sending to firEmergency
-	@type    data: map of data (structure see interface.txt)
+	@type    data: map of data (structure see readme.md in plugin folder)
 	@param   data: Contains the parameter for dispatch to firEmergency.
 	@type    freq: string
 	@keyword freq: frequency is not used in this plugin
@@ -70,7 +70,7 @@ def run(typ,freq,data):
 				# connect to firEmergency
 				#
 				firSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-				firSocket.connect((globals.config.get("firEmergency", "firserver"), globals.config.getint("firEmergency", "firport")))
+				firSocket.connect((globalVars.config.get("firEmergency", "firserver"), globalVars.config.getint("firEmergency", "firport")))
 			except:
 				logging.error("cannot connect to firEmergency")
 				logging.debug("cannot connect to firEmergency", exc_info=True)
