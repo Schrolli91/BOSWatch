@@ -21,7 +21,7 @@ import re
 from icalendar import Calendar, Event
 from datetime import datetime, timedelta
 import pytz 
-
+import os.path
 from includes import globalVars  # Global variables
 from includes.helper import configHandler
 
@@ -82,22 +82,23 @@ def run(typ,freq,data):
 					#
 
 					if typ == "ZVEI":
-						g = open(globalVars.config.get("2calendar", "filepath2calendar")+'alle.ics','rb')
-						gcal = Calendar.from_ical(g.read())
+						if os.path.exists(globalVars.config.get("2calendar", "filepath2calendar")+'alle.ics'):
+							g = open(globalVars.config.get("2calendar", "filepath2calendar")+'alle.ics','rb')
+							gcal = Calendar.from_ical(g.read())
 
-						for component in gcal.walk():
+							for component in gcal.walk():
 
-							if component.name == "VEVENT":
-								event = Event()
-								event.add('summary', component.get('SUMMARY'))
-								event.add('dtstart', component.get('DTSTART'))
-								event.add('dtend', component.get('dtend'))
-								event.add('dtstamp', component.get('dtstamp'))
-								event.add('location', component.get('location'))
-								event['uid'] = component.get('UID')
-								cal.add_component(event)
+								if component.name == "VEVENT":
+									event = Event()
+									event.add('summary', component.get('SUMMARY'))
+									event.add('dtstart', component.get('DTSTART'))
+									event.add('dtend', component.get('dtend'))
+									event.add('dtstamp', component.get('dtstamp'))
+									event.add('location', component.get('location'))
+									event['uid'] = component.get('UID')
+									cal.add_component(event)
 
-						g.close()
+							g.close()
 
 
 						timestamp = datetime.fromtimestamp(data["timestamp"])
