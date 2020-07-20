@@ -156,7 +156,9 @@ try:
 		logging.debug("BOSWatch given arguments")
 		if args.test:
 			logging.debug(" - Test-Mode!")
-
+			globalVars.testvariable = 1
+		else:
+			globalVars.testvariable = 0
 		logging.debug(" - Frequency: %s", converter.freqToHz(args.freq))
 		logging.debug(" - Device: %s", args.device)
 		logging.debug(" - PPM Error: %s", args.error)
@@ -202,7 +204,7 @@ try:
 	try:
 		logging.debug("reading config file")
 		globals.config = ConfigParser.ConfigParser()
-		globals.config.read(globals.script_path+"/config/config.ini")
+		globalVars.config.read([globalVars.script_path+"/config/config.ini", "/var/www/html/config_filter.ini"])
 		# if given loglevel is debug:
 		if globals.config.getint("BOSWatch","loglevel") == 10:
 			logging.debug(" - BOSWatch:")
