@@ -204,7 +204,7 @@ try:
 	try:
 		logging.debug("reading config file")
 		globals.config = ConfigParser.ConfigParser()
-		globalVars.config.read([globalVars.script_path+"/config/config.ini", "/var/www/html/config_filter.ini"])
+		globalVars.config.read([globalVars.script_path+"/config/config.ini", "globalVars.script_path+"/config/config_filter.ini"])
 		# if given loglevel is debug:
 		if globals.config.getint("BOSWatch","loglevel") == 10:
 			logging.debug(" - BOSWatch:")
