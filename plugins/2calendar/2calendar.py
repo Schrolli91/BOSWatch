@@ -25,7 +25,7 @@ import re
 from icalendar import Calendar, Event
 from datetime import datetime, timedelta
 import pytz 
-
+from pathlib import Path
 from includes import globalVars  # Global variables
 from includes.helper import configHandler
 
@@ -93,29 +93,30 @@ def run(typ,freq,data):
 					
 					if typ == "ZVEI":
 						logging.debug("Vorhandene Events werden eingelesen")
-						g = open(globalVars.config.get("2calendar", "filepath2calendar")+'alle.ics','rb')
-						gcal = Calendar.from_ical(g.read())
+						if globalVars.config.get("2calendar", "filepath2calendar")+'alle.ics'.isfile():
+							g = open(globalVars.config.get("2calendar", "filepath2calendar")+'alle.ics','rb')
+							gcal = Calendar.from_ical(g.read())
 
-						for component in gcal.walk():
-						
-							if component.name == "VEVENT":
-								
-								logging.debug("Lese Event aus: "+component.get('SUMMARY') )
-								event = Event()
-								event.add('summary', component.get('SUMMARY'))
-								print(component.get('SUMMARY'))
-								event.add('dtstart', component.get('DTSTART'))
-								print(component.get('DTSTART').dt)
-								event.add('dtend', component.get('dtend'))
-								print(component.get('dtend').dt)
-								event.add('dtstamp', component.get('dtstamp'))
-								print(component.get('dtstamp').dt)
-								event.add('location', component.get('location'))
-								print(component.get('LOCATION'))
-								event['uid'] = component.get('UID')
-								cal.add_component(event)
-								
-						g.close()
+							for component in gcal.walk():
+							
+								if component.name == "VEVENT":
+									
+									logging.debug("Lese Event aus: "+component.get('SUMMARY') )
+									event = Event()
+									event.add('summary', component.get('SUMMARY'))
+									print(component.get('SUMMARY'))
+									event.add('dtstart', component.get('DTSTART'))
+									print(component.get('DTSTART').dt)
+									event.add('dtend', component.get('dtend'))
+									print(component.get('dtend').dt)
+									event.add('dtstamp', component.get('dtstamp'))
+									print(component.get('dtstamp').dt)
+									event.add('location', component.get('location'))
+									print(component.get('LOCATION'))
+									event['uid'] = component.get('UID')
+									cal.add_component(event)
+									
+							g.close()
 					
 					
 						timestamp = datetime.fromtimestamp(data["timestamp"])
