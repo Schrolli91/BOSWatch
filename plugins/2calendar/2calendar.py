@@ -3,15 +3,15 @@
 
 """
 Kalendereinträge für Alarmierungen
-
-@author: baderj
+Erstellt eine Icalendar (ICS)-Datei, diese kann in Kalender wie Outlook etc. importiert werden.
+Aktuell wird jeder Alarm der via Regex dieses Plugin anspricht, in eine "Gesamtdatei" geschrieben. Denkbar wäre aber auch 
+für jeden Filter eine seperate Datei anzulegen. 
+Auch wird aktuell nur ZVEI, aus mangel an Erfahrung, ausgewertet.
 @author: Norbert Jahn
 @author: Bastian Schroll
-
 @requires: icalendar https://pypi.org/project/icalendar/
 @requires: dateutil https://github.com/dateutil/dateutil/
 @requires: pytz https://pypi.org/project/pytz/
-
 """
 
 import logging # Global logger
@@ -37,9 +37,7 @@ def onLoad():
 	"""
 	While loading the plugins by pluginLoader.loadPlugins()
 	this onLoad() routine is called one time for initialize the plugin
-
 	@requires:  nothing
-
 	@return:    nothing
 	"""
 	# nothing to do for this plugin
@@ -48,23 +46,20 @@ def onLoad():
 
 ##
 #
-# Main function of MySQL-plugin
+# Main function of Calendar-plugin
 # will be called by the alarmHandler
 #
 def run(typ,freq,data):
 	"""
 	This function is the implementation of a Calendar-Plugin
 	It will write Alarms in an ics-File.
-
 	@type    typ:  string (FMS|ZVEI|POC)
 	@param   typ:  Typ of the dataset for sending to BosMon
 	@type    data: map of data (structure see readme.md in plugin folder)
 	@param   data: Contains the parameter for dispatch to BosMon.
 	@type    freq: string
 	@keyword freq: frequency is not used in this plugin
-
 	@requires: 
-
 	@return:    nothing
 	"""
 	try:
@@ -74,11 +69,10 @@ def run(typ,freq,data):
 				#
 				# Kalender instanzieren
 				#
-				logging.debug("Kalender wird instanziert")
 				cal = Calendar()
 				cal.add('proid', 'BOS')
 				cal.add('version', '2.0')
-				
+
 			except:
 				logging.error("Kann Kalender nicht erstellen")
 			else: 
@@ -86,19 +80,14 @@ def run(typ,freq,data):
 					#
 					# Erstelle das Event
 					#
-					logging.debug("Insert %s", typ)
-	
+
 					if typ == "ZVEI":
-						
-					
 						g = open(globalVars.config.get("2calendar", "filepath2calendar")+'alle.ics','rb')
 						gcal = Calendar.from_ical(g.read())
 
 						for component in gcal.walk():
-						
+
 							if component.name == "VEVENT":
-								
-								logging.debug("Lese Event aus: "+component.get('SUMMARY') )
 								event = Event()
 								event.add('summary', component.get('SUMMARY'))
 								print(component.get('SUMMARY'))
@@ -112,10 +101,10 @@ def run(typ,freq,data):
 								print(component.get('LOCATION'))
 								event['uid'] = component.get('UID')
 								cal.add_component(event)
-								
+
 						g.close()
-					
-					
+
+
 						timestamp = datetime.fromtimestamp(data["timestamp"])
 						event = Event()
 						event.add('summary', data["description"])        
@@ -125,10 +114,6 @@ def run(typ,freq,data):
 						event.add('location', data["zvei"])
 						event['uid'] = "{0}#{1}".format(timestamp,data["description"])
 						cal.add_component(event)
-						# logging.debug("Schreibe in ZVEI-spezifische-Datei")
-						# with open(globalVars.config.get("2calendar", "filepath2calendar")+data["description"]+'.ics', 'wb') as f:
-							# f.write(cal.to_ical())
-						logging.debug("Schreibe in Gesamt-Datei")
 						with open(globalVars.config.get("2calendar", "filepath2calendar")+'alle.ics', 'wb') as f:
 							f.write(cal.to_ical())
 					else:
@@ -137,8 +122,6 @@ def run(typ,freq,data):
 					logging.error("cannot Insert %s", typ)
 					logging.debug("cannot Insert %s", typ, exc_info=True)
 					return
-
-		
 
 	except:
 		logging.error("unknown error")
