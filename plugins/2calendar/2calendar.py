@@ -80,8 +80,25 @@ def run(typ,freq,data):
 					#
 					# Erstelle das Event
 					#
+					
+					summary = ""
+					location = ""
+					msg = ""
+					enterEvent = False
 
 					if typ == "ZVEI":
+						summary = data["description"]
+						location = data["zvei"]
+						enterEvent = True
+					elif typ == "POC":
+						summary = data["description"]
+						location = data["ric"] + data["functionChar"]
+						msg = data["msg"]
+						enterEvent = True
+					else:
+						logging.warning("Nicht unterstützter Typ: %s", typ)
+						
+					if enterEvent == True:
 						if os.path.exists(globalVars.config.get("2calendar", "filepath2calendar")+'alle.ics'):
 							g = open(globalVars.config.get("2calendar", "filepath2calendar")+'alle.ics','rb')
 							gcal = Calendar.from_ical(g.read())
@@ -103,17 +120,17 @@ def run(typ,freq,data):
 
 						timestamp = datetime.fromtimestamp(data["timestamp"])
 						event = Event()
-						event.add('summary', data["description"])        
+						event.add('summary', summary)        
 						event.add('dtstart',timestamp)
 						event.add('dtend',timestamp)
 						event.add('dtstamp',timestamp)
-						event.add('location', data["zvei"])
+						event.add('location', location)
+						event.add('description', msg)
 						event['uid'] = "{0}#{1}".format(timestamp,data["description"])
 						cal.add_component(event)
 						with open(globalVars.config.get("2calendar", "filepath2calendar")+'alle.ics', 'wb') as f:
 							f.write(cal.to_ical())
-					else:
-						logging.warning("Nicht unterstützter Typ: %s", typ)
+						
 				except:
 					logging.error("cannot Insert %s", typ)
 					logging.debug("cannot Insert %s", typ, exc_info=True)
