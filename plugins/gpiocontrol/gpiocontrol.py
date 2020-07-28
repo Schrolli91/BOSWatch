@@ -92,9 +92,9 @@ def run(typ,freq,data):
 				#logging.warning("%s not supported", typ)
 			elif typ == "POC":
 				if globalVars.config.get("gpiocontrol", "activerics") == "":
-                    		th = threading.Thread(target = trigger)
-                    		th.start()
-              			else
+                    			th = threading.Thread(target = trigger)
+                    			th.start()
+              			else:
                  			if  data["ric"] in globalVars.config.get("gpiocontrol", "activerics"):
                 				th = threading.Thread(target = trigger)
                     				th.start()
