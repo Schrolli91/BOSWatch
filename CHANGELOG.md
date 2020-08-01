@@ -1,5 +1,9 @@
 # Changelog
 
+### __[v2.5.2]__ - 01.08.2020
+##### Fixed
+- GPIOcontrol plugin: Fixing indentation errors. [#465](https://github.com/Schrolli91/BOSWatch/pull/465)
+
 ### __[v2.5.1]__ - 28.04.2020
 ##### Added
 - Plugin requirements: Added requirements.txt for all plugins requiring extra python packages so the install will be easier [#446](https://github.com/Schrolli91/BOSWatch/pull/446)
