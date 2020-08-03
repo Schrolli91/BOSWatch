@@ -12,7 +12,7 @@ The software was developed using the Multimon-NG code, a function in the real op
 
 
 ### Fast support on https://bwcc.boswatch.de (Mattermost)
-##### Work on BOSWatch 3 has started
+### BW3 in first testing phase - see: https://github.com/BOSWatch/BW3-Core
 
 |Branch|Code Qualität|CI-Build|
 |---|---|---|
