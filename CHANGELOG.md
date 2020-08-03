@@ -1,6 +1,5 @@
 # Changelog
 
-
 ### __[v2.5.2]__ - unreleased
 ##### Added
 - fhemCmd-Plugin: New plugin fhemCmd to execute commands in FHEM home automation. [#457](https://github.com/Schrolli91/BOSWatch/pull/457)
