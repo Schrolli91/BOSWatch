@@ -7,6 +7,7 @@
 ##### Changed
 - Divera Plugin: Add individual alarms for FMS, ZVEI and POC. [#451](https://github.com/Schrolli91/BOSWatch/pull/451)
 - install.sh: local git repo available at /opt/boswatch (or at your own path). Updates easier with `git pull` in /opt/boswatch. [#452](https://github.com/Schrolli91/BOSWatch/pull/452)
+- Telegram Plugin: Add support for simple HTML style message formatting. [#482](https://github.com/Schrolli91/BOSWatch/pull/482)
 ##### Deprecated
 ##### Removed
 ##### Fixed
