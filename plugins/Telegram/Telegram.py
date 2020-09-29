@@ -94,7 +94,7 @@ def run(typ,freq,data):
 				bot = telegram.Bot(token='%s' % BOTTokenAPIKey)
 				# Send message to chat via Telegram BOT API
 				logging.debug("Send message to chat via Telegram BOT API")
-				bot.sendMessage('%s' % BOTChatIDAPIKey, text)
+				bot.sendMessage('%s' % BOTChatIDAPIKey, text, parse_mode=telegram.ParseMode.HTML)
 
 				# Generate location information only for specific RIC
 				if typ == "POC" and data["ric"] == RICforLocationAPIKey:
