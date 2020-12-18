@@ -1,4 +1,8 @@
 # Changelog
+##### Added
+- MQTT: Plugin für Übermittlung von POSAC an einen MQTT-Broker [498](
+https://github.com/Schrolli91/BOSWatch/pull/498)
+##### Fixed
 
 ### __[v2.5.1]__ - 28.04.2020
 ##### Added
