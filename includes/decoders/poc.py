@@ -163,6 +163,7 @@ def decode(freq, decoded):
 							data["lat"] = lat
 						# Add function as character a-d to dataset
 						data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
+						data["ricFuncChar"] = data["ric"] + data["functionChar"]
 
 						logging.info("POCSAG%s: %s %s %s ", data["bitrate"], data["ric"], data["function"], data["msg"])
 

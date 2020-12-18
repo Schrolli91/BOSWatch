@@ -203,6 +203,7 @@ In the data map are the folowing informations:
 - ric
 - function
 - functionChar
+- ricFuncChar
 - msg
 - bitrate
 - description
