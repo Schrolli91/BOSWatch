@@ -80,9 +80,21 @@ def run(typ,freq,data):
 			mqttClient = mqtt.Client()
 
 			if typ == "FMS":
-				logging.warning("%s not supported", typ)
+				x = {
+					"fms": data["fms"],
+					"status": data["status"],
+					"direction": data["direction"],
+					"directionText": data["directionText"],
+					"tsi": data["tsi"],
+					"description": data["description"],
+					"timestamp": timeHandler.curtime()
+				}
 			elif typ == "ZVEI":
-				logging.warning("%s not supported", typ)
+				x = {
+					"zvei": data["zvei"],
+					"description": data["description"],
+					"timestamp": timeHandler.curtime()
+				}
 			elif typ == "POC":
 				functionText = "%FUNCTEXT%"
 				functionText = wildcardHandler.replaceWildcards(functionText, data)
@@ -96,11 +108,12 @@ def run(typ,freq,data):
 					"description": data["description"],
 					"timestamp": timeHandler.curtime()
 				}
-				y = json.dumps(x)
-				mqttClient.connect(broker_address)
-				mqttClient.publish(topic,y)
 			else:
 				logging.warning("Invalid Typ: %s", typ)
+			
+			y = json.dumps(x)
+			mqttClient.connect(broker_address)
+			mqttClient.publish(topic,y)
 			########## User Plugin CODE ##########
 
 	except:
