@@ -4,8 +4,7 @@
 ##### Added
 - fhemCmd-Plugin: New plugin fhemCmd to execute commands in FHEM home automation. [#457](https://github.com/Schrolli91/BOSWatch/pull/457)
 - Add field "ricFuncChar" in data structure for POC messages as a combination of "ric" and "functionChar" for using in RegEx filter. [#459](https://github.com/Schrolli91/BOSWatch/pull/459)
-- MQTT: Plugin für Übermittlung von POSAC an einen MQTT-Broker [#498](
-https://github.com/Schrolli91/BOSWatch/pull/498)
+- MQTT Plugin: Send alarms to an MQTT broker [#498](https://github.com/Schrolli91/BOSWatch/pull/498)
 ##### Changed
 - Divera Plugin: Add individual alarms for FMS, ZVEI and POC. [#451](https://github.com/Schrolli91/BOSWatch/pull/451)
 - install.sh: local git repo available at /opt/boswatch (or at your own path). Updates easier with `git pull` in /opt/boswatch. [#452](https://github.com/Schrolli91/BOSWatch/pull/452)
