@@ -16,6 +16,24 @@ from includes import globalVars  # Global variables
 from includes.helper import configHandler
 from includes.helper import wildcardHandler
 
+def isSignal(poc_id):
+	"""
+	@type    poc_id: string
+	@param   poc_id: POCSAG Ric
+
+	@requires:  Configuration has to be set in the config.ini
+
+	@return:    True if the Ric is Signal, other False
+	@exception: none
+	"""
+	# If RIC is Signal return True, else False
+	if globalVars.config.get("POC", "netIdent_ric"):
+		if poc_id in globalVars.config.get("POC", "netIdent_ric"):
+			logging.info("RIC %s is net ident", poc_id)
+			return True
+		else:
+			logging.info("RIC %s is no net ident", poc_id)
+			return False
 
 ##
 #
@@ -61,6 +79,7 @@ def run(typ, freq, data):
                 text = globalVars.config.get("Divera", "fms_text")
                 title = globalVars.config.get("Divera", "fms_title")
                 priority = globalVars.config.get("Divera", "fms_prio")
+                vehicle = globalVars.config.get("Divera", "fms_vehicle")
 
             elif typ == "ZVEI":
                 #
@@ -68,25 +87,33 @@ def run(typ, freq, data):
                 #
                 text = globalVars.config.get("Divera", "zvei_text")
                 title = globalVars.config.get("Divera", "zvei_title")
-                priority = globalVars.config.get("Divera","zvei_std_prio")
+                priority = globalVars.config.get("Divera","zvei_prio")
+                zvei_id = globalVars.config.get("Divera","zvei_id")
 
             elif typ == "POC":
-                #
-                # building message for POC
-                #
-                if data["function"] == '1':
-                    priority = globalVars.config.get("Divera", "SubA")
-                elif data["function"] == '2':
-                    priority = globalVars.config.get("Divera", "SubB")
-                elif data["function"] == '3':
-                    priority = globalVars.config.get("Divera", "SubC")
-                elif data["function"] == '4':
-                    priority = globalVars.config.get("Divera", "SubD")
+                if isSignal(data["ric"]): 
+                
+                    logging.debug("RIC is net ident")
+                    return
                 else:
-                    priority = ''
+                    #
+                    # building message for POC
+                    #
+                    if data["function"] == '1':
+                        priority = globalVars.config.get("Divera", "SubA")
+                    elif data["function"] == '2':
+                        priority = globalVars.config.get("Divera", "SubB")
+                    elif data["function"] == '3':
+                        priority = globalVars.config.get("Divera", "SubC")
+                    elif data["function"] == '4':
+                        priority = globalVars.config.get("Divera", "SubD")
+                    else:
+                        priority = ''
                         
-                text = globalVars.config.get("Divera", "poc_text")
-                title = globalVars.config.get("Divera", "poc_title")
+                    text = globalVars.config.get("Divera", "poc_text")
+                    title = globalVars.config.get("Divera", "poc_title")
+                    ric = globalVars.config.get("Divera", "poc_ric")
+                    
 
             else:
                 logging.warning("Invalid type: %s", typ)
@@ -97,30 +124,91 @@ def run(typ, freq, data):
             # Divera-Request
             #
             logging.debug("send Divera for %s", typ)
-
-            # replace the wildcards
-            text = wildcardHandler.replaceWildcards(text, data)
-            title = wildcardHandler.replaceWildcards(title, data)
             
-            # Logging data to send
+            # Replace wildcards & Logging data to send
+            title = wildcardHandler.replaceWildcards(title, data)
             logging.debug("Title   : %s", title)
+            text = wildcardHandler.replaceWildcards(text, data)
             logging.debug("Text    : %s", text)
-            logging.debug("Priority: %s", priority)
+            
+            if typ == "FMS":
+                vehicle = wildcardHandler.replaceWildcards(vehicle, data)
+                logging.debug("Vehicle     : %s", vehicle)
+            elif typ == "POC":
+                ric = wildcardHandler.replaceWildcards(ric, data)
+                logging.debug("RIC     : %s", ric)
+            elif typ == "ZVEI":
+                zvei_id = wildcardHandler.replaceWildcards(zvei_id, data)
+                logging.debug("ZVEI_ID     : %s", zvei_id)
+            else:
+                logging.info("No wildcards to replace and no Typ selected!")
 				
             # check priority value
             if (priority != 'false') and (priority != 'true'):
                 logging.info("No Priority set for type '%s'! Skipping Divera-Alarm!", typ)
                 return
 
-            # start the connection
-            conn = httplib.HTTPSConnection("www.divera247.com:443")
-            conn.request("GET", "/api/alarm",
-                        urllib.urlencode({
-                            "accesskey": globalVars.config.get("Divera", "accesskey"),
-                            "title": title,
-                            "text": text,
-                            "priority": priority,
-                        }))
+            # Check FMS
+            if typ == "FMS":
+                if (vehicle == ''):
+                    logging.info("No Vehicle set!")
+            
+            # Check POC
+            elif typ == "POC":
+                if (ric == ''):
+                    logging.info("No RIC set!")
+             
+            # Check ZVEI       
+            elif typ == "ZVEI":
+                if (zvei_id == ''):
+                    logging.info("No ZVEI_ID set!")
+                    
+            else:
+                logging.info("No ZVEI, FMS or POC alarm")
+            
+            # start connection to Divera                
+            if typ == "FMS":
+                # start the connection FMS
+                conn = httplib.HTTPSConnection("www.divera247.com:443")
+                conn.request("GET", "/api/fms",
+                             urllib.urlencode({
+                                "accesskey": globalVars.config.get("Divera", "accesskey"),
+                                "vehicle_ric": vehicle,
+                                "status_id": data["status"],
+                                "status_note": data["directionText"],
+                                "title": title,
+                                "text": text,
+                                "priority": priority,
+                            }))
+                            
+            elif typ == "ZVEI":
+            # start connection ZVEI; zvei_id in Divera is alarm-RIC!
+                conn = httplib.HTTPSConnection("www.divera247.com:443")
+                conn.request("GET", "/api/alarm",
+                            urllib.urlencode({
+                                "accesskey": globalVars.config.get("Divera", "accesskey"),
+                                "title": title,
+                                "ric": zvei_id,
+                                "text": text,
+                                "priority": priority,
+                            }))
+            
+            elif typ == "POC":
+            # start connection POC
+                conn = httplib.HTTPSConnection("www.divera247.com:443")
+                conn.request("GET", "/api/alarm",
+                            urllib.urlencode({
+                                "accesskey": globalVars.config.get("Divera", "accesskey"),
+                                "title": title,
+                                "ric": ric,
+                                "text": text,
+                                "priority": priority,
+                            }))
+                                      
+            
+            else:
+                loggin.debug("No Type is set", exc_info=True)
+                return
 
         except:
             logging.error("cannot send Divera request")
