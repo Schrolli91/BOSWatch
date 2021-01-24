@@ -1,18 +1,27 @@
 # Changelog
 
-### __[v2.5.2]__ - unreleased
+
+### __[v2.5.3]__ - unreleased
 ##### Added
-- fhemCmd-Plugin: New plugin fhemCmd to execute commands in FHEM home automation. [#457](https://github.com/Schrolli91/BOSWatch/pull/457)
-- Add field "ricFuncChar" in data structure for POC messages as a combination of "ric" and "functionChar" for using in RegEx filter. [#459](https://github.com/Schrolli91/BOSWatch/pull/459)
 ##### Changed
-- Divera Plugin: Add individual alarms for FMS, ZVEI and POC. [#451](https://github.com/Schrolli91/BOSWatch/pull/451)
-- install.sh: local git repo available at /opt/boswatch (or at your own path). Updates easier with `git pull` in /opt/boswatch. [#452](https://github.com/Schrolli91/BOSWatch/pull/452)
 ##### Deprecated
 ##### Removed
 ##### Fixed
+##### Security
+
+
+### __[v2.5.2]__ - 08.01.2021
+##### Added
+- fhemCmd-Plugin: New plugin fhemCmd to execute commands in FHEM home automation. [#457](https://github.com/Schrolli91/BOSWatch/pull/457)
+- Add field "ricFuncChar" in data structure for POC messages as a combination of "ric" and "functionChar" for using in RegEx filter. [#459](https://github.com/Schrolli91/BOSWatch/pull/459)
+- MQTT Plugin: Send alarms to an MQTT broker [#498](https://github.com/Schrolli91/BOSWatch/pull/498)
+##### Changed
+- Divera Plugin: Add individual alarms for FMS, ZVEI and POC. [#451](https://github.com/Schrolli91/BOSWatch/pull/451)
+- install.sh: local git repo available at /opt/boswatch (or at your own path). Updates easier with `git pull` in /opt/boswatch. [#452](https://github.com/Schrolli91/BOSWatch/pull/452)
+- Telegram Plugin: Add support for simple HTML style message formatting. [#482](https://github.com/Schrolli91/BOSWatch/pull/482)
+##### Fixed
 - install.sh: old version of mysql-connector-python removed; add new via pip [#452](https://github.com/Schrolli91/BOSWatch/pull/452) [#445](https://github.com/Schrolli91/BOSWatch/issues/445)
 - GPIOcontrol plugin: Fixing indentation errors. [#465](https://github.com/Schrolli91/BOSWatch/pull/465)
-##### Security
 
 
 ### __[v2.5.1]__ - 28.04.2020
@@ -126,7 +135,7 @@
 Zum schreiben des Changelog's siehe:
 http://keepachangelog.com/de/1.0.0/
 
-### __[v#.#]__ - date
+### __[v#.#]__ - unreleased
 ##### Added
 ##### Changed
 ##### Deprecated
