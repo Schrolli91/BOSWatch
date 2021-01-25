@@ -157,7 +157,20 @@ def decode(freq, decoded):
 
 					# check for double alarm
 					if doubleFilter.checkID("POC", poc_id+poc_sub, poc_text):
-						data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id, "has_geo":has_geo}
+						data = {"ric":poc_id, "function":poc_sub, "msg":poc_text, "bitrate":bitrate, "description":poc_id, "has_geo":has_geo, "has_schema_fields":False}
+						
+						# if a schema is defined, analyze and associate
+						if globalVars.config.has_option("POC", "schemaRegex"):
+							logging.info("schemaRegex found")
+							m = re.match(globalVars.config.get("POC", "schemaRegex"), poc_text)
+							if m:
+								logging.info("POC Schema match")
+								# enrich data structure by regex groups
+								data.update(m.groupdict())
+								data["has_schema_fields"] = True
+							else:
+								logging.info("No POC Schema match")
+						
 						if has_geo == True:
 							data["lon"] = lon
 							data["lat"] = lat
@@ -177,7 +190,7 @@ def decode(freq, decoded):
 							logging.debug(" - multicastAlarm without msg")
 							from includes import multicastAlarm
 							multicastAlarm.newEntrymultiList(data)
-
+						
 						# multicastAlarm processing if enabled and alarm message has been received
 						elif globalVars.config.getint("multicastAlarm", "multicastAlarm") and data["msg"] != "" and data["ric"] in globalVars.config.get("multicastAlarm", "multicastAlarm_ric"):
 							logging.debug(" - multicastAlarm with message")
