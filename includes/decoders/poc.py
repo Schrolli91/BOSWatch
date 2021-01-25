@@ -15,6 +15,7 @@ import re      # Regex for validation
 
 from includes import globalVars  # Global variables
 from includes import doubleFilter  # double alarm filter
+from includes import locationCoordinates
 
 ##
 #
@@ -161,6 +162,9 @@ def decode(freq, decoded):
 						if has_geo == True:
 							data["lon"] = lon
 							data["lat"] = lat
+						else:
+							locationCoordinates.findCoordinates(data)
+							
 						# Add function as character a-d to dataset
 						data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
 						data["ricFuncChar"] = data["ric"] + data["functionChar"]

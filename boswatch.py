@@ -288,6 +288,17 @@ try:
 		logging.debug("cannot load description lists", exc_info=True)
 
 	#
+	# Load location RegEx
+	#
+	try:
+		from includes import locationCoordinates
+		locationCoordinates.loadFilters()
+	except:
+		# It's an error, but we could work without that stuff...
+		logging.error("cannot load location regex")
+		logging.debug("cannot load location regex", exc_info=True)
+
+	#
 	# Start rtl_fm
 	#
 	try:
