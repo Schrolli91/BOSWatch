@@ -291,8 +291,9 @@ try:
 	# Load location RegEx
 	#
 	try:
-		from includes import locationCoordinates
-		locationCoordinates.loadFilters()
+		if globalVars.config.getboolean("LocationCoordinates", "locationCoordinates"):
+			from includes import locationCoordinates
+			locationCoordinates.loadFilters()
 	except:
 		# It's an error, but we could work without that stuff...
 		logging.error("cannot load location regex")

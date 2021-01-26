@@ -163,7 +163,8 @@ def decode(freq, decoded):
 							data["lon"] = lon
 							data["lat"] = lat
 						else:
-							locationCoordinates.findCoordinates(data)
+							if globalVars.config.getboolean("LocationCoordinates", "locationCoordinates"):
+								locationCoordinates.findCoordinates(data)
 							
 						# Add function as character a-d to dataset
 						data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
