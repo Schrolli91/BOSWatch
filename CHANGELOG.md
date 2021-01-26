@@ -3,6 +3,7 @@
 
 ### __[v2.5.3]__ - unreleased
 ##### Added
+- GPS-coordinates configuration based on POC message elements
 ##### Changed
 ##### Deprecated
 ##### Removed
