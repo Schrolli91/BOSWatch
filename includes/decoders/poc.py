@@ -161,7 +161,7 @@ def decode(freq, decoded):
 						
 						# if a schema is defined, analyze and associate
 						if globalVars.config.has_option("POC", "schemaRegex"):
-							logging.info("schemaRegex found")
+							logging.debug("schemaRegex found")
 							m = re.match(globalVars.config.get("POC", "schemaRegex"), poc_text)
 							if m:
 								logging.info("POC Schema match")
