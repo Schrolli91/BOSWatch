@@ -20,7 +20,7 @@ filterList = []
 
 def loadFilters():
 	try:
-		logging.debug("Loading Location Coordinates")
+		logging.debug("Loading location coordinates")
 		
 		for key,val in globalVars.config.items("LocationCoordinates"):
 			logging.debug(" - %s = %s", key, val)
@@ -55,16 +55,17 @@ def findCoordinates(data):
 			for k in i["filterItem"]:
 				logging.debug("Pattern : " + str(k))
 				if k["field"] not in data.keys():
-					logging.debug("field " + k["field"] + " not in data structure, hence no match")
+					logging.debug("Field " + k["field"] + " not in data structure, hence no match")
 					regexMatch = False
 					break
 				else:
-					if (k["field"] and not re.search(k["pattern"], data.get(k["field"]))):
+					if not re.search(k["pattern"], data.get(k["field"])):
 						logging.debug("No match")
 						regexMatch = False
+						break
 			if regexMatch:
 				coordinatesString = i["coordinates"]
-				logging.debug("Coordinate String: " + coordinatesString)
+				logging.debug("Coordinates string: " + coordinatesString)
 				coordinatesList = coordinatesString.replace(" ", "").split(",")
 				if len(coordinatesList) == 2:
 					data["lat"] = coordinatesList[0]
