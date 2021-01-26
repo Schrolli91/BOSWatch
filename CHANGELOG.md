@@ -3,7 +3,7 @@
 
 ### __[v2.5.3]__ - unreleased
 ##### Added
-- GPS-coordinates configuration based on POC message elements
+- GPS-coordinates configuration based on POC message elements. [#509](https://github.com/Schrolli91/BOSWatch/pull/509)
 ##### Changed
 ##### Deprecated
 ##### Removed
