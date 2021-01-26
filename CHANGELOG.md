@@ -3,7 +3,7 @@
 
 ### __[v2.5.3]__ - unreleased
 ##### Added
-- Extending POC data-structure by Regex named groups matching.
+- Extending POC data-structure by Regex named groups matching. [#508](https://github.com/Schrolli91/BOSWatch/pull/508)
 ##### Changed
 ##### Deprecated
 ##### Removed
