@@ -164,12 +164,12 @@ def decode(freq, decoded):
 							logging.debug("schemaRegex found")
 							m = re.match(globalVars.config.get("POC", "schemaRegex"), poc_text)
 							if m:
-								logging.info("POC Schema match")
+								logging.debug("POC Schema match")
 								# enrich data structure by regex groups
 								data.update(m.groupdict())
 								data["has_schema_fields"] = True
 							else:
-								logging.info("No POC Schema match")
+								logging.debug("No POC Schema match")
 						
 						if has_geo == True:
 							data["lon"] = lon
