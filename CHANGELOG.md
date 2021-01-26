@@ -3,6 +3,7 @@
 
 ### __[v2.5.3]__ - unreleased
 ##### Added
+- Extending POC data-structure by Regex named groups matching.
 ##### Changed
 ##### Deprecated
 ##### Removed
