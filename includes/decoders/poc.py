@@ -15,7 +15,6 @@ import re      # Regex for validation
 
 from includes import globalVars  # Global variables
 from includes import doubleFilter  # double alarm filter
-from includes import locationCoordinates
 
 ##
 #
@@ -177,6 +176,7 @@ def decode(freq, decoded):
 							data["lat"] = lat
 						else:
 							if globalVars.config.getboolean("LocationCoordinates", "locationCoordinates"):
+								from includes import locationCoordinates
 								locationCoordinates.findCoordinates(data)
 							
 						# Add function as character a-d to dataset
