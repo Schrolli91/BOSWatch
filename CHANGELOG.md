@@ -3,7 +3,7 @@
 
 ### __[v2.5.3]__ - unreleased
 ##### Added
-- GPS-coordinates configuration based on POC message elements. [#510](https://github.com/Schrolli91/BOSWatch/pull/510)
+- Functionality to fill coordinate values in POC data structure (lat, lon) based on configured locations that match a regular expression in POC message [#510](https://github.com/Schrolli91/BOSWatch/pull/510)
 ##### Changed
 ##### Deprecated
 ##### Removed

@@ -71,7 +71,7 @@ def findCoordinates(data):
 					data["lat"] = coordinatesList[0]
 					data["lon"] = coordinatesList[1]
 					data["has_geo"] = True
-					logging.info("Coordinates found!")
+					logging.debug("Coordinates found!")
 					break
 	except:
 		logging.error("cannot read config file")
