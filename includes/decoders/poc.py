@@ -174,6 +174,11 @@ def decode(freq, decoded):
 						if has_geo == True:
 							data["lon"] = lon
 							data["lat"] = lat
+						else:
+							if globalVars.config.getboolean("LocationCoordinates", "locationCoordinates"):
+								from includes import locationCoordinates
+								locationCoordinates.findCoordinates(data)
+							
 						# Add function as character a-d to dataset
 						data["functionChar"] = data["function"].replace("1", "a").replace("2", "b").replace("3", "c").replace("4", "d")
 						data["ricFuncChar"] = data["ric"] + data["functionChar"]
