@@ -187,7 +187,7 @@ echo "[ 8/9] [########-]"
 tput cup 15 5
 echo "-> Download & Install MySQL connector for Python."
 cd $boswatch_install_path
-pip install mysql-connector-python >> $boswatch_install_path/setup_log.txt 2>&1
+pip install mysql-connector-python==8.0.19 >> $boswatch_install_path/setup_log.txt 2>&1
 exitcodefunction $? install mysql-connector
 
 # Blacklist DVB-Drivers
