@@ -9,6 +9,8 @@
 ##### Deprecated
 ##### Removed
 ##### Fixed
+ - Use specific mysql-connector-python version 8.0.19 [#533](https://github.com/Schrolli91/BOSWatch/pull/533)
+ - Correct Syntax-Errors in MySQL Statements [#533](https://github.com/Schrolli91/BOSWatch/pull/533)
 ##### Security
 
 
