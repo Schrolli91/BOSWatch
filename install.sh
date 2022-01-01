@@ -108,7 +108,8 @@ tput cup 13 15
 echo "[ 2/9] [##-------]"
 tput cup 15 5
 echo "-> download GIT and other stuff.........."
-apt-get -y install git cmake build-essential libusb-1.0 qt4-qmake qt4-default libpulse-dev libx11-dev sox python-pip >> $boswatch_install_path/setup_log.txt 2>&1
+sudo add-apt-repository ppa:rock-core/qt4 -y >> $boswatch_install_path/setup_log.txt 2>&1
+apt-get -y install git cmake build-essential libusb-1.0 qt4-qmake qt4-default libpulse-dev libx11-dev sox python3-pip >> $boswatch_install_path/setup_log.txt 2>&1
 exitcodefunction $? download stuff
 
 # download BOSWatch via git
