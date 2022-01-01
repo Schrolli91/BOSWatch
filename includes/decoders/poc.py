@@ -119,7 +119,7 @@ def decode(freq, decoded):
 			poc_id = decoded[21:28].replace(" ", "").zfill(7)
 			poc_sub = str(int(decoded[40])+1)
 
-		if bitrate is 0:
+		if bitrate == 0:
 			logging.warning("POCSAG Bitrate not found")
 			logging.debug(" - (%s)", decoded)
 		else:
