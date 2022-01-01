@@ -126,15 +126,15 @@ def decode(freq, decoded):
 			logging.debug("POCSAG Bitrate: %s", bitrate)
 
 			if "Alpha:" in decoded: #check if there is a text message
-                		poc_text = decoded.split('Alpha:   ')[1].strip().replace('<NUL><NUL>','').replace('<NUL>','').replace('<NUL','').replace('< NUL>','').replace('<EOT>','').strip()
-                		if globalVars.config.getint("POC","geo_enable"):
-                    			try:
-                        			logging.debug("Using %s to find geo-tag in %s", globalVars.config.get("POC","geo_format"),poc_text)
-                        			m = re.search(globalVars.config.get("POC","geo_format"),poc_text)
-                        			if m:
-                            				logging.debug("Found geo-tag in message, parsing...")
-                            				has_geo = True
-                            				geo_order = globalVars.config.get("POC","geo_order").split(',')
+				poc_text = decoded.split('Alpha:   ')[1].strip().replace('<NUL><NUL>','').replace('<NUL>','').replace('<NUL','').replace('< NUL>','').replace('<EOT>','').strip()
+				if globalVars.config.getint("POC","geo_enable"):
+					try:
+						logging.debug("Using %s to find geo-tag in %s", globalVars.config.get("POC","geo_format"),poc_text)
+						m = re.search(globalVars.config.get("POC","geo_format"),poc_text)
+						if m:
+							logging.debug("Found geo-tag in message, parsing...")
+							has_geo = True
+							geo_order = globalVars.config.get("POC","geo_order").split(',')
 							if geo_order[0].lower == "lon":
 								lat = m.group(1) + "." + m.group(2)
 								lon = m.group(3) + "." + m.group(4)
