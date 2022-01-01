@@ -1,6 +1,15 @@
 # Changelog
 
 
+### __[v2.5.3]__ - 
+##### Added
+
+##### Changed
+
+##### Fixed
+- install skript for install python3 and the qt4
+
+
 ### __[v2.5.2]__ - 08.01.2021
 ##### Added
 - fhemCmd-Plugin: New plugin fhemCmd to execute commands in FHEM home automation. [#457](https://github.com/Schrolli91/BOSWatch/pull/457)
