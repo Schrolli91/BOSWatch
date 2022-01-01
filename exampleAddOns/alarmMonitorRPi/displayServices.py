@@ -30,7 +30,7 @@ def autoTurnOffDisplay():
 	import sys
 	import time
 	import logging
-	import ConfigParser
+	import configparser
 	import globalData
 
 	logging.debug("autoTurnOffDisplay-thread started")
@@ -79,7 +79,7 @@ def eventHandler():
 	import sys
 	import time
 	import logging
-	import ConfigParser
+	import configparser
 	import pygame
 	import globalData
 
@@ -173,7 +173,7 @@ def displayPainter():
 	import sys
 	import time
 	import logging
-	import ConfigParser
+	import configparser
 	import RPi.GPIO as GPIO
 	import pygame
 	from wrapline import wrapline

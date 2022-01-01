@@ -62,10 +62,10 @@ def siren():
 	if siren_stopped == True:
 		pibrella.buzzer.stop()
 		return True
-	for x in xrange(-30,30,2):
+	for x in range(-30,30,2):
 		pibrella.buzzer.note(x)
 		time.sleep(0.01)
-	for x in reversed(xrange(-30,30,2)):
+	for x in reversed(list(range(-30,30,2))):
 		pibrella.buzzer.note(x)
 		time.sleep(0.01)
 # start asynchronous siren

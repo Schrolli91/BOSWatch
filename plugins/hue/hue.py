@@ -97,7 +97,7 @@ def run(typ,freq,data):
 				logging.debug("hue REST API URL: %s", url)
 				
 				#blinking  
-				for _ in xrange(repeat):
+				for _ in range(repeat):
 					requests.put(url, data=data_on)
 					logging.debug("on for %s seconds", timeon)
 					time.sleep(timeon)

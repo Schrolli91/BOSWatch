@@ -1,6 +1,7 @@
 *.psd
 *.pyc
 *.log
+*.bak
 config.ini
 log/
 
@@ -11,3 +12,4 @@ log/
 \.settings/
 
 \.idea/
+boswatch.py.bak

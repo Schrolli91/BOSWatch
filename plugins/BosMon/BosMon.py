@@ -13,8 +13,8 @@ BOSWatch-Plugin to dispatch FMS-, ZVEI- and POCSAG - messages to BosMon
 
 import logging # Global logger
 
-import httplib #for the HTTP request
-import urllib #for the HTTP request with parameters
+import http.client #for the HTTP request
+import urllib.request, urllib.parse, urllib.error #for the HTTP request with parameters
 import base64 #for the HTTP request with User/Password
 
 from includes import globalVars  # Global variables
@@ -115,7 +115,7 @@ def run(typ,freq,data):
 					headers['Authorization'] = "Basic {0}".format(base64.b64encode("{0}:{1}".format(globalVars.config.get("BosMon", "bosmon_user"), globalVars.config.get("BosMon", "bosmon_password"))))
 				logging.debug("connect to BosMon")
 				# open connection to BosMon-Server
-				httprequest = httplib.HTTPConnection(globalVars.config.get("BosMon", "bosmon_server"), globalVars.config.get("BosMon", "bosmon_port"), timeout=5)
+				httprequest = http.client.HTTPConnection(globalVars.config.get("BosMon", "bosmon_server"), globalVars.config.get("BosMon", "bosmon_port"), timeout=5)
 				# debug-level to shell (0=no debug|1)
 				httprequest.set_debuglevel(0)
 			except:
@@ -149,7 +149,7 @@ def run(typ,freq,data):
 							info = info + 4      # + b0100
 						# "I" is nothing to do     + b0000
 
-						params = urllib.urlencode({'type':'fms', 'address':data["fms"], 'status':data["status"], 'info':info, 'flags':'0'})
+						params = urllib.parse.urlencode({'type':'fms', 'address':data["fms"], 'status':data["status"], 'info':info, 'flags':'0'})
 						logging.debug(" - Params: %s", params)
 						# dispatch the BosMon-request
 						bosMonRequest(httprequest, params, headers)
@@ -161,7 +161,7 @@ def run(typ,freq,data):
 				elif typ == "ZVEI":
 					logging.debug("Start ZVEI to BosMon")
 					try:
-						params = urllib.urlencode({'type':'zvei', 'address':data["zvei"], 'flags':'0'})
+						params = urllib.parse.urlencode({'type':'zvei', 'address':data["zvei"], 'flags':'0'})
 						logging.debug(" - Params: %s", params)
 						# dispatch the BosMon-request
 						bosMonRequest(httprequest, params, headers)
@@ -174,7 +174,7 @@ def run(typ,freq,data):
 					logging.debug("Start POC to BosMon")
 					try:
 						# BosMon-Telegramin expected "a-d" as RIC-sub/function
-						params = urllib.urlencode({'type':'pocsag', 'address':data["ric"], 'flags':'0', 'function':data["functionChar"], 'message':data["msg"]})
+						params = urllib.parse.urlencode({'type':'pocsag', 'address':data["ric"], 'flags':'0', 'function':data["functionChar"], 'message':data["msg"]})
 						logging.debug(" - Params: %s", params)
 						# dispatch the BosMon-request
 						bosMonRequest(httprequest, params, headers)

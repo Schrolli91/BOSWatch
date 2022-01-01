@@ -69,7 +69,7 @@ def convertToUnicode(inputString = ""):
 			pass
 
 		# 2. Check if inputString is unicode...
-		if isinstance(inputString, unicode):
+		if isinstance(inputString, str):
 			logging.debug("-- unicode")
 			return inputString
 
@@ -112,7 +112,7 @@ def convertToUTF8(inputString = ""):
 				pass
 
 			# 2. Check if inputString is unicode...
-			if isinstance(inputString, unicode):
+			if isinstance(inputString, str):
 				logging.debug("-- unicode")
 				# ... then return it as UTF-8
 				uft8String = decodedString.encode('UTF-8')

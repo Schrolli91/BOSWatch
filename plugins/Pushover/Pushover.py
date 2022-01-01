@@ -10,8 +10,8 @@ Pushover-Plugin to send FMS-, ZVEI- and POCSAG - messages to Pushover Clients
 """
 
 import logging  # Global logger
-import httplib  # for the HTTP request
-import urllib
+import http.client  # for the HTTP request
+import urllib.request, urllib.parse, urllib.error
 from includes import globalVars  # Global variables
 
 # from includes.helper import timeHandler
@@ -134,9 +134,9 @@ def run(typ, freq, data):
                         sound = "pushover"
 
                 # start the connection
-                conn = httplib.HTTPSConnection("api.pushover.net:443")
+                conn = http.client.HTTPSConnection("api.pushover.net:443")
                 conn.request("POST", "/1/messages.json",
-                             urllib.urlencode({
+                             urllib.parse.urlencode({
                                  "token": globalVars.config.get("Pushover", "api_key"),
                                  "user": globalVars.config.get("Pushover", "user_key"),
                                  "message": message,

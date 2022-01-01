@@ -10,8 +10,8 @@ SMS77-Plugin to send FMS-, ZVEI- and POCSAG - messages to SMS77
 """
 
 import logging # Global logger
-import httplib #for the HTTP request
-import urllib
+import http.client #for the HTTP request
+import urllib.request, urllib.parse, urllib.error
 from includes import globalVars  # Global variables
 
 #from includes.helper import timeHandler
@@ -80,9 +80,9 @@ def run(typ,freq,data):
 				#
 				logging.debug("send Sms77 %s", typ)
 
-				conn = httplib.HTTPSConnection("gateway.sms77.io",443)
+				conn = http.client.HTTPSConnection("gateway.sms77.io",443)
 				conn.request("POST", "/api/sms",
-				urllib.urlencode({
+				urllib.parse.urlencode({
 					"u": globalVars.config.get("Sms77", "user"),
 					"p": globalVars.config.get("Sms77", "password"),
 					"to": globalVars.config.get("Sms77", "to"),
