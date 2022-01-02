@@ -8,8 +8,8 @@ Divera-Plugin to send FMS-, ZVEI- and POCSAG - messages to Divera
 """
 
 import logging  # Global logger
-import httplib  # for the HTTP request
-import urllib
+import http.client  # for the HTTP request
+import urllib.request, urllib.parse, urllib.error
 from includes import globalVars  # Global variables
 
 # from includes.helper import timeHandler
@@ -169,9 +169,9 @@ def run(typ, freq, data):
             # start connection to Divera                
             if typ == "FMS":
                 # start the connection FMS
-                conn = httplib.HTTPSConnection("www.divera247.com:443")
+                conn = http.client.HTTPSConnection("www.divera247.com:443")
                 conn.request("GET", "/api/fms",
-                             urllib.urlencode({
+                             urllib.parse.urlencode({
                                 "accesskey": globalVars.config.get("Divera", "accesskey"),
                                 "vehicle_ric": vehicle,
                                 "status_id": data["status"],
@@ -183,9 +183,9 @@ def run(typ, freq, data):
                             
             elif typ == "ZVEI":
             # start connection ZVEI; zvei_id in Divera is alarm-RIC!
-                conn = httplib.HTTPSConnection("www.divera247.com:443")
+                conn = http.client.HTTPSConnection("www.divera247.com:443")
                 conn.request("GET", "/api/alarm",
-                            urllib.urlencode({
+                            urllib.parse.urlencode({
                                 "accesskey": globalVars.config.get("Divera", "accesskey"),
                                 "title": title,
                                 "ric": zvei_id,
@@ -195,9 +195,9 @@ def run(typ, freq, data):
             
             elif typ == "POC":
             # start connection POC
-                conn = httplib.HTTPSConnection("www.divera247.com:443")
+                conn = http.client.HTTPSConnection("www.divera247.com:443")
                 conn.request("GET", "/api/alarm",
-                            urllib.urlencode({
+                            urllib.parse.urlencode({
                                 "accesskey": globalVars.config.get("Divera", "accesskey"),
                                 "title": title,
                                 "ric": ric,

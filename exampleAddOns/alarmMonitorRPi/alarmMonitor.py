@@ -27,7 +27,7 @@ RPi-Display: https://github.com/watterott/RPi-Display
 
 import logging
 import logging.handlers
-import ConfigParser
+import configparser
 
 import os
 import time
@@ -79,7 +79,7 @@ try:
 	#
 	try:
 		logging.debug("reading config file")
-		globalData.config = ConfigParser.SafeConfigParser()
+		globalData.config = configparser.SafeConfigParser()
 		globalData.config.read("config.ini")
 		# if given loglevel is debug:
 		logging.debug("- [AlarmMonitor]")

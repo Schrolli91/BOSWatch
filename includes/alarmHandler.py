@@ -74,7 +74,7 @@ def processAlarm(typ, freq, data):
 		# timestamp, to make sure, that all plugins use the same time
 		data['timestamp'] = int(time.time())
 		# Go to all plugins in pluginList
-		for pluginName, plugin in globalVars.pluginList.items():
+		for pluginName, plugin in list(globalVars.pluginList.items()):
 			# if enabled use RegEx-filter
 			if globalVars.config.getint("BOSWatch","useRegExFilter"):
 				from includes import regexFilter

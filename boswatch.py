@@ -19,7 +19,7 @@ import logging
 import logging.handlers
 
 import argparse		# for parse the args
-import ConfigParser	# for parse the config file
+import configparser	# for parse the config file
 import os			# for log mkdir
 import sys			# for py version
 import time			# for time.sleep()
@@ -35,7 +35,7 @@ from includes.helper import freqConverter
 # Check for exisiting config/config.ini-file
 #
 if not os.path.exists(os.path.dirname(os.path.abspath(__file__))+"/config/config.ini"):
-	print "ERROR: No config.ini found"
+	print("ERROR: No config.ini found")
 	exit(1)
 
 #
@@ -65,7 +65,7 @@ except SystemExit:
 	exit(0)
 except:
 	# we couldn't work without arguments -> exit
-	print "ERROR: cannot parsing the arguments"
+	print("ERROR: cannot parsing the arguments")
 	exit(1)
 
 
@@ -99,7 +99,7 @@ try:
 			os.mkdir(globalVars.log_path)
 	except:
 		# we couldn't work without logging -> exit
-		print "ERROR: cannot initialize paths"
+		print("ERROR: cannot initialize paths")
 		exit(1)
 
 	#
@@ -132,7 +132,7 @@ try:
 
 	except:
 		# we couldn't work without logging -> exit
-		print "ERROR: cannot create logger"
+		print("ERROR: cannot create logger")
 		exit(1)
 
 	# initialization of the logging was fine, continue...
@@ -215,7 +215,7 @@ try:
 	#
 	try:
 		logging.debug("reading config file")
-		globalVars.config = ConfigParser.ConfigParser()
+		globalVars.config = configparser.ConfigParser()
 		globalVars.config.read(globalVars.script_path+"/config/config.ini")
 		# if given loglevel is debug:
 		if globalVars.config.getint("BOSWatch","loglevel") == 10:
