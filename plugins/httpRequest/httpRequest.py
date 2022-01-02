@@ -102,9 +102,9 @@ def run(typ,freq,data):
 					try:
 						urllib.request.urlopen(url)
 					except urllib.error.HTTPError as e:
-    						logging.warning("HTTP response: %s", e.code)
+						logging.warning("HTTP response: %s", e.code)
 					except urllib.error.URLError as e:
-    						logging.warning("HTTP-specific error: %s", e.args)
+						logging.warning("HTTP-specific error: %s", e.args)
 
 			except:
 				logging.error("cannot send HTTP request")

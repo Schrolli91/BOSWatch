@@ -76,16 +76,16 @@ def run(typ, freq, data):
                 # building message for ZVEI
                 #
                 if globalVars.config.get("Pushover", "zvei_sep_prio") == '1':
-			if data["zvei"] in globalVars.config.get("Pushover", "zvei_prio2"):
-				priority = '2'
-			elif data["zvei"] in globalVars.config.get("Pushover","zvei_prio1"):
-				priority = '1'
-			elif data["zvei"] in globalVars.config.get("Pushover","zvei_prio0"):
-				priority = '0'
-			else:
-				priority = '-1'
-		else:
-			priority = globalVars.config.get("Pushover","zvei_std_prio")
+                    if data["zvei"] in globalVars.config.get("Pushover", "zvei_prio2"):
+                        priority = '2'
+                    elif data["zvei"] in globalVars.config.get("Pushover","zvei_prio1"):
+                        priority = '1'
+                    elif data["zvei"] in globalVars.config.get("Pushover","zvei_prio0"):
+                        priority = '0'
+                    else:
+                        priority = '-1'
+                else:
+                    priority = globalVars.config.get("Pushover","zvei_std_prio")
 
                 message = globalVars.config.get("Pushover", "zvei_message")
                 title = globalVars.config.get("Pushover", "zvei_title")
@@ -98,25 +98,25 @@ def run(typ, freq, data):
                 #
                 logging.debug("send Pushover for %s", typ)
                 if globalVars.config.get("Pushover", "poc_spec_ric") == '0':
-			if data["function"] == '1':
-                        	priority = globalVars.config.get("Pushover", "SubA")
-                    	elif data["function"] == '2':
-                        	priority = globalVars.config.get("Pushover", "SubB")
-                    	elif data["function"] == '3':
-	                        priority = globalVars.config.get("Pushover", "SubC")
-        	        elif data["function"] == '4':
-                	        priority = globalVars.config.get("Pushover", "SubD")
-                    	else:
-                        	priority = 0
+                    if data["function"] == '1':
+                        priority = globalVars.config.get("Pushover", "SubA")
+                    elif data["function"] == '2':
+                        priority = globalVars.config.get("Pushover", "SubB")
+                    elif data["function"] == '3':
+                        priority = globalVars.config.get("Pushover", "SubC")
+                    elif data["function"] == '4':
+                        priority = globalVars.config.get("Pushover", "SubD")
+                    else:
+                        priority = 0
                 else:
-                    	if data["ric"] in globalVars.config.get("Pushover", "poc_prio2"):
-                        	priority = 2
-			elif data["ric"] in globalVars.config.get("Pushover","poc_prio1"):
-			        priority = 1
-                    	elif data["ric"] in globalVars.config.get("Pushover","poc_prio0"):
-			        priority = 0
-			else:
-				priority = -1
+                    if data["ric"] in globalVars.config.get("Pushover", "poc_prio2"):
+                        priority = 2
+                    elif data["ric"] in globalVars.config.get("Pushover","poc_prio1"):
+                        priority = 1
+                    elif data["ric"] in globalVars.config.get("Pushover","poc_prio0"):
+                        priority = 0
+                    else:
+                        priority = -1
                         
                 message = globalVars.config.get("Pushover", "poc_message")
                 title = globalVars.config.get("Pushover", "poc_title")

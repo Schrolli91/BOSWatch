@@ -138,11 +138,11 @@ def run(typ,freq,data):
 				
 				logging.debug(alarmHeaders)
 
-	            alarmHeadersOrdered=OrderedDict()
-                alarmHeadersOrdered['webApiToken']=webApiToken
-                alarmHeadersOrdered['accessToken']=accessToken
-                alarmHeadersOrdered['selectiveCallCode']=selectiveCallCode
-                alarmHeadersOrdered['hmac']=hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()
+				alarmHeadersOrdered=OrderedDict()
+				alarmHeadersOrdered['webApiToken']=webApiToken
+				alarmHeadersOrdered['accessToken']=accessToken
+				alarmHeadersOrdered['selectiveCallCode']=selectiveCallCode
+				alarmHeadersOrdered['hmac']=hmac.new(webApiKey, webApiToken + selectiveCallCode + accessToken + alarmData, digestmod=hashlib.sha256).hexdigest()
 				
 				logging.debug(alarmHeadersOrdered)
 

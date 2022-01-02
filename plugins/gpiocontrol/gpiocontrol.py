@@ -112,7 +112,7 @@ def trigger():
 	GPIO.output(GPIOPIN, GPIO.LOW)
 	logging.info("GPIOPIN %s angeschaltet", GPIOPIN)
 	time.sleep(waitTime)
-        GPIO.output(GPIOPIN, GPIO.HIGH)
+	GPIO.output(GPIOPIN, GPIO.HIGH)
 	logging.info("GPIOPIN %s ausgeschaltet", GPIOPIN)
 
 	return
