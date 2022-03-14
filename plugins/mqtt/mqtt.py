@@ -77,7 +77,11 @@ def run(typ,freq,data):
 			########## User Plugin CODE ##########
 			broker_address = globalVars.config.get("mqtt", "brokeraddress")
 			topic = globalVars.config.get("mqtt", "topic")
-			mqttClient = mqtt.Client()
+
+            broker_username = globalVars.config.get("mqtt", "brokerusername")
+            broker_password = globalVars.config.get("mqtt", "brokerpassword")
+
+            mqttClient = mqtt.Client()
 
 			if typ == "FMS":
 				x = {
@@ -112,6 +116,12 @@ def run(typ,freq,data):
 				logging.warning("Invalid Typ: %s", typ)
 			
 			y = json.dumps(x)
+
+
+            ## only login if there is a username given
+            if( len(broker_username) > 0 ):
+                mqttClient.username_pw_set(broker_username, broker_password)
+
 			mqttClient.connect(broker_address)
 			mqttClient.publish(topic,y)
 			########## User Plugin CODE ##########
