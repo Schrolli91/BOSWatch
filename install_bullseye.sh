@@ -108,8 +108,16 @@ tput cup 13 15
 echo "[ 2/9] [##-------]"
 tput cup 15 5
 echo "-> download GIT and other stuff.........."
-apt-get -y install git cmake build-essential libusb-1.0 qt4-qmake qt4-default libpulse-dev libx11-dev sox python-pip >> $boswatch_install_path/setup_log.txt 2>&1
+apt-get -y install git python cmake build-essential libusb-1.0 qt5-qmake qtbase5-dev libpulse-dev libx11-dev sox  >> \
+$boswatch_install_path/setup_log.txt 2>&1
 exitcodefunction $? download stuff
+
+# download and install pip2
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py >> $boswatch_install_path/setup_log.txt 2>&1 
+exitcodefunction $? curl pip2
+python2 get-pip.py >> $boswatch_install_path/setup_log.txt 2>&1 exitcodefunction $? python2 get-pip
+rm get-pip.py
+
 
 # download BOSWatch via git
 tput cup 13 15
