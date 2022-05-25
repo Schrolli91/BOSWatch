@@ -1,6 +1,20 @@
 # Changelog
 
 
+### __[v2.5.3]__ - unreleased
+##### Added
+- Functionality to fill coordinate values in POC data structure (lat, lon) based on configured locations that match a regular expression in POC message [#510](https://github.com/Schrolli91/BOSWatch/pull/510)
+- Extending POC data-structure by Regex named groups matching. [#508](https://github.com/Schrolli91/BOSWatch/pull/508)
+- MQTT Plugin: Added possibility to configure login (user and password) for mqtt broker. [#539](https://github.com/Schrolli91/BOSWatch/pull/539)
+##### Changed
+##### Deprecated
+##### Removed
+##### Fixed
+ - Use specific mysql-connector-python version 8.0.19 [#533](https://github.com/Schrolli91/BOSWatch/pull/533)
+ - Correct Syntax-Errors in MySQL Statements [#533](https://github.com/Schrolli91/BOSWatch/pull/533)
+##### Security
+
+
 ### __[v2.5.2]__ - 08.01.2021
 ##### Added
 - fhemCmd-Plugin: New plugin fhemCmd to execute commands in FHEM home automation. [#457](https://github.com/Schrolli91/BOSWatch/pull/457)
