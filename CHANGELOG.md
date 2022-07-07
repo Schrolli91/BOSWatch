@@ -6,6 +6,7 @@
 - Functionality to fill coordinate values in POC data structure (lat, lon) based on configured locations that match a regular expression in POC message [#510](https://github.com/Schrolli91/BOSWatch/pull/510)
 - Extending POC data-structure by Regex named groups matching. [#508](https://github.com/Schrolli91/BOSWatch/pull/508)
 - MQTT Plugin: Added possibility to configure login (user and password) for mqtt broker. [#539](https://github.com/Schrolli91/BOSWatch/pull/539)
+- Installer Script for Debian 11 Bullseye [#546](https://github.com/Schrolli91/BOSWatch/pull/546/)
 ##### Changed
 ##### Deprecated
 ##### Removed
